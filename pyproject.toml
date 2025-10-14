@@ -1,0 +1,404 @@
+[project]
+name = "slashsense"
+version = "0.0.1"
+description = "Natural language to slash command mapping for Claude Code"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Shakes Dlamini", email = "shakestzd@gmail.com" }
+]
+maintainers = [
+    { name = "Shakes Dlamini", email = "shakestzd@gmail.com" }
+]
+keywords = [
+    "claude-code",
+    "intent-detection",
+    "natural-language",
+    "command-mapping",
+    "ai-coding",
+    "plugin"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: Linguistic",
+]
+
+# Core dependencies
+dependencies = [
+    "model2vec>=0.3.0",
+    "semantic-router>=0.1.0",
+    "numpy>=1.24.0,<2.0.0",
+]
+
+# Development dependencies
+[project.optional-dependencies]
+dev = [
+    # Testing
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.23.0",
+    
+    # Documentation
+    "mkdocs>=1.6.0",
+    "mkdocs-material>=9.5.0",
+    "mkdocstrings[python]>=0.25.0",
+    "mkdocs-autorefs>=1.0.0",
+    
+    # Code quality
+    "ruff>=0.6.0",
+    "mypy>=1.11.0",
+    "pre-commit>=3.8.0",
+    
+    # Type stubs
+    "types-requests>=2.31.0",
+]
+
+docs = [
+    "mkdocs>=1.6.0",
+    "mkdocs-material>=9.5.0",
+    "mkdocstrings[python]>=0.25.0",
+    "mkdocs-autorefs>=1.0.0",
+]
+
+test = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.23.0",
+]
+
+[project.urls]
+Homepage = "https://slashsense.com"
+Documentation = "https://yourusername.github.io/slashsense/"
+Repository = "https://github.com/yourusername/slashsense"
+Issues = "https://github.com/yourusername/slashsense/issues"
+Changelog = "https://github.com/yourusername/slashsense/blob/main/CHANGELOG.md"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# ============================================================================
+# Ruff Configuration
+# ============================================================================
+
+[tool.ruff]
+# Python version target
+target-version = "py310"
+
+# Line length
+line-length = 88
+
+# Include/exclude patterns
+extend-exclude = [
+    ".venv",
+    "venv",
+    "__pycache__",
+    "*.pyc",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".ruff_cache",
+    "site/",
+    "dist/",
+    "build/",
+]
+
+[tool.ruff.lint]
+# Enable rule groups
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "N",      # pep8-naming
+    "UP",     # pyupgrade
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "SIM",    # flake8-simplify
+    "TCH",    # flake8-type-checking
+    "RUF",    # ruff-specific rules
+]
+
+# Disable specific rules
+ignore = [
+    "E501",   # line too long (handled by formatter)
+    "B008",   # do not perform function calls in argument defaults
+    "C901",   # function is too complex
+    "SIM108", # use ternary operator (sometimes less readable)
+]
+
+# Allow autofix for all enabled rules
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+# Use double quotes for strings
+quote-style = "double"
+
+# Indent with spaces
+indent-style = "space"
+
+# Respect magic trailing comma
+skip-magic-trailing-comma = false
+
+# Auto-detect line ending
+line-ending = "auto"
+
+[tool.ruff.lint.isort]
+# Sort imports
+known-first-party = ["slashsense"]
+combine-as-imports = true
+
+[tool.ruff.lint.per-file-ignores]
+# Ignore import order in __init__.py
+"__init__.py" = ["F401", "F403"]
+# Test files can have assertions
+"tests/**/*.py" = ["S101"]
+
+# ============================================================================
+# Mypy Configuration
+# ============================================================================
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+strict_equality = true
+
+# Import discovery
+mypy_path = "lib"
+namespace_packages = true
+explicit_package_bases = true
+
+# Error output
+show_error_codes = true
+show_error_context = true
+pretty = true
+
+# Disable for specific modules
+[[tool.mypy.overrides]]
+module = [
+    "model2vec.*",
+    "semantic_router.*",
+]
+ignore_missing_imports = true
+
+# ============================================================================
+# Pytest Configuration
+# ============================================================================
+
+[tool.pytest.ini_options]
+# Test discovery
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+# Output options
+addopts = [
+    "-v",                           # verbose output
+    "--strict-markers",             # strict marker handling
+    "--strict-config",              # strict config handling
+    "--tb=short",                   # short traceback format
+    "--disable-warnings",           # hide warnings
+]
+
+# Coverage options (when using pytest-cov)
+[tool.coverage.run]
+source = ["lib"]
+omit = [
+    "*/tests/*",
+    "*/__pycache__/*",
+    "*/site-packages/*",
+]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "@abstractmethod",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+# ============================================================================
+# MkDocs Configuration (docs via pyproject.toml)
+# ============================================================================
+
+# Note: MkDocs primarily uses mkdocs.yml, but we define structure here
+# for documentation purposes. Create mkdocs.yml in project root with:
+
+# site_name: SlashSense
+# site_description: Natural language to slash command mapping for Claude Code
+# site_author: Your Name
+# site_url: https://yourusername.github.io/slashsense/
+# 
+# repo_name: yourusername/slashsense
+# repo_url: https://github.com/yourusername/slashsense
+# 
+# theme:
+#   name: material
+#   palette:
+#     - scheme: default
+#       primary: indigo
+#       accent: indigo
+#       toggle:
+#         icon: material/brightness-7
+#         name: Switch to dark mode
+#     - scheme: slate
+#       primary: indigo
+#       accent: indigo
+#       toggle:
+#         icon: material/brightness-4
+#         name: Switch to light mode
+#   features:
+#     - navigation.instant
+#     - navigation.tracking
+#     - navigation.tabs
+#     - navigation.sections
+#     - navigation.expand
+#     - navigation.top
+#     - search.suggest
+#     - search.highlight
+#     - content.code.copy
+#     - content.code.annotate
+# 
+# plugins:
+#   - search
+#   - mkdocstrings:
+#       handlers:
+#         python:
+#           options:
+#             docstring_style: google
+#             show_source: true
+#             show_root_heading: true
+#             show_category_heading: true
+#             members_order: source
+#             separate_signature: true
+#             show_signature_annotations: true
+# 
+# markdown_extensions:
+#   - pymdownx.highlight:
+#       anchor_linenums: true
+#       line_spans: __span
+#       pygments_lang_class: true
+#   - pymdownx.inlinehilite
+#   - pymdownx.snippets
+#   - pymdownx.superfences
+#   - pymdownx.tabbed:
+#       alternate_style: true
+#   - admonition
+#   - pymdownx.details
+#   - pymdownx.emoji:
+#       emoji_index: !!python/name:material.extensions.emoji.twemoji
+#       emoji_generator: !!python/name:material.extensions.emoji.to_svg
+#   - toc:
+#       permalink: true
+# 
+# nav:
+#   - Home: index.md
+#   - Getting Started:
+#       - Installation: installation.md
+#       - Quick Start: quickstart.md
+#       - Configuration: configuration.md
+#   - User Guide:
+#       - Usage: usage.md
+#       - Commands: commands.md
+#       - Custom Patterns: custom-patterns.md
+#   - Architecture:
+#       - Overview: architecture.md
+#       - Detection Cascade: detection-cascade.md
+#       - Performance: performance.md
+#   - API Reference:
+#       - Keyword Matcher: api/keyword_matcher.md
+#       - Model2Vec Matcher: api/model2vec_matcher.md
+#       - Semantic Router Matcher: api/semantic_router_matcher.md
+#       - Unified Detector: api/unified_detector.md
+#   - Development:
+#       - Contributing: contributing.md
+#       - Testing: testing.md
+#       - Release Process: release.md
+#   - About:
+#       - Changelog: changelog.md
+#       - License: license.md
+
+# ============================================================================
+# UV Configuration (uv-specific settings)
+# ============================================================================
+
+[tool.uv]
+# UV package installer settings
+dev-dependencies = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "mkdocs>=1.6.0",
+    "mkdocs-material>=9.5.0",
+    "mkdocstrings[python]>=0.25.0",
+    "ruff>=0.6.0",
+    "mypy>=1.11.0",
+]
+
+# UV will use these when resolving dependencies
+[tool.uv.pip]
+# Use newest compatible versions
+resolution = "highest"
+
+# ============================================================================
+# Hatch Build Configuration
+# ============================================================================
+
+[tool.hatch.build.targets.wheel]
+packages = ["lib"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/lib",
+    "/hooks",
+    "/data",
+    "/commands",
+    "/tests",
+    "/docs",
+    "/README.md",
+    "/LICENSE",
+    "/CLAUDE.md",
+    "/pyproject.toml",
+]
+exclude = [
+    "/.git",
+    "/.github",
+    "/.venv",
+    "/venv",
+    "/__pycache__",
+    "*.pyc",
+    "/.pytest_cache",
+    "/.mypy_cache",
+    "/.ruff_cache",
+    "/site",
+    "/dist",
+    "/build",
+]

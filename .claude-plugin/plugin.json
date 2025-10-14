@@ -1,0 +1,28 @@
+{
+  "name": "slashsense",
+  "version": "0.0.1",
+  "description": "Natural language to slash command mapping for Claude Code. Stop memorizing commands—just describe what you want.",
+  "author": {
+    "name": "Shakes Dlamini",
+    "email": "shakestzd@gmail.com",
+    "url": "https://slashsense.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Shakes-tzd/slashsense"
+  },
+  "license": "MIT",
+  "keywords": [
+    "intent-detection",
+    "natural-language",
+    "command-mapping",
+    "productivity",
+    "ux-enhancement"
+  ],
+  "compatibility": {
+    "minClaudeCodeVersion": "1.0.0"
+  },
+  "hooks": [
+    "UserPromptSubmit"
+  ]
+}

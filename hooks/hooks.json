@@ -1,0 +1,13 @@
+{
+  "UserPromptSubmit": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "uv run hooks/user_prompt_submit.py"
+        }
+      ]
+    }
+  ]
+}
