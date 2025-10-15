@@ -1,0 +1,68 @@
+{
+  "name": "SlashSense",
+  "owner": {
+    "name": "Shakes Dlamini",
+    "email": "shakestzd@gmail.com",
+    "url": "https://github.com/Shakes-tzd"
+  },
+  "description": "Natural language to slash command mapping for Claude Code. The first intent detection plugin for coding agents.",
+  "version": "0.1.0",
+  "plugins": [
+    {
+      "name": "slashsense",
+      "version": "0.1.0",
+      "source": "Shakes-tzd/slashsense",
+      "description": "Natural language to slash command mapping for Claude Code. Stop memorizing commands—just describe what you want.",
+      "category": "Productivity",
+      "tags": [
+        "intent-detection",
+        "natural-language",
+        "command-mapping",
+        "productivity",
+        "ux-enhancement",
+        "parallel-development",
+        "automation"
+      ],
+      "author": {
+        "name": "Shakes Dlamini",
+        "email": "shakestzd@gmail.com",
+        "url": "https://github.com/Shakes-tzd"
+      },
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Shakes-tzd/slashsense"
+      },
+      "license": "MIT",
+      "keywords": [
+        "intent-detection",
+        "natural-language",
+        "command-mapping",
+        "productivity",
+        "ux-enhancement",
+        "parallel-development"
+      ],
+      "compatibility": {
+        "minClaudeCodeVersion": "1.0.0"
+      },
+      "features": [
+        "3-tier detection cascade (Keyword, Model2Vec, Semantic Router)",
+        "Lightning fast: <2ms P95 latency",
+        "Zero configuration required",
+        "Supports 26+ commands out of the box",
+        "Parallel development workflow with git worktrees",
+        "Auto-discovery of installed plugins",
+        "Custom pattern mapping",
+        "Works offline (Keyword + Model2Vec tiers)"
+      ],
+      "commands": [
+        "/slashsense:config",
+        "/slashsense:stats",
+        "/slashsense:parallel:plan",
+        "/slashsense:parallel:execute",
+        "/slashsense:parallel:status",
+        "/slashsense:parallel:cleanup"
+      ],
+      "strict": true
+    }
+  ]
+}

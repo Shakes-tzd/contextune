@@ -63,14 +63,32 @@ Understands natural variations:
 
 ### Installation
 
+**Option 1: From Marketplace (Recommended)**
 ```bash
-# Install from marketplace (coming soon)
-/plugin install slashsense@marketplace
+# Add SlashSense marketplace
+/plugin marketplace add Shakes-tzd/slashsense
 
-# Or install from GitHub
-git clone https://github.com/yourusername/slashsense
+# Install plugin
+/plugin install slashsense
+```
+
+**Option 2: Direct from GitHub**
+```bash
+# Install directly
+/plugin install Shakes-tzd/slashsense
+
+# Or specify version
+/plugin install Shakes-tzd/slashsense@0.1.0
+```
+
+**Option 3: Local Development**
+```bash
+# Clone repository
+git clone https://github.com/Shakes-tzd/slashsense
 cd slashsense
-/plugin install slashsense@local
+
+# Install locally
+/plugin install @local
 ```
 
 ### Usage
@@ -104,6 +122,63 @@ SlashSense detects these commands out of the box:
 | "commit changes" | `/sc:git` | 85% |
 
 **Expandable:** SlashSense auto-discovers commands from all your installed plugins!
+
+---
+
+## Parallel Development Workflow
+
+SlashSense includes a powerful parallel development system that lets Claude work on multiple independent tasks simultaneously using git worktrees.
+
+### Key Features
+
+- 🚀 **Automatic Subagent Spawning** - Claude spawns multiple agents to work in parallel
+- 🌿 **Git Worktrees** - Isolated working directories for each task
+- 📋 **GitHub Integration** - Automatic issue creation and tracking
+- 🎯 **Zero Manual Coordination** - Claude manages everything automatically
+
+### Commands
+
+| Natural Language | Command | What It Does |
+|-----------------|---------|--------------|
+| "plan parallel development" | `/slashsense:parallel:plan` | Document development plan for parallel execution |
+| "work on these in parallel" | `/slashsense:parallel:execute` | Execute plan in parallel using git worktrees |
+| "check parallel status" | `/slashsense:parallel:status` | Monitor progress across all parallel tasks |
+| "cleanup parallel worktrees" | `/slashsense:parallel:cleanup` | Clean up completed worktrees and branches |
+
+### Example Workflow
+
+```
+You: "I need to implement authentication, dashboard, and analytics"
+
+Claude: "📋 These tasks are independent. Would you like to work on them in parallel?"
+
+You: "yes, parallelize this work"
+
+SlashSense: 🎯 /slashsense:parallel:execute detected (92% confidence)
+
+Claude:
+"✅ Created plan: .parallel/plans/PLAN-20251014.md
+✅ Created 3 GitHub issues
+✅ Created 3 git worktrees
+🚀 Spawning 3 parallel subagents...
+
+Agent 1: Working on authentication (worktrees/task-123)
+Agent 2: Working on dashboard (worktrees/task-124)
+Agent 3: Working on analytics (worktrees/task-125)
+
+All tasks complete in 2 hours (vs 4.5h sequential - 56% faster!)"
+```
+
+### Time Savings
+
+- **Sequential**: 4.5 hours (sum of all tasks)
+- **Parallel**: 2 hours (longest task duration)
+- **Speed Up**: ~57% faster
+
+**Requirements:**
+- GitHub CLI (`gh`) installed and authenticated
+- Git remote configured
+- Clean working tree
 
 ---
 
@@ -263,9 +338,14 @@ Benchmarked on M1 MacBook Pro:
 - [x] Hook implementation
 - [x] Basic command mappings
 
-### v1.1 (Next)
-- [ ] `/slashsense:config` command
-- [ ] `/slashsense:stats` command
+### v1.1 (Current)
+- [x] `/slashsense:config` command
+- [x] `/slashsense:stats` command
+- [x] Parallel development workflow
+- [x] `/slashsense:parallel:plan` command
+- [x] `/slashsense:parallel:execute` command
+- [x] `/slashsense:parallel:status` command
+- [x] `/slashsense:parallel:cleanup` command
 - [ ] Auto-discovery of all plugin commands
 - [ ] Learning mode (capture corrections)
 - [ ] Custom pattern editor

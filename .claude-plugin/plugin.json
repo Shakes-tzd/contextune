@@ -1,6 +1,6 @@
 {
   "name": "slashsense",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Natural language to slash command mapping for Claude Code. Stop memorizing commands—just describe what you want.",
   "author": {
     "name": "Shakes Dlamini",

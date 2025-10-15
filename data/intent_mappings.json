@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "created": "2025-10-14",
     "description": "Base command mappings for SlashSense intent detection",
-    "total_commands": 22,
+    "total_commands": 26,
     "documentation": "lib/INTENT_MAPPINGS.md"
   },
   "commands": {
@@ -792,6 +792,125 @@
       "auto_personas": ["Architect", "Analyzer"],
       "wave_enabled": false,
       "documentation": "commands/sc/pattern.md"
+    },
+    "/slashsense:parallel:plan": {
+      "description": "Document a development plan for parallel execution",
+      "category": "Parallel Development",
+      "keywords": [
+        "plan parallel",
+        "parallel plan",
+        "parallel development",
+        "parallel execution",
+        "plan tasks",
+        "organize parallel",
+        "parallel strategy",
+        "development plan",
+        "parallel workflow"
+      ],
+      "examples": [
+        "plan parallel development",
+        "create parallel execution plan",
+        "plan these tasks for parallel work",
+        "organize tasks for parallel execution",
+        "plan parallel workflow",
+        "create development plan",
+        "plan parallel strategy"
+      ],
+      "related_flags": [
+        "--think",
+        "--persona-architect"
+      ],
+      "auto_personas": ["Architect"],
+      "wave_enabled": false,
+      "documentation": "commands/slashsense-parallel-plan.md"
+    },
+    "/slashsense:parallel:execute": {
+      "description": "Execute plan in parallel using git worktrees and multiple Claude sessions",
+      "category": "Parallel Development",
+      "keywords": [
+        "parallel execute",
+        "execute parallel",
+        "parallelize",
+        "run parallel",
+        "work parallel",
+        "parallel tasks",
+        "spawn agents",
+        "parallel work",
+        "worktrees",
+        "parallel development"
+      ],
+      "examples": [
+        "execute parallel development",
+        "work on these in parallel",
+        "parallelize this work",
+        "run these tasks in parallel",
+        "execute parallel plan",
+        "work on multiple tasks simultaneously",
+        "spawn agents for parallel work",
+        "run parallel execution"
+      ],
+      "related_flags": [
+        "--max-parallel",
+        "--seq"
+      ],
+      "auto_personas": [],
+      "wave_enabled": true,
+      "documentation": "commands/slashsense-parallel-execute.md"
+    },
+    "/slashsense:parallel:status": {
+      "description": "Check status of parallel worktrees and tasks",
+      "category": "Parallel Development",
+      "keywords": [
+        "parallel status",
+        "check parallel",
+        "parallel progress",
+        "worktree status",
+        "parallel tasks status",
+        "monitor parallel",
+        "parallel check",
+        "show parallel"
+      ],
+      "examples": [
+        "check parallel status",
+        "show parallel progress",
+        "parallel status",
+        "what's the status of parallel tasks",
+        "check parallel worktrees",
+        "monitor parallel execution",
+        "show parallel development status"
+      ],
+      "related_flags": [],
+      "auto_personas": [],
+      "wave_enabled": false,
+      "documentation": "commands/slashsense-parallel-status.md"
+    },
+    "/slashsense:parallel:cleanup": {
+      "description": "Clean up completed worktrees and branches",
+      "category": "Parallel Development",
+      "keywords": [
+        "parallel cleanup",
+        "clean parallel",
+        "cleanup worktrees",
+        "remove worktrees",
+        "cleanup parallel",
+        "clean worktrees",
+        "parallel clean"
+      ],
+      "examples": [
+        "cleanup parallel worktrees",
+        "clean up parallel execution",
+        "remove completed worktrees",
+        "cleanup parallel work",
+        "clean parallel tasks",
+        "remove parallel branches"
+      ],
+      "related_flags": [
+        "--aggressive",
+        "--dry-run"
+      ],
+      "auto_personas": [],
+      "wave_enabled": false,
+      "documentation": "commands/slashsense-parallel-cleanup.md"
     }
   },
   "aliases": {
