@@ -1,14 +1,16 @@
 {
-  "UserPromptSubmit": [
-    {
-      "matcher": "*",
-      "hooks": [
-        {
-          "type": "command",
-          "command": "uv run hooks/user_prompt_submit.py",
-          "timeout": 5000
-        }
-      ]
-    }
-  ]
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run hooks/user_prompt_submit.py",
+            "timeout": 5000
+          }
+        ]
+      }
+    ]
+  }
 }
