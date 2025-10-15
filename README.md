@@ -103,8 +103,8 @@ Just type what you want in natural language:
 # Just type:
 "can you analyze my code for issues?"
 
-# SlashSense suggests:
-🎯 /sc:analyze detected with 85% confidence
+# SlashSense auto-executes:
+🎯 Auto-executing /sc:analyze (85% confidence, keyword match, 0.02ms)
 ```
 
 ### Supported Commands
@@ -202,9 +202,9 @@ User prompt: "analyze my code please"
               ↓
     Command: /sc:analyze (85%)
               ↓
-    Suggestion shown to Claude
+    Hook modifies prompt to "/sc:analyze"
               ↓
-    Claude executes command
+    Claude Code auto-executes the command
 ```
 
 ### Confidence Levels
