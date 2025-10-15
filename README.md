@@ -25,8 +25,8 @@ Claude: "Sure! Running tests..."
 **After SlashSense:**
 ```
 You: "I need to run tests"
-SlashSense: 🎯 Command Detected: /sc:test (85% confidence)
-Claude: [Executes /sc:test immediately]
+SlashSense: 🎯 Auto-executing /sc:test (85% confidence, keyword match, 0.02ms)
+Claude: [Executes /sc:test automatically]
 ```
 
 ---
@@ -38,12 +38,13 @@ Claude: [Executes /sc:test immediately]
 - **Model2Vec Embeddings** (0.2ms) - 30% of queries
 - **Semantic Router** (50ms) - 10% of queries
 
-### 🎯 **Smart Intent Detection**
-Understands natural variations:
-- "analyze my code" → `/sc:analyze`
-- "review the codebase" → `/sc:analyze`
-- "check code quality" → `/sc:analyze`
-- "audit for issues" → `/sc:analyze`
+### 🎯 **Smart Intent Detection & Auto-Execution**
+Understands natural variations and **automatically executes** the detected command:
+- "analyze my code" → Auto-executes `/sc:analyze`
+- "review the codebase" → Auto-executes `/sc:analyze`
+- "check code quality" → Auto-executes `/sc:analyze`
+- "audit for issues" → Auto-executes `/sc:analyze`
+- "work on these in parallel" → Auto-executes `/slashsense:parallel:execute`
 
 ### ⚡ **Lightning Fast**
 - P95 latency: <2ms (keyword path)
