@@ -28,10 +28,8 @@
         "email": "shakestzd@gmail.com",
         "url": "https://github.com/Shakes-tzd"
       },
-      "repository": {
-        "type": "git",
-        "url": "https://github.com/Shakes-tzd/slashsense"
-      },
+      "repository": "https://github.com/Shakes-tzd/slashsense",
+      "homepage": "https://github.com/Shakes-tzd/slashsense#readme",
       "license": "MIT",
       "keywords": [
         "intent-detection",
@@ -40,27 +38,6 @@
         "productivity",
         "ux-enhancement",
         "parallel-development"
-      ],
-      "compatibility": {
-        "minClaudeCodeVersion": "1.0.0"
-      },
-      "features": [
-        "3-tier detection cascade (Keyword, Model2Vec, Semantic Router)",
-        "Lightning fast: <2ms P95 latency",
-        "Zero configuration required",
-        "Supports 26+ commands out of the box",
-        "Parallel development workflow with git worktrees",
-        "Auto-discovery of installed plugins",
-        "Custom pattern mapping",
-        "Works offline (Keyword + Model2Vec tiers)"
-      ],
-      "commands": [
-        "/slashsense:config",
-        "/slashsense:stats",
-        "/slashsense:parallel:plan",
-        "/slashsense:parallel:execute",
-        "/slashsense:parallel:status",
-        "/slashsense:parallel:cleanup"
       ],
       "strict": true
     }
