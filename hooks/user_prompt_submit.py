@@ -162,15 +162,13 @@ def main():
             print(json.dumps(response))
             return
         
-        # High confidence match - suggest to Claude
-        suggestion = format_suggestion(match)
-        
+        # High confidence match - inject the slash command!
         response = {
             "continue": True,
-            "feedback": suggestion,
-            "suppressOutput": False  # Show suggestion
+            "modifiedPrompt": match.command,
+            "feedback": f"🎯 SlashSense: Detected `{match.command}` ({match.confidence:.0%} confidence, {match.method} match, {match.latency_ms:.2f}ms)"
         }
-        
+
         print(json.dumps(response))
         
     except Exception as e:
