@@ -77,6 +77,9 @@ Thumbs.db
 # Claude Code
 .claude/
 
+# Parallel execution workspace
+.parallel/
+
 # Temporary files
 *.tmp
 *.temp
