@@ -129,16 +129,20 @@ Would you like me to execute `{match.command}` instead?
 
 def main():
     """Hook entry point."""
-    
+
     try:
         # Read hook event from stdin
         event_json = sys.stdin.read()
         event = json.loads(event_json)
-        
+
         prompt = event.get("prompt", "")
-        
+
+        # DEBUG: Log what we received
+        print(f"DEBUG: SlashSense hook triggered with prompt: '{prompt}'", file=sys.stderr)
+
         # Check if we should process
         if not should_process(prompt):
+            print(f"DEBUG: Skipping prompt (should_process=False)", file=sys.stderr)
             # Pass through unchanged
             response = {
                 "continue": True,
@@ -146,14 +150,19 @@ def main():
             }
             print(json.dumps(response))
             return
-        
+
+        print(f"DEBUG: Processing prompt (should_process=True)", file=sys.stderr)
+
         # Initialize detector
         detector = SlashSenseDetector()
-        
+
         # Detect intent
         match = detector.detect(prompt)
-        
+
+        print(f"DEBUG: Detection result: {match}", file=sys.stderr)
+
         if match is None or match.confidence < 0.7:
+            print(f"DEBUG: No match or low confidence, passing through", file=sys.stderr)
             # No match or low confidence - pass through
             response = {
                 "continue": True,
@@ -161,19 +170,23 @@ def main():
             }
             print(json.dumps(response))
             return
-        
+
         # High confidence match - inject the slash command!
+        print(f"DEBUG: Injecting command: {match.command}", file=sys.stderr)
         response = {
             "continue": True,
             "modifiedPrompt": match.command,
             "feedback": f"🎯 SlashSense: Detected `{match.command}` ({match.confidence:.0%} confidence, {match.method} match, {match.latency_ms:.2f}ms)"
         }
 
+        print(f"DEBUG: Response: {json.dumps(response)}", file=sys.stderr)
         print(json.dumps(response))
-        
+
     except Exception as e:
         # Log error but don't block Claude
+        import traceback
         print(f"SlashSense error: {e}", file=sys.stderr)
+        print(f"DEBUG: Traceback: {traceback.format_exc()}", file=sys.stderr)
         response = {
             "continue": True,
             "suppressOutput": True
