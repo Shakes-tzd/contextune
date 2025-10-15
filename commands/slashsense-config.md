@@ -1,6 +1,7 @@
 ---
 name: slashsense:config
 description: Configure SlashSense intent detection settings
+executable: commands/slashsense-config.py
 ---
 
 # SlashSense Configuration
