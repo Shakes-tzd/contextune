@@ -7,10 +7,8 @@
     "email": "shakestzd@gmail.com",
     "url": "https://slashsense.com"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Shakes-tzd/slashsense"
-  },
+  "repository": "https://github.com/Shakes-tzd/slashsense",
+  "homepage": "https://github.com/Shakes-tzd/slashsense#readme",
   "license": "MIT",
   "keywords": [
     "intent-detection",
@@ -19,10 +17,5 @@
     "productivity",
     "ux-enhancement"
   ],
-  "compatibility": {
-    "minClaudeCodeVersion": "1.0.0"
-  },
-  "hooks": [
-    "UserPromptSubmit"
-  ]
+  "hooks": "./hooks/hooks.json"
 }
