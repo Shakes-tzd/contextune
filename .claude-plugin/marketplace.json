@@ -11,7 +11,10 @@
     {
       "name": "slashsense",
       "version": "0.1.0",
-      "source": "Shakes-tzd/slashsense",
+      "source": {
+        "type": "github",
+        "repo": "Shakes-tzd/slashsense"
+      },
       "description": "Natural language to slash command mapping for Claude Code. Stop memorizing commands—just describe what you want.",
       "category": "Productivity",
       "tags": [
