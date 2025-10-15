@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "uv run hooks/user_prompt_submit.py",
+            "command": "uv run ${CLAUDE_PLUGIN_ROOT}/hooks/user_prompt_submit.py",
             "timeout": 5000
           }
         ]
