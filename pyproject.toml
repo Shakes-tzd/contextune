@@ -76,10 +76,10 @@ test = [
 
 [project.urls]
 Homepage = "https://slashsense.com"
-Documentation = "https://yourusername.github.io/slashsense/"
-Repository = "https://github.com/yourusername/slashsense"
-Issues = "https://github.com/yourusername/slashsense/issues"
-Changelog = "https://github.com/yourusername/slashsense/blob/main/CHANGELOG.md"
+Documentation = "https://Shakes-tzd.github.io/slashsense/"
+Repository = "https://github.com/Shakes-tzd/slashsense"
+Issues = "https://github.com/Shakes-tzd/slashsense/issues"
+Changelog = "https://github.com/Shakes-tzd/slashsense/blob/main/CHANGELOG.md"
 
 [build-system]
 requires = ["hatchling"]
