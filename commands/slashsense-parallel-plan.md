@@ -1,41 +1,40 @@
 ---
 name: slashsense:parallel:plan
 description: Document a development plan for parallel execution
+executable: true
 ---
 
-# Parallel Plan - Document Development Plan
+# Parallel Plan - Create Structured Development Plan
 
-**Purpose:** Analyze our discussion and create a structured plan document for parallel development.
+You are executing the parallel planning workflow. Your task is to analyze the conversation history and create a structured plan document for parallel development.
 
----
-
-## What This Does
-
-Analyzes our conversation and creates `.parallel/plans/PLAN-{timestamp}.md` with:
-
-1. **Overview** - What we're building
-2. **Independent Tasks** - Can run in parallel
-3. **Dependent Tasks** - Must run sequentially  
-4. **Shared Resources** - Potential conflict zones
-5. **Success Criteria** - How to know we're done
+This command is part of the SlashSense plugin and can be triggered via natural language or explicitly with `/slashsense:parallel:plan`.
 
 ---
 
-## Task Analysis Criteria
+## Step 1: Analyze Conversation and Requirements
 
-**✅ Independent Tasks (Parallel-Safe):**
+Review the conversation history to identify:
+- What features/tasks the user wants to implement
+- Which tasks are independent (can run in parallel)
+- Which tasks have dependencies (must run sequentially)
+- Potential shared resources or conflict zones
+
+Use the following criteria to classify tasks:
+
+**Independent Tasks (Parallel-Safe):**
 - Touch different files
 - Different modules/features
 - No shared state
 - Can complete in any order
 
-**⚠️ Dependent Tasks (Sequential):**
+**Dependent Tasks (Sequential):**
 - Task B needs Task A's output
 - Database migrations
 - Shared file modifications
 - Order matters
 
-**🔴 Conflict Risks:**
+**Conflict Risks:**
 - Same file edits
 - Shared configuration
 - Database schema changes
@@ -43,7 +42,27 @@ Analyzes our conversation and creates `.parallel/plans/PLAN-{timestamp}.md` with
 
 ---
 
-## Plan Document Structure
+## Step 2: Create Plan Directory
+
+Create the `.parallel/plans/` directory if it doesn't exist:
+
+```bash
+mkdir -p .parallel/plans
+```
+
+If this fails, report the error to the user and stop.
+
+---
+
+## Step 3: Generate Plan Document
+
+Create a new plan file at `.parallel/plans/PLAN-{timestamp}.md` using the Write tool.
+
+Use the current timestamp in format: `YYYYMMDD-HHMMSS`
+
+Example: `PLAN-20251016-143000.md`
+
+The plan document MUST follow this structure:
 
 ```markdown
 # Development Plan: {Feature Name}
@@ -55,7 +74,7 @@ Analyzes our conversation and creates `.parallel/plans/PLAN-{timestamp}.md` with
 
 ## 🎯 Overview
 
-{High-level description of what we're building}
+{High-level description of what we're building - 2-3 sentences}
 
 ---
 
@@ -64,7 +83,7 @@ Analyzes our conversation and creates `.parallel/plans/PLAN-{timestamp}.md` with
 ### Task 1: {Name}
 - **Description:** {What needs to be done}
 - **Estimated Time:** {X hours}
-- **Files Touched:** 
+- **Files Touched:**
   - `path/to/file1.ts`
   - `path/to/file2.ts`
 - **Dependencies:** None (independent)
@@ -78,23 +97,19 @@ Analyzes our conversation and creates `.parallel/plans/PLAN-{timestamp}.md` with
 - **Dependencies:** None (independent)
 - **Tests Required:** {Test descriptions}
 
-### Task 3: {Name}
-- **Description:** {What needs to be done}
-- **Estimated Time:** {Z hours}
-- **Files Touched:**
-  - `path/to/file4.ts`
-- **Dependencies:** None (independent)
-- **Tests Required:** {Test descriptions}
+{Add more tasks as needed}
 
 ---
 
 ## 🔗 Dependent Tasks (Must Be Sequential)
 
+{Only include this section if there are dependencies}
+
 ### Phase 1: {Task Name}
 **Must complete before:** Phase 2
 **Reason:** {Why dependency exists}
 
-### Phase 2: {Task Name}  
+### Phase 2: {Task Name}
 **Depends on:** Phase 1
 **Reason:** {Why dependency exists}
 
@@ -110,13 +125,7 @@ Analyzes our conversation and creates `.parallel/plans/PLAN-{timestamp}.md` with
 - Task 1 creates base types first
 - Other tasks rebase before merging
 
-### Database Concerns
-- No schema changes in parallel tasks
-- Each task uses separate migrations
-
-### API Contracts
-- Define interfaces upfront
-- No breaking changes during parallel work
+{Include database concerns, API contracts, etc. if relevant}
 
 ---
 
@@ -150,17 +159,15 @@ Analyzes our conversation and creates `.parallel/plans/PLAN-{timestamp}.md` with
 ## 🚀 Execution Order
 
 **Parallel Phase (Estimated {Y hours}):**
-1. I automatically spawn subagents for Tasks 1, 2, 3 simultaneously
+1. Spawn subagents for Tasks 1, 2, 3 simultaneously
 2. Each agent works in its own git worktree
-3. I monitor progress and coordinate completion
+3. Monitor progress and coordinate completion
 4. Merge branches as each completes
 
 **Sequential Phase (if any):**
 1. Complete Phase 1
 2. Then Phase 2
 3. Final integration tests
-
-**Note:** When you run `/parallel:execute`, I spawn all subagents automatically - no manual terminal management required!
 
 ---
 
@@ -173,89 +180,126 @@ Analyzes our conversation and creates `.parallel/plans/PLAN-{timestamp}.md` with
 ## 🔄 Changelog
 
 - **{timestamp}:** Plan created
-- **{timestamp}:** Task 2 modified (reason)
-- **{timestamp}:** All tasks completed
 ```
+
+**Important instructions:**
+- Fill in all placeholders with actual values from the conversation
+- Estimate times based on task complexity (simple: 1h, medium: 2-3h, complex: 4-6h)
+- Be specific about files that will be touched
+- Break down large tasks into smaller, independent tasks when possible
+- Aim for 3-5 parallel tasks maximum for optimal efficiency
 
 ---
 
-## Example Usage
+## Step 4: Add .parallel/ to .gitignore
+
+Check if `.gitignore` exists and contains `.parallel/`:
+
+```bash
+grep -q "^\.parallel/" .gitignore 2>/dev/null
+```
+
+If the grep command exits with non-zero status, add `.parallel/` to `.gitignore`:
+
+Use the Edit tool to add to `.gitignore`:
+```
+.parallel/
+```
+
+If `.gitignore` doesn't exist, create it using the Write tool.
+
+Commit the change:
+```bash
+git add .gitignore
+git commit -m "chore: add .parallel/ to gitignore"
+```
+
+If the commit fails (e.g., already exists), continue anyway.
+
+---
+
+## Step 5: Validate the Plan
+
+Before reporting to the user, verify:
+
+1. Plan file was created successfully (use Read tool to confirm)
+2. All required sections are present
+3. At least 1 independent task is defined
+4. Time estimates are reasonable
+
+If validation fails, report the error to the user and ask for guidance.
+
+---
+
+## Step 6: Report to User
+
+Tell the user:
 
 ```
-You: "Plan parallel development for user auth, dashboard, and analytics"
-
-Me: "📋 Creating development plan...
-
-**Analyzing your requirements...**
-
-✅ Identified 3 independent tasks:
-- Authentication system (user login/logout/session)
-- Dashboard UI (charts, widgets, layout)
-- Analytics tracking (events, metrics)
-
-**Checking for dependencies...**
-- All tasks are independent ✅
-- No shared file conflicts ✅
-- Can run in true parallel ✅
-
-**Creating plan document...**
-
-Created: .parallel/plans/PLAN-20251014-153045.md
+📋 Created development plan: .parallel/plans/PLAN-{timestamp}.md
 
 **Summary:**
-- 3 tasks in parallel
-- Estimated: 4.5h sequential → 2h parallel (57% faster)
-- 0 blocking dependencies
-- Low conflict risk
+- {N} tasks can run in parallel
+- {M} tasks must run sequentially (if any)
+- Estimated time: {X hours sequential / Y hours parallel} ({Z%} faster)
+- Conflict risk: {Low/Medium/High}
 
-Ready to execute? Use `/slashsense:parallel:execute`"
+**Independent Tasks:**
+1. {Task 1 name} (~{X}h)
+2. {Task 2 name} (~{Y}h)
+3. {Task 3 name} (~{Z}h)
+
+Ready to execute? Run `/slashsense:parallel:execute` to start parallel development.
 ```
+
+Include a warning if:
+- Conflict risk is Medium or High
+- More than 5 parallel tasks (may be hard to coordinate)
+- Sequential dependencies exist
 
 ---
 
-## Global Availability
+## Error Handling
 
-This command is available in **all projects** after installing the SlashSense plugin:
+**If directory creation fails:**
+- Check permissions
+- Report error to user
+- Suggest manual creation: `mkdir -p .parallel/plans`
 
-```bash
-/plugin install slashsense
-```
+**If Write tool fails:**
+- Check if file already exists (read it first)
+- Report error to user
+- Suggest manual file creation
 
-You can trigger it with:
-- `/slashsense:parallel:plan` (explicit)
-- Natural language: "plan parallel development"
-- SlashSense will detect your intent automatically
+**If git commit fails:**
+- Check if there are uncommitted changes
+- Report to user but continue (not critical)
 
----
-
-## When to Use This
-
-**Before `/slashsense:parallel:execute`:**
-- Review plan for feasibility
-- Share with team for input
-- Adjust task boundaries
-- Document decisions
-
-**Standalone:**
-- Architecture planning
-- Feasibility analysis
-- Team coordination
-- Sprint planning
+**If conversation context is insufficient:**
+- Ask user for clarification:
+  - What features do they want to implement?
+  - Which tasks can run independently?
+  - Are there any dependencies?
 
 ---
 
-## Output Location
+## SlashSense Integration
 
-Plans saved to: `.parallel/plans/PLAN-{timestamp}.md`
+This command is available globally through the SlashSense plugin. Users can trigger it with:
 
-**Git Tracking:**
-```bash
-# Add to git for team visibility
-git add .parallel/plans/
-git commit -m "docs: add parallel development plan"
-```
+- **Explicit command:** `/slashsense:parallel:plan`
+- **Natural language:** "plan parallel development", "create parallel plan"
+- **Auto-detection:** SlashSense will detect planning intent automatically
 
-**Reference in Issues:**
-```markdown
-**Plan:** `.parallel/plans/PLAN-20251014-153045.md`
-```
+When users say things like "plan parallel development for X, Y, Z", SlashSense routes to this command automatically.
+
+---
+
+## Notes
+
+- Always create a plan even if the user's request is brief
+- Break down vague requests into specific, actionable tasks
+- Ask clarifying questions if the scope is unclear
+- Prioritize task independence to maximize parallelization
+- Document assumptions in the Notes section
+- Keep the plan focused and concise
