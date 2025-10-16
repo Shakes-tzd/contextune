@@ -26,6 +26,7 @@ console = Console()
 DEFAULT_CONFIG = {
     "enabled": True,
     "confidence_threshold": 0.7,
+    "delegation_mode": "verify",  # "verify", "auto", or "suggest"
     "tiers": {
         "keyword": True,
         "model2vec": True,
@@ -103,6 +104,15 @@ def display_config(config: dict, config_path: Path):
 
     status_table.add_row("Enabled", "✓ Yes" if config.get("enabled", True) else "✗ No")
     status_table.add_row("Confidence Threshold", str(config.get("confidence_threshold", 0.7)))
+
+    # Add delegation mode with explanation
+    delegation_mode = config.get("delegation_mode", "verify")
+    delegation_desc = {
+        "verify": "✓ Verify (sub-agent asks user) - Safest",
+        "auto": "⚡ Auto-execute - Fastest",
+        "suggest": "💡 Suggest (main agent decides) - Balanced"
+    }.get(delegation_mode, delegation_mode)
+    status_table.add_row("Delegation Mode", delegation_desc)
 
     console.print(Panel(status_table, title="[bold]General Settings[/bold]", border_style="blue"))
     console.print()
