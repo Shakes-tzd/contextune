@@ -2,11 +2,12 @@
 
 > **Stop memorizing commands. Start describing intent.**
 
-Natural language to slash command mapping for Claude Code. The first intent detection plugin for coding agents.
+Natural language to slash command mapping + AI-powered expert guidance for Claude Code. The first intent detection plugin with autonomous Skills.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg)](https://docs.claude.com/en/docs/claude-code/plugins)
+[![Version](https://img.shields.io/badge/version-0.2.0-green.svg)](https://github.com/Shakes-tzd/slashsense/releases)
 [![Documentation](https://img.shields.io/badge/docs-mkdocs-blue.svg)](https://yourusername.github.io/slashsense/)
 
 ---
@@ -28,6 +29,68 @@ You: "I need to run tests"
 SlashSense: 🎯 Auto-executing /sc:test (85% confidence, keyword match, 0.02ms)
 Claude: [Executes /sc:test automatically]
 ```
+
+---
+
+## ✨ NEW in v0.2.0: AI-Powered Skills
+
+SlashSense now includes **autonomous expert guidance** through Skills. No commands to memorize - just ask questions naturally!
+
+### 🧠 4 Expert Skills (Auto-Activated)
+
+**🚀 parallel-development-expert**
+```
+You: "How can I work on multiple features faster?"
+
+Claude: *Skill activates automatically*
+"Let me analyze your project...
+
+Found 3 independent tasks!
+Sequential: 8 hours → Parallel: 3 hours (62% faster!)
+
+Say 'work on them in parallel' and I'll handle everything!"
+```
+
+**📚 intent-recognition**
+```
+You: "What can SlashSense do?"
+
+Claude: "SlashSense makes Claude Code more natural!
+
+🎯 Capabilities:
+1. Parallel Development (30-70% faster)
+2. Smart Intent Detection (zero commands to learn)
+3. Expert Troubleshooting (autonomous help)
+
+Try: 'work on auth and dashboard in parallel'"
+```
+
+**🔧 git-worktree-master**
+```
+You: "Can't remove worktree, says locked"
+
+Claude: "Diagnosing... Found lock file from interrupted operation.
+
+Safe fix: Remove lock + worktree
+Risk: None (keeps your branch)
+
+Proceed? ✅"
+```
+
+**⚡ performance-optimizer**
+```
+You: "My parallel workflow seems slow"
+
+Claude: "Benchmarking...
+
+Bottleneck: Sequential setup (107s overhead)
+Fix: Parallel setup pattern
+Impact: 2.3 min faster (23% improvement)
+
+Optimize now?"
+```
+
+**Learn more:** [Skills Documentation](skills/README.md)
 
 ---
 

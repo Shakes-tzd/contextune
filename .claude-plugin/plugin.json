@@ -1,7 +1,7 @@
 {
   "name": "slashsense",
-  "version": "0.1.0",
-  "description": "Natural language to slash command mapping for Claude Code. Stop memorizing commands—just describe what you want.",
+  "version": "0.2.0",
+  "description": "Natural language to slash command mapping with AI-powered Skills for Claude Code. Stop memorizing commands—just describe what you want. Now with autonomous expert guidance!",
   "author": {
     "name": "Shakes Dlamini",
     "email": "shakestzd@gmail.com",
@@ -15,7 +15,12 @@
     "natural-language",
     "command-mapping",
     "productivity",
-    "ux-enhancement"
+    "ux-enhancement",
+    "skills",
+    "ai-assistant",
+    "parallel-development",
+    "git-worktrees",
+    "performance-optimization"
   ],
   "hooks": "./hooks/hooks.json"
 }
