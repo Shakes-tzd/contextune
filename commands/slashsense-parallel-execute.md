@@ -38,11 +38,58 @@ git --version && gh --version && git worktree list
 - Git 2.5+ (worktree support)
 - GitHub CLI (`gh`) authenticated
 - Clean working directory (no uncommitted changes)
+- **Auto-approval configured** (see below)
 
 **If validation fails:**
 - Report missing tools to user
 - Provide installation instructions
 - Stop execution
+
+### ⚡ IMPORTANT: Configure Auto-Approval to Avoid Bottlenecks
+
+**Problem:** Without auto-approval, you must approve EVERY git/gh command from EVERY parallel agent individually, negating all parallelism benefits!
+
+**Solution:** Pre-approve safe git/gh commands using Claude Code's IAM permission system.
+
+**Quick Setup (5 minutes):**
+
+1. **Run in Claude Code:** `/permissions`
+
+2. **Add these allow rules:**
+   ```
+   Bash(git worktree:*)
+   Bash(git add:*)
+   Bash(git commit:*)
+   Bash(git push:*)
+   Bash(gh issue:*)
+   Bash(gh label create:*)
+   ```
+
+3. **Set permission mode:** `"defaultMode": "acceptEdits"` in settings
+
+4. **Done!** Agents work autonomously 🚀
+
+**📖 Complete guide:** See `docs/AUTO_APPROVAL_CONFIGURATION.md` for:
+- Full configuration options
+- Security considerations
+- PreToolUse hook setup (advanced)
+- Troubleshooting
+
+**Without auto-approval:**
+```
+Agent 1: Waiting for approval... (blocked)
+Agent 2: Waiting for approval... (blocked)
+Agent 3: Waiting for approval... (blocked)
+→ You: Must approve each one individually (bottleneck!)
+```
+
+**With auto-approval:**
+```
+Agent 1: Creating issue... ✅ Creating worktree... ✅ Working...
+Agent 2: Creating issue... ✅ Creating worktree... ✅ Working...
+Agent 3: Creating issue... ✅ Creating worktree... ✅ Working...
+→ True parallelism! 🚀
+```
 
 ---
 
