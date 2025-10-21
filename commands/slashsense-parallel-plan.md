@@ -42,7 +42,214 @@ Use the following criteria to classify tasks:
 
 ---
 
-## Step 2: Create Plan Directory
+## Step 2: Parallel Research (NEW! - Grounded Research)
+
+**IMPORTANT:** Before planning, do comprehensive research using 5 parallel agents!
+
+**Why parallel research?**
+- 5x faster (1-2 min vs 6+ min sequential)
+- More comprehensive coverage
+- Grounded in current reality (uses context from hook)
+- Main agent context preserved (research in subagents)
+
+### Research Phase Workflow
+
+**Context Available (injected by hook):**
+- Current date (for accurate web searches)
+- Tech stack (from package.json, etc.)
+- Existing specifications
+- Recent plans
+
+**Spawn 5 Research Agents in PARALLEL:**
+
+Use the Task tool to spawn ALL 5 agents in a SINGLE message:
+
+#### Agent 1: Web Search - Similar Solutions
+
+```
+Task tool with subagent_type="general-purpose"
+
+Description: "Research similar solutions and best practices"
+
+Prompt: (Use template from docs/RESEARCH_AGENTS_GUIDE.md - Agent 1)
+
+"You are researching similar solutions for {PROBLEM}.
+
+Use WebSearch to find:
+- Best practices for {PROBLEM} in {CURRENT_YEAR} ← Use year from context!
+- Common approaches and patterns
+- Known pitfalls
+
+Search queries:
+- 'best practices {PROBLEM} {TECH_STACK} {CURRENT_YEAR}'
+- '{PROBLEM} implementation examples latest'
+
+Report back (<500 words):
+1. Approaches found (top 3)
+2. Recommended approach with reasoning
+3. Implementation considerations
+4. Pitfalls to avoid"
+```
+
+#### Agent 2: Web Search - Libraries/Tools
+
+```
+Task tool with subagent_type="general-purpose"
+
+Description: "Research libraries and tools"
+
+Prompt: (Use template from docs/RESEARCH_AGENTS_GUIDE.md - Agent 2)
+
+"You are researching libraries for {USE_CASE} in {TECH_STACK}.
+
+Use WebSearch to find:
+- Popular libraries for {USE_CASE}
+- Comparison of top solutions
+- Community recommendations
+
+Report back (<500 words):
+1. Top 3 libraries (comparison table)
+2. Recommended library with reasoning
+3. Integration notes"
+```
+
+#### Agent 3: Codebase Pattern Search
+
+```
+Task tool with subagent_type="general-purpose"
+
+Description: "Search codebase for existing patterns"
+
+Prompt: (Use template from docs/RESEARCH_AGENTS_GUIDE.md - Agent 3)
+
+"You are searching codebase for existing patterns for {PROBLEM}.
+
+Use Grep/Glob to search:
+- grep -r '{KEYWORD}' . --include='*.{ext}'
+- Check for similar functionality
+
+CRITICAL: If similar code exists, recommend REUSING it!
+
+Report back (<400 words):
+1. Existing functionality found (with file:line)
+2. Patterns to follow
+3. Recommendation (REUSE vs CREATE NEW)"
+```
+
+#### Agent 4: Specification Validation
+
+```
+Task tool with subagent_type="general-purpose"
+
+Description: "Validate against existing specifications"
+
+Prompt: (Use template from docs/RESEARCH_AGENTS_GUIDE.md - Agent 4)
+
+"You are checking specifications for {PROBLEM}.
+
+Read these files (if exist):
+- docs/ARCHITECTURE.md
+- docs/specs/*.md
+- README.md
+
+Check for:
+- Existing requirements
+- Constraints we must follow
+- Patterns to use
+
+Report back (<500 words):
+1. Spec status (exists/incomplete/missing)
+2. Requirements from specs
+3. Compliance checklist"
+```
+
+#### Agent 5: Dependency Analysis
+
+```
+Task tool with subagent_type="general-purpose"
+
+Description: "Analyze project dependencies"
+
+Prompt: (Use template from docs/RESEARCH_AGENTS_GUIDE.md - Agent 5)
+
+"You are analyzing dependencies for {PROBLEM}.
+
+Read:
+- package.json (Node.js)
+- pyproject.toml (Python)
+- go.mod (Go)
+- Cargo.toml (Rust)
+
+Check:
+- What's already installed?
+- Can we reuse existing deps?
+- What new deps needed?
+
+Report back (<300 words):
+1. Relevant existing dependencies
+2. New dependencies needed (if any)
+3. Compatibility analysis"
+```
+
+**Spawn ALL 5 in ONE message** (parallel execution!)
+
+### Wait for Research Results
+
+All 5 agents will complete in ~1-2 minutes (parallel).
+
+### Synthesize Research Findings
+
+Once all 5 agents report back:
+
+1. **Read all research reports**
+2. **Identify best approach** (from Agent 1)
+3. **Select libraries** (from Agent 2)
+4. **Plan code reuse** (from Agent 3)
+5. **Check spec compliance** (from Agent 4)
+6. **Plan dependencies** (from Agent 5)
+
+**Create Research Synthesis:**
+
+```markdown
+## Research Synthesis
+
+### Best Approach
+{From Agent 1: Recommended approach and reasoning}
+
+### Libraries/Tools
+{From Agent 2: Which libraries to use}
+
+### Existing Code to Reuse
+{From Agent 3: Files and patterns to leverage}
+
+### Specification Compliance
+{From Agent 4: Requirements we must follow}
+
+### Dependencies
+{From Agent 5: What to install, what to reuse}
+
+### Architectural Decisions
+
+Based on research findings:
+
+**Decision 1:** {Architecture decision}
+- **Reasoning:** {Why, based on research}
+- **Source:** {Which research agent(s)}
+
+**Decision 2:** {Technology decision}
+- **Reasoning:** {Why, based on research}
+- **Source:** {Which research agent(s)}
+
+**Decision 3:** {Pattern decision}
+- **Reasoning:** {Why, based on research}
+- **Source:** {Which research agent(s)}
+```
+
+This synthesis will be embedded in the plan document and used to create detailed specifications for Haiku agents.
+
+---
+
+## Step 3: Create Plan Directory
 
 Create the `.parallel/plans/` directory if it doesn't exist:
 

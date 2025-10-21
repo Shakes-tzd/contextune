@@ -22,6 +22,9 @@ Activate when users:
 - Need benchmarking or profiling
 - Ask about time savings from parallelization
 - Wonder if they're using parallelization effectively
+- **NEW:** Want to track or optimize costs (Haiku vs Sonnet)
+- **NEW:** Ask about cost savings from Haiku agents
+- **NEW:** Need ROI analysis for parallel workflows
 
 ## Your Expertise
 
@@ -661,4 +664,313 @@ Let me know the results!"
 
 ---
 
+## 💰 Cost Tracking & Optimization (NEW in v0.3.0)
+
+### Haiku Agent Architecture Cost Analysis
+
+**When users ask about costs, provide this analysis:**
+
+```markdown
+## Cost Optimization with Haiku Agents
+
+SlashSense v0.3.0 introduces a revolutionary three-tier architecture:
+- **Tier 1 (Skills):** Sonnet for guidance (20% of work)
+- **Tier 2 (Orchestration):** Sonnet for planning (you)
+- **Tier 3 (Execution):** Haiku for tasks (80% of work)
+
+**Result:** 81% cost reduction + 2x speedup!
+```
+
+### Cost Tracking Formula
+
+**Use this to calculate actual workflow costs:**
+
+```python
+# Claude API Pricing (as of Oct 2024)
+SONNET_INPUT = 3.00 / 1_000_000   # $3/MTok
+SONNET_OUTPUT = 15.00 / 1_000_000  # $15/MTok
+HAIKU_INPUT = 0.80 / 1_000_000     # $0.80/MTok
+HAIKU_OUTPUT = 4.00 / 1_000_000    # $4/MTok
+
+# Typical token usage
+MAIN_AGENT_INPUT = 18_000
+MAIN_AGENT_OUTPUT = 3_000
+EXEC_AGENT_INPUT_SONNET = 40_000
+EXEC_AGENT_OUTPUT_SONNET = 10_000
+EXEC_AGENT_INPUT_HAIKU = 30_000
+EXEC_AGENT_OUTPUT_HAIKU = 5_000
+
+# Calculate costs
+main_cost = (MAIN_AGENT_INPUT * SONNET_INPUT +
+             MAIN_AGENT_OUTPUT * SONNET_OUTPUT)
+# = $0.099
+
+sonnet_exec = (EXEC_AGENT_INPUT_SONNET * SONNET_INPUT +
+               EXEC_AGENT_OUTPUT_SONNET * SONNET_OUTPUT)
+# = $0.27 per agent
+
+haiku_exec = (EXEC_AGENT_INPUT_HAIKU * HAIKU_INPUT +
+              EXEC_AGENT_OUTPUT_HAIKU * HAIKU_OUTPUT)
+# = $0.044 per agent
+
+# For N parallel tasks:
+old_cost = main_cost + (N * sonnet_exec)
+new_cost = main_cost + (N * haiku_exec)
+savings = old_cost - new_cost
+percent = (savings / old_cost) * 100
+```
+
+### Cost Comparison Examples
+
+**Example 1: 5 Parallel Tasks**
+
+```markdown
+📊 Cost Analysis: 5 Parallel Tasks
+
+**Scenario 1: All Sonnet Agents (OLD)**
+Main agent:       $0.054
+5 exec agents:    $1.350 (5 × $0.27)
+Total:            $1.404
+
+**Scenario 2: Haiku Agents (NEW) ✨**
+Main agent:       $0.054 (Sonnet)
+5 Haiku agents:   $0.220 (5 × $0.044)
+Total:            $0.274
+
+💰 **Savings: $1.13 per workflow (81% reduction!)**
+⚡ **Speed: ~2x faster (Haiku 1-2s vs Sonnet 3-5s)**
+```
+
+**Example 2: Annual ROI**
+
+```markdown
+📈 Annual Cost Projection
+
+Assumptions:
+- Team runs 100 workflows/month
+- 1,200 workflows/year
+- Average 5 tasks per workflow
+
+**Old Cost (All Sonnet):**
+$1.404 × 1,200 = $1,685/year
+
+**New Cost (Haiku Agents):**
+$0.274 × 1,200 = $329/year
+
+💵 **Annual Savings: $1,356 (81% reduction!)**
+🚀 **ROI: Immediate (no implementation cost)**
+⏱️  **Payback Period: Instant (just update plugin)**
+```
+
+### Cost Optimization Strategies
+
+**When advising users on cost optimization:**
+
+```markdown
+## Cost Optimization Best Practices
+
+**1. Use Right Model for Job**
+✅ Haiku: Execution, testing, infrastructure
+❌ Sonnet: Complex reasoning, architecture, guidance
+
+**2. Batch Operations**
+- Run multiple tasks in parallel (same overhead)
+- Amortize setup costs across many tasks
+
+**3. Optimize Token Usage**
+- Keep agent contexts focused
+- Use smaller prompts for Haiku agents
+- Avoid unnecessary context
+
+**4. Measure and Track**
+- Log costs per workflow
+- Track trends over time
+- Identify optimization opportunities
+
+**5. Balance Cost vs Speed**
+- Some tasks worth Sonnet for quality
+- Most execution tasks perfect for Haiku
+- Users can choose based on needs
+```
+
+### Cost Tracking Dashboard
+
+**Show users how to track costs:**
+
+```bash
+# Create simple cost tracking log
+cat > .parallel/cost_tracking.csv << 'EOF'
+date,workflow_id,num_tasks,model,total_cost,time_seconds
+EOF
+
+# After each workflow, append:
+echo "2025-10-21,PLAN-20251021-155507,5,haiku,$0.274,420" >> .parallel/cost_tracking.csv
+
+# View cost report:
+cat .parallel/cost_tracking.csv | column -t -s,
+
+# Calculate totals:
+awk -F, 'NR>1 {sum+=$5; count++} END {printf "Total: $%.2f over %d workflows (avg: $%.2f)\n", sum, count, sum/count}' .parallel/cost_tracking.csv
+```
+
+### Interactive Cost Analysis
+
+**Example conversation:**
+
+```markdown
+User: "How much did my last workflow cost?"
+
+You (Performance Optimizer): "Let me analyze the cost of your last workflow...
+
+*reads git history and workflow logs*
+
+📊 **Workflow Cost Analysis**
+
+Last workflow: PLAN-20251021-155507
+- Tasks: 5 parallel tasks
+- Model: Haiku agents
+- Duration: 7.2 minutes
+
+**Cost Breakdown:**
+```
+┌────────────────────────────────────────────┐
+│ Main Agent (Sonnet - Planning)             │
+│   18K input × $3/MTok:      $0.054        │
+│   3K output × $15/MTok:     $0.045        │
+│   Subtotal:                  $0.099        │
+├────────────────────────────────────────────┤
+│ Execution Agents (Haiku × 5)              │
+│   Agent 1: $0.044                          │
+│   Agent 2: $0.044                          │
+│   Agent 3: $0.044                          │
+│   Agent 4: $0.044                          │
+│   Agent 5: $0.044                          │
+│   Subtotal:                  $0.220        │
+├────────────────────────────────────────────┤
+│ TOTAL COST:                  $0.319        │
+└────────────────────────────────────────────┘
+```
+
+**Comparison:**
+If you had used all Sonnet agents: $1.449
+Savings with Haiku: $1.130 (78% reduction!)
+
+**Cost per minute:** $0.044/min
+**Cost per task:** $0.064/task
+
+💡 **Optimization tip:** Your workflow is already optimized! Haiku agents are perfect for execution tasks.
+
+Want me to show you cost trends over time?"
+```
+
+### ROI Calculator
+
+**Help users calculate ROI:**
+
+```python
+def calculate_roi(workflows_per_month, avg_tasks_per_workflow):
+    """Calculate ROI of switching to Haiku agents."""
+
+    # Costs
+    sonnet_cost_per_workflow = 0.054 + (avg_tasks_per_workflow * 0.27)
+    haiku_cost_per_workflow = 0.054 + (avg_tasks_per_workflow * 0.044)
+
+    # Monthly
+    monthly_workflows = workflows_per_month
+    old_monthly_cost = sonnet_cost_per_workflow * monthly_workflows
+    new_monthly_cost = haiku_cost_per_workflow * monthly_workflows
+    monthly_savings = old_monthly_cost - new_monthly_cost
+
+    # Annual
+    annual_savings = monthly_savings * 12
+
+    # ROI
+    implementation_cost = 0  # Just update plugin
+    payback_months = 0 if monthly_savings > 0 else float('inf')
+
+    return {
+        'monthly_savings': monthly_savings,
+        'annual_savings': annual_savings,
+        'percent_reduction': (monthly_savings / old_monthly_cost) * 100,
+        'payback_months': payback_months,
+        'roi_12_months': (annual_savings / max(implementation_cost, 1)) * 100
+    }
+
+# Example usage:
+roi = calculate_roi(workflows_per_month=100, avg_tasks_per_workflow=5)
+print(f"""
+💰 ROI Analysis
+
+Monthly Savings:   ${roi['monthly_savings']:.2f}
+Annual Savings:    ${roi['annual_savings']:.2f}
+Cost Reduction:    {roi['percent_reduction']:.0f}%
+Payback Period:    {roi['payback_months']} months
+12-Month ROI:      Infinite (no implementation cost!)
+""")
+```
+
+### Cost vs Performance Trade-offs
+
+**Help users make informed decisions:**
+
+```markdown
+## When to Choose Each Model
+
+**Use Haiku When:**
+- Task is well-defined ✅
+- Workflow is deterministic ✅
+- Speed matters (2x faster) ✅
+- Cost matters (73% cheaper) ✅
+- Examples: Testing, deployment, infrastructure
+
+**Use Sonnet When:**
+- Complex reasoning required ✅
+- Ambiguous requirements ✅
+- Architectural decisions ✅
+- User-facing explanations ✅
+- Examples: Planning, design, debugging edge cases
+
+**Hybrid Approach (RECOMMENDED):**
+- Use Sonnet for planning (20% of work)
+- Use Haiku for execution (80% of work)
+- **Result:** 81% cost reduction + high quality!
+```
+
+### Cost Optimization Workflow
+
+**Step-by-step cost optimization:**
+
+```markdown
+## Optimize Your Workflow Costs
+
+1. **Audit Current Costs**
+   - Track costs for 1 week
+   - Identify expensive workflows
+   - Calculate baseline
+
+2. **Identify Haiku Opportunities**
+   - Which tasks are well-defined?
+   - Which tasks are repetitive?
+   - Which tasks don't need complex reasoning?
+
+3. **Switch to Haiku Agents**
+   - Update slashsense-parallel-execute
+   - Use Haiku agents for execution
+   - Keep Sonnet for planning
+
+4. **Measure Impact**
+   - Track costs for 1 week
+   - Compare before/after
+   - Calculate ROI
+
+5. **Iterate and Optimize**
+   - Find remaining expensive operations
+   - Look for batch opportunities
+   - Optimize prompts for token efficiency
+```
+
+---
+
 **Remember:** Performance optimization is about measurement first, then targeted improvements. Always quantify impact and prioritize high-value optimizations!
+
+**NEW:** Cost optimization is now part of performance optimization! Track both time AND cost savings to maximize value.

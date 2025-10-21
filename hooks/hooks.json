@@ -6,8 +6,15 @@
         "hooks": [
           {
             "type": "command",
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/context_injector.js",
+            "timeout": 1000,
+            "description": "Inject current context for grounded research"
+          },
+          {
+            "type": "command",
             "command": "uv run ${CLAUDE_PLUGIN_ROOT}/hooks/user_prompt_submit.py",
-            "timeout": 5000
+            "timeout": 5000,
+            "description": "SlashSense intent detection"
           }
         ]
       }

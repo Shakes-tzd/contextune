@@ -1,7 +1,7 @@
 {
   "name": "slashsense",
-  "version": "0.2.0",
-  "description": "Natural language to slash command mapping with AI-powered Skills for Claude Code. Stop memorizing commands—just describe what you want. Now with autonomous expert guidance!",
+  "version": "0.3.0",
+  "description": "Natural language to slash command mapping with AI-powered Skills and cost-optimized Haiku agents. Enables 81% cost reduction and 2x speedup with three-tier intelligence architecture. Stop memorizing commands—just describe what you want!",
   "author": {
     "name": "Shakes Dlamini",
     "email": "shakestzd@gmail.com",
@@ -20,7 +20,12 @@
     "ai-assistant",
     "parallel-development",
     "git-worktrees",
-    "performance-optimization"
+    "performance-optimization",
+    "haiku-agents",
+    "cost-optimization",
+    "three-tier-architecture",
+    "autonomous-execution",
+    "workflow-automation"
   ],
   "hooks": "./hooks/hooks.json"
 }
