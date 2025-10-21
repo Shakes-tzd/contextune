@@ -103,6 +103,42 @@ gh label create "auto-created" --description "Created by automation" --color "d4
 
 Spawn a `parallel-task-executor` Haiku agent. Each agent receives:
 
+### 🎯 v0.4.0: Context-Grounded Execution (Zero Research!)
+
+**IMPORTANT:** If using SlashSense v0.4.0+ with context-grounded research:
+
+✅ **All research was ALREADY done during planning!**
+- Web searches for best practices (2025, not 2024!)
+- Library comparisons and recommendations
+- Codebase pattern searches
+- Specification validation
+- Dependency analysis
+
+✅ **The specifications you receive are COMPLETE and GROUNDED:**
+- Based on current date and tech stack
+- Follows existing specifications
+- Reuses existing code patterns
+- Uses compatible dependencies
+- Follows proven best practices from 2025
+
+✅ **Your job is EXECUTION ONLY:**
+- Read the specification
+- Execute EXACTLY as specified
+- Do NOT research alternatives
+- Do NOT make architectural decisions
+- Do NOT search for different libraries
+- If ANYTHING is unclear → ASK, don't guess!
+
+**Why this matters:**
+The planning phase (Sonnet) already spent 2 minutes doing comprehensive parallel research. You (Haiku) are optimized for fast, accurate execution of well-defined tasks. Trust the plan!
+
+**Cost savings:**
+- Planning (Sonnet + research): $0.20
+- Your execution (Haiku): $0.04 per task
+- If you re-research: Wastes time and money!
+
+---
+
 ### Subagent Instructions Template
 
 ```
@@ -202,12 +238,31 @@ cp ../../.env.local .env.local 2>/dev/null || true
 
 {task.detailed_implementation_steps}
 
-**Guidelines:**
-- Follow existing code patterns and conventions
-- Write tests as you go (TDD approach)
-- Keep commits atomic and descriptive
-- Comment your code clearly
-- Run linter/formatter before committing
+**🎯 EXECUTION-ONLY Guidelines (v0.4.0):**
+
+**DO (Execute as specified):**
+- ✅ Follow the specification EXACTLY
+- ✅ Use the libraries/tools specified in the plan
+- ✅ Implement the patterns specified in the plan
+- ✅ Follow existing code patterns and conventions
+- ✅ Write tests as specified
+- ✅ Keep commits atomic and descriptive
+- ✅ Run linter/formatter before committing
+
+**DON'T (No research, no decisions):**
+- ❌ Research alternative approaches (already done in planning!)
+- ❌ Choose different libraries (planning chose the best one!)
+- ❌ Make architectural decisions (planning made them!)
+- ❌ Search for "better" patterns (planning found them!)
+- ❌ Second-guess the specification
+
+**IF UNCLEAR:**
+- ⚠️ Specification is ambiguous → Ask in GitHub issue comments
+- ⚠️ Implementation detail missing → Ask for clarification
+- ⚠️ Library doesn't work as expected → Report in issue
+- ⚠️ Tests are unclear → Request test specification
+
+**Remember:** All research was done. All decisions were made. You execute!
 
 **Commit messages should follow:**
 ```
@@ -318,6 +373,8 @@ gh issue close $ISSUE_NUM --comment "Task completed successfully!"
 5. ❌ **No touching main:** Never commit directly to main branch
 6. ❌ **No touching other worktrees:** Stay in your assigned directory
 7. ⚠️ **Report conflicts:** If you encounter merge conflicts, report in issue
+8. 🎯 **EXECUTE ONLY (v0.4.0):** Follow spec exactly, no research, no decisions
+9. ⚠️ **Ask if unclear:** Specification ambiguous? Ask in issue, don't guess!
 
 ---
 
@@ -583,7 +640,8 @@ Annual projection (1,200 workflows):
 - Plan archived: .parallel/archive/PLAN-{timestamp}.md
 
 🎉 All tasks completed successfully via SlashSense parallel execution!
-🚀 Powered by Haiku Agent Architecture v0.3.0
+🚀 Powered by Context-Grounded Parallel Research v0.4.0
+✨ Sonnet planned EVERYTHING, Haiku executed BLINDLY
 ```
 
 **Calculate Cost Savings:**
