@@ -911,6 +911,38 @@
       "auto_personas": [],
       "wave_enabled": false,
       "documentation": "commands/ctx-cleanup.md"
+    },
+    "/ctx:research": {
+      "description": "Fast research using 3 parallel Haiku agents for technical questions and decision-making",
+      "category": "Research & Investigation",
+      "keywords": [
+        "research",
+        "investigate",
+        "find information",
+        "compare",
+        "what's the best",
+        "which library",
+        "which framework",
+        "what should i use",
+        "look into",
+        "evaluate options"
+      ],
+      "examples": [
+        "research best React state libraries",
+        "investigate Python async frameworks",
+        "compare REST vs GraphQL",
+        "what's the best database for authentication",
+        "which testing framework should I use",
+        "find information about caching strategies",
+        "evaluate state management options",
+        "compare TypeScript type libraries",
+        "research deployment options",
+        "investigate authentication solutions"
+      ],
+      "related_flags": [],
+      "auto_personas": [],
+      "wave_enabled": false,
+      "documentation": "commands/ctx-research.md"
     }
   },
   "aliases": {

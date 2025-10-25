@@ -35,6 +35,7 @@ sys.path.insert(0, str(PLUGIN_ROOT / "lib"))
 from keyword_matcher import KeywordMatcher, IntentMatch
 from model2vec_matcher import Model2VecMatcher
 from semantic_router_matcher import SemanticRouterMatcher
+from observability_db import ObservabilityDB
 
 
 class ContextuneDetector:
@@ -111,52 +112,48 @@ def should_process(prompt: str) -> bool:
 
 
 def write_detection_for_statusline(match: IntentMatch, prompt: str):
-    """Write detection data to file for status line to read."""
+    """Write detection data to observability DB for status line to read."""
     try:
-        # Create .contextune directory in current working directory
-        contextune_dir = Path(".contextune")
-        contextune_dir.mkdir(exist_ok=True)
+        db = ObservabilityDB(".contextune/observability.db")
+        db.set_detection(
+            command=match.command,
+            confidence=match.confidence,
+            method=match.method,
+            prompt_preview=prompt[:60] + ("..." if len(prompt) > 60 else ""),
+            latency_ms=match.latency_ms
+        )
 
-        detection_file = contextune_dir / "last_detection"
+        # Also log matcher performance
+        db.log_matcher_performance(match.method, match.latency_ms, success=True)
 
-        # Write detection with timestamp
-        detection_data = {
-            "command": match.command,
-            "confidence": round(match.confidence, 2),
-            "method": match.method,
-            "latency_ms": round(match.latency_ms, 2),
-            "timestamp": datetime.utcnow().isoformat(),
-            "prompt_preview": prompt[:60] + ("..." if len(prompt) > 60 else "")
-        }
-
-        with open(detection_file, "w") as f:
-            json.dump(detection_data, f, indent=2)
-
-        print(f"DEBUG: Wrote detection to {detection_file}", file=sys.stderr)
+        print(f"DEBUG: Wrote detection to observability DB: {match.command} ({match.confidence:.0%} {match.method})", file=sys.stderr)
     except Exception as e:
-        # Don't fail hook if statusline write fails
-        print(f"DEBUG: Failed to write statusline file: {e}", file=sys.stderr)
+        # Don't fail hook if observability write fails
+        print(f"DEBUG: Failed to write to observability DB: {e}", file=sys.stderr)
+        # Also log the error
+        try:
+            db = ObservabilityDB(".contextune/observability.db")
+            db.log_error("user_prompt_submit", type(e).__name__, str(e))
+        except:
+            pass
 
 
 def clear_detection_statusline():
     """Clear status line detection (no match found)."""
     try:
-        detection_file = Path(".contextune/last_detection")
-        if detection_file.exists():
-            detection_file.unlink()
-            print(f"DEBUG: Cleared detection file", file=sys.stderr)
+        db = ObservabilityDB(".contextune/observability.db")
+        db.clear_detection()
+        print(f"DEBUG: Cleared detection from observability DB", file=sys.stderr)
     except Exception as e:
-        print(f"DEBUG: Failed to clear statusline file: {e}", file=sys.stderr)
+        print(f"DEBUG: Failed to clear detection from observability DB: {e}", file=sys.stderr)
 
 
 def get_detection_count() -> int:
     """Get total number of detections for progressive tips."""
     try:
-        stats_file = Path.home() / ".claude" / "plugins" / "contextune" / "data" / "detection_stats.json"
-        if stats_file.exists():
-            with open(stats_file) as f:
-                stats = json.load(f)
-                return stats.get("total_detections", 0)
+        db = ObservabilityDB(".contextune/observability.db")
+        stats = db.get_stats()
+        return stats.get("detections", {}).get("total", 0)
     except:
         pass
     return 0
@@ -206,6 +203,39 @@ COMMAND_ACTIONS = {
     "/ctx:configure": "enable persistent status bar display",
     "/ctx:stats": "see your time & cost savings",
 }
+
+# Skill mapping for reliable Claude execution
+# Maps slash commands to skill names (resolved from plugin's skills/ directory)
+# Skills are auto-discovered by Claude Code from: contextune/skills/*/SKILL.md
+SKILL_MAPPING = {
+    "/sc:design": "sc:architect",      # Plugin skill: skills/software-architect
+    "/sc:analyze": "sc:analyzer",      # Future: skills/code-analyzer
+    "/ctx:research": "ctx:researcher", # Plugin skill: skills/researcher
+    "/ctx:plan": "ctx:planner",        # Future: skills/parallel-planner
+}
+
+def create_skill_augmented_prompt(match: IntentMatch, original_prompt: str) -> str:
+    """
+    Augment prompt with skill suggestion for more reliable execution.
+
+    Evidence: Skills are invoked more reliably than slash commands because
+    they use Claude's native Skill tool (structured, type-safe) vs text expansion.
+
+    Args:
+        match: Detected command and confidence
+        original_prompt: User's original prompt text
+
+    Returns:
+        Augmented prompt that guides Claude to use skill or command
+    """
+    if match.command in SKILL_MAPPING:
+        skill_name = SKILL_MAPPING[match.command]
+        # Strong directive: "You can use your X skill"
+        return f"{original_prompt}. You can use your {skill_name} skill to help with this task."
+    else:
+        # For commands without skills, use directive language
+        action = COMMAND_ACTIONS.get(match.command, "complete this request")
+        return f"{original_prompt}. Please use the {match.command} command to {action}."
 
 
 def get_contextual_tip(match: IntentMatch, detection_count: int) -> str:
@@ -314,14 +344,18 @@ def main():
         # Increment counter
         increment_detection_count()
 
-        # SUGGEST MODE: Add context, let Claude decide
-        print(f"DEBUG: Suggesting command to Claude (detection #{detection_count + 1})", file=sys.stderr)
+        # AUGMENT MODE: Modify prompt with skill/command suggestion for reliability
+        print(f"DEBUG: Augmenting prompt for Claude (detection #{detection_count + 1})", file=sys.stderr)
+
+        # Create augmented prompt with skill suggestion
+        augmented_prompt = create_skill_augmented_prompt(match, prompt)
 
         # Format feedback with contextual tips
         feedback_msg = format_suggestion(match, detection_count)
 
         response = {
             "continue": True,
+            "modifiedPrompt": augmented_prompt,  # KEY: Augmented prompt for reliable execution
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",
                 "additionalContext": f"\n\n[Contextune detected: `{match.command}` with {match.confidence:.0%} confidence via {match.method}]"

@@ -2,14 +2,36 @@
 /**
  * Contextune SessionStart Hook
  *
- * Displays available Contextune commands at session start.
+ * 1. Clears old detection state from status line
+ * 2. Displays available Contextune commands at session start
+ *
  * Uses `feedback` field for ZERO context overhead (0 tokens).
  *
  * Context Cost: 0 tokens (feedback is UI-only, not added to Claude's context)
  */
 
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
+
 function main() {
   try {
+    // Clear old detection state from observability database
+    const dbFile = path.join('.contextune', 'observability.db');
+    try {
+      if (fs.existsSync(dbFile)) {
+        // Fast SQLite DELETE query (0.1ms)
+        execSync(`sqlite3 "${dbFile}" "DELETE FROM current_detection WHERE id = 1"`, {
+          stdio: 'pipe',
+          timeout: 1000
+        });
+        console.error('DEBUG: Cleared old detection from observability DB');
+      }
+    } catch (err) {
+      console.error('DEBUG: Failed to clear detection from observability DB:', err.message);
+      // Non-fatal, continue with session start message
+    }
+
     // Read SessionStart event from stdin (optional - we don't use it)
     // const event = JSON.parse(require('fs').readFileSync(0, 'utf-8'));
 

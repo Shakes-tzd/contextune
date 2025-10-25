@@ -134,6 +134,17 @@ class KeywordMatcher:
                 r'\bmerge\b',
                 r'\bgit\b',
             ],
+            '/ctx:research': [
+                r'\bresearch\b',
+                r'\binvestigate\b',
+                r'\bfind\s+information\b',
+                r'\bcompare\b',
+                r'\bwhat\'?s\s+the\s+best\b',
+                r'\bwhich\s+(library|framework|tool)\b',
+                r'\bwhat\s+should\s+i\s+use\b',
+                r'\blook\s+into\b',
+                r'\bevaluate\s+options\b',
+            ],
         }
 
         # Compile patterns with case-insensitive flag
