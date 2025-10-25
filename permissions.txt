@@ -1,0 +1,6 @@
+Bash(git worktree:*)
+Bash(git add:*)
+Bash(git commit:*)
+Bash(git push:*)
+Bash(gh issue:*)
+Bash(gh label create:*)

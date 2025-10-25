@@ -1,5 +1,5 @@
 ---
-name: slashsense:parallel:plan
+name: ss:plan
 description: Document a development plan for parallel execution
 executable: true
 ---

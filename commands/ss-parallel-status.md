@@ -1,5 +1,5 @@
 ---
-name: slashsense:parallel:status
+name: ss:status
 description: Check status of parallel worktrees and tasks
 executable: true
 ---

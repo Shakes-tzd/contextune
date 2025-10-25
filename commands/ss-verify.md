@@ -1,5 +1,5 @@
 ---
-name: slashsense:verify
+name: ss:verify
 description: Verify and execute detected slash command with user confirmation
 ---
 

@@ -1,7 +1,7 @@
 {
   "name": "slashsense",
-  "version": "0.5.0",
-  "description": "Natural language to slash command mapping with multi-layered discovery (CLAUDE.md + Status Bar + Skills + Hook). One-time /slashsense:configure setup ensures persistent visibility. 81% cost reduction with Haiku agents. Stop memorizing commands—just describe what you want!",
+  "version": "0.5.1",
+  "description": "Natural language to slash command mapping with ultra-short commands (/ss:*). Quick research with /ss:research (3 parallel agents, 1-2 min). Multi-layered discovery (CLAUDE.md + Status Bar + Skills). 87% cost reduction with Haiku agents. Stop memorizing—just describe what you want!",
   "author": {
     "name": "Shakes Dlamini",
     "email": "shakestzd@gmail.com",

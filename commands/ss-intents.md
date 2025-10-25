@@ -1,15 +1,15 @@
 ---
-name: slashsense:config
+name: ss:intents
 description: Configure SlashSense intent detection settings
 executable: commands/slashsense-config.py
 ---
 
-# SlashSense Configuration
+# SlashSense Intent Detection Settings
 
-Opens the SlashSense configuration file for editing.
+Configure intent detection settings and custom command mappings.
 
 ## Usage
-`/slashsense:config`
+`/ss:intents`
 
 This opens `~/.claude/plugins/slashsense/data/user_patterns.json` where you can:
 

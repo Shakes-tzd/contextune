@@ -7,7 +7,7 @@ Natural language to slash command mapping + AI-powered expert guidance for Claud
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg)](https://docs.claude.com/en/docs/claude-code/plugins)
-[![Version](https://img.shields.io/badge/version-0.5.0-green.svg)](https://github.com/Shakes-tzd/slashsense/releases)
+[![Version](https://img.shields.io/badge/version-0.5.1-green.svg)](https://github.com/Shakes-tzd/slashsense/releases)
 [![Cost Savings](https://img.shields.io/badge/cost%20savings-81%25-brightgreen.svg)](#-new-in-v030-haiku-agent-architecture)
 [![Documentation](https://img.shields.io/badge/docs-mkdocs-blue.svg)](https://yourusername.github.io/slashsense/)
 
@@ -209,7 +209,7 @@ Understands natural variations and **automatically executes** the detected comma
 - "review the codebase" → Auto-executes `/sc:analyze`
 - "check code quality" → Auto-executes `/sc:analyze`
 - "audit for issues" → Auto-executes `/sc:analyze`
-- "work on these in parallel" → Auto-executes `/slashsense:parallel:execute`
+- "work on these in parallel" → Auto-executes `/ss:execute`
 
 ### ⚡ **Lightning Fast**
 - P95 latency: <2ms (keyword path)
@@ -262,7 +262,7 @@ cd slashsense
 **NEW in v0.5.0:** Run the configuration command for persistent visibility:
 
 ```bash
-/slashsense:configure
+/ss:configure
 ```
 
 This will:
@@ -327,10 +327,10 @@ SlashSense includes a powerful parallel development system that lets Claude work
 
 | Natural Language | Command | What It Does |
 |-----------------|---------|--------------|
-| "plan parallel development" | `/slashsense:parallel:plan` | Document development plan for parallel execution |
-| "work on these in parallel" | `/slashsense:parallel:execute` | Execute plan in parallel using git worktrees |
-| "check parallel status" | `/slashsense:parallel:status` | Monitor progress across all parallel tasks |
-| "cleanup parallel worktrees" | `/slashsense:parallel:cleanup` | Clean up completed worktrees and branches |
+| "plan parallel development" | `/ss:plan` | Document development plan for parallel execution |
+| "work on these in parallel" | `/ss:execute` | Execute plan in parallel using git worktrees |
+| "check parallel status" | `/ss:status` | Monitor progress across all parallel tasks |
+| "cleanup parallel worktrees" | `/ss:cleanup` | Clean up completed worktrees and branches |
 
 ### Example Workflow
 
@@ -341,7 +341,7 @@ Claude: "📋 These tasks are independent. Would you like to work on them in par
 
 You: "yes, parallelize this work"
 
-SlashSense: 🎯 /slashsense:parallel:execute detected (92% confidence)
+SlashSense: 🎯 /ss:execute detected (92% confidence)
 
 Claude:
 "✅ Created plan: .parallel/plans/PLAN-20251014.md
@@ -526,13 +526,13 @@ Benchmarked on M1 MacBook Pro:
 - [x] Basic command mappings
 
 ### v1.1 (Current)
-- [x] `/slashsense:config` command
-- [x] `/slashsense:stats` command
+- [x] `/ss:intents` command
+- [x] `/ss:stats` command
 - [x] Parallel development workflow
-- [x] `/slashsense:parallel:plan` command
-- [x] `/slashsense:parallel:execute` command
-- [x] `/slashsense:parallel:status` command
-- [x] `/slashsense:parallel:cleanup` command
+- [x] `/ss:plan` command
+- [x] `/ss:execute` command
+- [x] `/ss:status` command
+- [x] `/ss:cleanup` command
 - [ ] Auto-discovery of all plugin commands
 - [ ] Learning mode (capture corrections)
 - [ ] Custom pattern editor

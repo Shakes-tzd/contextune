@@ -1,5 +1,5 @@
 ---
-name: slashsense:parallel:cleanup
+name: ss:cleanup
 description: Clean up completed worktrees and branches
 executable: true
 ---

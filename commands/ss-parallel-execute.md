@@ -1,5 +1,5 @@
 ---
-name: slashsense:parallel:execute
+name: ss:execute
 description: Execute plan in parallel using git worktrees and multiple Claude sessions
 executable: true
 ---

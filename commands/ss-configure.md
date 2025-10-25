@@ -1,5 +1,5 @@
 ---
-name: slashsense:configure
+name: ss:configure
 description: Configure SlashSense for persistent visibility in CLAUDE.md and status bar. Run once after installation.
 executable: true
 ---

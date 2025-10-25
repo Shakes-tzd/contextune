@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1] - 2025-10-25
+
+**Status: Command Shortening & Research Release**
+
+### Added
+
+**New Command:**
+- `/ss:research` - Fast research using 3 parallel Haiku agents (1-2 min, ~$0.07)
+  - Agent 1: Web research (latest trends, comparisons)
+  - Agent 2: Codebase search (existing patterns, reuse opportunities)
+  - Agent 3: Dependency analysis (what's installed, compatibility)
+  - Returns comparison table + recommendation + next steps
+
+**Shortened Command Names:**
+- All commands shortened from `/slashsense:*` to `/ss:*` for faster typing
+- `/ss:configure` - Setup persistent visibility
+- `/ss:intents` - Configure intent detection
+- `/ss:research` - Quick research (NEW)
+- `/ss:plan` - Create parallel development plans
+- `/ss:execute` - Execute plans in parallel
+- `/ss:status` - Monitor parallel tasks
+- `/ss:cleanup` - Clean up worktrees
+- `/ss:stats` - View statistics
+- `/ss:verify` - Verify detected commands
+
+### Changed
+- Updated status bar to show correct command names: `/ss:research | /ss:plan | /ss:execute`
+- Updated CLAUDE.md with shortened names and research command
+- Updated README and all documentation with new command names
+- Plugin description updated to highlight quick research capability
+
+### Benefits
+- **Faster typing**: `/ss:*` vs `/slashsense:*` (60% shorter)
+- **Quick research**: Answer technical questions in 1-2 min with parallel agents
+- **Cost efficient**: Research costs ~$0.07 (3 Haiku agents vs 1 Sonnet ~$0.15)
+- **Better UX**: Shorter commands more natural to type
+
 ## [0.5.0] - 2025-10-24
 
 **Status: Discovery & Configuration Release - Multi-Layered Visibility**
@@ -14,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 **Configuration Command:**
-- `/slashsense:configure` - One-time setup for persistent visibility
+- `/ss:configure` - One-time setup for persistent visibility
 - Integrates SlashSense into CLAUDE.md (~150 tokens context at session start)
 - Adds SlashSense commands to status bar (zero context, always visible)
 - Creates backups before modifications (safe rollback)
@@ -148,12 +185,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 26 command mappings out of the box
 - Intent mappings for SuperClaude commands (`/sc:*`)
 - Parallel development workflow commands:
-  - `/slashsense:parallel:plan` - Document development plans
-  - `/slashsense:parallel:execute` - Execute parallel development with git worktrees
-  - `/slashsense:parallel:status` - Monitor parallel task progress
-  - `/slashsense:parallel:cleanup` - Clean up completed worktrees
-- Configuration command: `/slashsense:config`
-- Statistics command: `/slashsense:stats`
+  - `/ss:plan` - Document development plans
+  - `/ss:execute` - Execute parallel development with git worktrees
+  - `/ss:status` - Monitor parallel task progress
+  - `/ss:cleanup` - Clean up completed worktrees
+- Configuration command: `/ss:intents`
+- Statistics command: `/ss:stats`
 - Automatic subagent spawning for parallel execution
 - GitHub integration (issue creation, labeling, tracking)
 - Git worktree management for isolated development

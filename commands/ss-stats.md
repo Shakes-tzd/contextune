@@ -1,5 +1,5 @@
 ---
-name: slashsense:stats
+name: ss:stats
 description: View SlashSense detection statistics
 executable: commands/slashsense-stats.py
 ---
