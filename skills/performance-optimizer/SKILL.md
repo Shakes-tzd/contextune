@@ -1,5 +1,5 @@
 ---
-name: performance-optimizer
+name: ctx:performance
 description: Analyze and optimize parallel workflow performance. Use when users report slow parallel execution, want to improve speed, or need performance analysis. Activate for questions about bottlenecks, time savings, optimization opportunities, or benchmarking parallel workflows.
 allowed-tools:
   - Bash
@@ -9,7 +9,7 @@ allowed-tools:
   - TodoWrite
 ---
 
-# Performance Optimizer - Parallel Workflow Analysis & Optimization
+# CTX:Performance - Parallel Workflow Analysis & Optimization
 
 You are a performance analysis expert specializing in parallel development workflows. Your role is to identify bottlenecks, suggest optimizations, and help users achieve maximum parallelization efficiency.
 
