@@ -1,4 +1,4 @@
-# SlashSense Architecture Improvements v0.5.1
+# Contextune Architecture Improvements v0.5.1
 ## Discovery Mechanisms + Research Command
 
 **Date:** 2025-10-24
@@ -9,12 +9,12 @@
 
 ## Executive Summary
 
-Research uncovered **2 critical gaps** in SlashSense architecture:
+Research uncovered **2 critical gaps** in Contextune architecture:
 
 1. **No standalone research command** - Research embedded in `parallel:plan`, can't be used independently
-2. **Missing Claude discovery mechanism** - Zero skills exist, Claude never proactively suggests SlashSense
+2. **Missing Claude discovery mechanism** - Zero skills exist, Claude never proactively suggests Contextune
 
-**Impact:** Users install SlashSense but never discover its capabilities
+**Impact:** Users install Contextune but never discover its capabilities
 
 **Solution:** Add 2 skills + 1 research command (total: ~6-8 hours development)
 
@@ -40,7 +40,7 @@ Research uncovered **2 critical gaps** in SlashSense architecture:
 3. **Execution** - Implement with adaptive feedback loops
 4. **Evaluation** - Measure results, optimize
 
-**SlashSense Currently:** Merges research + planning into one command (not modular)
+**Contextune Currently:** Merges research + planning into one command (not modular)
 
 ### Context Optimization Patterns
 
@@ -52,7 +52,7 @@ Research uncovered **2 critical gaps** in SlashSense architecture:
 
 ---
 
-## Current SlashSense Architecture
+## Current Contextune Architecture
 
 ### Existing Components
 
@@ -62,13 +62,13 @@ Hooks:
 └─ user_prompt_submit.py (UserPromptSubmit) - Intent detection (3-tier)
 
 Commands:
-├─ slashsense-config.md - Configuration
-├─ slashsense-stats.md - Statistics
-├─ slashsense-verify.md - Verification
-├─ slashsense-parallel-plan.md - Plan creation (RESEARCH EMBEDDED HERE!)
-├─ slashsense-parallel-execute.md - Execution
-├─ slashsense-parallel-status.md - Monitoring
-└─ slashsense-parallel-cleanup.md - Cleanup
+├─ contextune-config.md - Configuration
+├─ contextune-stats.md - Statistics
+├─ contextune-verify.md - Verification
+├─ contextune-parallel-plan.md - Plan creation (RESEARCH EMBEDDED HERE!)
+├─ contextune-parallel-execute.md - Execution
+├─ contextune-parallel-status.md - Monitoring
+└─ contextune-parallel-cleanup.md - Cleanup
 
 Skills: NONE (❌ Critical gap!)
 
@@ -84,18 +84,18 @@ User types: "implement auth, dashboard, API"
   ↓
 ??? NO PROACTIVE SUGGESTION ???  ← Discovery gap!
   ↓
-/slashsense:parallel:plan
+/contextune:parallel:plan
   ├─ Lines 45-248: Research phase (embedded)
   ├─ Spawns 5 Haiku agents for research
   └─ Creates plan with research synthesis
   ↓
-/slashsense:parallel:execute
+/contextune:parallel:execute
 ```
 
 **Problems:**
 1. Research can't be used standalone
 2. Claude never suggests "You could parallelize this!"
-3. Users don't discover SlashSense exists
+3. Users don't discover Contextune exists
 
 ---
 
@@ -105,14 +105,14 @@ User types: "implement auth, dashboard, API"
 
 #### 1. Skill: `parallel-development-expert`
 
-**Location:** `.claude/skills/slashsense-parallel-development-expert/SKILL.md`
+**Location:** `.claude/skills/contextune-parallel-development-expert/SKILL.md`
 
 **Purpose:** Proactively suggest parallelization opportunities
 
 **Frontmatter:**
 ```yaml
 ---
-name: slashsense:parallel-development-expert
+name: contextune:parallel-development-expert
 description: Expert guidance on parallel development workflows using git worktrees and multi-agent execution. Use when users mention parallel work, concurrent development, speeding up development, working on multiple features simultaneously, or scaling team productivity. Activate for questions about task decomposition, worktree management, or parallelization strategies.
 ---
 ```
@@ -121,7 +121,7 @@ description: Expert guidance on parallel development workflows using git worktre
 ```markdown
 # Parallel Development Expert
 
-You are an expert in parallel development workflows using SlashSense.
+You are an expert in parallel development workflows using Contextune.
 
 ## When to Activate
 
@@ -143,22 +143,22 @@ Determine if tasks are independent:
 
 If 3+ independent tasks detected:
 
-"I can parallelize these tasks using SlashSense! Estimated time:
+"I can parallelize these tasks using Contextune! Estimated time:
 - Sequential: {X} hours
 - Parallel: {Y} hours
 - Savings: {Z}% faster
 
 Want me to create a parallel development plan?"
 
-Then offer: `/slashsense:parallel:plan`
+Then offer: `/contextune:parallel:plan`
 
 ## Examples
 
 User: "I need to add auth, dashboard, and API integration"
-You: "These 3 features are independent! I can run them in parallel using git worktrees with SlashSense. Estimated: 2.5h parallel vs 6h sequential (58% faster). Shall I create a plan?"
+You: "These 3 features are independent! I can run them in parallel using git worktrees with Contextune. Estimated: 2.5h parallel vs 6h sequential (58% faster). Shall I create a plan?"
 
 User: "This will take weeks to build all these features"
-You: "I can help speed this up! Are the features independent? If so, I can use SlashSense to run them in parallel using separate git worktrees. This could reduce development time by 60-80%."
+You: "I can help speed this up! Are the features independent? If so, I can use Contextune to run them in parallel using separate git worktrees. This could reduce development time by 60-80%."
 ```
 
 **Context Overhead:** ~150 tokens (description + activation hints)
@@ -169,35 +169,35 @@ You: "I can help speed this up! Are the features independent? If so, I can use S
 
 #### 2. Skill: `intent-recognition`
 
-**Location:** `.claude/skills/slashsense-intent-recognition/SKILL.md`
+**Location:** `.claude/skills/contextune-intent-recognition/SKILL.md`
 
-**Purpose:** Help users discover SlashSense capabilities
+**Purpose:** Help users discover Contextune capabilities
 
 **Frontmatter:**
 ```yaml
 ---
-name: slashsense:intent-recognition
-description: Help users discover SlashSense capabilities and understand how to use natural language commands. Use when users ask about SlashSense features, available commands, how to use the plugin, or what they can do. Activate for questions like "what can SlashSense do?", "how do I use this?", "show me examples", "what commands are available?"
+name: contextune:intent-recognition
+description: Help users discover Contextune capabilities and understand how to use natural language commands. Use when users ask about Contextune features, available commands, how to use the plugin, or what they can do. Activate for questions like "what can Contextune do?", "how do I use this?", "show me examples", "what commands are available?"
 ---
 ```
 
 **Content Structure:**
 ```markdown
-# SlashSense Intent Recognition & Discovery
+# Contextune Intent Recognition & Discovery
 
-You help users discover and understand SlashSense plugin capabilities.
+You help users discover and understand Contextune plugin capabilities.
 
 ## When to Activate
 
-- "What can SlashSense do?"
+- "What can Contextune do?"
 - "How do I use this plugin?"
-- "Show me SlashSense examples"
+- "Show me Contextune examples"
 - "What commands are available?"
-- "SlashSense documentation"
+- "Contextune documentation"
 
 ## Capabilities Overview
 
-SlashSense provides **natural language to slash command mapping** with three tiers:
+Contextune provides **natural language to slash command mapping** with three tiers:
 
 1. **Intent Detection** (automatic)
    - Detects slash commands from natural language
@@ -210,8 +210,8 @@ SlashSense provides **natural language to slash command mapping** with three tie
    - Multi-agent coordination
 
 3. **Configuration** (optional)
-   - `/slashsense:config` - View/edit settings
-   - `/slashsense:stats` - Usage statistics
+   - `/contextune:config` - View/edit settings
+   - `/contextune:stats` - Usage statistics
 
 ## Natural Language Examples
 
@@ -220,29 +220,29 @@ Instead of typing `/sc:analyze`, users can say:
 - "review this codebase"
 - "check code quality"
 
-SlashSense automatically detects and suggests the command.
+Contextune automatically detects and suggests the command.
 
 ## Available Commands
 
 ### Research & Planning
-- `/slashsense:research` - Standalone research (quick questions)
-- `/slashsense:parallel:plan` - Create parallel development plan
+- `/contextune:research` - Standalone research (quick questions)
+- `/contextune:parallel:plan` - Create parallel development plan
 
 ### Execution & Monitoring
-- `/slashsense:parallel:execute` - Execute plan with worktrees
-- `/slashsense:parallel:status` - Monitor progress
-- `/slashsense:parallel:cleanup` - Clean up worktrees
+- `/contextune:parallel:execute` - Execute plan with worktrees
+- `/contextune:parallel:status` - Monitor progress
+- `/contextune:parallel:cleanup` - Clean up worktrees
 
 ### Configuration
-- `/slashsense:config` - Manage settings
-- `/slashsense:stats` - View statistics
-- `/slashsense:verify` - Verify detection
+- `/contextune:config` - Manage settings
+- `/contextune:stats` - View statistics
+- `/contextune:verify` - Verify detection
 
 ## How to Use
 
 **Option 1: Natural Language (Recommended)**
 Just type what you want: "analyze my code"
-SlashSense detects and suggests the appropriate command.
+Contextune detects and suggests the appropriate command.
 
 **Option 2: Explicit Command**
 Type `/command-name` directly.
@@ -253,7 +253,7 @@ User: "What can this plugin do?"
 You: [Show capabilities overview + natural language examples]
 
 User: "How do I parallelize work?"
-You: "Use natural language like 'create parallel plan for features X, Y, Z' or run `/slashsense:parallel:plan` directly."
+You: "Use natural language like 'create parallel plan for features X, Y, Z' or run `/contextune:parallel:plan` directly."
 ```
 
 **Context Overhead:** ~50 tokens (description only)
@@ -262,16 +262,16 @@ You: "Use natural language like 'create parallel plan for features X, Y, Z' or r
 
 ---
 
-#### 3. Command: `/slashsense:research`
+#### 3. Command: `/contextune:research`
 
-**Location:** `commands/slashsense-research.md`
+**Location:** `commands/contextune-research.md`
 
 **Purpose:** Standalone research without parallel execution commitment
 
 **Frontmatter:**
 ```yaml
 ---
-name: slashsense:research
+name: contextune:research
 description: Conduct focused research using parallel Haiku agents. Answers questions about libraries, best practices, existing code patterns, and technical decisions. Returns findings without creating a full development plan.
 executable: true
 ---
@@ -279,7 +279,7 @@ executable: true
 
 **Content Structure:**
 ```markdown
-# SlashSense Research - Focused Investigation
+# Contextune Research - Focused Investigation
 
 Conduct targeted research using 3 parallel Haiku agents to answer specific questions.
 
@@ -414,7 +414,7 @@ Report (<300 words):
 
 **User:** "What's the best database for our use case?"
 
-**Claude:** I'll research database options for you using SlashSense.
+**Claude:** I'll research database options for you using Contextune.
 
 *Spawns 3 agents in parallel...*
 
@@ -459,13 +459,13 @@ Compatibility: ✅ All systems go
 
 **Step 1:** Create skill directory structure
 ```bash
-mkdir -p .claude/skills/slashsense-parallel-development-expert
-mkdir -p .claude/skills/slashsense-intent-recognition
+mkdir -p .claude/skills/contextune-parallel-development-expert
+mkdir -p .claude/skills/contextune-intent-recognition
 ```
 
 **Step 2:** Write SKILL.md files (content above)
 
-**Step 3:** Create `/slashsense:research` command
+**Step 3:** Create `/contextune:research` command
 
 **Step 4:** Test discovery
 - Start fresh Claude Code session
@@ -473,7 +473,7 @@ mkdir -p .claude/skills/slashsense-intent-recognition
 - Verify skill activates and suggests parallelization
 
 **Step 5:** Test research
-- Run `/slashsense:research` with question
+- Run `/contextune:research` with question
 - Verify 3 agents spawn in parallel
 - Check synthesis quality
 
@@ -496,7 +496,7 @@ Claude: "I can parallelize these! Estimated:
   ↓
 [User: "Yes"]
   ↓
-/slashsense:parallel:plan
+/contextune:parallel:plan
 ```
 
 ### Research Flow (NEW!)
@@ -504,7 +504,7 @@ Claude: "I can parallelize these! Estimated:
 ```
 User: "What's the best state library for React?"
   ↓
-/slashsense:research
+/contextune:research
   ├─ Agent 1: WebSearch (Zustand, Redux, Jotai comparison)
   ├─ Agent 2: Codebase (existing patterns)
   └─ Agent 3: Dependencies (what's installed)
@@ -521,12 +521,12 @@ User: "Create parallel plan for X, Y, Z"
   ↓
 [context_injector.js] Injects date, tech stack, specs
   ↓
-/slashsense:parallel:plan
-  ├─ NOW: Can reuse /slashsense:research findings!
+/contextune:parallel:plan
+  ├─ NOW: Can reuse /contextune:research findings!
   ├─ Spawns 5 agents OR references prior research
   └─ Creates structured plan
   ↓
-/slashsense:parallel:execute
+/contextune:parallel:execute
 ```
 
 ---
@@ -568,7 +568,7 @@ Discovery capability: ✅ PROACTIVE (skills suggest automatically)
 
 **Trade-off:**
 - Cost: +230 tokens passive (~$0.0007 per session)
-- Benefit: Users discover SlashSense automatically
+- Benefit: Users discover Contextune automatically
 - ROI: Massive (discovery drives adoption)
 
 ---
@@ -577,16 +577,16 @@ Discovery capability: ✅ PROACTIVE (skills suggest automatically)
 
 ### Phase 1: Discovery (HIGH PRIORITY)
 
-**Why:** Solves the "users don't know SlashSense exists" problem
+**Why:** Solves the "users don't know Contextune exists" problem
 
 **Tasks:**
-1. Create `slashsense:parallel-development-expert` skill (2-3h)
-2. Create `slashsense:intent-recognition` skill (1h)
+1. Create `contextune:parallel-development-expert` skill (2-3h)
+2. Create `contextune:intent-recognition` skill (1h)
 3. Test discovery in real conversations (30min)
 
 **Deliverables:**
-- `.claude/skills/slashsense-parallel-development-expert/SKILL.md`
-- `.claude/skills/slashsense-intent-recognition/SKILL.md`
+- `.claude/skills/contextune-parallel-development-expert/SKILL.md`
+- `.claude/skills/contextune-intent-recognition/SKILL.md`
 - Verified: Skills activate automatically
 
 **Estimated Effort:** 3-4 hours
@@ -598,12 +598,12 @@ Discovery capability: ✅ PROACTIVE (skills suggest automatically)
 **Why:** Decouples research from planning (modularity)
 
 **Tasks:**
-1. Create `/slashsense:research` command (2-3h)
+1. Create `/contextune:research` command (2-3h)
 2. Extract research agent templates from `parallel:plan` (1h)
 3. Test standalone research (30min)
 
 **Deliverables:**
-- `commands/slashsense-research.md`
+- `commands/contextune-research.md`
 - Verified: Research works independently
 
 **Estimated Effort:** 3-4 hours
@@ -620,7 +620,7 @@ Discovery capability: ✅ PROACTIVE (skills suggest automatically)
 3. Test integrated workflow (30min)
 
 **Deliverables:**
-- Updated `commands/slashsense-parallel-plan.md`
+- Updated `commands/contextune-parallel-plan.md`
 - Verified: Can reuse research or run fresh
 
 **Estimated Effort:** 2-3 hours
@@ -646,7 +646,7 @@ Discovery capability: ✅ PROACTIVE (skills suggest automatically)
 
 **Measurement:**
 ```python
-# Track in slashsense-stats
+# Track in contextune-stats
 {
   "skill_activations": {
     "parallel-development-expert": {
@@ -666,8 +666,8 @@ Discovery capability: ✅ PROACTIVE (skills suggest automatically)
 ```python
 {
   "command_usage": {
-    "slashsense:research": 23,
-    "slashsense:parallel:plan": 46,
+    "contextune:research": 23,
+    "contextune:parallel:plan": 46,
     "research_before_plan_rate": "50%"
   }
 }
@@ -739,7 +739,7 @@ This architecture improvement **complements** the v0.5.0 cost optimization plan:
 ### Phase 3: GA (v0.5.1)
 - Release as stable
 - Publish discovery metrics
-- Create tutorial: "How SlashSense discovers itself"
+- Create tutorial: "How Contextune discovers itself"
 
 ---
 
@@ -752,28 +752,28 @@ Add section:
 ```markdown
 ## 🔍 Auto-Discovery
 
-SlashSense automatically discovers opportunities to help:
+Contextune automatically discovers opportunities to help:
 
 ### Proactive Suggestions
-When you mention multiple tasks, SlashSense suggests parallelization:
+When you mention multiple tasks, Contextune suggests parallelization:
 - "I need to build auth, dashboard, and API"
-- → Claude: "I can parallelize these! 58% faster with SlashSense"
+- → Claude: "I can parallelize these! 58% faster with Contextune"
 
 ### Quick Research
-Need to make a technical decision? Use `/slashsense:research`:
+Need to make a technical decision? Use `/contextune:research`:
 - "What's the best React state library?"
 - → Gets comparison in 1-2 minutes using parallel research agents
 
 ### Intent Detection
-Just use natural language—SlashSense detects commands automatically:
+Just use natural language—Contextune detects commands automatically:
 - "analyze my code" → Suggests `/sc:analyze`
-- "create parallel plan" → Triggers `/slashsense:parallel:plan`
+- "create parallel plan" → Triggers `/contextune:parallel:plan`
 ```
 
 ### New Documentation Files
 
 1. `docs/discovery.md` - How auto-discovery works
-2. `docs/research-workflow.md` - Using `/slashsense:research`
+2. `docs/research-workflow.md` - Using `/contextune:research`
 3. `docs/skills-reference.md` - Available skills and activation criteria
 
 ---
@@ -786,7 +786,7 @@ These architecture improvements address the two critical gaps:
 2. ✅ **Modularity** - Research command decouples research from planning (reusability)
 
 **Investment:** 8-11 hours
-**Impact:** Solves the "users don't know SlashSense exists" problem
+**Impact:** Solves the "users don't know Contextune exists" problem
 **Context Cost:** +230 tokens (~$0.0007 per session)
 **ROI:** Massive (adoption drives all other features)
 

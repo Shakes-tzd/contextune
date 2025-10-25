@@ -1,11 +1,62 @@
 # Changelog
 
-All notable changes to SlashSense will be documented in this file.
+All notable changes to Contextune will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.5.4] - 2025-10-25
+
+**Status: Rebrand to Contextune - Context Engineering Focus**
+
+### Changed
+
+**Major Rebrand:**
+- **New name: Contextune** (formerly SlashSense)
+  - Portmanteau: Context + Tune
+  - Better represents core value proposition: context engineering
+  - Domain: contextune.com (available)
+  - Repository: github.com/Shakes-tzd/contextune
+
+**Command Name Changes:**
+- `/ss:*` → `/ctx:*` (shorter, clearer prefix)
+  - `/ss:research` → `/ctx:research`
+  - `/ss:plan` → `/ctx:plan`
+  - `/ss:execute` → `/ctx:execute`
+  - `/ss:status` → `/ctx:status`
+  - `/ss:cleanup` → `/ctx:cleanup`
+  - `/ss:configure` → `/ctx:configure`
+  - `/ss:stats` → `/ctx:stats`
+
+**Updated Focus:**
+- From: "Natural language to slash command mapping"
+- To: "Precision-tuned context engineering"
+- Emphasizes: Modular plans (95% fewer tokens), parallel workflows (81% cost reduction), zero-transformation architecture
+
+**Files Updated:**
+- `.claude-plugin/plugin.json` - Name, version (1.0.0), description
+- All command files renamed: `ss-*.md` → `ctx-*.md`
+- All hooks updated: `hooks/user_prompt_submit.py`, `hooks/session_start.js`
+- All skills updated: 4 skill SKILL.md files
+- All agents updated: 5 agent .md files
+- Configuration: `marketplace.json`, `intent_mappings.json`
+- Documentation: All .md files in `docs/`, `.plans/`
+
+### Migration
+
+**For Existing Users:**
+- Plugin name change: `slashsense` → `contextune`
+- Commands auto-remapped: Old `/ss:*` commands still work via intent detection
+- No breaking changes to functionality
+- See MIGRATION.md for detailed upgrade guide
+
+### Version
+
+- **Version bumped: 0.5.3 → 0.5.4** (rebrand)
+- Maintains experimental 0.x status
+- All functionality preserved
 
 ## [0.5.3] - 2025-10-25
 
@@ -14,7 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 **SessionStart Hook for Command Discovery:**
-- Added `hooks/session_start.js` - Displays SlashSense commands at session start
+- Added `hooks/session_start.js` - Displays Contextune commands at session start
 - **Zero context overhead** - Uses `feedback` field (0 tokens, UI-only)
 - Shows 7 key commands with descriptions
 - Includes natural language examples
@@ -70,14 +121,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Skills for Auto-Discovery:**
 - `parallel-development-expert` - Proactively suggests parallelization when multiple tasks mentioned
-- `intent-recognition` - Helps users discover SlashSense capabilities
+- `intent-recognition` - Helps users discover Contextune capabilities
 - Skills automatically activate based on user context (no manual invocation)
 - Zero-config discovery mechanism
 
 ### Changed
 
 **Plugin Architecture Improvements:**
-- `/ss:configure` - Converted from auto-modification to read-only guide
+- `/ctx:configure` - Converted from auto-modification to read-only guide
   - No longer automatically modifies user files (respects plugin boundaries)
   - Provides copy-paste snippets for optional manual customization
   - Explains trade-offs clearly (context cost vs benefits)
@@ -89,8 +140,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- `/ss:intents` command (unnecessary complexity)
-- `commands/slashsense-config.py` (Python dependency removed)
+- `/ctx:intents` command (unnecessary complexity)
+- `commands/contextune-config.py` (Python dependency removed)
 - `delegation_mode` configuration (no longer needed)
 - `user_patterns.json` config file (hook has no configurable settings)
 - Auto-modification of `~/.claude/CLAUDE.md` (anti-pattern)
@@ -118,9 +169,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Migration Notes
 
-If you previously ran `/ss:configure`:
-1. Manually remove SlashSense section from `~/.claude/CLAUDE.md` (optional)
-2. Manually remove SlashSense section from `~/.claude/statusline.sh` (optional)
+If you previously ran `/ctx:configure`:
+1. Manually remove Contextune section from `~/.claude/CLAUDE.md` (optional)
+2. Manually remove Contextune section from `~/.claude/statusline.sh` (optional)
 3. Skills now provide discovery automatically (better than static context)
 
 ## [0.5.1] - 2025-10-25
@@ -130,32 +181,32 @@ If you previously ran `/ss:configure`:
 ### Added
 
 **New Command:**
-- `/ss:research` - Fast research using 3 parallel Haiku agents (1-2 min, ~$0.07)
+- `/ctx:research` - Fast research using 3 parallel Haiku agents (1-2 min, ~$0.07)
   - Agent 1: Web research (latest trends, comparisons)
   - Agent 2: Codebase search (existing patterns, reuse opportunities)
   - Agent 3: Dependency analysis (what's installed, compatibility)
   - Returns comparison table + recommendation + next steps
 
 **Shortened Command Names:**
-- All commands shortened from `/slashsense:*` to `/ss:*` for faster typing
-- `/ss:configure` - Setup persistent visibility
-- `/ss:intents` - Configure intent detection
-- `/ss:research` - Quick research (NEW)
-- `/ss:plan` - Create parallel development plans
-- `/ss:execute` - Execute plans in parallel
-- `/ss:status` - Monitor parallel tasks
-- `/ss:cleanup` - Clean up worktrees
-- `/ss:stats` - View statistics
-- `/ss:verify` - Verify detected commands
+- All commands shortened from `/contextune:*` to `/ctx:*` for faster typing
+- `/ctx:configure` - Setup persistent visibility
+- `/ctx:intents` - Configure intent detection
+- `/ctx:research` - Quick research (NEW)
+- `/ctx:plan` - Create parallel development plans
+- `/ctx:execute` - Execute plans in parallel
+- `/ctx:status` - Monitor parallel tasks
+- `/ctx:cleanup` - Clean up worktrees
+- `/ctx:stats` - View statistics
+- `/ctx:verify` - Verify detected commands
 
 ### Changed
-- Updated status bar to show correct command names: `/ss:research | /ss:plan | /ss:execute`
+- Updated status bar to show correct command names: `/ctx:research | /ctx:plan | /ctx:execute`
 - Updated CLAUDE.md with shortened names and research command
 - Updated README and all documentation with new command names
 - Plugin description updated to highlight quick research capability
 
 ### Benefits
-- **Faster typing**: `/ss:*` vs `/slashsense:*` (60% shorter)
+- **Faster typing**: `/ctx:*` vs `/contextune:*` (60% shorter)
 - **Quick research**: Answer technical questions in 1-2 min with parallel agents
 - **Cost efficient**: Research costs ~$0.07 (3 Haiku agents vs 1 Sonnet ~$0.15)
 - **Better UX**: Shorter commands more natural to type
@@ -167,9 +218,9 @@ If you previously ran `/ss:configure`:
 ### Added
 
 **Configuration Command:**
-- `/ss:configure` - One-time setup for persistent visibility
-- Integrates SlashSense into CLAUDE.md (~150 tokens context at session start)
-- Adds SlashSense commands to status bar (zero context, always visible)
+- `/ctx:configure` - One-time setup for persistent visibility
+- Integrates Contextune into CLAUDE.md (~150 tokens context at session start)
+- Adds Contextune commands to status bar (zero context, always visible)
 - Creates backups before modifications (safe rollback)
 - Validates plugin settings and skills
 - Comprehensive error handling and rollback instructions
@@ -187,7 +238,7 @@ If you previously ran `/ss:configure`:
 - Context optimization strategies (~350 tokens passive overhead)
 
 ### Benefits
-- **Visibility**: SlashSense always present through multiple mechanisms
+- **Visibility**: Contextune always present through multiple mechanisms
 - **Discoverability**: 95%+ users will see and discover features
 - **Cost**: Minimal context overhead (~$0.001 per session)
 - **User Control**: Requires permission, creates backups, provides rollback
@@ -232,7 +283,7 @@ If you previously ran `/ss:configure`:
 - `MIGRATION_GUIDE_v0.3.0.md` - Upgrade guide from v0.2.0
 
 ### Changed
-- Updated `slashsense-parallel-execute` to use Haiku agents instead of generic Task tool
+- Updated `contextune-parallel-execute` to use Haiku agents instead of generic Task tool
 - Enhanced `performance-optimizer` skill with cost tracking capabilities
 - Updated plugin.json to v0.3.0 with new description and keywords
 
@@ -256,7 +307,7 @@ If you previously ran `/ss:configure`:
 
 **AI-Powered Skills (4 Autonomous Skills):**
 - `parallel-development-expert`: Autonomous guidance on parallelizing development tasks
-- `intent-recognition`: Helps users discover SlashSense capabilities
+- `intent-recognition`: Helps users discover Contextune capabilities
 - `git-worktree-master`: Expert troubleshooting for git worktree issues
 - `performance-optimizer`: Analyzes and optimizes parallel workflow performance
 
@@ -281,7 +332,7 @@ If you previously ran `/ss:configure`:
 ### Changed
 - Updated plugin.json to v0.2.0
 - Updated README with prominent Skills section
-- Enhanced `slashsense-parallel-execute` with parallel setup pattern
+- Enhanced `contextune-parallel-execute` with parallel setup pattern
 
 ### Documentation
 - Skills architecture and integration guides
@@ -301,12 +352,12 @@ If you previously ran `/ss:configure`:
 - 26 command mappings out of the box
 - Intent mappings for SuperClaude commands (`/sc:*`)
 - Parallel development workflow commands:
-  - `/ss:plan` - Document development plans
-  - `/ss:execute` - Execute parallel development with git worktrees
-  - `/ss:status` - Monitor parallel task progress
-  - `/ss:cleanup` - Clean up completed worktrees
-- Configuration command: `/ss:intents`
-- Statistics command: `/ss:stats`
+  - `/ctx:plan` - Document development plans
+  - `/ctx:execute` - Execute parallel development with git worktrees
+  - `/ctx:status` - Monitor parallel task progress
+  - `/ctx:cleanup` - Clean up completed worktrees
+- Configuration command: `/ctx:intents`
+- Statistics command: `/ctx:stats`
 - Automatic subagent spawning for parallel execution
 - GitHub integration (issue creation, labeling, tracking)
 - Git worktree management for isolated development
@@ -351,6 +402,6 @@ If you previously ran `/ss:configure`:
 - Basic plugin scaffolding
 - Development environment setup
 
-[Unreleased]: https://github.com/Shakes-tzd/slashsense/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/Shakes-tzd/slashsense/releases/tag/v0.1.0
-[0.0.1]: https://github.com/Shakes-tzd/slashsense/releases/tag/v0.0.1
+[Unreleased]: https://github.com/Shakes-tzd/contextune/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/Shakes-tzd/contextune/releases/tag/v0.1.0
+[0.0.1]: https://github.com/Shakes-tzd/contextune/releases/tag/v0.0.1

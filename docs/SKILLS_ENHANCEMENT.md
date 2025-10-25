@@ -1,4 +1,4 @@
-# SlashSense Skills Enhancement
+# Contextune Skills Enhancement
 
 **Version:** 0.2.0
 **Date:** 2025-10-21
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-SlashSense now includes **AI-powered Skills** that transform it from a command mapper to an **autonomous development assistant**. Skills provide expert guidance automatically - no commands to memorize, no documentation to read. Just talk naturally and Claude activates the right expertise.
+Contextune now includes **AI-powered Skills** that transform it from a command mapper to an **autonomous development assistant**. Skills provide expert guidance automatically - no commands to memorize, no documentation to read. Just talk naturally and Claude activates the right expertise.
 
 **Key Innovation:** Model-invoked capabilities that combine with intent detection for a truly natural development experience.
 
@@ -21,9 +21,9 @@ SlashSense now includes **AI-powered Skills** that transform it from a command m
 ```
 User: "work on auth and dashboard in parallel"
 ↓
-SlashSense Hook: Detects "parallel" intent
+Contextune Hook: Detects "parallel" intent
 ↓
-Executes: /slashsense:parallel:execute
+Executes: /contextune:parallel:execute
 ↓
 Result: Parallel execution starts
 ```
@@ -40,7 +40,7 @@ Result: Parallel execution starts
 ```
 User: "How can I speed up development?"
 ↓
-SlashSense Skill: parallel-development-expert activates
+Contextune Skill: parallel-development-expert activates
 ↓
 Claude: Analyzes project, suggests parallelization
         Explains time savings (60% faster!)
@@ -49,7 +49,7 @@ Claude: Analyzes project, suggests parallelization
 ↓
 User: "yes, do it"
 ↓
-SlashSense Hook: Detects intent
+Contextune Hook: Detects intent
 ↓
 Executes: Optimized parallel workflow
 ↓
@@ -92,10 +92,10 @@ Result: User learns AND executes, 60% faster development
              ↕
 ┌─────────────────────────────────────────┐
 │  Layer 1: Slash Commands (Existing)     │
-│  ├─ /slashsense:parallel:plan           │
-│  ├─ /slashsense:parallel:execute        │
-│  ├─ /slashsense:parallel:status         │
-│  └─ /slashsense:parallel:cleanup        │
+│  ├─ /contextune:parallel:plan           │
+│  ├─ /contextune:parallel:execute        │
+│  ├─ /contextune:parallel:status         │
+│  └─ /contextune:parallel:cleanup        │
 │                                          │
 │  Explicit command execution             │
 └─────────────────────────────────────────┘
@@ -107,7 +107,7 @@ Result: User learns AND executes, 60% faster development
 2. **Skill activates** (parallel-development-expert analyzes project)
 3. **Skill recommends** ("Run these 3 tasks in parallel, save 60%")
 4. **User agrees** ("yes, do it")
-5. **Intent detection** maps "do it" → /slashsense:parallel:execute
+5. **Intent detection** maps "do it" → /contextune:parallel:execute
 6. **Command executes** with optimal settings
 
 Result: **Intelligent automation** (not just automation)
@@ -157,7 +157,7 @@ Say 'create parallel plan' to proceed"
 
 ### 2. intent-recognition (2,389 lines)
 
-**Purpose:** Help users discover SlashSense capabilities
+**Purpose:** Help users discover Contextune capabilities
 
 **Capabilities:**
 - Interactive capability discovery
@@ -169,10 +169,10 @@ Say 'create parallel plan' to proceed"
 **Example Interaction:**
 
 ```
-User: "What can SlashSense do?"
+User: "What can Contextune do?"
 
 intent-recognition:
-"SlashSense makes Claude Code more natural!
+"Contextune makes Claude Code more natural!
 
 🎯 Main Capabilities:
 
@@ -187,7 +187,7 @@ intent-recognition:
 3. Zero Configuration
    Works immediately, no setup!
 
-What are you building? I'll show you how SlashSense helps!"
+What are you building? I'll show you how Contextune helps!"
 ```
 
 **Key Features:**
@@ -415,18 +415,18 @@ Say 'work on them in parallel' and I'll handle everything!"
 
 **Typical Workflow (3 features):**
 
-Without SlashSense:
+Without Contextune:
 - Research parallel development: 30 min
 - Set up worktrees manually: 20 min
 - Work sequentially: 8 hours
 - **Total: 8.8 hours**
 
-With SlashSense (v0.1.0 - Intent Detection):
+With Contextune (v0.1.0 - Intent Detection):
 - Say "work on X, Y, Z in parallel": 30s
 - Parallel execution: 3 hours
 - **Total: 3 hours (66% faster!)**
 
-With SlashSense (v0.2.0 - Intent + Skills):
+With Contextune (v0.2.0 - Intent + Skills):
 - Ask "how can I work faster?": 30s
 - Get analysis + recommendations: 1 min
 - Confirm execution: 10s
@@ -460,16 +460,16 @@ Result: Execution + education
 ### Skills + Slash Commands
 
 ```
-User: "How do I use /slashsense:parallel:execute?"
+User: "How do I use /contextune:parallel:execute?"
 ↓
 Skill (intent-recognition): Activates
 ↓
 "Actually, you don't need that command!
 Just say: 'work on X and Y in parallel'
-SlashSense handles the rest.
+Contextune handles the rest.
 
 But if you prefer explicit commands:
-/slashsense:parallel:execute runs the workflow"
+/contextune:parallel:execute runs the workflow"
 ↓
 Result: User learns natural language is preferred
 ```
@@ -562,7 +562,7 @@ Yes! Nothing changed. Skills enhance, don't replace.
 **Testing:**
 ```bash
 # Try these to experience skills:
-"What can SlashSense do?"               # Activates intent-recognition
+"What can Contextune do?"               # Activates intent-recognition
 "How can I work on multiple features?"   # Activates parallel-development-expert
 "Can't remove my worktree"               # Activates git-worktree-master
 "Why is my parallel workflow slow?"      # Activates performance-optimizer
@@ -578,7 +578,7 @@ Yes! Nothing changed. Skills enhance, don't replace.
    ```
    ✅ "How can I speed up development?"
    ✅ "I'm getting a worktree error"
-   ✅ "What can I do with SlashSense?"
+   ✅ "What can I do with Contextune?"
 
    ❌ "Activate parallel-development-expert skill"
    ❌ "Run performance analysis"
@@ -667,12 +667,12 @@ Skills respect user preference:
 
 ```
 User: "Just run the command, don't explain"
-Skill: "Sure! Executing /slashsense:parallel:execute..."
+Skill: "Sure! Executing /contextune:parallel:execute..."
 ```
 
 Or use slash commands directly:
 ```
-/slashsense:parallel:execute
+/contextune:parallel:execute
 ```
 
 ---
@@ -730,7 +730,7 @@ Total: 76s (4% slower, but 10x better UX!)
 
 ## Conclusion
 
-SlashSense v0.2.0 transforms from a **command mapper** to an **autonomous development assistant** through Skills.
+Contextune v0.2.0 transforms from a **command mapper** to an **autonomous development assistant** through Skills.
 
 **Key Achievements:**
 - ✅ 4 production-ready skills (~11,600 lines)
@@ -752,7 +752,7 @@ SlashSense v0.2.0 transforms from a **command mapper** to an **autonomous develo
 - Skill analytics
 - Cross-project learning
 
-SlashSense + Skills = **The most natural way to use Claude Code.**
+Contextune + Skills = **The most natural way to use Claude Code.**
 
 ---
 

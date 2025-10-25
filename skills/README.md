@@ -1,9 +1,9 @@
-# SlashSense Skills - Autonomous Expert Guidance
+# Contextune Skills - Autonomous Expert Guidance
 
-**Version:** 0.2.0
-**Status:** ✅ Production Ready
+**Version:** 0.5.4
+**Status:** ✅ Experimental (0.x)
 
-SlashSense now includes **AI-powered Skills** that provide autonomous expert guidance. Skills are **model-invoked** - Claude automatically activates them when you need help, no commands required!
+Contextune now includes **AI-powered Skills** that provide autonomous expert guidance. Skills are **model-invoked** - Claude automatically activates them when you need help, no commands required!
 
 ---
 
@@ -15,7 +15,7 @@ Skills are specialized capabilities that Claude autonomously uses based on your 
 
 ```
 Slash Commands: User-invoked
-  You: "/slashsense:parallel:execute"
+  You: "/contextune:execute"
   Claude: Executes the command
 
 Skills: Model-invoked
@@ -70,17 +70,17 @@ Would you like me to create a parallel execution plan?"
 
 ### 2. **intent-recognition**
 
-**What it does:** Helps you discover SlashSense capabilities
+**What it does:** Helps you discover Contextune capabilities
 
 **Activates when you ask:**
-- "What can SlashSense do?"
+- "What can Contextune do?"
 - "How do I use this?"
 - "Show me examples"
 - "What commands are available?"
 - "Can you help me with...?"
 
 **Capabilities:**
-- ✅ Explains SlashSense features interactively
+- ✅ Explains Contextune features interactively
 - ✅ Shows natural language examples
 - ✅ Demonstrates capabilities
 - ✅ Guides first-time users
@@ -88,11 +88,11 @@ Would you like me to create a parallel execution plan?"
 
 **Example:**
 ```
-You: "What can SlashSense do?"
+You: "What can Contextune do?"
 
 Claude: *Activates intent-recognition*
 
-"SlashSense makes Claude Code more natural! Instead of memorizing commands,
+"Contextune makes Claude Code more natural! Instead of memorizing commands,
 just describe what you want.
 
 🎯 Main Capabilities:
@@ -231,7 +231,7 @@ Skills activate automatically when Claude detects you need them. Just talk natur
 
 **Discovery:**
 ```
-"What can I do with SlashSense?"
+"What can I do with Contextune?"
 "Show me what's possible"
 "How does this work?"
 "Give me some examples"
@@ -333,7 +333,7 @@ Claude: "Create branches with git branch..."
 [20 minutes of back-and-forth, no parallelization]
 ```
 
-### After Skills (With SlashSense)
+### After Skills (With Contextune)
 
 ```
 User: "I need to build auth, dashboard, and analytics"
@@ -367,7 +367,7 @@ Say 'work on these in parallel' and I'll handle the rest!"
 ### Skill Architecture
 
 ```
-slashsense/
+contextune/
 ├── skills/
 │   ├── parallel-development-expert/
 │   │   └── SKILL.md              # Expert guidance
@@ -405,8 +405,8 @@ description: Expert guidance on parallel development workflows using git worktre
 
 **intent-recognition:**
 ```yaml
-description: Help users discover SlashSense capabilities and understand how to use
-             natural language commands. Use when users ask about SlashSense features,
+description: Help users discover Contextune capabilities and understand how to use
+             natural language commands. Use when users ask about Contextune features,
              available commands, how to use the plugin, or what they can do.
 ```
 
@@ -548,11 +548,11 @@ Claude: "Let me diagnose that worktree error..." (git-worktree-master)
 ### Example 1: First-Time User
 
 ```
-User: "I just installed SlashSense. What is this?"
+User: "I just installed Contextune. What is this?"
 
 Claude: *Activates intent-recognition*
 
-"Welcome! 🎉 SlashSense makes Claude Code more natural.
+"Welcome! 🎉 Contextune makes Claude Code more natural.
 
 Instead of: /complex-command-with-flags --option=value
 Just say: 'work on these features in parallel'
@@ -605,14 +605,14 @@ Proceed?"
 ## 📚 Further Reading
 
 - [Claude Code Skills Documentation](https://docs.claude.com/en/docs/claude-code/skills.md)
-- [SlashSense Parallel Development Guide](../.parallel/docs/PARALLEL_SETUP_PATTERN.md)
+- [Contextune Parallel Development Guide](../.parallel/docs/PARALLEL_SETUP_PATTERN.md)
 - [Plugin Architecture](../docs/architecture.md)
 
 ---
 
-**Version:** 0.2.0
-**Last Updated:** 2025-10-21
-**Status:** Production Ready
+**Version:** 0.5.4
+**Last Updated:** 2025-10-25
+**Status:** Experimental (0.x)
 **License:** MIT
 
 **Questions?** Open an issue on GitHub or check the main README!

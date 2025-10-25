@@ -55,7 +55,7 @@
 - Kept intent detection hook (runs SECOND)
 - Context flows: inject → detect → execute
 
-**2. `commands/slashsense-parallel-plan.md`**
+**2. `commands/contextune-parallel-plan.md`**
 - Added Step 2: Parallel Research (NEW!)
 - 5 research agents spawn in parallel
 - Research synthesis phase
@@ -82,7 +82,7 @@ Context Hook (JavaScript):
 
 Intent Detection Hook:
 ├─ Receives enriched prompt
-├─ Detects /slashsense:parallel:plan
+├─ Detects /contextune:parallel:plan
 └─ Routes to planning command
 
 Planning Command:
@@ -212,7 +212,7 @@ Result: **Higher quality plans, faster execution, lower cost**
 
 ```bash
 # Test the JavaScript hook directly
-cd /Users/shakes/DevProjects/slashsense
+cd /Users/shakes/DevProjects/contextune
 
 echo '{"prompt":"research authentication"}' | node hooks/context_injector.js
 
@@ -243,7 +243,7 @@ User: "plan parallel development for user auth"
 ```bash
 # In Claude Code, trigger planning:
 
-User: "/slashsense:parallel:plan"
+User: "/contextune:parallel:plan"
 # or
 User: "create a parallel development plan for adding authentication"
 
@@ -478,7 +478,7 @@ Result: **Higher quality decisions, fewer errors, faster execution**
 **Implementation:**
 - `docs/RESEARCH_AGENTS_GUIDE.md` - Research agent templates
 - `hooks/context_injector.js` - Context injection hook
-- `commands/slashsense-parallel-plan.md` - Updated planning command
+- `commands/contextune-parallel-plan.md` - Updated planning command
 
 **Previous versions:**
 - `CHANGELOG.md` - Version history

@@ -8,16 +8,16 @@
  * - additionalContext: Added to Claude's context (HAS context cost)
  * - suppressOutput: Controls visibility in transcript (Ctrl-R)
  *
- * Use this pattern to show SlashSense commands without consuming tokens.
+ * Use this pattern to show Contextune commands without consuming tokens.
  */
 
 const fs = require('fs');
 const path = require('path');
 
 /**
- * Load SlashSense commands from commands/ directory
+ * Load Contextune commands from commands/ directory
  */
-function getSlashSenseCommands() {
+function getContextuneCommands() {
   const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT || path.join(__dirname, '..');
   const commandsDir = path.join(pluginRoot, 'commands');
 
@@ -63,11 +63,11 @@ function getSlashSenseCommands() {
  */
 function formatCommandList(commands) {
   if (commands.length === 0) {
-    return '💡 SlashSense is ready! Type naturally and I\'ll detect commands.';
+    return '💡 Contextune is ready! Type naturally and I\'ll detect commands.';
   }
 
   const lines = [];
-  lines.push('💡 SlashSense Commands Available:');
+  lines.push('💡 Contextune Commands Available:');
   lines.push('');
 
   for (const cmd of commands) {
@@ -88,8 +88,8 @@ function formatCommandList(commands) {
  */
 function main() {
   try {
-    // Get SlashSense commands
-    const commands = getSlashSenseCommands();
+    // Get Contextune commands
+    const commands = getContextuneCommands();
     const message = formatCommandList(commands);
 
     // PATTERN 1: Zero-context UI message
@@ -119,6 +119,6 @@ if (require.main === module) {
 }
 
 module.exports = {
-  getSlashSenseCommands,
+  getContextuneCommands,
   formatCommandList
 };

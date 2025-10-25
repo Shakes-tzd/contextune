@@ -41,12 +41,12 @@
 
 ## 2. Zero-Context Pattern
 
-**Objective**: Show SlashSense commands in UI without consuming tokens.
+**Objective**: Show Contextune commands in UI without consuming tokens.
 
 ```json
 {
   "continue": true,
-  "feedback": "💡 SlashSense Commands:\n  /slashsense:config - Configure detection\n  /slashsense:stats - View statistics\n  /slashsense:verify - Verify detection\n\nOr type naturally - I'll detect your intent!",
+  "feedback": "💡 Contextune Commands:\n  /contextune:config - Configure detection\n  /contextune:stats - View statistics\n  /contextune:verify - Verify detection\n\nOr type naturally - I'll detect your intent!",
   "suppressOutput": false
 }
 ```
@@ -69,7 +69,7 @@
 
 ### SessionStart Hook: Zero-Context Command List
 
-**File**: `/Users/shakes/DevProjects/slashsense/hooks/session_start.js`
+**File**: `/Users/shakes/DevProjects/contextune/hooks/session_start.js`
 
 ```javascript
 #!/usr/bin/env node
@@ -77,7 +77,7 @@
 const fs = require('fs');
 const path = require('path');
 
-function getSlashSenseCommands() {
+function getContextuneCommands() {
   const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT || path.join(__dirname, '..');
   const commandsDir = path.join(pluginRoot, 'commands');
 
@@ -117,10 +117,10 @@ function getSlashSenseCommands() {
 
 function formatCommandList(commands) {
   if (commands.length === 0) {
-    return '💡 SlashSense is ready! Type naturally and I\'ll detect commands.';
+    return '💡 Contextune is ready! Type naturally and I\'ll detect commands.';
   }
 
-  const lines = ['💡 SlashSense Commands Available:', ''];
+  const lines = ['💡 Contextune Commands Available:', ''];
 
   for (const cmd of commands) {
     lines.push(`  ${cmd.name}`);
@@ -135,7 +135,7 @@ function formatCommandList(commands) {
 
 function main() {
   try {
-    const commands = getSlashSenseCommands();
+    const commands = getContextuneCommands();
     const message = formatCommandList(commands);
 
     // ZERO-CONTEXT PATTERN: UI message only, no token cost
@@ -162,7 +162,7 @@ if (require.main === module) {
 
 ### Hook Registration
 
-**File**: `/Users/shakes/DevProjects/slashsense/hooks/hooks.json`
+**File**: `/Users/shakes/DevProjects/contextune/hooks/hooks.json`
 
 ```json
 {
@@ -175,7 +175,7 @@ if (require.main === module) {
             "type": "command",
             "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/session_start.js",
             "timeout": 1000,
-            "description": "Show SlashSense commands (zero context cost)"
+            "description": "Show Contextune commands (zero context cost)"
           }
         ]
       }
@@ -188,7 +188,7 @@ if (require.main === module) {
             "type": "command",
             "command": "uv run ${CLAUDE_PLUGIN_ROOT}/hooks/user_prompt_submit.py",
             "timeout": 5000,
-            "description": "SlashSense intent detection"
+            "description": "Contextune intent detection"
           }
         ]
       }
@@ -243,7 +243,7 @@ if (require.main === module) {
 ```json
 {
   "continue": true,
-  "feedback": "💡 SlashSense: 3 commands available. Type naturally!",
+  "feedback": "💡 Contextune: 3 commands available. Type naturally!",
   "suppressOutput": false
 }
 ```
@@ -254,7 +254,7 @@ if (require.main === module) {
 ```json
 {
   "continue": true,
-  "feedback": "💡 SlashSense Commands:\n  /slashsense:config - Configure detection settings\n  /slashsense:stats - View usage statistics\n  /slashsense:verify - Verify detected command\n\nOr type naturally - I'll detect your intent!",
+  "feedback": "💡 Contextune Commands:\n  /contextune:config - Configure detection settings\n  /contextune:stats - View usage statistics\n  /contextune:verify - Verify detected command\n\nOr type naturally - I'll detect your intent!",
   "suppressOutput": false
 }
 ```
@@ -267,9 +267,9 @@ if (require.main === module) {
   "continue": true,
   "hookSpecificOutput": {
     "hookEventName": "SessionStart",
-    "additionalContext": "[SlashSense Configuration]\n- Custom patterns: 5 commands\n- Detection tiers: keyword, Model2Vec, semantic\n- Min confidence: 0.7\n- Fallback: prompt user if < 0.5"
+    "additionalContext": "[Contextune Configuration]\n- Custom patterns: 5 commands\n- Detection tiers: keyword, Model2Vec, semantic\n- Min confidence: 0.7\n- Fallback: prompt user if < 0.5"
   },
-  "feedback": "💡 SlashSense loaded with custom config",
+  "feedback": "💡 Contextune loaded with custom config",
   "suppressOutput": true
 }
 ```
@@ -282,9 +282,9 @@ if (require.main === module) {
   "continue": true,
   "hookSpecificOutput": {
     "hookEventName": "SessionStart",
-    "additionalContext": "[SlashSense: 10 custom patterns loaded]"
+    "additionalContext": "[Contextune: 10 custom patterns loaded]"
   },
-  "feedback": "💡 SlashSense ready with your custom patterns!\n\nCommands:\n  /slashsense:config\n  /slashsense:stats\n\nType naturally for intent detection.",
+  "feedback": "💡 Contextune ready with your custom patterns!\n\nCommands:\n  /contextune:config\n  /contextune:stats\n\nType naturally for intent detection.",
   "suppressOutput": false
 }
 ```
@@ -294,7 +294,7 @@ if (require.main === module) {
 
 ## 6. Recommendations
 
-### For SlashSense Plugin
+### For Contextune Plugin
 
 **SessionStart Hook** - Use zero-context pattern:
 ```javascript
@@ -319,7 +319,7 @@ if (require.main === module) {
   "continue": true,
   "hookSpecificOutput": {
     "hookEventName": "UserPromptSubmit",
-    "additionalContext": `[SlashSense detected: ${match.command}]`
+    "additionalContext": `[Contextune detected: ${match.command}]`
   },
   "feedback": `💡 Suggested: ${match.command}`,
   "suppressOutput": false
@@ -380,7 +380,7 @@ if (require.main === module) {
 3. **Zero-context pattern enables rich UI without token overhead**
 4. **Multi-hook coordination allows separation of concerns**
 
-**SlashSense Implementation**:
+**Contextune Implementation**:
 
 - **SessionStart**: Zero-context command list (0 tokens)
 - **UserPromptSubmit**: Context injection for matches (~20 tokens/match)
@@ -393,8 +393,8 @@ if (require.main === module) {
 ## Working Examples
 
 See implementation examples:
-- `/Users/shakes/DevProjects/slashsense/examples/session_start_zero_context.js`
-- `/Users/shakes/DevProjects/slashsense/examples/session_start_with_context.js`
+- `/Users/shakes/DevProjects/contextune/examples/session_start_zero_context.js`
+- `/Users/shakes/DevProjects/contextune/examples/session_start_with_context.js`
 
 Full analysis:
-- `/Users/shakes/DevProjects/slashsense/docs/hook-output-analysis.md`
+- `/Users/shakes/DevProjects/contextune/docs/hook-output-analysis.md`

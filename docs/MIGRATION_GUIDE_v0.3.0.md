@@ -2,7 +2,7 @@
 
 **Upgrading to Haiku Agent Architecture**
 
-This guide will help you upgrade from SlashSense v0.2.0 (Skills) to v0.3.0 (Haiku Agents) and take advantage of the 81% cost reduction and 2x performance improvement.
+This guide will help you upgrade from Contextune v0.2.0 (Skills) to v0.3.0 (Haiku Agents) and take advantage of the 81% cost reduction and 2x performance improvement.
 
 ---
 
@@ -10,7 +10,7 @@ This guide will help you upgrade from SlashSense v0.2.0 (Skills) to v0.3.0 (Haik
 
 ```bash
 # Update the plugin
-/plugin update slashsense
+/plugin update contextune
 
 # Restart Claude Code
 # That's it! The Haiku agents are ready to use.
@@ -87,16 +87,16 @@ The Haiku agents are **automatically used** by the parallel execution workflow w
 
 ```bash
 # In Claude Code
-/plugin update slashsense
+/plugin update contextune
 
 # Or reinstall
-/plugin uninstall slashsense
-/plugin install slashsense@latest
+/plugin uninstall contextune
+/plugin install contextune@latest
 ```
 
 **Expected output:**
 ```
-✓ Updated slashsense to v0.3.0
+✓ Updated contextune to v0.3.0
   Restart Claude Code to apply changes.
 ```
 
@@ -111,17 +111,17 @@ Close and reopen Claude Code to load the new agents.
 /plugin list
 
 # Expected output:
-# slashsense (v0.3.0) - Natural language to slash command mapping...
+# contextune (v0.3.0) - Natural language to slash command mapping...
 ```
 
 ### Step 4: Test Haiku Agents (Optional)
 
 ```bash
 # Create a simple test plan
-/slashsense:parallel:plan
+/contextune:parallel:plan
 
 # Then execute with Haiku agents
-/slashsense:parallel:execute
+/contextune:parallel:execute
 ```
 
 You should see cost savings in the final report:
@@ -141,14 +141,14 @@ You should see cost savings in the final report:
 
 **Before (v0.2.0):**
 ```
-/slashsense:parallel:execute
+/contextune:parallel:execute
 → Spawns general-purpose agents (Sonnet)
 → Cost: $1.40 for 5 tasks
 ```
 
 **After (v0.3.0):**
 ```
-/slashsense:parallel:execute
+/contextune:parallel:execute
 → Spawns parallel-task-executor agents (Haiku)
 → Cost: $0.27 for 5 tasks
 → Automatic 81% savings!
@@ -191,16 +191,16 @@ You can now invoke specialized agents directly:
 
 ```bash
 # Troubleshoot worktree issues
-Task tool with subagent_type: "slashsense:worktree-manager"
+Task tool with subagent_type: "contextune:worktree-manager"
 
 # Bulk create issues
-Task tool with subagent_type: "slashsense:issue-orchestrator"
+Task tool with subagent_type: "contextune:issue-orchestrator"
 
 # Run tests autonomously
-Task tool with subagent_type: "slashsense:test-runner"
+Task tool with subagent_type: "contextune:test-runner"
 
 # Analyze performance
-Task tool with subagent_type: "slashsense:performance-analyzer"
+Task tool with subagent_type: "contextune:performance-analyzer"
 ```
 
 ### 2. Cost Tracking Dashboard
@@ -257,7 +257,7 @@ If you want to customize agent behavior, you can:
 1. **Copy agents to your project** (optional):
    ```bash
    mkdir -p .claude/agents
-   cp ~/.claude/plugins/slashsense/agents/*.md .claude/agents/
+   cp ~/.claude/plugins/contextune/agents/*.md .claude/agents/
    ```
 
 2. **Edit agent specifications**:
@@ -274,7 +274,7 @@ If you want to customize agent behavior, you can:
 
 ## Troubleshooting
 
-### Issue: "Agent not found: slashsense:parallel-task-executor"
+### Issue: "Agent not found: contextune:parallel-task-executor"
 
 **Solution:**
 ```bash
@@ -282,7 +282,7 @@ If you want to customize agent behavior, you can:
 # Agents are loaded on startup
 
 # Verify agents directory exists
-ls ~/.claude/plugins/slashsense/agents/
+ls ~/.claude/plugins/contextune/agents/
 
 # Should show:
 # parallel-task-executor.md
@@ -302,15 +302,15 @@ ls ~/.claude/plugins/slashsense/agents/
 ```bash
 # 1. Verify version
 /plugin list
-# Should show: slashsense (v0.3.0)
+# Should show: contextune (v0.3.0)
 
 # 2. Clear cache and restart
-rm -rf ~/.claude/cache/slashsense
+rm -rf ~/.claude/cache/contextune
 # Restart Claude Code
 
 # 3. Reinstall
-/plugin uninstall slashsense
-/plugin install slashsense@latest
+/plugin uninstall contextune
+/plugin install contextune@latest
 ```
 
 ### Issue: "Cost savings not showing in reports"
@@ -320,12 +320,12 @@ The parallel execute workflow was updated in v0.3.0. Make sure you're using the 
 
 ```bash
 # Update plugin
-/plugin update slashsense
+/plugin update contextune
 
 # Restart Claude Code
 
 # Run new workflow
-/slashsense:parallel:execute
+/contextune:parallel:execute
 ```
 
 ---
@@ -336,10 +336,10 @@ If you need to rollback to v0.2.0:
 
 ```bash
 # Uninstall current version
-/plugin uninstall slashsense
+/plugin uninstall contextune
 
 # Install specific version
-/plugin install slashsense@0.2.0
+/plugin install contextune@0.2.0
 
 # Restart Claude Code
 ```
@@ -440,7 +440,7 @@ Haiku agents are already token-optimized, but you can help:
 
 ```bash
 # Use Haiku (cheap, fast)
-Task tool with subagent_type: "slashsense:parallel-task-executor"
+Task tool with subagent_type: "contextune:parallel-task-executor"
 
 # Use Sonnet (complex reasoning)
 Task tool with subagent_type: "general-purpose"
@@ -499,8 +499,8 @@ But we recommend trying Haiku first—you'll likely be surprised by the quality 
 - [performance-analyzer.md](../agents/performance-analyzer.md)
 
 **Community:**
-- [GitHub Discussions](https://github.com/Shakes-tzd/slashsense/discussions)
-- [Report Issues](https://github.com/Shakes-tzd/slashsense/issues)
+- [GitHub Discussions](https://github.com/Shakes-tzd/contextune/discussions)
+- [Report Issues](https://github.com/Shakes-tzd/contextune/issues)
 
 ---
 
@@ -510,8 +510,8 @@ If you encounter any issues during migration:
 
 1. Check [Troubleshooting](#troubleshooting) section above
 2. Review the [FAQ](#faq)
-3. Check [GitHub Discussions](https://github.com/Shakes-tzd/slashsense/discussions)
-4. [Open an issue](https://github.com/Shakes-tzd/slashsense/issues/new)
+3. Check [GitHub Discussions](https://github.com/Shakes-tzd/contextune/discussions)
+4. [Open an issue](https://github.com/Shakes-tzd/contextune/issues/new)
 
 ---
 

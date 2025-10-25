@@ -1,8 +1,8 @@
-# SlashSense Development Guide
+# Contextune Development Guide
 
 ## Project Overview
 
-SlashSense is a Claude Code plugin that provides natural language to slash command mapping. It uses a 3-tier detection cascade (keyword → Model2Vec → Semantic Router) to detect user intent and suggest appropriate slash commands.
+Contextune is a Claude Code plugin that provides natural language to slash command mapping. It uses a 3-tier detection cascade (keyword → Model2Vec → Semantic Router) to detect user intent and suggest appropriate slash commands.
 
 **Core Technology:**
 - Python 3.10+ with UV for dependency management
@@ -62,7 +62,7 @@ All standalone scripts MUST use inline script metadata:
 ## Project Structure
 
 ```
-slashsense/
+contextune/
 ├── .claude-plugin/
 │   └── plugin.json              # Plugin metadata (name, version, hooks)
 ├── hooks/
@@ -77,8 +77,8 @@ slashsense/
 │   ├── intent_mappings.json     # Base command → pattern mappings
 │   └── user_patterns.json       # User customizations (auto-generated)
 ├── commands/
-│   ├── slashsense-config.md     # /slashsense:config command
-│   └── slashsense-stats.md      # /slashsense:stats command
+│   ├── contextune-config.md     # /contextune:config command
+│   └── contextune-stats.md      # /contextune:stats command
 ├── tests/
 │   ├── test_keyword.py
 │   ├── test_model2vec.py
@@ -155,7 +155,7 @@ Simulate Claude Code calling the hook:
 echo '{"prompt":"analyze my code please"}' | uv run hooks/user_prompt_submit.py
 
 # Expected output (JSON):
-# {"continue": true, "feedback": "<slashsense_detection>...", "suppressOutput": false}
+# {"continue": true, "feedback": "<contextune_detection>...", "suppressOutput": false}
 ```
 
 ### 5. Local Plugin Installation
@@ -163,14 +163,14 @@ echo '{"prompt":"analyze my code please"}' | uv run hooks/user_prompt_submit.py
 ```bash
 # Install plugin locally for testing
 # In Claude Code:
-/plugin install slashsense@local
+/plugin install contextune@local
 
 # Verify installation
 /plugin list
 
 # Test with natural language
 # Just type: "can you review my code"
-# SlashSense should detect and suggest /sc:analyze
+# Contextune should detect and suggest /sc:analyze
 ```
 
 ### 6. Documentation Development
@@ -263,7 +263,7 @@ uv run mypy lib/
 
 ```markdown
 ---
-name: slashsense:mycommand
+name: contextune:mycommand
 description: Brief description
 ---
 
@@ -273,12 +273,12 @@ Full documentation here.
 
 ## Usage
 \```
-/slashsense:mycommand [args]
+/contextune:mycommand [args]
 \```
 ```
 
 2. Add to `.claude-plugin/plugin.json` if needed
-3. Test: `/slashsense:mycommand`
+3. Test: `/contextune:mycommand`
 
 ### Adding New Matchers
 
@@ -523,7 +523,7 @@ Hooks run automatically with user's permissions. Be careful:
 
 ### Community
 - [Claude Code Discord](https://discord.gg/anthropic)
-- [GitHub Discussions](https://github.com/yourusername/slashsense/discussions)
+- [GitHub Discussions](https://github.com/yourusername/contextune/discussions)
 
 ### Examples
 - [jeremylongshore/claude-code-plugins](https://github.com/jeremylongshore/claude-code-plugins)
@@ -552,8 +552,8 @@ uv run mkdocs build                  # Build docs
 uv run mkdocs gh-deploy              # Deploy to GitHub Pages
 
 # Plugin
-/plugin install slashsense@local     # Install locally
-/plugin uninstall slashsense         # Uninstall
+/plugin install contextune@local     # Install locally
+/plugin uninstall contextune         # Uninstall
 ```
 
 ---

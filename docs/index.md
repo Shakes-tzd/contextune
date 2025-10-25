@@ -1,10 +1,10 @@
-# SlashSense
+# Contextune
 
 Natural language to slash command mapping for Claude Code.
 
 ## Overview
 
-SlashSense is a Claude Code plugin that intelligently detects user intent from natural language and suggests appropriate slash commands. It uses a 3-tier detection cascade for optimal performance:
+Contextune is a Claude Code plugin that intelligently detects user intent from natural language and suggests appropriate slash commands. It uses a 3-tier detection cascade for optimal performance:
 
 1. **Keyword Matching** (Tier 1) - Fast regex-based detection (<0.1ms)
 2. **Model2Vec Embeddings** (Tier 2) - Semantic similarity matching (<1ms)
@@ -14,11 +14,11 @@ SlashSense is a Claude Code plugin that intelligently detects user intent from n
 
 ```bash
 # Install the plugin
-/plugin install slashsense
+/plugin install contextune
 
 # Try it out with natural language
 "can you analyze my code"
-# SlashSense detects intent and suggests: /sc:analyze
+# Contextune detects intent and suggests: /sc:analyze
 ```
 
 ## Features
@@ -30,8 +30,8 @@ SlashSense is a Claude Code plugin that intelligently detects user intent from n
 
 ## Documentation
 
-- [Installation](getting-started/installation.md) - Get started with SlashSense
-- [Usage Guide](user-guide/usage.md) - Learn how to use SlashSense
+- [Installation](getting-started/installation.md) - Get started with Contextune
+- [Usage Guide](user-guide/usage.md) - Learn how to use Contextune
 - [Architecture](architecture/overview.md) - Understand how it works
 - [API Reference](api/index.md) - Explore the codebase
 

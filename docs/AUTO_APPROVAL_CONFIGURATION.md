@@ -53,7 +53,7 @@ Bash(gh label create:*)
 
 ### Step 4: Add Project-Specific Rules
 
-For SlashSense parallel execution, add:
+For Contextune parallel execution, add:
 
 ```
 Bash(mkdir -p .parallel/*)
@@ -268,7 +268,7 @@ Update `hooks/hooks.json`:
 
 ---
 
-## Recommended Configuration for SlashSense
+## Recommended Configuration for Contextune
 
 For optimal parallel agent performance:
 
@@ -341,7 +341,7 @@ Expected: Should execute without approval prompt
 ### Test 3: Parallel Agent Spawn
 
 ```
-/slashsense:parallel:execute
+/contextune:parallel:execute
 ```
 
 Expected: All agents create issues/worktrees without prompts
@@ -469,7 +469,7 @@ But still validate:
 
 3. **Set mode:** `defaultMode: "acceptEdits"` in settings
 
-4. **Test:** `/slashsense:parallel:execute`
+4. **Test:** `/contextune:parallel:execute`
 
 5. **Verify:** Agents create issues/worktrees without prompts
 
@@ -481,7 +481,7 @@ But still validate:
 
 - [Claude Code IAM Documentation](https://docs.claude.com/en/docs/claude-code/iam.md)
 - [Claude Code Hooks Documentation](https://docs.claude.com/en/docs/claude-code/hooks.md)
-- [SlashSense Parallel Execution](commands/slashsense-parallel-execute.md)
+- [Contextune Parallel Execution](commands/contextune-parallel-execute.md)
 
 ---
 

@@ -1,14 +1,14 @@
-# SlashSense Configuration Command Specification
+# Contextune Configuration Command Specification
 
-**Command:** `/slashsense:configure`
-**Purpose:** One-time setup for persistent SlashSense visibility
+**Command:** `/contextune:configure`
+**Purpose:** One-time setup for persistent Contextune visibility
 **User Permission:** Required before any modifications
 
 ---
 
 ## Overview
 
-The `/slashsense:configure` command integrates SlashSense into the user's Claude Code environment through three mechanisms:
+The `/contextune:configure` command integrates Contextune into the user's Claude Code environment through three mechanisms:
 
 1. **CLAUDE.md Integration** - Persistent context injection
 2. **Status Bar Integration** - Always-visible command reminders
@@ -18,32 +18,32 @@ The `/slashsense:configure` command integrates SlashSense into the user's Claude
 
 ## Command File
 
-**Location:** `commands/slashsense-configure.md`
+**Location:** `commands/contextune-configure.md`
 
 **Frontmatter:**
 ```yaml
 ---
-name: slashsense:configure
-description: Configure SlashSense for persistent visibility in CLAUDE.md and status bar. Run once after installation.
+name: contextune:configure
+description: Configure Contextune for persistent visibility in CLAUDE.md and status bar. Run once after installation.
 executable: true
 ---
 ```
 
 **Content:**
 ```markdown
-# SlashSense Configuration - One-Time Setup
+# Contextune Configuration - One-Time Setup
 
-This command integrates SlashSense into your Claude Code environment for maximum visibility.
+This command integrates Contextune into your Claude Code environment for maximum visibility.
 
 ## What This Does
 
 1. **CLAUDE.md Integration**
-   - Adds SlashSense section to `~/.claude/CLAUDE.md`
+   - Adds Contextune section to `~/.claude/CLAUDE.md`
    - Provides command reference at every session start
    - ~150 token context overhead (minimal)
 
 2. **Status Bar Integration**
-   - Adds SlashSense commands to your status bar
+   - Adds Contextune commands to your status bar
    - Always visible in Claude Code UI
    - Zero context overhead (UI-only)
 
@@ -63,12 +63,12 @@ This command integrates SlashSense into your Claude Code environment for maximum
 Present this message:
 
 ```
-🔧 SlashSense Configuration
+🔧 Contextune Configuration
 
-I can integrate SlashSense into your Claude Code environment:
+I can integrate Contextune into your Claude Code environment:
 
-✅ Add SlashSense section to ~/.claude/CLAUDE.md (~150 tokens context)
-✅ Add SlashSense commands to status bar (zero context)
+✅ Add Contextune section to ~/.claude/CLAUDE.md (~150 tokens context)
+✅ Add Contextune commands to status bar (zero context)
 ✅ Validate plugin settings
 
 Files to modify:
@@ -80,7 +80,7 @@ Proceed with configuration? (yes/no)
 
 Wait for user response.
 
-**If user declines:** Exit gracefully, explain they can run `/slashsense:configure` anytime.
+**If user declines:** Exit gracefully, explain they can run `/contextune:configure` anytime.
 
 **If user confirms:** Continue to Step 2.
 
@@ -92,11 +92,11 @@ Before making any changes, create backups:
 
 ```bash
 # Create backup directory
-mkdir -p ~/.claude/backups/slashsense-config-$(date +%Y%m%d-%H%M%S)
+mkdir -p ~/.claude/backups/contextune-config-$(date +%Y%m%d-%H%M%S)
 
 # Backup files
-cp ~/.claude/CLAUDE.md ~/.claude/backups/slashsense-config-$(date +%Y%m%d-%H%M%S)/CLAUDE.md.bak 2>/dev/null || true
-cp ~/.claude/statusline.sh ~/.claude/backups/slashsense-config-$(date +%Y%m%d-%H%M%S)/statusline.sh.bak 2>/dev/null || true
+cp ~/.claude/CLAUDE.md ~/.claude/backups/contextune-config-$(date +%Y%m%d-%H%M%S)/CLAUDE.md.bak 2>/dev/null || true
+cp ~/.claude/statusline.sh ~/.claude/backups/contextune-config-$(date +%Y%m%d-%H%M%S)/statusline.sh.bak 2>/dev/null || true
 ```
 
 Report backup location to user.
@@ -115,11 +115,11 @@ else
 fi
 ```
 
-**If exists:** Check for existing SlashSense section
+**If exists:** Check for existing Contextune section
 
 ```bash
-if grep -q "## SlashSense Plugin" ~/.claude/CLAUDE.md; then
-    echo "SlashSense section already exists - skipping"
+if grep -q "## Contextune Plugin" ~/.claude/CLAUDE.md; then
+    echo "Contextune section already exists - skipping"
 else
     # Add section
 fi
@@ -128,22 +128,22 @@ fi
 **Content to Add:**
 
 ```markdown
-## SlashSense Plugin (Parallel Development)
+## Contextune Plugin (Parallel Development)
 
-**Quick Research**: `/slashsense:research` - Fast answers using parallel agents
-**Planning**: `/slashsense:parallel:plan` - Create parallel development plans
-**Execution**: `/slashsense:parallel:execute` - Run tasks in parallel worktrees
-**Monitoring**: `/slashsense:parallel:status` - Check progress
-**Cleanup**: `/slashsense:parallel:cleanup` - Remove completed worktrees
+**Quick Research**: `/contextune:research` - Fast answers using parallel agents
+**Planning**: `/contextune:parallel:plan` - Create parallel development plans
+**Execution**: `/contextune:parallel:execute` - Run tasks in parallel worktrees
+**Monitoring**: `/contextune:parallel:status` - Check progress
+**Cleanup**: `/contextune:parallel:cleanup` - Remove completed worktrees
 
 **Natural Language:** Just say "research best React libraries" or "create parallel plan for X, Y, Z"
 
 **Skills (Auto-Activated):**
 - `parallel-development-expert` - Suggests parallelization opportunities
-- `intent-recognition` - Helps discover SlashSense capabilities
+- `intent-recognition` - Helps discover Contextune capabilities
 - `git-worktree-master` - Worktree troubleshooting
 
-Full docs: `@~/.claude/plugins/marketplaces/SlashSense/README.md`
+Full docs: `@~/.claude/plugins/marketplaces/Contextune/README.md`
 
 ---
 ```
@@ -171,9 +171,9 @@ fi
 **Content to Add** (after existing sections):
 
 ```bash
-# Section 5: SlashSense Commands (if plugin installed)
-if grep -q '"slashsense@SlashSense".*true' ~/.claude/settings.json 2>/dev/null; then
-    OUTPUT="${OUTPUT} | ${YELLOW}SlashSense:${RESET} /research | /parallel:plan | /parallel:execute"
+# Section 5: Contextune Commands (if plugin installed)
+if grep -q '"contextune@Contextune".*true' ~/.claude/settings.json 2>/dev/null; then
+    OUTPUT="${OUTPUT} | ${YELLOW}Contextune:${RESET} /research | /parallel:plan | /parallel:execute"
 fi
 ```
 
@@ -189,9 +189,9 @@ set -euo pipefail
 YELLOW="\033[1;33m"
 RESET="\033[0m"
 
-# SlashSense Commands (if plugin installed)
-if grep -q '"slashsense@SlashSense".*true' ~/.claude/settings.json 2>/dev/null; then
-    echo -e "${YELLOW}SlashSense:${RESET} /research | /parallel:plan | /parallel:execute"
+# Contextune Commands (if plugin installed)
+if grep -q '"contextune@Contextune".*true' ~/.claude/settings.json 2>/dev/null; then
+    echo -e "${YELLOW}Contextune:${RESET} /research | /parallel:plan | /parallel:execute"
 fi
 ```
 
@@ -205,23 +205,23 @@ chmod +x ~/.claude/statusline.sh
 
 ### Step 5: Validate Settings
 
-Check if SlashSense is enabled in settings:
+Check if Contextune is enabled in settings:
 
 ```bash
-if grep -q '"slashsense@SlashSense".*true' ~/.claude/settings.json 2>/dev/null; then
+if grep -q '"contextune@Contextune".*true' ~/.claude/settings.json 2>/dev/null; then
     echo "✅ Plugin enabled in settings"
 else
-    echo "⚠️  Plugin not enabled - run '/plugin install slashsense@SlashSense'"
+    echo "⚠️  Plugin not enabled - run '/plugin install contextune@Contextune'"
 fi
 ```
 
 Check if skills exist:
 
 ```bash
-SKILLS_DIR="~/.claude/plugins/marketplaces/SlashSense/skills"
+SKILLS_DIR="~/.claude/plugins/marketplaces/Contextune/skills"
 if [ -d "$SKILLS_DIR" ]; then
     SKILL_COUNT=$(ls -1 "$SKILLS_DIR" | wc -l | tr -d ' ')
-    echo "✅ Found $SKILL_COUNT SlashSense skills"
+    echo "✅ Found $SKILL_COUNT Contextune skills"
 else
     echo "⚠️  Skills directory not found"
 fi
@@ -234,33 +234,33 @@ fi
 Display configuration summary:
 
 ```
-🎉 SlashSense Configuration Complete!
+🎉 Contextune Configuration Complete!
 
 ✅ CLAUDE.md updated
    Location: ~/.claude/CLAUDE.md
-   Added: SlashSense section (~150 tokens)
+   Added: Contextune section (~150 tokens)
 
 ✅ Status bar updated
    Location: ~/.claude/statusline.sh
-   Added: SlashSense commands (UI-only, zero context)
+   Added: Contextune commands (UI-only, zero context)
 
 ✅ Settings validated
    Plugin: Enabled
    Skills: 3 found
 
-📦 Backups created: ~/.claude/backups/slashsense-config-{timestamp}/
+📦 Backups created: ~/.claude/backups/contextune-config-{timestamp}/
 
 🔄 Next Steps:
 1. Restart Claude Code to see status bar changes
 2. Start new session to load CLAUDE.md changes
-3. Try: "research best React libraries" or "/slashsense:research"
+3. Try: "research best React libraries" or "/contextune:research"
 
 💡 Tips:
 - Status bar shows quick commands: /research | /parallel:plan | /parallel:execute
 - CLAUDE.md loaded at session start (automatic context)
 - Skills activate automatically when relevant
 
-Run `/slashsense:help` to see all capabilities.
+Run `/contextune:help` to see all capabilities.
 ```
 
 ---
@@ -276,7 +276,7 @@ Manual fix:
 1. Open ~/.claude/CLAUDE.md
 2. Add this section:
 
-{show SlashSense section content}
+{show Contextune section content}
 
 3. Save and restart Claude Code
 ```
@@ -307,12 +307,12 @@ After configuration, verify:
 
 1. **CLAUDE.md Section Exists:**
    ```bash
-   grep -A 10 "## SlashSense Plugin" ~/.claude/CLAUDE.md
+   grep -A 10 "## Contextune Plugin" ~/.claude/CLAUDE.md
    ```
 
 2. **Status Bar Code Exists:**
    ```bash
-   grep -A 3 "Section 5: SlashSense" ~/.claude/statusline.sh
+   grep -A 3 "Section 5: Contextune" ~/.claude/statusline.sh
    ```
 
 3. **Files are valid:**
@@ -332,7 +332,7 @@ If user wants to undo configuration:
 
 ```bash
 # Restore from backups
-BACKUP_DIR=$(ls -dt ~/.claude/backups/slashsense-config-* | head -1)
+BACKUP_DIR=$(ls -dt ~/.claude/backups/contextune-config-* | head -1)
 
 cp "$BACKUP_DIR/CLAUDE.md.bak" ~/.claude/CLAUDE.md
 cp "$BACKUP_DIR/statusline.sh.bak" ~/.claude/statusline.sh
@@ -340,7 +340,7 @@ cp "$BACKUP_DIR/statusline.sh.bak" ~/.claude/statusline.sh
 echo "✅ Rolled back to pre-configuration state"
 ```
 
-Or create `/slashsense:unconfigure` command for automatic rollback.
+Or create `/contextune:unconfigure` command for automatic rollback.
 
 ---
 
@@ -348,15 +348,15 @@ Or create `/slashsense:unconfigure` command for automatic rollback.
 
 ### Manual Testing
 
-1. Run `/slashsense:configure`
+1. Run `/contextune:configure`
 2. Confirm permission prompt shows
 3. Confirm backups created
 4. Confirm CLAUDE.md updated
 5. Confirm statusline.sh updated
 6. Restart Claude Code
-7. Verify status bar shows SlashSense commands
+7. Verify status bar shows Contextune commands
 8. Start new session
-9. Verify CLAUDE.md context loaded (ask "what SlashSense commands exist?")
+9. Verify CLAUDE.md context loaded (ask "what Contextune commands exist?")
 
 ### Edge Cases
 
@@ -407,7 +407,7 @@ This command complements the discovery skills:
 
 **Discovery Layers:**
 
-1. **Session Start** (CLAUDE.md) → Claude reads SlashSense section
+1. **Session Start** (CLAUDE.md) → Claude reads Contextune section
 2. **Passive** (Skills) → Metadata always in context
 3. **Active** (Skills) → Activate when keywords match
 4. **Always Visible** (Status Bar) → UI reminder
@@ -424,9 +424,9 @@ This command complements the discovery skills:
 **Effort:** 2-3 hours
 
 **Deliverables:**
-- `/slashsense:configure` command (2h)
+- `/contextune:configure` command (2h)
 - Testing and validation (1h)
-- Optional: `/slashsense:unconfigure` for rollback (30min)
+- Optional: `/contextune:unconfigure` for rollback (30min)
 
 **Impact:** High (persistent visibility without requiring user knowledge)
 
@@ -434,7 +434,7 @@ This command complements the discovery skills:
 
 ## Success Metrics
 
-**Target:** 95%+ users configure SlashSense after installation
+**Target:** 95%+ users configure Contextune after installation
 
 **Measurement:**
 ```python
@@ -452,7 +452,7 @@ This command complements the discovery skills:
 
 ## Next Steps
 
-1. Create `commands/slashsense-configure.md` with this specification
+1. Create `commands/contextune-configure.md` with this specification
 2. Test on clean Claude Code installation
 3. Verify all three mechanisms work (CLAUDE.md, status bar, settings)
 4. Add to v0.5.1 plan as optional Phase 4

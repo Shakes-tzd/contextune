@@ -2,7 +2,7 @@
 
 **Version:** 1.0
 **Last Updated:** 2025-10-21
-**Target Audience:** Developers integrating Haiku agents with SlashSense parallel workflows
+**Target Audience:** Developers integrating Haiku agents with Contextune parallel workflows
 
 ---
 
@@ -24,7 +24,7 @@
 
 ### What is Agent Integration?
 
-Agent integration in SlashSense refers to the coordination between:
+Agent integration in Contextune refers to the coordination between:
 
 1. **Main Agent (Sonnet 4.5)**: Your primary Claude Code conversation
 2. **Haiku Agents**: Specialized, cost-optimized execution agents
@@ -1548,7 +1548,7 @@ gh api rate_limit
 
 ## Summary
 
-Agent integration in SlashSense is about finding the right balance:
+Agent integration in Contextune is about finding the right balance:
 
 **Key Principles:**
 

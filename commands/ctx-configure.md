@@ -1,35 +1,35 @@
 ---
-name: ss:configure
-description: Learn how to optionally customize your environment for extra SlashSense visibility (manual setup guide)
+name: ctx:configure
+description: Learn how to optionally customize your environment for extra Contextune visibility (manual setup guide)
 executable: false
 ---
 
-# SlashSense Optional Customization Guide
+# Contextune Optional Customization Guide
 
-**Note:** SlashSense works automatically after installation through Skills and Hooks. This guide provides **optional** customizations for users who want extra visibility.
+**Note:** Contextune works automatically after installation through Skills and Hooks. This guide provides **optional** customizations for users who want extra visibility.
 
 ---
 
 ## ✅ What Works Automatically (No Setup Needed)
 
-After installing SlashSense, these features work immediately:
+After installing Contextune, these features work immediately:
 
 1. **Intent Detection** - Hook detects slash commands from natural language
 2. **Skills** - Claude auto-suggests parallelization and discovers capabilities
-3. **Commands** - All `/ss:*` commands available in autocomplete
+3. **Commands** - All `/ctx:*` commands available in autocomplete
 
-**You don't need to configure anything!** SlashSense is designed to be zero-setup.
+**You don't need to configure anything!** Contextune is designed to be zero-setup.
 
 ---
 
 ## 🎨 Optional Customizations (Manual Setup)
 
-If you want **extra visibility**, you can manually add SlashSense to:
+If you want **extra visibility**, you can manually add Contextune to:
 1. **CLAUDE.md** - Persistent context at session start (~150 tokens)
 2. **Status Bar** - Always-visible command reminders
 
 **Trade-offs:**
-- ✅ Pro: SlashSense always top-of-mind for Claude
+- ✅ Pro: Contextune always top-of-mind for Claude
 - ✅ Pro: Visual reminders in status bar
 - ⚠️ Con: ~150 tokens per session (CLAUDE.md)
 - ⚠️ Con: Manual setup required
@@ -44,26 +44,26 @@ If you want **extra visibility**, you can manually add SlashSense to:
 **Add this section:**
 
 ```markdown
-## SlashSense Plugin (Parallel Development)
+## Contextune Plugin (Parallel Development)
 
-**Quick Research**: `/ss:research` - Fast answers using 3 parallel agents (1-2 min, $0.07)
-**Planning**: `/ss:plan` - Create parallel development plans with grounded research
-**Execution**: `/ss:execute` - Run tasks in parallel using git worktrees
-**Monitoring**: `/ss:status` - Check progress across all worktrees
-**Cleanup**: `/ss:cleanup` - Remove completed worktrees and branches
+**Quick Research**: `/ctx:research` - Fast answers using 3 parallel agents (1-2 min, $0.07)
+**Planning**: `/ctx:plan` - Create parallel development plans with grounded research
+**Execution**: `/ctx:execute` - Run tasks in parallel using git worktrees
+**Monitoring**: `/ctx:status` - Check progress across all worktrees
+**Cleanup**: `/ctx:cleanup` - Remove completed worktrees and branches
 
 **Natural Language Examples:**
-- "research best React state libraries" → Triggers `/ss:research`
-- "create parallel plan for auth, dashboard, API" → Triggers `/ss:plan`
-- "what can SlashSense do?" → Activates `intent-recognition` skill
+- "research best React state libraries" → Triggers `/ctx:research`
+- "create parallel plan for auth, dashboard, API" → Triggers `/ctx:plan`
+- "what can Contextune do?" → Activates `intent-recognition` skill
 
 **Skills (Auto-Activated):**
 - `parallel-development-expert` - Suggests parallelization when you mention multiple tasks
-- `intent-recognition` - Helps discover SlashSense capabilities
+- `intent-recognition` - Helps discover Contextune capabilities
 
 **Cost Optimization**: Uses Haiku agents (87% cheaper than Sonnet) for execution.
 
-Full documentation: Type `/ss:research what can SlashSense do?`
+Full documentation: Type `/ctx:research what can Contextune do?`
 ```
 
 **How to add:**
@@ -87,9 +87,9 @@ code ~/.claude/CLAUDE.md
 **Add this section before the final `echo` command:**
 
 ```bash
-# Section: SlashSense Commands (if plugin installed)
-if grep -q '"slashsense@SlashSense".*true' ~/.claude/settings.json 2>/dev/null; then
-    OUTPUT="${OUTPUT} | ${YELLOW}SlashSense:${RESET} /ss:research | /ss:plan | /ss:execute"
+# Section: Contextune Commands (if plugin installed)
+if grep -q '"slashsense@Contextune".*true' ~/.claude/settings.json 2>/dev/null; then
+    OUTPUT="${OUTPUT} | ${YELLOW}Contextune:${RESET} /ctx:research | /ctx:plan | /ctx:execute"
 fi
 ```
 
@@ -111,11 +111,11 @@ code ~/.claude/statusline.sh
 
 ## Option 3: Validate Plugin Status
 
-Run this command to check SlashSense installation:
+Run this command to check Contextune installation:
 
 ```bash
 # Check if plugin is enabled
-grep -A 2 '"slashsense@SlashSense"' ~/.claude/settings.json
+grep -A 2 '"slashsense@Contextune"' ~/.claude/settings.json
 
 # List available skills
 ls -la ~/.claude/plugins/*/skills/*/SKILL.md
@@ -125,7 +125,7 @@ ls -la ~/.claude/plugins/*/commands/*.md | grep ss-
 ```
 
 **Expected output:**
-- Plugin enabled: `"slashsense@SlashSense": true`
+- Plugin enabled: `"slashsense@Contextune": true`
 - Skills: `parallel-development-expert`, `intent-recognition`
 - Commands: `ss-research`, `ss-plan`, `ss-execute`, `ss-status`, `ss-cleanup`, `ss-stats`, `ss-verify`
 
@@ -151,7 +151,7 @@ ls -la ~/.claude/plugins/*/commands/*.md | grep ss-
 
 ## Troubleshooting
 
-**Q: SlashSense commands not appearing?**
+**Q: Contextune commands not appearing?**
 ```bash
 /plugin list  # Verify plugin is installed and enabled
 /plugin enable slashsense  # Enable if disabled
@@ -160,7 +160,7 @@ ls -la ~/.claude/plugins/*/commands/*.md | grep ss-
 **Q: Skills not activating?**
 ```bash
 # Check skills exist
-ls ~/.claude/plugins/marketplaces/SlashSense/skills/
+ls ~/.claude/plugins/marketplaces/Contextune/skills/
 
 # Expected: parallel-development-expert/, intent-recognition/
 ```
@@ -168,7 +168,7 @@ ls ~/.claude/plugins/marketplaces/SlashSense/skills/
 **Q: Hook not detecting intents?**
 ```bash
 # Check hook is registered
-cat ~/.claude/plugins/marketplaces/SlashSense/hooks/hooks.json
+cat ~/.claude/plugins/marketplaces/Contextune/hooks/hooks.json
 
 # Expected: UserPromptSubmit hook with user_prompt_submit.py
 ```
@@ -187,6 +187,6 @@ cat ~/.claude/plugins/marketplaces/SlashSense/hooks/hooks.json
 - 🎨 Status bar display (zero tokens)
 
 **Need help?**
-- Run `/ss:research what can SlashSense do?`
-- Ask Claude: "How do I use SlashSense for parallel development?"
-- Read README: `cat ~/.claude/plugins/marketplaces/SlashSense/README.md`
+- Run `/ctx:research what can Contextune do?`
+- Ask Claude: "How do I use Contextune for parallel development?"
+- Read README: `cat ~/.claude/plugins/marketplaces/Contextune/README.md`

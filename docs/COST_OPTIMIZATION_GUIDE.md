@@ -2,7 +2,7 @@
 
 **Version:** 1.0
 **Last Updated:** 2025-10-21
-**Target Audience:** Developers and teams using SlashSense for parallel development
+**Target Audience:** Developers and teams using Contextune for parallel development
 
 ---
 

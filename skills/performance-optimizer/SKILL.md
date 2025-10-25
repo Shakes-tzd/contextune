@@ -673,7 +673,7 @@ Let me know the results!"
 ```markdown
 ## Cost Optimization with Haiku Agents
 
-SlashSense v0.3.0 introduces a revolutionary three-tier architecture:
+Contextune v0.3.0 introduces a revolutionary three-tier architecture:
 - **Tier 1 (Skills):** Sonnet for guidance (20% of work)
 - **Tier 2 (Orchestration):** Sonnet for planning (you)
 - **Tier 3 (Execution):** Haiku for tasks (80% of work)
@@ -954,7 +954,7 @@ Payback Period:    {roi['payback_months']} months
    - Which tasks don't need complex reasoning?
 
 3. **Switch to Haiku Agents**
-   - Update slashsense-parallel-execute
+   - Update contextune-parallel-execute
    - Use Haiku agents for execution
    - Keep Sonnet for planning
 

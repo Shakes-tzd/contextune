@@ -1,10 +1,10 @@
 ---
-name: ss:research
+name: ctx:research
 description: Fast research using 3 parallel Haiku agents for technical questions and decision-making (1-2 min)
 executable: true
 ---
 
-# SlashSense Research - Quick Technical Investigation
+# Contextune Research - Quick Technical Investigation
 
 Conduct focused research using 3 parallel Haiku agents to answer specific technical questions quickly.
 
@@ -158,7 +158,7 @@ After all 3 agents complete, synthesize findings:
 
 ## Example Usage
 
-**User:** "/ss:research What's the best database for user authentication?"
+**User:** "/ctx:research What's the best database for user authentication?"
 
 **Result:**
 
@@ -211,9 +211,9 @@ Compatibility: ✅ All compatible with Node 18+
 
 ---
 
-## Differences from `/ss:plan`
+## Differences from `/ctx:plan`
 
-| Feature | `/ss:research` | `/ss:plan` |
+| Feature | `/ctx:research` | `/ctx:plan` |
 |---------|----------------|------------|
 | **Purpose** | Answer specific question | Create execution plan |
 | **Agents** | 3 (focused) | 5 (comprehensive) |
@@ -221,20 +221,20 @@ Compatibility: ✅ All compatible with Node 18+
 | **Time** | 1-2 min | 2-3 min |
 | **Cost** | $0.06-0.08 | $0.10-0.12 |
 | **Use When** | Quick decision needed | Ready to execute in parallel |
-| **Next Step** | User decides | Execute with `/ss:execute` |
+| **Next Step** | User decides | Execute with `/ctx:execute` |
 
 ---
 
 ## When to Use This Command
 
-**Use `/ss:research` when:**
+**Use `/ctx:research` when:**
 - ✅ You need to make a technical decision
 - ✅ Comparing libraries, frameworks, or approaches
 - ✅ Want to know what already exists in codebase
 - ✅ Checking compatibility or dependencies
 - ✅ Need quick answer (1-2 min) not full plan
 
-**Use `/ss:plan` when:**
+**Use `/ctx:plan` when:**
 - ✅ You have multiple features to implement
 - ✅ Need structured task breakdown
 - ✅ Ready for parallel execution

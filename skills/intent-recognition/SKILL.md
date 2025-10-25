@@ -1,26 +1,26 @@
 ---
-name: slashsense:intent-recognition
-description: Help users discover SlashSense capabilities and understand how to use natural language commands. Use when users ask about SlashSense features, available commands, how to use the plugin, or what they can do. Activate for questions like "what can SlashSense do?", "how do I use this?", "show me examples", "what commands are available?"
+name: contextune:intent-recognition
+description: Help users discover Contextune capabilities and understand how to use natural language commands. Use when users ask about Contextune features, available commands, how to use the plugin, or what they can do. Activate for questions like "what can Contextune do?", "how do I use this?", "show me examples", "what commands are available?"
 ---
 
-# SlashSense Intent Recognition & Discovery
+# Contextune Intent Recognition & Discovery
 
-You help users discover and understand SlashSense plugin capabilities.
+You help users discover and understand Contextune plugin capabilities.
 
 ## When to Activate
 
 Activate when user asks:
-- "What can SlashSense do?"
+- "What can Contextune do?"
 - "How do I use this plugin?"
-- "Show me SlashSense examples"
+- "Show me Contextune examples"
 - "What commands are available?"
-- "SlashSense documentation"
-- "How does SlashSense work?"
-- "What is SlashSense?"
+- "Contextune documentation"
+- "How does Contextune work?"
+- "What is Contextune?"
 
 ## Capabilities Overview
 
-SlashSense provides **natural language to slash command mapping** with automatic parallel development workflows.
+Contextune provides **natural language to slash command mapping** with automatic parallel development workflows.
 
 ### 1. Intent Detection (Automatic)
 - Detects slash commands from natural language automatically
@@ -29,11 +29,11 @@ SlashSense provides **natural language to slash command mapping** with automatic
 - No user configuration needed
 
 ### 2. Parallel Development Workflow
-- **Research**: `/ss:research` - Quick research using 3 parallel agents (1-2 min, ~$0.07)
-- **Planning**: `/ss:plan` - Create parallel development plans
-- **Execution**: `/ss:execute` - Run tasks in parallel using git worktrees
-- **Monitoring**: `/ss:status` - Check progress across worktrees
-- **Cleanup**: `/ss:cleanup` - Merge and cleanup when done
+- **Research**: `/ctx:research` - Quick research using 3 parallel agents (1-2 min, ~$0.07)
+- **Planning**: `/ctx:plan` - Create parallel development plans
+- **Execution**: `/ctx:execute` - Run tasks in parallel using git worktrees
+- **Monitoring**: `/ctx:status` - Check progress across worktrees
+- **Cleanup**: `/ctx:cleanup` - Merge and cleanup when done
 
 ### 3. Auto-Discovery
 - Skills automatically suggest parallelization opportunities
@@ -50,28 +50,28 @@ Instead of memorizing slash commands, users can use natural language:
 - "check code quality" → Suggests `/sc:analyze`
 
 **Research:**
-- "research best React state libraries" → `/ss:research`
-- "what's the best database for my use case?" → `/ss:research`
+- "research best React state libraries" → `/ctx:research`
+- "what's the best database for my use case?" → `/ctx:research`
 
 **Parallel Development:**
-- "create parallel plan for auth, dashboard, API" → `/ss:plan`
-- "implement features X, Y, Z" → Skill suggests `/ss:plan`
+- "create parallel plan for auth, dashboard, API" → `/ctx:plan`
+- "implement features X, Y, Z" → Skill suggests `/ctx:plan`
 
 ## Available Commands
 
 ### Research & Planning
-- `/ss:research` - Standalone research (3 parallel agents, answers specific questions)
-- `/ss:plan` - Create parallel development plan (5 agents, comprehensive)
+- `/ctx:research` - Standalone research (3 parallel agents, answers specific questions)
+- `/ctx:plan` - Create parallel development plan (5 agents, comprehensive)
 
 ### Execution & Monitoring
-- `/ss:execute` - Execute plan with worktrees and multiple agents
-- `/ss:status` - Monitor progress across all parallel tasks
-- `/ss:cleanup` - Clean up worktrees and merge branches
+- `/ctx:execute` - Execute plan with worktrees and multiple agents
+- `/ctx:status` - Monitor progress across all parallel tasks
+- `/ctx:cleanup` - Clean up worktrees and merge branches
 
 ### Configuration
-- `/ss:configure` - Optional manual customization guide (CLAUDE.md, status bar)
-- `/ss:stats` - View usage statistics
-- `/ss:verify` - Verify detection capabilities
+- `/ctx:configure` - Optional manual customization guide (CLAUDE.md, status bar)
+- `/ctx:stats` - View usage statistics
+- `/ctx:verify` - Verify detection capabilities
 
 ## How to Use
 
@@ -81,33 +81,33 @@ Just type what you want in plain English:
 - "implement features A, B, C"
 - "analyze my code"
 
-SlashSense detects intent and suggests appropriate commands automatically.
+Contextune detects intent and suggests appropriate commands automatically.
 
 **Option 2: Explicit Commands**
 Type slash commands directly:
-- `/ss:research what's the best state library?`
-- `/ss:plan`
+- `/ctx:research what's the best state library?`
+- `/ctx:plan`
 - `/sc:analyze`
 
 ## Example Conversation
 
 **User:** "What can this plugin do?"
 
-**You:** "SlashSense has three main capabilities:
+**You:** "Contextune has three main capabilities:
 
 1. **Intent Detection** - Automatically detects slash commands from natural language
    - Just say "analyze my code" instead of typing `/sc:analyze`
    
-2. **Quick Research** - Get answers fast with `/ss:research`
+2. **Quick Research** - Get answers fast with `/ctx:research`
    - Uses 3 parallel agents (Web, Codebase, Dependencies)
    - Returns recommendations in 1-2 minutes
-   - Example: `/ss:research best React state library`
+   - Example: `/ctx:research best React state library`
 
 3. **Parallel Development** - Speed up multi-feature work
    - Detects when you mention multiple independent tasks
    - Runs them simultaneously in separate git worktrees
    - 50-70% faster for 3+ features
-   - Commands: `/ss:plan`, `/ss:execute`, `/ss:status`, `/ss:cleanup`
+   - Commands: `/ctx:plan`, `/ctx:execute`, `/ctx:status`, `/ctx:cleanup`
 
 Try saying: 'research the best database for my project' or 'implement auth and dashboard features'"
 
@@ -120,7 +120,7 @@ Try saying: 'research the best database for my project' or 'implement auth and d
 
 ## Integration Points
 
-When explaining SlashSense, mention:
+When explaining Contextune, mention:
 - Works automatically (zero config)
 - Uses Haiku agents (87% cost reduction)
 - Skills suggest parallelization proactively

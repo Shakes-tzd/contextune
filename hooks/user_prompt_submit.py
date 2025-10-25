@@ -8,11 +8,11 @@
 # ]
 # ///
 """
-SlashSense UserPromptSubmit Hook
+Contextune UserPromptSubmit Hook
 
 Detects slash commands from natural language prompts using 3-tier cascade:
 1. Keyword matching (0.02ms, 60% coverage)
-2. Model2Vec embeddings (0.2ms, 30% coverage)  
+2. Model2Vec embeddings (0.2ms, 30% coverage)
 3. Semantic Router (50ms, 10% coverage)
 
 Hook Protocol:
@@ -36,10 +36,10 @@ from model2vec_matcher import Model2VecMatcher
 from semantic_router_matcher import SemanticRouterMatcher
 
 
-class SlashSenseDetector:
+class ContextuneDetector:
     """
     3-tier intent detection cascade.
-    
+
     Uses your existing matchers in order of speed:
     1. KeywordMatcher (always fast)
     2. Model2VecMatcher (if available)
@@ -111,11 +111,11 @@ def should_process(prompt: str) -> bool:
 
 def format_suggestion(match: IntentMatch) -> str:
     """Format detection result as Claude-friendly suggestion."""
-    
+
     confidence_label = "HIGH" if match.confidence >= 0.85 else "MEDIUM"
-    
+
     return f"""
-<slashsense_detection>
+<contextune_detection>
 🎯 **Command Detected**: `{match.command}`
 
 **Confidence**: {match.confidence:.0%} ({confidence_label})
@@ -123,7 +123,7 @@ def format_suggestion(match: IntentMatch) -> str:
 **Latency**: {match.latency_ms:.2f}ms
 
 Would you like me to execute `{match.command}` instead?
-</slashsense_detection>
+</contextune_detection>
 """.strip()
 
 
@@ -138,7 +138,7 @@ def main():
         prompt = event.get("prompt", "")
 
         # DEBUG: Log what we received
-        print(f"DEBUG: SlashSense hook triggered with prompt: '{prompt}'", file=sys.stderr)
+        print(f"DEBUG: Contextune hook triggered with prompt: '{prompt}'", file=sys.stderr)
 
         # Check if we should process
         if not should_process(prompt):
@@ -154,7 +154,7 @@ def main():
         print(f"DEBUG: Processing prompt (should_process=True)", file=sys.stderr)
 
         # Initialize detector
-        detector = SlashSenseDetector()
+        detector = ContextuneDetector()
 
         # Detect intent
         match = detector.detect(prompt)
@@ -177,9 +177,9 @@ def main():
             "continue": True,
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",
-                "additionalContext": f"\n\n[SlashSense detected: `{match.command}` with {match.confidence:.0%} confidence via {match.method}]"
+                "additionalContext": f"\n\n[Contextune detected: `{match.command}` with {match.confidence:.0%} confidence via {match.method}]"
             },
-            "feedback": f"💡 SlashSense: Suggested `{match.command}` ({match.confidence:.0%} confidence)"
+            "feedback": f"💡 Contextune: Suggested `{match.command}` ({match.confidence:.0%} confidence)"
         }
 
         print(f"DEBUG: Response: {json.dumps(response)}", file=sys.stderr)
@@ -188,7 +188,7 @@ def main():
     except Exception as e:
         # Log error but don't block Claude
         import traceback
-        print(f"SlashSense error: {e}", file=sys.stderr)
+        print(f"Contextune error: {e}", file=sys.stderr)
         print(f"DEBUG: Traceback: {traceback.format_exc()}", file=sys.stderr)
         response = {
             "continue": True,

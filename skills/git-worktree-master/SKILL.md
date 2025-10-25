@@ -206,7 +206,7 @@ git worktree prune
 
 Performance should improve significantly!
 
-💡 Pro Tip: Use `/slashsense:parallel:cleanup` after completing work"
+💡 Pro Tip: Use `/contextune:parallel:cleanup` after completing work"
 ```
 
 #### Issue 5: Locked Files / Concurrent Git Operations

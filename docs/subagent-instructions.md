@@ -54,7 +54,7 @@ Created from: {plan_file_path}
 
 ---
 
-🤖 Auto-created via SlashSense parallel execution
+🤖 Auto-created via Contextune parallel execution
 EOF
 )" \
   --label "parallel-execution,auto-created"
@@ -347,7 +347,7 @@ $(git diff --name-only origin/main..HEAD)
 
 Ready for review and merge!
 
-🤖 Completed via SlashSense parallel execution
+🤖 Completed via Contextune parallel execution
 EOF
 )"
 ```
@@ -547,4 +547,4 @@ When spawning subagents:
 
 **Version:** 1.0
 **Last Updated:** 2025-10-21
-**Compatible with:** SlashSense Parallel Execution v1.0+
+**Compatible with:** Contextune Parallel Execution v1.0+

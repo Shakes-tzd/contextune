@@ -338,7 +338,7 @@ if __name__ == "__main__":
     },
     {
       "command": "uv run hooks/user_prompt_submit.py",
-      "description": "SlashSense intent detection",
+      "description": "Contextune intent detection",
       "continueOnError": true,
       "timeout": 5000
     }
@@ -363,7 +363,7 @@ Research Agent Prompt:
 **Current Date:** 2025-10-21
 ⚠️ Use THIS date in searches, not 2024!
 
-**Project:** slashsense
+**Project:** contextune
 **Tech Stack:** Python 3.10+, UV package manager
 
 **Existing Specifications:**
@@ -496,7 +496,7 @@ Quality: High (current, reuses existing, follows specs)
 
 ### Phase 4: Update Planning Command
 
-11. Update `slashsense-parallel-plan.md`:
+11. Update `contextune-parallel-plan.md`:
     - Expect context in prompts
     - Reference context in research
     - Validate against specs
@@ -545,7 +545,7 @@ Quality: High (current, reuses existing, follows specs)
 
 ### User Request
 ```
-User: /slashsense:parallel:plan
+User: /contextune:parallel:plan
 "I need to add user authentication"
 ```
 

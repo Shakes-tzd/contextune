@@ -1,4 +1,4 @@
-# SlashSense v0.5.0 Implementation Plan
+# Contextune v0.5.0 Implementation Plan
 ## Cost Optimization & Discovery Features
 
 **Date:** 2025-10-24
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This plan addresses **$1.15 per workflow cost waste** (82% inefficiency) discovered during the DocuColab parallel development project. The root cause: users are unaware of SlashSense's cost-optimized Haiku agents and have no discovery mechanism.
+This plan addresses **$1.15 per workflow cost waste** (82% inefficiency) discovered during the DocuColab parallel development project. The root cause: users are unaware of Contextune's cost-optimized Haiku agents and have no discovery mechanism.
 
 ### Investment vs. Return
 
@@ -33,7 +33,7 @@ This plan addresses **$1.15 per workflow cost waste** (82% inefficiency) discove
 ## Problem Statement
 
 **Core Issue:** Users waste 82% on agent costs because they:
-- Don't know SlashSense's specialized agents exist
+- Don't know Contextune's specialized agents exist
 - Have no cost preview before spawning agents
 - Have no cost visibility after execution
 - Lack cross-branch API validation
@@ -145,7 +145,7 @@ PRICING = {
 
 **Example Output:**
 ```
-SlashSense Cost Report
+Contextune Cost Report
 ======================
 
 Workflow: DocuColab Phase 1
@@ -180,7 +180,7 @@ Time: 22 minutes
 
 | Keywords | Suggestion | Benefit |
 |----------|------------|---------|
-| "parallel", "concurrent", "N tasks" | `/slashsense:parallel-plan` | 82% cost savings |
+| "parallel", "concurrent", "N tasks" | `/contextune:parallel-plan` | 82% cost savings |
 | "test", "pytest" | `test-runner` agent | 87% cheaper |
 | "worktree", "parallel branch" | `worktree-manager` | 100% automation |
 | "GitHub issue" | `issue-orchestrator` | Bulk operations |
@@ -188,16 +188,16 @@ Time: 22 minutes
 
 **Example UX:**
 ```
-💡 SlashSense Suggestion
+💡 Contextune Suggestion
 
 I noticed you mentioned "parallel tasks".
 
-SlashSense can automate this workflow:
+Contextune can automate this workflow:
 • Cost: $0.25 (vs $1.40 manual - 82% savings)
 • Speed: Fully automated
 • Quality: Cross-branch validation included
 
-Try: `/slashsense:parallel-plan`
+Try: `/contextune:parallel-plan`
 
 [Yes, use it] [No, continue manually]
 ```
@@ -244,7 +244,7 @@ agent_patterns = {
 Task: "Implement 5 features in parallel"
 
 ┌─────────────────────────────────────────────────────┐
-│ ✅ Recommended: slashsense:parallel-task-executor   │
+│ ✅ Recommended: contextune:parallel-task-executor   │
 │    Cost: $0.20 (5 × $0.04)                          │
 │    Speed: 5-10s total                               │
 │    Benefits: Cost tracking + API validation         │
@@ -367,7 +367,7 @@ Phase 5: Reporting (Main agent)
 └─ Recommendations
 ```
 
-**Integration:** Enhanced `commands/slashsense-parallel-execute.md`
+**Integration:** Enhanced `commands/contextune-parallel-execute.md`
 
 **Performance:** ~5s orchestration overhead (worth it for automation)
 
@@ -426,9 +426,9 @@ Validation Layer (Sequential - After Integration)
 
 ```bash
 # Create 3 worktrees for parallel work
-git worktree add ../slashsense-cost-tracking -b feature/cost-tracking
-git worktree add ../slashsense-contextual-help -b feature/contextual-help
-git worktree add ../slashsense-validator -b feature/cross-branch-validator
+git worktree add ../contextune-cost-tracking -b feature/cost-tracking
+git worktree add ../contextune-contextual-help -b feature/contextual-help
+git worktree add ../contextune-validator -b feature/cross-branch-validator
 
 # Launch Claude Code in each worktree
 # Work on all 3 tasks simultaneously
@@ -463,7 +463,7 @@ git worktree add ../slashsense-validator -b feature/cross-branch-validator
 **Depends on:** Task A merged
 
 ```bash
-git worktree add ../slashsense-cost-advisor -b feature/agent-cost-advisor
+git worktree add ../contextune-cost-advisor -b feature/agent-cost-advisor
 # Wait for Task A to merge first
 ```
 
@@ -477,12 +477,12 @@ git worktree add ../slashsense-cost-advisor -b feature/agent-cost-advisor
 **Depends on:** Tasks A + C merged
 
 ```bash
-git worktree add ../slashsense-orchestration -b feature/enhanced-orchestration
+git worktree add ../contextune-orchestration -b feature/enhanced-orchestration
 # Wait for Tasks A and C to merge first
 ```
 
 **Deliverables:**
-- ✅ Enhanced `/slashsense:parallel-execute` command
+- ✅ Enhanced `/contextune:parallel-execute` command
 - ✅ Dependency analysis (DAG)
 - ✅ Validation integration (Task C)
 - ✅ Cost reporting (Task A)
@@ -501,8 +501,8 @@ git worktree add ../slashsense-orchestration -b feature/enhanced-orchestration
 **Duration:** 6-8 hours wall clock (can parallelize)
 
 ```bash
-git worktree add ../slashsense-testing -b test/integration-qa
-git worktree add ../slashsense-docs -b docs/v0.5.0
+git worktree add ../contextune-testing -b test/integration-qa
+git worktree add ../contextune-docs -b docs/v0.5.0
 ```
 
 **Task F: Testing & QA (6-8h)**
@@ -547,26 +547,26 @@ Week 2: Dev1=Task D, Dev2=Task E (12-15h wall clock)
 Week 3: Dev1=Task F, Dev2=Task G (6-8h wall clock)
 ```
 
-### Scenario 3: SlashSense Parallel Workflow (RECOMMENDED)
+### Scenario 3: Contextune Parallel Workflow (RECOMMENDED)
 **Total Time:** ~**20-25 hours wall clock**
 
-Use `/slashsense:parallel-execute` to orchestrate development:
+Use `/contextune:parallel-execute` to orchestrate development:
 
 ```bash
 # Phase 1: Foundation (parallel)
-/slashsense:parallel-execute \
+/contextune:parallel-execute \
   --tasks="Cost Tracking,Contextual Help,Cross-Branch Validator" \
   --branches="feature/cost-tracking,feature/contextual-help,feature/cross-branch-validator"
 # Wall clock: 8-10h (tasks run in parallel worktrees)
 
 # Phase 2: Integration (sequential)
-/slashsense:parallel-execute \
+/contextune:parallel-execute \
   --tasks="Agent Cost Advisor,Enhanced Orchestration" \
   --branches="feature/agent-cost-advisor,feature/enhanced-orchestration"
 # Wall clock: 12-15h (Task E is longer)
 
 # Phase 3: Validation (parallel)
-/slashsense:parallel-execute \
+/contextune:parallel-execute \
   --tasks="Testing,Documentation" \
   --branches="test/integration-qa,docs/v0.5.0"
 # Wall clock: 6-8h
@@ -687,7 +687,7 @@ Use `/slashsense:parallel-execute` to orchestrate development:
 
 2. **Set up development environment**
    ```bash
-   cd /Users/shakes/DevProjects/slashsense
+   cd /Users/shakes/DevProjects/contextune
    git checkout -b develop  # Create integration branch
    mkdir .plans  # Store this plan
    ```
@@ -700,9 +700,9 @@ Use `/slashsense:parallel-execute` to orchestrate development:
 4. **Begin Phase 1 execution**
    ```bash
    # Create worktrees
-   git worktree add ../slashsense-cost-tracking -b feature/cost-tracking
-   git worktree add ../slashsense-contextual-help -b feature/contextual-help
-   git worktree add ../slashsense-validator -b feature/cross-branch-validator
+   git worktree add ../contextune-cost-tracking -b feature/cost-tracking
+   git worktree add ../contextune-contextual-help -b feature/contextual-help
+   git worktree add ../contextune-validator -b feature/cross-branch-validator
 
    # Launch parallel development
    # Open Claude Code in each worktree
@@ -720,7 +720,7 @@ Use `/slashsense:parallel-execute` to orchestrate development:
 ## Appendix: File Structure
 
 ```
-slashsense/
+contextune/
 ├── .plans/
 │   └── IMPLEMENTATION_PLAN_v0.5.0.md  # This document
 ├── lib/
@@ -736,9 +736,9 @@ slashsense/
 │       ├── matcher.py
 │       └── README.md
 ├── commands/
-│   ├── slashsense-parallel-execute.md # ENHANCED - Task E
-│   ├── slashsense-config.md           # Existing
-│   └── slashsense-stats.md            # Existing
+│   ├── contextune-parallel-execute.md # ENHANCED - Task E
+│   ├── contextune-config.md           # Existing
+│   └── contextune-stats.md            # Existing
 ├── agents/
 │   ├── parallel-task-executor.md      # ENHANCED - Add cost reporting
 │   ├── worktree-manager.md            # ENHANCED - Add cost reporting
@@ -767,8 +767,8 @@ slashsense/
 ## References
 
 - **Analysis Documents:**
-  - `/tmp/slashsense-analysis-summary.md` - Executive summary
-  - `/tmp/slashsense-issues-analysis.md` - Detailed issue breakdown
+  - `/tmp/contextune-analysis-summary.md` - Executive summary
+  - `/tmp/contextune-issues-analysis.md` - Detailed issue breakdown
 
 - **GitHub Issues:**
   - Issue #5: Agent Cost Advisor Skill

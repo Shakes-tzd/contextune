@@ -1,4 +1,4 @@
-# SlashSense Skills - 5-Minute Quick Start
+# Contextune Skills - 5-Minute Quick Start
 
 **Version:** 0.2.0
 **Time to Value:** < 5 minutes
@@ -12,7 +12,7 @@ Skills are **autonomous expert capabilities** that activate automatically when y
 **Key Difference:**
 ```
 Slash Commands: You invoke them
-    /slashsense:parallel:execute
+    /contextune:parallel:execute
 
 Skills: Claude invokes them
     "How can I work faster?" → Skill activates automatically!
@@ -26,7 +26,7 @@ Skills: Claude invokes them
 
 **Ask:**
 ```
-"What can SlashSense do?"
+"What can Contextune do?"
 ```
 
 **What Happens:**
@@ -36,7 +36,7 @@ Skills: Claude invokes them
 - Suggests what to try next
 
 **Try saying:**
-- "What can I do with SlashSense?"
+- "What can I do with Contextune?"
 - "Show me examples"
 - "How do I use this?"
 
@@ -108,7 +108,7 @@ Is that normal?"
 
 | Ask About | Skill That Activates | You Get |
 |-----------|---------------------|---------|
-| "What can SlashSense do?" | intent-recognition | Capability discovery |
+| "What can Contextune do?" | intent-recognition | Capability discovery |
 | "Work on multiple features?" | parallel-development-expert | Parallelization guidance |
 | "Can't remove worktree" | git-worktree-master | Troubleshooting help |
 | "Why is this slow?" | performance-optimizer | Performance analysis |
@@ -156,7 +156,7 @@ Not vague promises:
 
 1. **Discovery** (1 min)
    ```
-   You: "What can SlashSense do?"
+   You: "What can Contextune do?"
    → Learn capabilities
    ```
 
@@ -169,7 +169,7 @@ Not vague promises:
 3. **Execute** (1 min)
    ```
    You: "Work on them in parallel"
-   → SlashSense executes optimized workflow
+   → Contextune executes optimized workflow
    ```
 
 4. **Monitor** (30s)

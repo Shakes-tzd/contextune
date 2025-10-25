@@ -1,15 +1,16 @@
-# SlashSense 🎯
+# Contextune 🎵
 
-> **Stop memorizing commands. Start describing intent.**
+> **Precision-Tuned Context Engineering for Claude Code**
 
-Natural language to slash command mapping + AI-powered expert guidance for Claude Code. The first intent detection plugin with autonomous Skills.
+Optimize context flow with modular plans (95% fewer tokens), parallel workflows (81% cost reduction), and zero-transformation architecture. Contextune your workflows for peak performance!
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg)](https://docs.claude.com/en/docs/claude-code/plugins)
-[![Version](https://img.shields.io/badge/version-0.5.1-green.svg)](https://github.com/Shakes-tzd/slashsense/releases)
-[![Cost Savings](https://img.shields.io/badge/cost%20savings-81%25-brightgreen.svg)](#-new-in-v030-haiku-agent-architecture)
-[![Documentation](https://img.shields.io/badge/docs-mkdocs-blue.svg)](https://yourusername.github.io/slashsense/)
+[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/Shakes-tzd/contextune/releases)
+[![Cost Savings](https://img.shields.io/badge/cost%20savings-81%25-brightgreen.svg)](#-cost-optimization)
+[![Context Optimization](https://img.shields.io/badge/token%20savings-95%25-brightgreen.svg)](#-context-engineering)
+[![Documentation](https://img.shields.io/badge/docs-contextune.com-blue.svg)](https://contextune.com/)
 
 ---
 
@@ -17,17 +18,17 @@ Natural language to slash command mapping + AI-powered expert guidance for Claud
 
 Claude Code has 80+ plugins with hundreds of slash commands. You can't remember them all.
 
-**Before SlashSense:**
+**Before Contextune:**
 ```
 You: "I need to run tests"
 Claude: "Sure! Running tests..."
 [30 seconds later, writes custom test script]
 ```
 
-**After SlashSense:**
+**After Contextune:**
 ```
 You: "I need to run tests"
-SlashSense: 🎯 Auto-executing /sc:test (85% confidence, keyword match, 0.02ms)
+Contextune: 🎯 Auto-executing /sc:test (85% confidence, keyword match, 0.02ms)
 Claude: [Executes /sc:test automatically]
 ```
 
@@ -37,7 +38,7 @@ Claude: [Executes /sc:test automatically]
 
 **81% cost reduction + 2x speedup with three-tier intelligence**
 
-SlashSense v0.3.0 introduces cost-optimized Haiku agents that dramatically reduce parallel workflow costs while improving performance.
+Contextune v0.3.0 introduces cost-optimized Haiku agents that dramatically reduce parallel workflow costs while improving performance.
 
 ### 💰 Cost Optimization
 
@@ -136,7 +137,7 @@ Result: 81% cost reduction, 2x performance, same quality!
 
 ## ✨ AI-Powered Skills (v0.2.0)
 
-SlashSense now includes **autonomous expert guidance** through Skills. No commands to memorize - just ask questions naturally!
+Contextune now includes **autonomous expert guidance** through Skills. No commands to memorize - just ask questions naturally!
 
 ### 🧠 4 Expert Skills (Auto-Activated)
 
@@ -155,9 +156,9 @@ Say 'work on them in parallel' and I'll handle everything!"
 
 **📚 intent-recognition**
 ```
-You: "What can SlashSense do?"
+You: "What can Contextune do?"
 
-Claude: "SlashSense makes Claude Code more natural!
+Claude: "Contextune makes Claude Code more natural!
 
 🎯 Capabilities:
 1. Parallel Development (30-70% faster)
@@ -209,7 +210,7 @@ Understands natural variations and **automatically executes** the detected comma
 - "review the codebase" → Auto-executes `/sc:analyze`
 - "check code quality" → Auto-executes `/sc:analyze`
 - "audit for issues" → Auto-executes `/sc:analyze`
-- "work on these in parallel" → Auto-executes `/ss:execute`
+- "work on these in parallel" → Auto-executes `/ctx:execute`
 
 ### ⚡ **Lightning Fast**
 - P95 latency: <2ms (keyword path)
@@ -231,27 +232,27 @@ Understands natural variations and **automatically executes** the detected comma
 
 **Option 1: From Marketplace (Recommended)**
 ```bash
-# Add SlashSense marketplace
-/plugin marketplace add Shakes-tzd/slashsense
+# Add Contextune marketplace
+/plugin marketplace add Shakes-tzd/contextune
 
 # Install plugin
-/plugin install slashsense
+/plugin install contextune
 ```
 
 **Option 2: Direct from GitHub**
 ```bash
 # Install directly
-/plugin install Shakes-tzd/slashsense
+/plugin install Shakes-tzd/contextune
 
 # Or specify version
-/plugin install Shakes-tzd/slashsense@0.1.0
+/plugin install Shakes-tzd/contextune@0.1.0
 ```
 
 **Option 3: Local Development**
 ```bash
 # Clone repository
-git clone https://github.com/Shakes-tzd/slashsense
-cd slashsense
+git clone https://github.com/Shakes-tzd/contextune
+cd contextune
 
 # Install locally
 /plugin install @local
@@ -262,21 +263,21 @@ cd slashsense
 **NEW in v0.5.0:** Run the configuration command for persistent visibility:
 
 ```bash
-/ss:configure
+/ctx:configure
 ```
 
 This will:
-- ✅ Add SlashSense section to `~/.claude/CLAUDE.md` (~150 tokens, loaded at session start)
-- ✅ Add SlashSense commands to your status bar (zero context, always visible)
+- ✅ Add Contextune section to `~/.claude/CLAUDE.md` (~150 tokens, loaded at session start)
+- ✅ Add Contextune commands to your status bar (zero context, always visible)
 - ✅ Validate plugin settings and skills
 - ✅ Create backups before any changes
 
 **Benefits:**
 - **Always visible:** See `/research | /parallel:plan | /parallel:execute` in status bar
-- **Session awareness:** Claude remembers SlashSense at every session start
+- **Session awareness:** Claude remembers Contextune at every session start
 - **Safe:** Creates backups, asks permission, provides rollback instructions
 
-**Without configuration:** SlashSense still works via intent detection, but you won't see visual reminders.
+**Without configuration:** Contextune still works via intent detection, but you won't see visual reminders.
 
 ### Usage
 
@@ -289,13 +290,13 @@ Just type what you want in natural language:
 # Just type:
 "can you analyze my code for issues?"
 
-# SlashSense auto-executes:
+# Contextune auto-executes:
 🎯 Auto-executing /sc:analyze (85% confidence, keyword match, 0.02ms)
 ```
 
 ### Supported Commands
 
-SlashSense detects these commands out of the box:
+Contextune detects these commands out of the box:
 
 | Natural Language | Command | Confidence |
 |-----------------|---------|------------|
@@ -308,13 +309,13 @@ SlashSense detects these commands out of the box:
 | "design architecture" | `/sc:design` | 85% |
 | "commit changes" | `/sc:git` | 85% |
 
-**Expandable:** SlashSense auto-discovers commands from all your installed plugins!
+**Expandable:** Contextune auto-discovers commands from all your installed plugins!
 
 ---
 
 ## Parallel Development Workflow
 
-SlashSense includes a powerful parallel development system that lets Claude work on multiple independent tasks simultaneously using git worktrees.
+Contextune includes a powerful parallel development system that lets Claude work on multiple independent tasks simultaneously using git worktrees.
 
 ### Key Features
 
@@ -327,10 +328,10 @@ SlashSense includes a powerful parallel development system that lets Claude work
 
 | Natural Language | Command | What It Does |
 |-----------------|---------|--------------|
-| "plan parallel development" | `/ss:plan` | Document development plan for parallel execution |
-| "work on these in parallel" | `/ss:execute` | Execute plan in parallel using git worktrees |
-| "check parallel status" | `/ss:status` | Monitor progress across all parallel tasks |
-| "cleanup parallel worktrees" | `/ss:cleanup` | Clean up completed worktrees and branches |
+| "plan parallel development" | `/ctx:plan` | Document development plan for parallel execution |
+| "work on these in parallel" | `/ctx:execute` | Execute plan in parallel using git worktrees |
+| "check parallel status" | `/ctx:status` | Monitor progress across all parallel tasks |
+| "cleanup parallel worktrees" | `/ctx:cleanup` | Clean up completed worktrees and branches |
 
 ### Example Workflow
 
@@ -341,7 +342,7 @@ Claude: "📋 These tasks are independent. Would you like to work on them in par
 
 You: "yes, parallelize this work"
 
-SlashSense: 🎯 /ss:execute detected (92% confidence)
+Contextune: 🎯 /ctx:execute detected (92% confidence)
 
 Claude:
 "✅ Created plan: .parallel/plans/PLAN-20251014.md
@@ -414,8 +415,8 @@ User prompt: "analyze my code please"
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/slashsense
-cd slashsense
+git clone https://github.com/yourusername/contextune
+cd contextune
 
 # Install dependencies
 uv sync
@@ -468,11 +469,11 @@ uv run pytest && uv run ruff check . && uv run mypy lib/
 
 ### Basic Configuration
 
-SlashSense works out of the box with zero configuration!
+Contextune works out of the box with zero configuration!
 
 ### Advanced Configuration
 
-Edit `~/.claude/plugins/slashsense/data/user_patterns.json`:
+Edit `~/.claude/plugins/contextune/data/user_patterns.json`:
 
 ```json
 {
@@ -526,13 +527,13 @@ Benchmarked on M1 MacBook Pro:
 - [x] Basic command mappings
 
 ### v1.1 (Current)
-- [x] `/ss:intents` command
-- [x] `/ss:stats` command
+- [x] `/ctx:intents` command
+- [x] `/ctx:stats` command
 - [x] Parallel development workflow
-- [x] `/ss:plan` command
-- [x] `/ss:execute` command
-- [x] `/ss:status` command
-- [x] `/ss:cleanup` command
+- [x] `/ctx:plan` command
+- [x] `/ctx:execute` command
+- [x] `/ctx:status` command
+- [x] `/ctx:cleanup` command
 - [ ] Auto-discovery of all plugin commands
 - [ ] Learning mode (capture corrections)
 - [ ] Custom pattern editor
@@ -610,7 +611,7 @@ uv run lib/semantic_router_matcher.py
 
 ## FAQ
 
-### Does SlashSense slow down Claude Code?
+### Does Contextune slow down Claude Code?
 
 No! The hook adds <2ms latency for 90% of queries. You won't notice it.
 
@@ -624,7 +625,7 @@ Yes! Edit `data/user_patterns.json` to add your own mappings.
 
 ### Does it work with other plugins?
 
-Yes! SlashSense auto-discovers commands from all installed plugins.
+Yes! Contextune auto-discovers commands from all installed plugins.
 
 ### What about privacy?
 
@@ -679,26 +680,26 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Links
 
-- **Documentation**: https://yourusername.github.io/slashsense/
-- **GitHub**: https://github.com/yourusername/slashsense
-- **Issues**: https://github.com/yourusername/slashsense/issues
-- **Discussions**: https://github.com/yourusername/slashsense/discussions
+- **Documentation**: https://yourusername.github.io/contextune/
+- **GitHub**: https://github.com/yourusername/contextune
+- **Issues**: https://github.com/yourusername/contextune/issues
+- **Discussions**: https://github.com/yourusername/contextune/discussions
 - **Claude Code Docs**: https://docs.claude.com/en/docs/claude-code/plugins
-- **Website**: https://slashsense.com (coming soon)
+- **Website**: https://contextune.com (coming soon)
 
 ---
 
 ## Support
 
-- 📖 [Read the docs](https://yourusername.github.io/slashsense/)
-- 💬 [Join discussions](https://github.com/yourusername/slashsense/discussions)
-- 🐛 [Report bugs](https://github.com/yourusername/slashsense/issues)
-- ⭐ [Star the repo](https://github.com/yourusername/slashsense)
+- 📖 [Read the docs](https://yourusername.github.io/contextune/)
+- 💬 [Join discussions](https://github.com/yourusername/contextune/discussions)
+- 🐛 [Report bugs](https://github.com/yourusername/contextune/issues)
+- ⭐ [Star the repo](https://github.com/yourusername/contextune)
 
 ---
 
 <p align="center">
-  <b>SlashSense: The command translator Claude Code needs.</b>
+  <b>Contextune: The command translator Claude Code needs.</b>
   <br><br>
   Made with ❤️ by developers who forgot too many slash commands
 </p>

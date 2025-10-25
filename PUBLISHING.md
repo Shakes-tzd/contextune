@@ -1,6 +1,6 @@
-# Publishing SlashSense to Claude Code Marketplace
+# Publishing Contextune to Claude Code Marketplace
 
-This guide explains how SlashSense is published and how users receive updates.
+This guide explains how Contextune is published and how users receive updates.
 
 ---
 
@@ -48,7 +48,7 @@ git push origin v0.1.0
 
 ### Step 3: Verify on GitHub
 
-Go to: https://github.com/Shakes-tzd/slashsense
+Go to: https://github.com/Shakes-tzd/contextune
 
 Ensure these files are present:
 - `.claude-plugin/plugin.json` ✓
@@ -61,11 +61,11 @@ Ensure these files are present:
 
 ```bash
 # Test direct installation
-/plugin install Shakes-tzd/slashsense
+/plugin install Shakes-tzd/contextune
 
 # Test marketplace installation
-/plugin marketplace add Shakes-tzd/slashsense
-/plugin install slashsense
+/plugin marketplace add Shakes-tzd/contextune
+/plugin install contextune
 ```
 
 ---
@@ -93,7 +93,7 @@ The community maintains an aggregator at **claudecodemarketplace.com** (115+ mar
    ```
 
 3. **Submit Pull Request:**
-   - Title: "Add SlashSense marketplace"
+   - Title: "Add Contextune marketplace"
    - Description: Brief overview of plugin features
    - Link to your repo
 
@@ -167,7 +167,7 @@ v1.0.0 → Stable release (API locked)
   "version": "1.1.0",
   "plugins": [
     {
-      "name": "slashsense",
+      "name": "contextune",
       "version": "1.1.0"
     }
   ]
@@ -207,7 +207,7 @@ gh release create v1.1.0 \
   --notes "See CHANGELOG.md for details"
 
 # Or via GitHub web UI:
-# https://github.com/Shakes-tzd/slashsense/releases/new
+# https://github.com/Shakes-tzd/contextune/releases/new
 ```
 
 ---
@@ -226,7 +226,7 @@ Claude Code automatically checks for plugin updates:
 Users can update with:
 ```bash
 # Update specific plugin
-/plugin update slashsense
+/plugin update contextune
 
 # Update all plugins
 /plugin update --all
@@ -237,10 +237,10 @@ Users can update with:
 Users can pin to specific versions:
 ```bash
 # Install specific version
-/plugin install Shakes-tzd/slashsense@1.0.0
+/plugin install Shakes-tzd/contextune@1.0.0
 
 # Upgrade to new version
-/plugin install Shakes-tzd/slashsense@1.1.0
+/plugin install Shakes-tzd/contextune@1.1.0
 ```
 
 ---
@@ -255,7 +255,7 @@ Track plugin adoption via GitHub:
 - **Clone Count**: Installation attempts
 - **Traffic**: Views and clones over time
 
-Access at: https://github.com/Shakes-tzd/slashsense/graphs/traffic
+Access at: https://github.com/Shakes-tzd/contextune/graphs/traffic
 
 ### Community Feedback
 
@@ -297,7 +297,7 @@ uv run ruff check .
 uv run mypy lib/
 
 # Test installation
-/plugin uninstall slashsense
+/plugin uninstall contextune
 /plugin install @local
 ```
 
@@ -348,7 +348,7 @@ Before each release:
 
 ## 🔗 Useful Links
 
-- **SlashSense Repository**: https://github.com/Shakes-tzd/slashsense
+- **Contextune Repository**: https://github.com/Shakes-tzd/contextune
 - **Community Marketplace**: https://claudecodemarketplace.com/
 - **Submit Marketplace**: https://github.com/joesaunderson/claude-code-marketplace
 - **Claude Code Docs**: https://docs.claude.com/en/docs/claude-code/plugin-marketplaces
@@ -371,7 +371,7 @@ Before each release:
 
 ### "Update not appearing"
 
-- Users need to run `/plugin update slashsense`
+- Users need to run `/plugin update contextune`
 - Check git tag created and pushed
 - Clear plugin cache (implementation dependent)
 
@@ -382,14 +382,14 @@ Before each release:
 Your plugin is now ready for the marketplace. Users can install it with:
 
 ```bash
-/plugin marketplace add Shakes-tzd/slashsense
-/plugin install slashsense
+/plugin marketplace add Shakes-tzd/contextune
+/plugin install contextune
 ```
 
 Or directly:
 
 ```bash
-/plugin install Shakes-tzd/slashsense
+/plugin install Shakes-tzd/contextune
 ```
 
 Updates will be pulled automatically from your GitHub repo when you push new tagged versions!

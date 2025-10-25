@@ -15,7 +15,7 @@
 ```json
 {
   "continue": true,
-  "feedback": "💡 SlashSense: 50 commands available. Type naturally!",
+  "feedback": "💡 Contextune: 50 commands available. Type naturally!",
   "suppressOutput": false
 }
 ```
@@ -31,7 +31,7 @@
   "continue": true,
   "hookSpecificOutput": {
     "hookEventName": "SessionStart",
-    "additionalContext": "[SlashSense config: 50 custom patterns, min confidence 0.7]"
+    "additionalContext": "[Contextune config: 50 custom patterns, min confidence 0.7]"
   },
   "suppressOutput": true
 }
@@ -125,7 +125,7 @@ When multiple SessionStart hooks are registered:
 
 ## Implementation Guide
 
-### SlashSense SessionStart Hook (Zero-Context)
+### Contextune SessionStart Hook (Zero-Context)
 
 ```javascript
 #!/usr/bin/env node
@@ -133,7 +133,7 @@ When multiple SessionStart hooks are registered:
 function main() {
   try {
     // Load commands from commands/ directory
-    const commands = getSlashSenseCommands();
+    const commands = getContextuneCommands();
 
     // Format as user-friendly list
     const message = formatCommandList(commands);
@@ -165,13 +165,13 @@ function main() {
 | Context injection (additionalContext) | ~100-500 tokens | <1ms | Config, persistent state |
 | Both (feedback + context) | ~100-500 tokens | <1ms | Show AND remember |
 
-### Example: SlashSense Command List
+### Example: Contextune Command List
 
 **Zero-Context Approach** (Recommended):
 ```json
 {
   "continue": true,
-  "feedback": "💡 SlashSense Commands:\n  /slashsense:config\n  /slashsense:stats\n\nOr type naturally!",
+  "feedback": "💡 Contextune Commands:\n  /contextune:config\n  /contextune:stats\n\nOr type naturally!",
   "suppressOutput": false
 }
 ```
@@ -185,9 +185,9 @@ function main() {
   "continue": true,
   "hookSpecificOutput": {
     "hookEventName": "SessionStart",
-    "additionalContext": "[Available commands: /slashsense:config, /slashsense:stats]"
+    "additionalContext": "[Available commands: /contextune:config, /contextune:stats]"
   },
-  "feedback": "💡 SlashSense loaded",
+  "feedback": "💡 Contextune loaded",
   "suppressOutput": true
 }
 ```
@@ -228,14 +228,14 @@ function main() {
 
 **Status**: Under investigation by Anthropic
 
-## Recommendations for SlashSense
+## Recommendations for Contextune
 
 ### Session Start: Zero-Context Pattern
 ```javascript
 // Show command list WITHOUT context cost
 {
   "continue": true,
-  "feedback": "💡 SlashSense ready! Type naturally or use:\n  /slashsense:config\n  /slashsense:stats",
+  "feedback": "💡 Contextune ready! Type naturally or use:\n  /contextune:config\n  /contextune:stats",
   "suppressOutput": false
 }
 ```
@@ -247,7 +247,7 @@ function main() {
   "continue": true,
   "hookSpecificOutput": {
     "hookEventName": "UserPromptSubmit",
-    "additionalContext": "[SlashSense detected: /sc:analyze with 95% confidence]"
+    "additionalContext": "[Contextune detected: /sc:analyze with 95% confidence]"
   },
   "feedback": "💡 Suggested: /sc:analyze",
   "suppressOutput": false
@@ -258,12 +258,12 @@ function main() {
 
 ### Minimal Context (20 tokens)
 ```
-[SlashSense: 10 commands available]
+[Contextune: 10 commands available]
 ```
 
 ### Medium Context (100 tokens)
 ```
-[SlashSense Configuration]
+[Contextune Configuration]
 - Custom patterns: 5 commands
 - Detection: keyword + Model2Vec
 - Min confidence: 0.7
@@ -271,7 +271,7 @@ function main() {
 
 ### Large Context (500 tokens)
 ```
-[SlashSense Configuration]
+[Contextune Configuration]
 
 Custom Patterns:
   /sc:analyze: code review, analyze, check quality, review code
@@ -292,7 +292,7 @@ Recent Usage:
 
 **Use `feedback` for UI, `additionalContext` for knowledge.**
 
-For SlashSense:
+For Contextune:
 - **SessionStart**: Use zero-context pattern (feedback only)
 - **UserPromptSubmit**: Use context injection (detected command)
 - **Total cost**: ~20 tokens per matched command (acceptable)

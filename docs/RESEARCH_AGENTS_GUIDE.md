@@ -468,4 +468,4 @@ security.py, following spec requirements.
 
 ---
 
-**Use these templates in `commands/slashsense-parallel-plan.md` to spawn grounded research agents!**
+**Use these templates in `commands/contextune-parallel-plan.md` to spawn grounded research agents!**

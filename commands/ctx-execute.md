@@ -1,5 +1,5 @@
 ---
-name: ss:execute
+name: ctx:execute
 description: Execute plan in parallel using git worktrees and multiple Claude sessions
 executable: true
 ---
@@ -8,7 +8,7 @@ executable: true
 
 You are executing an automated parallel development workflow with **optimized parallel setup**.
 
-**SlashSense Integration:** This command can be triggered via `/slashsense:parallel:execute` or natural language like "work on these tasks in parallel", "parallelize this work".
+**Contextune Integration:** This command can be triggered via `/contextune:parallel:execute` or natural language like "work on these tasks in parallel", "parallelize this work".
 
 ---
 
@@ -98,28 +98,81 @@ Agent 3: Creating issue... ✅ Creating worktree... ✅ Working...
 **Check for existing plan:**
 
 ```bash
-# Find most recent plan file
-ls -t .parallel/plans/PLAN-*.md 2>/dev/null | head -1
+# Check for plan.yaml
+[ -f .parallel/plans/plan.yaml ] && echo "Found plan.yaml" || echo "No plan found"
 ```
 
-**If plan exists:**
-- Read the plan file
-- Extract independent tasks (those marked "Can Run in Parallel")
-- Validate task structure (description, files, tests)
+**If plan.yaml exists:**
+- Read plan.yaml (lightweight index/TOC)
+- Get task list with names, priorities, dependencies
+- Understand scope WITHOUT reading full task files
+- Build execution graph based on dependencies
+
+**Context-Optimized Reading:**
+
+```python
+import yaml
+
+# Step 1: Read plan.yaml (index/TOC)
+with open('.parallel/plans/plan.yaml') as f:
+    plan = yaml.safe_load(f)
+
+# Step 2: Check context optimization
+# If tasks were created in SAME session → already in context!
+# If NEW session → read specific task files when spawning agents
+
+# Get task index (with names!)
+tasks_index = []
+for task_ref in plan['tasks']:
+    tasks_index.append({
+        'id': task_ref['id'],
+        'name': task_ref['name'],  # Name in index!
+        'file': task_ref['file'],
+        'priority': task_ref['priority'],
+        'dependencies': task_ref.get('dependencies', [])
+    })
+
+# Sort by priority: blocker > high > medium > low
+priority_order = {'blocker': 0, 'high': 1, 'medium': 2, 'low': 3}
+tasks_index.sort(key=lambda t: priority_order.get(t['priority'], 99))
+
+# Step 3: When spawning agent for specific task
+# ONLY THEN read the task file (if not in context)
+def spawn_agent_for_task(task_ref):
+    # Check if task file is in context
+    # (created in this session vs read from disk)
+
+    # If NOT in context → read it
+    task_file = f".parallel/plans/{task_ref['file']}"
+    with open(task_file) as f:
+        task_content = f.read()
+
+    # Spawn agent with task content
+    # ...
+```
+
+**Key Optimization:**
+- ✅ Read plan.yaml index (lightweight, ~1K tokens)
+- ✅ See all task names, priorities, dependencies
+- ✅ DON'T read all task files upfront!
+- ✅ Read specific task file ONLY when spawning its agent
+- ✅ If same session (tasks just created) → already in context!
 
 **If no plan exists:**
-- Ask user: "No plan found. Would you like to create one with `/slashsense:parallel:plan`?"
+- Ask user: "No plan.yaml found. Would you like to create one with `/contextune:parallel:plan`?"
 - Wait for user response
-- If user provides task list directly, create minimal inline plan
+- If user provides task list directly, create minimal inline YAML plan
 
 **Plan validation:**
-- At least 1 independent task
-- Each task has: description, estimated time, files touched
+- plan.yaml exists and has valid YAML syntax
+- All referenced task files exist
+- Each task has: id, priority, objective, files, acceptance criteria
 - No circular dependencies
+- Task IDs in plan.yaml match task IDs in task files
 
 **If validation fails:**
-- Report issues to user
-- Suggest running `/slashsense:parallel:plan` to create proper plan
+- Report specific issues to user (missing files, syntax errors, circular deps, etc.)
+- Suggest running `/contextune:parallel:plan` to create proper plan
 
 ---
 
@@ -178,7 +231,7 @@ Spawn a `parallel-task-executor` Haiku agent. Each agent receives:
 
 ### 🎯 v0.4.0: Context-Grounded Execution (Zero Research!)
 
-**IMPORTANT:** If using SlashSense v0.4.0+ with context-grounded research:
+**IMPORTANT:** If using Contextune v0.4.0+ with context-grounded research:
 
 ✅ **All research was ALREADY done during planning!**
 - Web searches for best practices (2025, not 2024!)
@@ -215,13 +268,32 @@ The planning phase (Sonnet) already spent 2 minutes doing comprehensive parallel
 ### Subagent Instructions Template
 
 ```
-You are Subagent working on: {task.description}
+You are Subagent working on: {task.name}
 
-**Plan Reference:** {plan_file_path}
-**Task Details:**
-- Estimated Time: {task.estimated_time}
-- Files to Touch: {task.files}
-- Tests Required: {task.tests}
+**Task Reference:** .parallel/plans/tasks/{task.id}.md (GitHub issue format)
+**Plan Reference:** .parallel/plans/plan.yaml
+
+**IMPORTANT:** Your task file is already in GitHub issue format (Markdown + YAML frontmatter).
+
+**Quick Reference:**
+- Priority: {task.priority}
+- Dependencies: {task.dependencies}
+
+**Your Complete Task Specification:**
+
+Read your task file for all details:
+```bash
+cat .parallel/plans/tasks/{task.id}.md
+```
+
+The file contains:
+- 🎯 Objective
+- 🛠️ Implementation Approach (libraries, patterns to follow)
+- 📁 Files to Touch (create/modify/delete)
+- 🧪 Tests Required (unit/integration)
+- ✅ Acceptance Criteria
+- ⚠️ Potential Conflicts
+- 📝 Notes
 
 ---
 
@@ -231,36 +303,27 @@ You are Subagent working on: {task.description}
 
 **Step 1: Create Your GitHub Issue**
 
+**ZERO TRANSFORMATION APPROACH** - Task files are already in GitHub issue format!
+
 ```bash
+# Extract task title from Markdown (first # heading)
+TASK_TITLE=$(grep "^# " .parallel/plans/tasks/{task.id}.md | head -1 | sed 's/^# //')
+
+# Extract labels from YAML frontmatter
+TASK_LABELS=$(grep -A 10 "^labels:" .parallel/plans/tasks/{task.id}.md | grep "  - " | sed 's/  - //' | tr '\n' ',' | sed 's/,$//')
+
+# Create issue directly from task file (NO TRANSFORMATION!)
 gh issue create \
-  --title "{task.title}" \
-  --body "$(cat <<'EOF'
-## Task Description
-{task.description}
-
-## Plan Reference
-Created from: {plan_file_path}
-
-## Files to Modify
-{task.files_list}
-
-## Tests Required
-{task.tests_list}
-
-## Success Criteria
-{task.success_criteria}
-
-**Worktree:** `worktrees/task-{task_id}`
-**Branch:** `feature/{task_id}`
-**Labels:** parallel-execution, auto-created
-
----
-
-🤖 Auto-created via SlashSense parallel execution
-EOF
-)" \
-  --label "parallel-execution,auto-created"
+  --title "$TASK_TITLE" \
+  --body-file .parallel/plans/tasks/{task.id}.md \
+  --label "$TASK_LABELS"
 ```
+
+**Why this is efficient:**
+- ✅ **No parsing**: Task file is already in GitHub issue format
+- ✅ **No reformatting**: Just pipe the file directly
+- ✅ **~500 tokens saved**: No transformation overhead
+- ✅ **Faster execution**: Less processing, less context usage
 
 **Capture the issue number:**
 ```bash
@@ -328,7 +391,24 @@ EOF
 
 ### Phase 2: Implement the Feature
 
-{task.detailed_implementation_steps}
+**Read your task file for complete details:**
+
+```bash
+cat .parallel/plans/tasks/{task.id}.md
+```
+
+**Your task file is in Markdown with YAML frontmatter:**
+- **Frontmatter**: Contains id, priority, status, dependencies, labels
+- **Body**: Contains objective, approach, libraries, files, tests, acceptance criteria
+
+**Follow the implementation approach specified in the task:**
+- Approach: {From "## 🛠️ Implementation Approach" section}
+- Libraries: {From "**Libraries:**" section}
+- Patterns: {From "**Pattern to follow:**" section}
+
+**Detailed implementation steps:**
+
+{Generate steps based on task.objective, task.files, and task.implementation}
 
 **🎯 EXECUTION-ONLY Guidelines (v0.4.0):**
 
@@ -460,7 +540,7 @@ $(git diff --name-only origin/main..HEAD)
 
 Ready for review and merge!
 
-🤖 Completed via SlashSense parallel execution
+🤖 Completed via Contextune parallel execution
 EOF
 )"
 ```
@@ -590,12 +670,106 @@ End of subagent instructions.
 
 **Use the Task tool with `parallel-task-executor` agent:**
 
-For each task, create a Task tool invocation with:
-- `description`: "{task.title}"
-- `prompt`: The complete subagent instructions template above (filled with task-specific values)
-- `subagent_type`: "slashsense:parallel-task-executor" (Haiku agent)
+For each task in the YAML plan, create a Task tool invocation with:
+- `description`: "{task.name}"
+- `prompt`: The complete subagent instructions template above (filled with task-specific YAML values)
+- `subagent_type`: "contextune:parallel-task-executor" (Haiku agent)
+
+**Load task data with context optimization:**
+
+```python
+import yaml
+
+# Step 1: Read plan.yaml index
+with open('.parallel/plans/plan.yaml') as f:
+    plan = yaml.safe_load(f)
+
+# Step 2: For each task in index
+for task_ref in plan['tasks']:
+    task_id = task_ref['id']
+    task_name = task_ref['name']  # Name from index!
+    task_file = task_ref['file']
+    task_priority = task_ref['priority']
+    task_dependencies = task_ref.get('dependencies', [])
+
+    # Step 3: Context optimization decision
+    # Question: Is task file already in context?
+    # Answer: YES if created in this session, NO if reading from disk
+
+    # If NOT in context → read task file
+    # If IN context → skip read, use existing context!
+
+    # For now, read task file when spawning agent
+    # (Haiku will use it directly for GitHub issue creation)
+    with open(f'.parallel/plans/{task_file}') as f:
+        task_content = f.read()
+
+    # Fill template with data from INDEX (not full task file!)
+    # Haiku agent will read full task file for implementation details
+    prompt = subagent_template.format(
+        task_id=task_id,
+        task_name=task_name,  # From index!
+        task_priority=task_priority,  # From index!
+        task_dependencies=', '.join(task_dependencies)  # From index!
+    )
+
+    # Spawn agent with minimal prompt
+    # Agent reads tasks/task-N.md for complete spec
+    Task(
+        description=task_name,
+        prompt=prompt,
+        subagent_type="contextune:parallel-task-executor"
+    )
+```
+
+**Context Optimization Benefits:**
+- ✅ **Index-first approach**: Get task names, priorities from plan.yaml (1K tokens)
+- ✅ **Lazy loading**: Only read task files when spawning agents
+- ✅ **Same-session optimization**: If tasks just created → already in context!
+- ✅ **Minimal prompt**: Agent gets id, name, priority from index
+- ✅ **Agent reads full spec**: Haiku reads tasks/task-N.md for details
+- ✅ **Zero transformation**: Task file used directly for GitHub issue (~500 tokens saved per task)
 
 **CRITICAL:** Spawn ALL agents in a SINGLE response using multiple Task tool invocations. This ensures parallel execution from the start.
+
+---
+
+### Context Optimization: Same Session vs New Session
+
+**Same Session (Plan just created):**
+```
+1. User runs /contextune:parallel:plan
+2. Planning agent creates:
+   - plan.yaml (in context)
+   - tasks/task-0.md (in context)
+   - tasks/task-1.md (in context)
+   - tasks/task-2.md (in context)
+3. User runs /contextune:parallel:execute
+4. Execution agent:
+   - Reads plan.yaml (~1K tokens)
+   - Tasks ALREADY in context (0 tokens!)
+   - Total: 1K tokens ✅
+
+Savings: Massive! No re-reading task files.
+```
+
+**New Session (Reading from disk):**
+```
+1. User runs /contextune:parallel:execute (new session)
+2. Execution agent:
+   - Reads plan.yaml index (~1K tokens)
+   - Sees task-0, task-1, task-2 in index
+   - Reads task-0.md when spawning agent (~3K tokens)
+   - Reads task-1.md when spawning agent (~3K tokens)
+   - Reads task-2.md when spawning agent (~3K tokens)
+   - Total: ~10K tokens
+
+Still optimized: Only reads what's needed, when it's needed.
+```
+
+**Key Insight:** plan.yaml acts as lightweight index/TOC. Model decides when to read full task files based on context availability.
+
+---
 
 **Cost Tracking:**
 Each Haiku agent costs ~$0.04 per task execution (vs $0.27 Sonnet - **85% savings!**)
@@ -626,7 +800,7 @@ All 3 Haiku agents start simultaneously, each creating its own issue and worktre
 Users can check progress at any time with:
 
 ```bash
-/slashsense:parallel:status
+/contextune:parallel:status
 ```
 
 This will show:
@@ -734,7 +908,7 @@ gh pr create \
 
 ```bash
 # Use the cleanup command
-/slashsense:parallel:cleanup
+/contextune:parallel:cleanup
 ```
 
 Or manually:
@@ -820,7 +994,7 @@ Annual projection (1,200 workflows):
 - Branches deleted: {N}
 - Plan archived: .parallel/archive/PLAN-{timestamp}.md
 
-🎉 All tasks completed successfully via SlashSense parallel execution!
+🎉 All tasks completed successfully via Contextune parallel execution!
 🚀 Powered by Context-Grounded Parallel Research v0.4.0
 ✨ Sonnet planned EVERYTHING, Haiku executed BLINDLY
 ```
@@ -867,22 +1041,22 @@ print(f"This workflow saved: ${savings:.2f} ({percentage:.0f}% reduction)")
 
 ---
 
-## SlashSense Integration
+## Contextune Integration
 
 ### Natural Language Triggers
 
 Users can trigger this command with:
-- `/slashsense:parallel:execute` (explicit)
+- `/contextune:parallel:execute` (explicit)
 - "work on X, Y, Z in parallel"
 - "parallelize these tasks"
 - "execute parallel development"
 - "run these in parallel"
 
-SlashSense automatically detects these intents and routes to this command.
+Contextune automatically detects these intents and routes to this command.
 
 ### Global Availability
 
-This command works in ALL projects after installing SlashSense:
+This command works in ALL projects after installing Contextune:
 
 ```bash
 /plugin install slashsense
@@ -893,9 +1067,9 @@ No project-specific configuration needed.
 ### Related Commands
 
 When suggesting next steps, mention:
-- `/slashsense:parallel:status` - Monitor progress
-- `/slashsense:parallel:cleanup` - Clean up completed work
-- `/slashsense:parallel:plan` - Create development plan
+- `/contextune:parallel:status` - Monitor progress
+- `/contextune:parallel:cleanup` - Clean up completed work
+- `/contextune:parallel:plan` - Create development plan
 
 ---
 
@@ -957,12 +1131,12 @@ Spawning 3 autonomous subagents...
 ✅ All tasks completed in 2.5 hours (estimated: 6 hours sequential)
 Time saved: 3.5 hours (58% faster)
 
-Triggered via SlashSense natural language detection.
+Triggered via Contextune natural language detection.
 ```
 
 **Explicit Command:**
 ```
-User: "/slashsense:parallel:execute"
+User: "/contextune:parallel:execute"
 
 You: [Load existing plan or ask for task list]
      [Execute full parallel workflow as above]
@@ -975,7 +1149,7 @@ You: [Load existing plan or ask for task list]
 **Issue: "Worktree already exists"**
 - Run: `git worktree list` to see active worktrees
 - Remove stale: `git worktree remove worktrees/task-{N}`
-- Or run: `/slashsense:parallel:cleanup`
+- Or run: `/contextune:parallel:cleanup`
 
 **Issue: "GitHub issue creation failed"**
 - Check: `gh auth status`
@@ -1012,7 +1186,7 @@ You: [Load existing plan or ask for task list]
 
 ## Specialized Haiku Agents
 
-SlashSense v0.3.0 includes specialized Haiku agents for specific operations. Use them when you need focused capabilities:
+Contextune v0.3.0 includes specialized Haiku agents for specific operations. Use them when you need focused capabilities:
 
 ### 1. parallel-task-executor
 **Use for:** Complete feature implementation from start to finish
@@ -1042,7 +1216,7 @@ SlashSense v0.3.0 includes specialized Haiku agents for specific operations. Use
 **Example:**
 ```bash
 # Use directly for troubleshooting
-Task tool with subagent_type: "slashsense:worktree-manager"
+Task tool with subagent_type: "contextune:worktree-manager"
 Prompt: "Diagnose and fix worktree lock files in .git/worktrees/"
 ```
 
@@ -1062,7 +1236,7 @@ Prompt: "Diagnose and fix worktree lock files in .git/worktrees/"
 **Example:**
 ```bash
 # Use directly for bulk operations
-Task tool with subagent_type: "slashsense:issue-orchestrator"
+Task tool with subagent_type: "contextune:issue-orchestrator"
 Prompt: "Create 10 issues from this task list and label them appropriately"
 ```
 
@@ -1082,7 +1256,7 @@ Prompt: "Create 10 issues from this task list and label them appropriately"
 **Example:**
 ```bash
 # Use directly for test automation
-Task tool with subagent_type: "slashsense:test-runner"
+Task tool with subagent_type: "contextune:test-runner"
 Prompt: "Run full test suite and create GitHub issues for any failures"
 ```
 
@@ -1102,7 +1276,7 @@ Prompt: "Run full test suite and create GitHub issues for any failures"
 **Example:**
 ```bash
 # Use directly for performance analysis
-Task tool with subagent_type: "slashsense:performance-analyzer"
+Task tool with subagent_type: "contextune:performance-analyzer"
 Prompt: "Analyze the last 5 parallel workflows and identify bottlenecks"
 ```
 
@@ -1204,6 +1378,6 @@ Savings:   $1,356/year (81% reduction!)
 - `agents/performance-analyzer.md` - Performance analysis specialist
 
 **Related Commands:**
-- `/slashsense:parallel:plan` - Create development plan
-- `/slashsense:parallel:status` - Monitor progress
-- `/slashsense:parallel:cleanup` - Clean up worktrees
+- `/contextune:parallel:plan` - Create development plan
+- `/contextune:parallel:status` - Monitor progress
+- `/contextune:parallel:cleanup` - Clean up worktrees

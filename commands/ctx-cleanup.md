@@ -1,5 +1,5 @@
 ---
-name: ss:cleanup
+name: ctx:cleanup
 description: Clean up completed worktrees and branches
 executable: true
 ---
@@ -8,7 +8,7 @@ executable: true
 
 You are performing cleanup of completed parallel development work.
 
-**SlashSense Integration:** This command can be triggered via `/slashsense:parallel:cleanup` or natural language like "clean up parallel worktrees", "remove completed tasks".
+**Contextune Integration:** This command can be triggered via `/contextune:parallel:cleanup` or natural language like "clean up parallel worktrees", "remove completed tasks".
 
 ---
 
@@ -33,22 +33,22 @@ Also support:
 
 ---
 
-## SlashSense-Specific Additions
+## Contextune-Specific Additions
 
 ### Natural Language Triggers
 
 Users can trigger this command with:
-- `/slashsense:parallel:cleanup` (explicit)
+- `/contextune:parallel:cleanup` (explicit)
 - "clean up parallel worktrees"
 - "remove completed tasks"
 - "clean up parallel work"
 - "delete merged branches"
 
-SlashSense automatically detects these intents.
+Contextune automatically detects these intents.
 
 ### Global Availability
 
-Works in ALL projects after installing SlashSense:
+Works in ALL projects after installing Contextune:
 
 ```bash
 /plugin install slashsense
@@ -57,9 +57,9 @@ Works in ALL projects after installing SlashSense:
 ### Related Commands
 
 When suggesting next steps, mention:
-- `/slashsense:parallel:status` - Check what's left
-- `/slashsense:parallel:execute` - Start new parallel work
-- `/slashsense:parallel:plan` - Plan next iteration
+- `/contextune:parallel:status` - Check what's left
+- `/contextune:parallel:execute` - Start new parallel work
+- `/contextune:parallel:plan` - Plan next iteration
 
 ---
 
@@ -78,14 +78,14 @@ You: [Execute cleanup workflow]
 
 **Explicit Command:**
 ```
-User: "/slashsense:parallel:cleanup"
+User: "/contextune:parallel:cleanup"
 
 You: [Execute cleanup workflow]
 ```
 
 **With Options:**
 ```
-User: "/slashsense:parallel:cleanup --dry-run"
+User: "/contextune:parallel:cleanup --dry-run"
 
 You: [Show what WOULD be deleted]
      Don't actually delete anything
@@ -108,6 +108,6 @@ Always:
 ## Implementation Notes
 
 - Use the exact same implementation as `/.claude/commands/parallel/cleanup.md`
-- Add SlashSense branding where appropriate
+- Add Contextune branding where appropriate
 - Support both explicit and natural language invocation
 - Be conservative - when in doubt, keep rather than delete

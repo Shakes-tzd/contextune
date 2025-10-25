@@ -1,16 +1,16 @@
 ---
-name: ss:stats
-description: View SlashSense detection statistics
+name: ctx:stats
+description: View Contextune detection statistics
 executable: commands/slashsense-stats.py
 ---
 
-# SlashSense Statistics
+# Contextune Statistics
 
 Display detection performance metrics.
 
 ## Usage
 
-`/slashsense:stats`
+`/contextune:stats`
 
 Shows:
 - Detection accuracy by tier

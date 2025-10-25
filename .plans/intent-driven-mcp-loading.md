@@ -1,4 +1,4 @@
-# Intent-Driven On-Demand MCP Loading for SlashSense
+# Intent-Driven On-Demand MCP Loading for Contextune
 
 **Date:** 2025-10-16
 **Status:** Planning
@@ -22,7 +22,7 @@ Through experimentation and research, the user discovered that:
 
 ```
 User Prompt
-  → SlashSense Intent Detection
+  → Contextune Intent Detection
   → MCP Registry Match
   → Auto-configure Project .mcp.json
   → Claude loads only needed MCPs
@@ -33,7 +33,7 @@ User Prompt
 
 1. **Zero Context Waste** - No MCPs loaded until actually needed
 2. **Intent Alignment** - User already signals intent ("use playwright", "search the web", "get docs for X")
-3. **Infrastructure Reuse** - SlashSense already performs intent detection + prompt augmentation
+3. **Infrastructure Reuse** - Contextune already performs intent detection + prompt augmentation
 4. **Project-Scoped** - Each project gets only relevant MCPs for its domain
 5. **Automatic Cleanup** - Can remove MCPs when session ends or task completes
 6. **Transparent** - Claude receives clear notification of available tools
@@ -44,7 +44,7 @@ User Prompt
 
 #### 1.1 Local Registry Structure
 
-Create `~/.claude/slashsense/mcp_registry.json`:
+Create `~/.claude/contextune/mcp_registry.json`:
 
 ```json
 {
@@ -170,7 +170,7 @@ Create `~/.claude/slashsense/mcp_registry.json`:
 
 #### 1.2 Registry Management Commands
 
-Add to SlashSense:
+Add to Contextune:
 - `/mcp-registry list` - Show all available MCPs
 - `/mcp-registry add <name> <config>` - Add custom MCP to registry
 - `/mcp-registry remove <name>` - Remove from registry
@@ -180,7 +180,7 @@ Add to SlashSense:
 
 #### 2.1 MCP Trigger Matching
 
-Enhance SlashSense intent detector (`unified_intent_detector.py`):
+Enhance Contextune intent detector (`unified_intent_detector.py`):
 
 ```python
 def detect_required_mcps(user_prompt: str, registry: dict) -> list[str]:
@@ -246,7 +246,7 @@ def resolve_mcp_variables(mcp_config: dict, context: dict) -> dict:
 
 #### 3.1 Setup Script
 
-Create SlashSense helper to modify project `.mcp.json`:
+Create Contextune helper to modify project `.mcp.json`:
 
 ```python
 import json
@@ -320,12 +320,12 @@ Option 2: Keep for session continuity
 
 ### Phase 4: Prompt Augmentation
 
-#### 4.1 SlashSense Output Format
+#### 4.1 Contextune Output Format
 
 When MCPs are detected and configured:
 
 ```markdown
-[SlashSense Analysis]
+[Contextune Analysis]
 
 **Detected Intent:** Browser Testing + Documentation Lookup
 **Configured MCPs:** playwright, context7
@@ -445,7 +445,7 @@ def sync_official_registry(local_registry_path: str) -> dict:
         if not cursor:
             break
 
-    # Convert official format to SlashSense format
+    # Convert official format to Contextune format
     for server_data in official_servers:
         server = server_data["server"]
         name = server["name"].replace("/", "_")  # Normalize name
@@ -486,7 +486,7 @@ def sync_official_registry(local_registry_path: str) -> dict:
 
 #### 5.3 Discovery UI
 
-Add SlashSense command to browse official registry:
+Add Contextune command to browse official registry:
 
 ```bash
 /mcp-discover [search-term]
@@ -599,7 +599,7 @@ Usage:
    - Can sync with official MCP Registry
    - Supports custom/private MCPs
 
-5. **SlashSense Integration**
+5. **Contextune Integration**
    - Leverages existing intent detection
    - Fits naturally into prompt augmentation flow
    - Enhances core value proposition
@@ -612,7 +612,7 @@ Usage:
 - Build .mcp.json configuration logic
 
 **Week 2: Integration**
-- Integrate with SlashSense intent detector
+- Integrate with Contextune intent detector
 - Add prompt augmentation
 - Test with real projects
 

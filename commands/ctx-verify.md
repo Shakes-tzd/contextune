@@ -1,11 +1,11 @@
 ---
-name: ss:verify
+name: ctx:verify
 description: Verify and execute detected slash command with user confirmation
 ---
 
-# SlashSense Verification Agent
+# Contextune Verification Agent
 
-**IMPORTANT**: This command is automatically triggered by the SlashSense hook when it detects a potential slash command. It runs in a sub-agent to preserve the main agent's context.
+**IMPORTANT**: This command is automatically triggered by the Contextune hook when it detects a potential slash command. It runs in a sub-agent to preserve the main agent's context.
 
 ## Your Task
 
@@ -18,7 +18,7 @@ You are a verification sub-agent. Your job is simple and focused:
 
 ## Detection Information
 
-The SlashSense hook has detected:
+The Contextune hook has detected:
 
 **Detected Command**: `{{DETECTED_COMMAND}}`
 **Confidence**: {{CONFIDENCE}}%
@@ -30,7 +30,7 @@ The SlashSense hook has detected:
 Present this to the user:
 
 ```
-🎯 **SlashSense Detection**
+🎯 **Contextune Detection**
 
 I detected that you might want to run a slash command instead:
 
@@ -66,7 +66,7 @@ Follow their new instructions.
 After completing the task, provide a brief summary:
 
 ```
-**SlashSense Verification Complete**
+**Contextune Verification Complete**
 
 User choice: [Option 1/Option 2/Custom]
 Action taken: [What you did]
@@ -88,7 +88,7 @@ Result: [Brief outcome]
 
 **You present**:
 ```
-🎯 **SlashSense Detection**
+🎯 **Contextune Detection**
 
 I detected that you might want to run a slash command instead:
 
@@ -110,7 +110,7 @@ Which would you prefer?
 
 [Run the analysis command]
 
-**SlashSense Verification Complete**
+**Contextune Verification Complete**
 
 User choice: Option 1 (/sc:analyze)
 Action taken: Ran code analysis
@@ -129,7 +129,7 @@ This command is invoked via:
 response = {
     "continue": True,
     "hookSpecificOutput": {
-        "additionalContext": "[SlashSense delegation directive]"
+        "additionalContext": "[Contextune delegation directive]"
     }
 }
 ```

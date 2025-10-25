@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "version": "0.0.1",
+    "version": "0.5.4",
     "created": "2025-10-14",
-    "description": "Base command mappings for SlashSense intent detection",
+    "description": "Base command mappings for Contextune intent detection",
     "total_commands": 26,
     "documentation": "lib/INTENT_MAPPINGS.md"
   },
@@ -793,7 +793,7 @@
       "wave_enabled": false,
       "documentation": "commands/sc/pattern.md"
     },
-    "/slashsense:parallel:plan": {
+    "/ctx:plan": {
       "description": "Document a development plan for parallel execution",
       "category": "Parallel Development",
       "keywords": [
@@ -822,9 +822,9 @@
       ],
       "auto_personas": ["Architect"],
       "wave_enabled": false,
-      "documentation": "commands/slashsense-parallel-plan.md"
+      "documentation": "commands/ctx-plan.md"
     },
-    "/slashsense:parallel:execute": {
+    "/ctx:execute": {
       "description": "Execute plan in parallel using git worktrees and multiple Claude sessions",
       "category": "Parallel Development",
       "keywords": [
@@ -855,9 +855,9 @@
       ],
       "auto_personas": [],
       "wave_enabled": true,
-      "documentation": "commands/slashsense-parallel-execute.md"
+      "documentation": "commands/ctx-execute.md"
     },
-    "/slashsense:parallel:status": {
+    "/ctx:status": {
       "description": "Check status of parallel worktrees and tasks",
       "category": "Parallel Development",
       "keywords": [
@@ -882,9 +882,9 @@
       "related_flags": [],
       "auto_personas": [],
       "wave_enabled": false,
-      "documentation": "commands/slashsense-parallel-status.md"
+      "documentation": "commands/ctx-status.md"
     },
-    "/slashsense:parallel:cleanup": {
+    "/ctx:cleanup": {
       "description": "Clean up completed worktrees and branches",
       "category": "Parallel Development",
       "keywords": [
@@ -910,7 +910,7 @@
       ],
       "auto_personas": [],
       "wave_enabled": false,
-      "documentation": "commands/slashsense-parallel-cleanup.md"
+      "documentation": "commands/ctx-cleanup.md"
     }
   },
   "aliases": {

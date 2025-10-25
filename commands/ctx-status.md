@@ -1,5 +1,5 @@
 ---
-name: ss:status
+name: ctx:status
 description: Check status of parallel worktrees and tasks
 executable: true
 ---
@@ -8,7 +8,7 @@ executable: true
 
 You are checking the status of all parallel worktrees and tasks.
 
-**SlashSense Integration:** This command can be triggered via `/slashsense:parallel:status` or natural language like "check parallel progress", "show parallel status".
+**Contextune Integration:** This command can be triggered via `/contextune:parallel:status` or natural language like "check parallel progress", "show parallel status".
 
 ---
 
@@ -27,22 +27,22 @@ Follow the same instructions as defined in `.claude/commands/parallel/status.md`
 
 ---
 
-## SlashSense-Specific Additions
+## Contextune-Specific Additions
 
 ### Natural Language Triggers
 
 Users can trigger this command with:
-- `/slashsense:parallel:status` (explicit)
+- `/contextune:parallel:status` (explicit)
 - "check parallel progress"
 - "show parallel status"
 - "how are the parallel tasks doing"
 - "parallel development status"
 
-SlashSense automatically detects these intents.
+Contextune automatically detects these intents.
 
 ### Global Availability
 
-Works in ALL projects after installing SlashSense:
+Works in ALL projects after installing Contextune:
 
 ```bash
 /plugin install slashsense
@@ -51,9 +51,9 @@ Works in ALL projects after installing SlashSense:
 ### Related Commands
 
 When suggesting next steps, mention:
-- `/slashsense:parallel:execute` - Execute parallel development
-- `/slashsense:parallel:cleanup` - Clean up completed work
-- `/slashsense:parallel:plan` - Create development plan
+- `/contextune:parallel:execute` - Execute parallel development
+- `/contextune:parallel:cleanup` - Clean up completed work
+- `/contextune:parallel:plan` - Create development plan
 
 ---
 
@@ -70,7 +70,7 @@ You: [Execute status check workflow]
 
 **Explicit Command:**
 ```
-User: "/slashsense:parallel:status"
+User: "/contextune:parallel:status"
 
 You: [Execute status check workflow]
 ```
@@ -80,6 +80,6 @@ You: [Execute status check workflow]
 ## Implementation Notes
 
 - Use the exact same implementation as `/.claude/commands/parallel/status.md`
-- Add SlashSense branding where appropriate
+- Add Contextune branding where appropriate
 - Support both explicit and natural language invocation
 - This command is read-only - never modifies anything

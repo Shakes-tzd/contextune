@@ -1,6 +1,6 @@
-# SlashSense Delegation Modes
+# Contextune Delegation Modes
 
-SlashSense now supports three delegation modes that control how detected commands are handled, including a **sub-agent verification mode** that preserves your main agent's context.
+Contextune now supports three delegation modes that control how detected commands are handled, including a **sub-agent verification mode** that preserves your main agent's context.
 
 ## Overview
 
@@ -42,12 +42,12 @@ Main agent context preserved!
 ```
 You: "can you help me analyze this code for bugs"
 
-Claude (Main): 🎯 SlashSense detected a command. Spawning verification agent...
+Claude (Main): 🎯 Contextune detected a command. Spawning verification agent...
 
 [Sub-agent spawned]
 
 Claude (Sub-agent):
-🎯 **SlashSense Detection**
+🎯 **Contextune Detection**
 
 I detected you might want to run a slash command:
 
@@ -63,7 +63,7 @@ Claude (Sub-agent):
 
 [Performs analysis]
 
-**SlashSense Verification Complete**
+**Contextune Verification Complete**
 User choice: Option 1 (/sc:analyze)
 Action taken: Ran code analysis
 Result: Found 3 potential issues
@@ -128,7 +128,7 @@ Executes immediately
 
 ### Set Delegation Mode
 
-Edit `~/.claude/plugins/slashsense/data/user_patterns.json`:
+Edit `~/.claude/plugins/contextune/data/user_patterns.json`:
 
 ```json
 {
@@ -151,7 +151,7 @@ Edit `~/.claude/plugins/slashsense/data/user_patterns.json`:
 ### View Current Configuration
 
 ```bash
-/slashsense:config
+/contextune:config
 ```
 
 ## Advanced: Hybrid Mode (Coming Soon)
@@ -165,7 +165,7 @@ Future version will support hybrid mode:
   "auto_execute_whitelist": [
     "/sc:analyze",
     "/sc:explain",
-    "/slashsense:stats"
+    "/contextune:stats"
   ]
 }
 ```
@@ -186,7 +186,7 @@ Future version will support hybrid mode:
   "hookSpecificOutput": {
     "additionalContext": "[Delegation directive with detection details]"
   },
-  "feedback": "🎯 SlashSense: Spawning verification agent"
+  "feedback": "🎯 Contextune: Spawning verification agent"
 }
 ```
 
@@ -194,7 +194,7 @@ Future version will support hybrid mode:
 ```python
 Task(
     subagent_type="general-purpose",
-    description="Verify SlashSense detection",
+    description="Verify Contextune detection",
     prompt="[Verification instructions with detected command]"
 )
 ```
@@ -231,8 +231,8 @@ Total: 410 tokens (but main agent only uses 150)
 **Q: Can I change modes mid-conversation?**
 A: Yes! Edit the config file and the next prompt will use the new mode.
 
-**Q: What if I don't want SlashSense at all?**
-A: Set `"enabled": false` in config, or uninstall: `/plugin uninstall slashsense`
+**Q: What if I don't want Contextune at all?**
+A: Set `"enabled": false` in config, or uninstall: `/plugin uninstall contextune`
 
 **Q: Can the sub-agent access my files?**
 A: Yes, sub-agents have the same permissions as the main agent.
@@ -241,7 +241,7 @@ A: Yes, sub-agents have the same permissions as the main agent.
 A: In verify/suggest modes, you choose. In auto mode, you're stuck with it (use verify mode!)
 
 **Q: Does this work with all commands?**
-A: Yes, SlashSense detects any slash command it's trained on.
+A: Yes, Contextune detects any slash command it's trained on.
 
 ## Recommendations
 

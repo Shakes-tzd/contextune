@@ -632,7 +632,7 @@ QUALITY: Much higher (better research, zero execution errors)
 
 ## 🎯 Implementation in Commands
 
-### Updated slashsense-parallel-plan Command
+### Updated contextune-parallel-plan Command
 
 ```markdown
 ## Phase 2: Parallel Research (NEW!)
@@ -678,7 +678,7 @@ Remind user:
 ```
 ✅ Plan complete with detailed specifications!
 
-Next: /slashsense:parallel:execute
+Next: /contextune:parallel:execute
 
 The plan includes:
 - 5 parallel research results synthesized
@@ -688,7 +688,7 @@ The plan includes:
 ```
 ```
 
-### Updated slashsense-parallel-execute Command
+### Updated contextune-parallel-execute Command
 
 ```markdown
 ## Phase 3: Spawn Haiku Execution Agents
@@ -696,7 +696,7 @@ The plan includes:
 **For each task, pass COMPLETE specification:**
 
 ```
-Task tool with subagent_type="slashsense:parallel-task-executor"
+Task tool with subagent_type="contextune:parallel-task-executor"
 
 Prompt:
 "Execute this task EXACTLY as specified.

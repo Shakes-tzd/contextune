@@ -1,35 +1,34 @@
 {
-  "name": "slashsense",
-  "version": "0.5.3",
-  "description": "Natural language to slash command mapping with zero-context auto-discovery (SessionStart hook: 0 tokens!). Quick research (/ss:research: 3 parallel agents, 1-2 min). Parallel development workflows. Skills + Hooks for intelligent command suggestions. Self-contained plugin following Claude Code best practices. 87% cost reduction with Haiku agents. Stop memorizing commands—just describe what you want!",
+  "name": "contextune",
+  "version": "0.5.4",
+  "description": "Precision-tuned context engineering for Claude Code. Optimize context flow with modular plans (95% fewer tokens), parallel workflows (81% cost reduction), and zero-transformation architecture. Quick research (/ctx:research: 3 parallel agents, 1-2 min). Contextune your workflows for peak performance!",
   "author": {
     "name": "Shakes Dlamini",
     "email": "shakestzd@gmail.com",
-    "url": "https://slashsense.com"
+    "url": "https://contextune.com"
   },
-  "repository": "https://github.com/Shakes-tzd/slashsense",
-  "homepage": "https://github.com/Shakes-tzd/slashsense#readme",
+  "repository": "https://github.com/Shakes-tzd/contextune",
+  "homepage": "https://github.com/Shakes-tzd/contextune#readme",
   "license": "MIT",
   "keywords": [
-    "intent-detection",
-    "natural-language",
-    "command-mapping",
-    "productivity",
-    "ux-enhancement",
-    "skills",
-    "ai-assistant",
+    "context-engineering",
+    "context-optimization",
     "parallel-development",
+    "workflow-automation",
     "git-worktrees",
+    "cost-optimization",
     "performance-optimization",
     "haiku-agents",
-    "cost-optimization",
+    "modular-plans",
+    "zero-transformation",
     "three-tier-architecture",
     "autonomous-execution",
-    "workflow-automation",
-    "discovery",
-    "configuration",
-    "statusline",
-    "claude-md"
+    "natural-language",
+    "intent-detection",
+    "command-mapping",
+    "productivity",
+    "ai-assistant",
+    "claude-code"
   ],
   "hooks": "./hooks/hooks.json"
 }

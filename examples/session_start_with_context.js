@@ -15,9 +15,9 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * Load SlashSense configuration
+ * Load Contextune configuration
  */
-function getSlashSenseConfig() {
+function getContextuneConfig() {
   const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT || path.join(__dirname, '..');
   const configPath = path.join(pluginRoot, 'data', 'user_patterns.json');
 
@@ -42,7 +42,7 @@ function formatConfigContext(config) {
   }
 
   const lines = [];
-  lines.push('[SlashSense Configuration]');
+  lines.push('[Contextune Configuration]');
   lines.push('');
 
   if (config.customPatterns && Object.keys(config.customPatterns).length > 0) {
@@ -68,8 +68,8 @@ function formatConfigContext(config) {
  */
 function main() {
   try {
-    // Get SlashSense config
-    const config = getSlashSenseConfig();
+    // Get Contextune config
+    const config = getContextuneConfig();
     const contextBlock = formatConfigContext(config);
 
     // PATTERN 2: Context injection (HAS token cost)
@@ -80,9 +80,9 @@ function main() {
       continue: true,
       hookSpecificOutput: {
         hookEventName: 'SessionStart',
-        additionalContext: contextBlock || '[SlashSense loaded with default configuration]'
+        additionalContext: contextBlock || '[Contextune loaded with default configuration]'
       },
-      feedback: '💡 SlashSense loaded with your custom patterns',
+      feedback: '💡 Contextune loaded with your custom patterns',
       suppressOutput: true
     };
 
@@ -102,6 +102,6 @@ if (require.main === module) {
 }
 
 module.exports = {
-  getSlashSenseConfig,
+  getContextuneConfig,
   formatConfigContext
 };

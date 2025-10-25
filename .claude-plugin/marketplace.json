@@ -1,43 +1,43 @@
 {
-  "name": "SlashSense",
+  "name": "Contextune",
   "owner": {
     "name": "Shakes Dlamini",
     "email": "shakestzd@gmail.com",
     "url": "https://github.com/Shakes-tzd"
   },
-  "description": "Natural language to slash command mapping for Claude Code. The first intent detection plugin for coding agents.",
-  "version": "0.1.0",
+  "description": "Precision-tuned context engineering for Claude Code. Optimize context flow with modular plans (95% fewer tokens), parallel workflows (81% cost reduction), and zero-transformation architecture.",
+  "version": "0.5.4",
   "plugins": [
     {
-      "name": "slashsense",
-      "version": "0.1.0",
+      "name": "contextune",
+      "version": "0.5.4",
       "source": "./",
-      "description": "Natural language to slash command mapping for Claude Code. Stop memorizing commands—just describe what you want.",
+      "description": "Precision-tuned context engineering for Claude Code. Natural language to slash command mapping, modular development plans, and parallel workflow execution.",
       "category": "Productivity",
       "tags": [
+        "context-engineering",
         "intent-detection",
         "natural-language",
-        "command-mapping",
-        "productivity",
-        "ux-enhancement",
         "parallel-development",
-        "automation"
+        "productivity",
+        "automation",
+        "cost-optimization"
       ],
       "author": {
         "name": "Shakes Dlamini",
         "email": "shakestzd@gmail.com",
         "url": "https://github.com/Shakes-tzd"
       },
-      "repository": "https://github.com/Shakes-tzd/slashsense",
-      "homepage": "https://github.com/Shakes-tzd/slashsense#readme",
+      "repository": "https://github.com/Shakes-tzd/contextune",
+      "homepage": "https://github.com/Shakes-tzd/contextune#readme",
       "license": "MIT",
       "keywords": [
+        "context-engineering",
         "intent-detection",
         "natural-language",
-        "command-mapping",
+        "parallel-development",
         "productivity",
-        "ux-enhancement",
-        "parallel-development"
+        "cost-optimization"
       ],
       "strict": true
     }

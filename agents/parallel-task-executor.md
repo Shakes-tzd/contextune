@@ -59,7 +59,7 @@ Created from: {plan_file_path}
 
 ---
 
-🤖 Auto-created via SlashSense Parallel Execution (Haiku-optimized)
+🤖 Auto-created via Contextune Parallel Execution (Haiku-optimized)
 EOF
 )" \
   --label "parallel-execution,auto-created,haiku-agent"

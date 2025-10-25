@@ -10,14 +10,14 @@
 ### Issue 1: Workflow Transition Gap
 
 **What happened:**
-1. User ran `/slashsense:parallel:plan` → Created plan
+1. User ran `/contextune:parallel:plan` → Created plan
 2. Plan said "Spawn 5 subagents in parallel"
 3. I continued working **sequentially** instead of executing the plan
 4. User had to remind me to work in parallel
 
 **Root cause:**
-- `/slashsense:parallel:plan` only creates the plan (documentation)
-- `/slashsense:parallel:execute` executes the plan
+- `/contextune:parallel:plan` only creates the plan (documentation)
+- `/contextune:parallel:execute` executes the plan
 - No automatic transition between plan → execute
 - No reminder to execute after planning
 
@@ -44,16 +44,16 @@
 
 ### 1. Integrate Software-Architect Skill
 
-**Copy to SlashSense:**
+**Copy to Contextune:**
 ```bash
 cp /Users/shakes/.claude/skills/software-architect/SKILL.md \
    skills/software-architect/SKILL.md
 ```
 
-**Update to include SlashSense-specific guidance:**
+**Update to include Contextune-specific guidance:**
 - Remind to check for existing implementations in codebase
 - Suggest using parallel development for independent tasks
-- Reference SlashSense workflows
+- Reference Contextune workflows
 
 ### 2. Enhance parallel-plan Command
 
@@ -99,7 +99,7 @@ cp /Users/shakes/.claude/skills/software-architect/SKILL.md \
 
 To start parallel development, run:
 ```
-/slashsense:parallel:execute
+/contextune:parallel:execute
 ```
 
 Or say: "execute this plan in parallel"
@@ -129,7 +129,7 @@ LATEST_PLAN=$(ls -t .parallel/plans/PLAN-*.md 2>/dev/null | head -1)
 
 **NEW: Automatic workflow transition detection**
 
-If this command was run immediately after `/slashsense:parallel:plan`:
+If this command was run immediately after `/contextune:parallel:plan`:
 - Auto-load the just-created plan
 - Show brief summary
 - **Skip asking user** - they already confirmed by running execute
@@ -146,7 +146,7 @@ if plan_exists and plan_age_seconds < 300:
 
 **If no recent plan:**
 - Ask: "No plan found. Options:
-  1. Create plan now with /slashsense:parallel:plan
+  1. Create plan now with /contextune:parallel:plan
   2. Provide task list directly and I'll create inline plan
   3. Cancel"
 ```
@@ -446,11 +446,11 @@ fi
 ### Before (Current)
 
 ```
-User: /slashsense:parallel:plan
+User: /contextune:parallel:plan
 → Plan created
 
 [User has to manually run]
-User: /slashsense:parallel:execute
+User: /contextune:parallel:execute
 → Execution starts
 
 Issues:
@@ -464,7 +464,7 @@ Issues:
 ### After (Improved)
 
 ```
-User: /slashsense:parallel:plan
+User: /contextune:parallel:plan
 → Research existing code ✅
 → Check for specs ✅
 → Validate requirements ✅
@@ -472,7 +472,7 @@ User: /slashsense:parallel:plan
 → Create plan ✅
 → Remind to execute ✅
 
-User: /slashsense:parallel:execute
+User: /contextune:parallel:execute
 → Detect recent plan ✅
 → Auto-load and execute ✅
 → Haiku agents apply principles ✅
@@ -495,8 +495,8 @@ Benefits:
 3. Create test files for validation
 
 **Phase 2: Update Commands (sequential - depends on Phase 1)**
-4. Update `commands/slashsense-parallel-plan.md` with 5-phase workflow
-5. Update `commands/slashsense-parallel-execute.md` with auto-transition
+4. Update `commands/contextune-parallel-plan.md` with 5-phase workflow
+5. Update `commands/contextune-parallel-execute.md` with auto-transition
 6. Add workflow state tracking to both commands
 
 **Phase 3: Update Agents (can parallelize these)**
