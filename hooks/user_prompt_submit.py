@@ -182,44 +182,73 @@ def increment_detection_count():
         pass  # Don't fail hook if stats tracking fails
 
 
+# Command action descriptions for directive feedback
+COMMAND_ACTIONS = {
+    # SuperClaude commands
+    "/sc:analyze": "analyze code quality, security & performance",
+    "/sc:test": "run tests with comprehensive reports",
+    "/sc:implement": "implement features with expert guidance",
+    "/sc:improve": "optimize code quality & performance",
+    "/sc:troubleshoot": "diagnose and fix issues",
+    "/sc:explain": "get clear code explanations",
+    "/sc:design": "design system architecture",
+    "/sc:git": "commit with smart messages",
+    "/sc:build": "build and package your project",
+    "/sc:cleanup": "clean up code and remove dead code",
+
+    # Contextune commands
+    "/ctx:research": "get fast answers using 3 parallel agents",
+    "/ctx:plan": "create parallel development plans",
+    "/ctx:execute": "run tasks in parallel worktrees",
+    "/ctx:status": "monitor parallel task progress",
+    "/ctx:cleanup": "clean up completed worktrees",
+    "/ctx:help": "see example-first command guide",
+    "/ctx:configure": "enable persistent status bar display",
+    "/ctx:stats": "see your time & cost savings",
+}
+
+
 def get_contextual_tip(match: IntentMatch, detection_count: int) -> str:
-    """Generate contextual tip based on usage patterns."""
+    """Generate directive contextual tip based on usage patterns."""
 
     # First-time users (1-3 detections)
     if detection_count <= 3:
-        return "New? Type '/ctx:help' for quick start guide"
+        return "New user? Type `/ctx:help` to see all commands with examples"
 
     # Early users (4-10 detections) - promote status bar
     elif detection_count <= 10:
-        if not (Path(".contextune") / "last_detection").exists():
-            return "Tip: Run '/ctx:configure' to enable status bar display"
-        return "Learning fast! Try '/ctx:research <query>' for parallel agents"
+        return "Enable persistent detection: Type `/ctx:configure` to set up status bar"
 
     # Experienced users (11-20) - promote advanced features
     elif detection_count <= 20:
-        if match.method == "keyword":
-            return f"Fast! {match.latency_ms:.2f}ms detection. Check '/ctx:stats' for metrics"
-        return "Experienced user? Try '/ctx:plan' for parallel workflows"
+        if match.command.startswith("/sc:"):
+            return "Want parallel workflows? Type `/ctx:plan` to work on multiple tasks simultaneously"
+        return f"Blazing fast: {match.latency_ms:.2f}ms detection. Type `/ctx:stats` to see all metrics"
 
-    # Power users (21+) - occasional reminders
+    # Power users (21+) - occasional celebration
     else:
         if detection_count % 10 == 0:  # Every 10th detection
-            return f"🎉 {detection_count} detections! Run '/ctx:stats' to see your savings"
+            return f"🎉 {detection_count} detections! Type `/ctx:stats` to see your time & cost savings"
         return None  # No tip for most interactions
 
 
 def format_suggestion(match: IntentMatch, detection_count: int = 0) -> str:
-    """Format detection result with contextual tips."""
+    """Format detection with directive, actionable phrasing."""
 
-    # Base message
-    base_msg = f"💡 Contextune: Suggested `{match.command}` ({match.confidence:.0%} confidence)"
+    # Get action description
+    action = COMMAND_ACTIONS.get(match.command, "execute this command")
 
-    # Add method for transparency
-    base_msg += f", {match.method}"
+    # Build directive message
+    confidence_pct = int(match.confidence * 100)
 
-    # Add latency if fast (brag about performance)
+    # Primary directive message
+    base_msg = f"💡 Type `{match.command}` to {action} ({confidence_pct}% {match.method}"
+
+    # Add latency if fast (show performance)
     if match.latency_ms < 1.0:
         base_msg += f", {match.latency_ms:.2f}ms"
+
+    base_msg += ")"
 
     # Get contextual tip
     tip = get_contextual_tip(match, detection_count)
