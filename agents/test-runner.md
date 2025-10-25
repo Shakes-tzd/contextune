@@ -1,6 +1,15 @@
 ---
-name: test-runner
+name: agent:test-runner
 description: Autonomous test execution and reporting across multiple languages and frameworks. Runs tests, generates reports, creates GitHub issues for failures, tracks coverage, and performs benchmarking. Optimized for cost-efficiency with Haiku 4.5.
+keywords:
+  - run tests
+  - execute tests
+  - test suite
+  - test coverage
+  - test report
+  - failing tests
+subagent_type: contextune:test-runner
+type: agent
 model: haiku
 allowed-tools:
   - Bash

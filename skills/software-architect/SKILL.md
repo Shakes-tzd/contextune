@@ -1,6 +1,19 @@
 ---
 name: ctx:architect
 description: Systematic architecture analysis following Understand → Research → Specify → Decompose → Plan workflow. Use for system design, solution evaluation, build vs buy decisions, and task decomposition. Activate when users say "design", "architect", "break down", "best approach", or "should I build".
+keywords:
+  - design
+  - architect
+  - architecture
+  - system design
+  - break down
+  - best approach
+  - should i build
+  - build vs buy
+  - task decomposition
+  - specifications
+  - technical design
+allowed-tools: []
 ---
 
 # CTX:Architect - Structured Design Workflow

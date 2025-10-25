@@ -1,201 +1,328 @@
 {
   "metadata": {
-    "version": "0.8.1",
-    "created": "2025-10-25",
-    "description": "Contextune command mappings for intent detection",
-    "total_commands": 6,
-    "documentation": "lib/INTENT_MAPPINGS.md"
+    "version": "0.8.3",
+    "generated": "auto",
+    "description": "Auto-generated from markdown frontmatter",
+    "total_commands": 10,
+    "total_skills": 6,
+    "total_agents": 5
   },
   "commands": {
+    "/ctx:status": {
+      "description": "Check status of parallel worktrees and tasks",
+      "keywords": [
+        "check status",
+        "parallel status",
+        "show progress",
+        "task status",
+        "worktree status",
+        "show parallel progress",
+        "check parallel"
+      ],
+      "category": "General",
+      "file": "commands/ctx-status.md"
+    },
+    "/ctx:help": {
+      "description": "Example-first command reference and quick start guide",
+      "keywords": [
+        "help",
+        "examples",
+        "quick start",
+        "how to use",
+        "show examples",
+        "command reference",
+        "getting started"
+      ],
+      "category": "General",
+      "file": "commands/ctx-help.md"
+    },
+    "/ctx:verify": {
+      "description": "Verify and execute detected slash command with user confirmation",
+      "keywords": [
+        "verify command",
+        "confirm command",
+        "verification"
+      ],
+      "category": "General",
+      "file": "commands/ctx-verify.md"
+    },
+    "/ctx:research": {
+      "description": "Fast research using 3 parallel Haiku agents for technical questions and decision-making (1-2 min)",
+      "keywords": [
+        "quick research",
+        "fast research",
+        "parallel research",
+        "technical research",
+        "investigate question",
+        "research question"
+      ],
+      "category": "General",
+      "file": "commands/ctx-research.md"
+    },
     "/ctx:design": {
-      "description": "Design system architecture, APIs, and component interfaces",
-      "category": "Architecture & Design",
+      "description": "Design system architecture, APIs, and component interfaces with structured workflow",
       "keywords": [
         "design",
         "architect",
         "architecture",
-        "plan architecture",
-        "structure",
-        "api design",
         "system design",
-        "component design",
+        "api design",
         "design pattern",
-        "design system"
+        "structure"
       ],
-      "examples": [
-        "design a caching system",
-        "architect the API",
-        "design the database schema",
-        "plan the system architecture",
-        "design component structure",
-        "create architecture plan",
-        "design the data model",
-        "architect the solution"
-      ],
-      "related_flags": [],
-      "auto_personas": [],
-      "wave_enabled": false,
-      "documentation": "commands/ctx-design.md"
+      "category": "General",
+      "file": "commands/ctx-design.md"
     },
-    "/ctx:research": {
-      "description": "Fast research using 3 parallel Haiku agents for technical questions and decision-making",
-      "category": "Research & Investigation",
+    "/ctx:configure": {
+      "description": "Learn how to optionally customize your environment for extra Contextune visibility (manual setup guide)",
+      "keywords": [
+        "configure",
+        "setup",
+        "customize",
+        "configuration",
+        "setup contextune",
+        "configure environment",
+        "customization guide"
+      ],
+      "category": "General",
+      "file": "commands/ctx-configure.md"
+    },
+    "/ctx:execute": {
+      "description": "Execute plan in parallel using git worktrees and multiple Claude sessions",
+      "keywords": [
+        "execute plan",
+        "run plan",
+        "run tasks",
+        "parallelize work",
+        "work in parallel",
+        "execute tasks",
+        "run parallel"
+      ],
+      "category": "General",
+      "file": "commands/ctx-execute.md"
+    },
+    "/ctx:plan": {
+      "description": "Document a development plan for parallel execution (modular YAML)",
+      "keywords": [
+        "create plan",
+        "development plan",
+        "parallel plan",
+        "plan tasks",
+        "make plan",
+        "plan development",
+        "create development plan"
+      ],
+      "category": "General",
+      "file": "commands/ctx-plan.md"
+    },
+    "/ctx:cleanup": {
+      "description": "Clean up completed worktrees and branches",
+      "keywords": [
+        "clean up",
+        "cleanup worktrees",
+        "remove worktrees",
+        "cleanup tasks",
+        "cleanup parallel",
+        "remove completed",
+        "clean worktrees"
+      ],
+      "category": "General",
+      "file": "commands/ctx-cleanup.md"
+    },
+    "/ctx:stats": {
+      "description": "View Contextune detection statistics",
+      "keywords": [
+        "show stats",
+        "statistics",
+        "detection stats",
+        "performance metrics",
+        "stats",
+        "metrics",
+        "show statistics"
+      ],
+      "category": "General",
+      "file": "commands/ctx-stats.md"
+    }
+  },
+  "skills": {
+    "ctx:performance": {
+      "description": "Analyze and optimize parallel workflow performance. Use when users report slow parallel execution, want to improve speed, or need performance analysis. Activate for questions about bottlenecks, time savings, optimization opportunities, or benchmarking parallel workflows.",
+      "keywords": [
+        "performance",
+        "optimize",
+        "slow execution",
+        "bottleneck",
+        "benchmark",
+        "time savings",
+        "speedup",
+        "parallel efficiency",
+        "workflow optimization",
+        "measure performance",
+        "cost savings"
+      ],
+      "allowed_tools": [
+        "Bash",
+        "Read",
+        "Grep",
+        "Glob",
+        "TodoWrite"
+      ],
+      "file": "skills/performance-optimizer/SKILL.md"
+    },
+    "ctx:architect": {
+      "description": "Systematic architecture analysis following Understand \u2192 Research \u2192 Specify \u2192 Decompose \u2192 Plan workflow. Use for system design, solution evaluation, build vs buy decisions, and task decomposition. Activate when users say \"design\", \"architect\", \"break down\", \"best approach\", or \"should I build\".",
+      "keywords": [
+        "design",
+        "architect",
+        "architecture",
+        "system design",
+        "break down",
+        "best approach",
+        "should i build",
+        "build vs buy",
+        "task decomposition",
+        "specifications",
+        "technical design"
+      ],
+      "allowed_tools": [],
+      "file": "skills/software-architect/SKILL.md"
+    },
+    "ctx:parallel-expert": {
+      "description": "Expert guidance on parallel development workflows using git worktrees and multi-agent execution. Use when users mention parallel work, concurrent development, speeding up development, working on multiple features simultaneously, or scaling team productivity. Activate for questions about task decomposition, worktree management, or parallelization strategies.",
+      "keywords": [
+        "parallel",
+        "concurrent",
+        "speed up development",
+        "multiple features",
+        "work simultaneously",
+        "independent tasks",
+        "parallelization",
+        "parallel workflow",
+        "concurrent development",
+        "multiple tasks"
+      ],
+      "allowed_tools": [],
+      "file": "skills/parallel-development-expert/SKILL.md"
+    },
+    "ctx:help": {
+      "description": "Help users discover Contextune capabilities and understand how to use natural language commands. Use when users ask about Contextune features, available commands, how to use the plugin, or what they can do. Activate for questions like \"what can Contextune do?\", \"how do I use this?\", \"show me examples\", \"what commands are available?\"",
+      "keywords": [
+        "what can contextune do",
+        "how to use",
+        "show me examples",
+        "what commands",
+        "contextune help",
+        "contextune documentation",
+        "how does contextune work",
+        "what is contextune",
+        "available commands",
+        "plugin features"
+      ],
+      "allowed_tools": [],
+      "file": "skills/intent-recognition/SKILL.md"
+    },
+    "ctx:researcher": {
+      "description": "Efficiently research topics using parallel agents via Contextune's /ctx:research command. Use when users ask to research, investigate, find information about topics, compare options, or evaluate libraries/tools. Activate for questions like \"research best X\", \"what's the best library for Y\", or \"investigate Z\".",
       "keywords": [
         "research",
         "investigate",
         "find information",
         "compare",
-        "what's the best",
+        "whats the best",
         "which library",
-        "which framework",
-        "what should i use",
-        "look into",
         "evaluate options"
       ],
-      "examples": [
-        "research best React state libraries",
-        "investigate Python async frameworks",
-        "compare REST vs GraphQL",
-        "what's the best database for authentication",
-        "which testing framework should I use",
-        "find information about caching strategies",
-        "evaluate state management options",
-        "compare TypeScript type libraries",
-        "research deployment options",
-        "investigate authentication solutions"
-      ],
-      "related_flags": [],
-      "auto_personas": [],
-      "wave_enabled": false,
-      "documentation": "commands/ctx-research.md"
+      "allowed_tools": [],
+      "file": "skills/researcher/SKILL.md"
     },
-    "/ctx:plan": {
-      "description": "Document a development plan for parallel execution",
-      "category": "Parallel Development",
+    "ctx:worktree": {
+      "description": "Expert-level git worktree troubleshooting, cleanup, and management. Use when users have worktree issues, conflicts, cleanup needs, or questions about git worktree commands. Activate for problems like stuck worktrees, locked files, orphaned branches, or worktree removal errors.",
       "keywords": [
-        "plan parallel",
-        "parallel plan",
-        "parallel development",
-        "parallel execution",
-        "plan tasks",
-        "organize parallel",
-        "parallel strategy",
-        "development plan",
-        "parallel workflow"
+        "worktree issue",
+        "cant remove worktree",
+        "worktree locked",
+        "worktree cleanup",
+        "orphaned branch",
+        "worktree error",
+        "worktree conflict",
+        "git worktree",
+        "worktree removal"
       ],
-      "examples": [
-        "plan parallel development",
-        "create parallel execution plan",
-        "plan these tasks for parallel work",
-        "organize tasks for parallel execution",
-        "plan parallel workflow",
-        "create development plan",
-        "plan parallel strategy"
+      "allowed_tools": [
+        "Bash",
+        "Read",
+        "Grep",
+        "TodoWrite"
       ],
-      "related_flags": [],
-      "auto_personas": [],
-      "wave_enabled": false,
-      "documentation": "commands/ctx-plan.md"
-    },
-    "/ctx:execute": {
-      "description": "Execute plan in parallel using git worktrees and multiple Claude sessions",
-      "category": "Parallel Development",
-      "keywords": [
-        "parallel execute",
-        "execute parallel",
-        "parallelize",
-        "run parallel",
-        "work parallel",
-        "parallel tasks",
-        "spawn agents",
-        "parallel work",
-        "worktrees",
-        "parallel development"
-      ],
-      "examples": [
-        "execute parallel development",
-        "work on these in parallel",
-        "parallelize this work",
-        "run these tasks in parallel",
-        "execute parallel plan",
-        "work on multiple tasks simultaneously",
-        "spawn agents for parallel work",
-        "run parallel execution"
-      ],
-      "related_flags": [],
-      "auto_personas": [],
-      "wave_enabled": true,
-      "documentation": "commands/ctx-execute.md"
-    },
-    "/ctx:status": {
-      "description": "Check status of parallel worktrees and tasks",
-      "category": "Parallel Development",
-      "keywords": [
-        "parallel status",
-        "check parallel",
-        "parallel progress",
-        "worktree status",
-        "parallel tasks status",
-        "monitor parallel",
-        "parallel check",
-        "show parallel"
-      ],
-      "examples": [
-        "check parallel status",
-        "show parallel progress",
-        "parallel status",
-        "what's the status of parallel tasks",
-        "check parallel worktrees",
-        "monitor parallel execution",
-        "show parallel development status"
-      ],
-      "related_flags": [],
-      "auto_personas": [],
-      "wave_enabled": false,
-      "documentation": "commands/ctx-status.md"
-    },
-    "/ctx:cleanup": {
-      "description": "Clean up completed worktrees and branches",
-      "category": "Parallel Development",
-      "keywords": [
-        "parallel cleanup",
-        "clean parallel",
-        "cleanup worktrees",
-        "remove worktrees",
-        "cleanup parallel",
-        "clean worktrees",
-        "parallel clean"
-      ],
-      "examples": [
-        "cleanup parallel worktrees",
-        "clean up parallel execution",
-        "remove completed worktrees",
-        "cleanup parallel work",
-        "clean parallel tasks",
-        "remove parallel branches"
-      ],
-      "related_flags": [],
-      "auto_personas": [],
-      "wave_enabled": false,
-      "documentation": "commands/ctx-cleanup.md"
+      "file": "skills/git-worktree-master/SKILL.md"
     }
   },
-  "aliases": {},
-  "natural_language_patterns": {
-    "question_words": ["what", "how", "why", "when", "where", "can you", "could you", "would you"],
-    "imperative_verbs": ["design", "research", "plan", "execute", "check", "cleanup"],
-    "action_indicators": ["design", "research", "plan", "execute", "parallelize", "monitor", "cleanup"]
-  },
-  "context_triggers": {
-    "architecture_keywords": ["design", "architect", "architecture", "structure", "pattern", "system"],
-    "research_keywords": ["research", "investigate", "compare", "evaluate", "find", "which", "best"],
-    "parallel_keywords": ["parallel", "worktree", "concurrent", "multiple", "spawn", "execute"]
-  },
-  "confidence_scoring": {
-    "exact_keyword_match": 1.0,
-    "partial_keyword_match": 0.7,
-    "context_match": 0.5,
-    "example_similarity": 0.8,
-    "multi_keyword_match_bonus": 0.2
+  "agents": {
+    "agent:worktree-manager": {
+      "description": "Expert git worktree management and troubleshooting. Handles worktree creation, cleanup, lock file resolution, and diagnostic operations. Use for worktree lifecycle management and troubleshooting.",
+      "keywords": [
+        "worktree stuck",
+        "worktree locked",
+        "worktree error",
+        "remove worktree failed",
+        "cant remove worktree",
+        "worktree issue",
+        "fix worktree",
+        "worktree problem"
+      ],
+      "subagent_type": "contextune:worktree-manager",
+      "file": "agents/worktree-manager.md"
+    },
+    "agent:test-runner": {
+      "description": "Autonomous test execution and reporting across multiple languages and frameworks. Runs tests, generates reports, creates GitHub issues for failures, tracks coverage, and performs benchmarking. Optimized for cost-efficiency with Haiku 4.5.",
+      "keywords": [
+        "run tests",
+        "execute tests",
+        "test suite",
+        "test coverage",
+        "test report",
+        "failing tests"
+      ],
+      "subagent_type": "contextune:test-runner",
+      "file": "agents/test-runner.md"
+    },
+    "agent:parallel-task-executor": {
+      "description": "Autonomous execution of independent development tasks in parallel. Handles complete workflow from issue creation to testing and deployment. Use for any task that can run independently - features, bug fixes, refactoring. Optimized for cost-efficiency with Haiku 4.5.",
+      "keywords": [
+        "implement feature",
+        "execute task",
+        "build feature",
+        "complete implementation",
+        "autonomous execution"
+      ],
+      "subagent_type": "contextune:parallel-task-executor",
+      "file": "agents/parallel-task-executor.md"
+    },
+    "agent:performance-analyzer": {
+      "description": "Benchmark and analyze parallel workflow performance. Measures timing, identifies bottlenecks, calculates speedup metrics (Amdahl's Law), generates cost comparisons, and provides optimization recommendations. Use for workflow performance analysis and cost optimization.",
+      "keywords": [
+        "analyze performance",
+        "benchmark workflow",
+        "measure speed",
+        "performance bottleneck",
+        "workflow optimization",
+        "calculate speedup"
+      ],
+      "subagent_type": "contextune:performance-analyzer",
+      "file": "agents/performance-analyzer.md"
+    },
+    "agent:issue-orchestrator": {
+      "description": "GitHub issue management specialist. Creates, updates, labels, links, and manages issues efficiently. Handles bulk operations and templating. Perfect for deterministic GitHub operations at 87% cost savings with Haiku 4.5.",
+      "keywords": [
+        "create issue",
+        "manage issues",
+        "github issues",
+        "label issues",
+        "bulk issues",
+        "issue template"
+      ],
+      "subagent_type": "contextune:issue-orchestrator",
+      "file": "agents/issue-orchestrator.md"
+    }
   }
 }

@@ -1,6 +1,14 @@
 ---
 name: ctx:cleanup
 description: Clean up completed worktrees and branches
+keywords:
+  - clean up
+  - cleanup worktrees
+  - remove worktrees
+  - cleanup tasks
+  - cleanup parallel
+  - remove completed
+  - clean worktrees
 executable: true
 ---
 

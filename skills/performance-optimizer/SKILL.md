@@ -1,6 +1,18 @@
 ---
 name: ctx:performance
 description: Analyze and optimize parallel workflow performance. Use when users report slow parallel execution, want to improve speed, or need performance analysis. Activate for questions about bottlenecks, time savings, optimization opportunities, or benchmarking parallel workflows.
+keywords:
+  - performance
+  - optimize
+  - slow execution
+  - bottleneck
+  - benchmark
+  - time savings
+  - speedup
+  - parallel efficiency
+  - workflow optimization
+  - measure performance
+  - cost savings
 allowed-tools:
   - Bash
   - Read

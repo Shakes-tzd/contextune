@@ -1,6 +1,14 @@
 ---
 name: ctx:help
 description: Example-first command reference and quick start guide
+keywords:
+  - help
+  - examples
+  - quick start
+  - how to use
+  - show examples
+  - command reference
+  - getting started
 ---
 
 # Contextune Help - Quick Start Guide

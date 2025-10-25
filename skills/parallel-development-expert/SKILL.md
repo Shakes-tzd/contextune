@@ -1,6 +1,18 @@
 ---
 name: ctx:parallel-expert
 description: Expert guidance on parallel development workflows using git worktrees and multi-agent execution. Use when users mention parallel work, concurrent development, speeding up development, working on multiple features simultaneously, or scaling team productivity. Activate for questions about task decomposition, worktree management, or parallelization strategies.
+keywords:
+  - parallel
+  - concurrent
+  - speed up development
+  - multiple features
+  - work simultaneously
+  - independent tasks
+  - parallelization
+  - parallel workflow
+  - concurrent development
+  - multiple tasks
+allowed-tools: []
 ---
 
 # CTX:Parallel-Expert - Parallel Development Guidance

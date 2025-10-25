@@ -4,7 +4,8 @@
 # dependencies = [
 #     "model2vec>=0.3.0",
 #     "semantic-router>=0.1.0",
-#     "numpy>=1.24.0"
+#     "numpy>=1.24.0",
+#     "rapidfuzz>=3.0.0"
 # ]
 # ///
 """
@@ -31,8 +32,8 @@ from datetime import datetime
 PLUGIN_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PLUGIN_ROOT / "lib"))
 
-# Import your existing matchers (unchanged!)
-from keyword_matcher import KeywordMatcher, IntentMatch
+# Import matchers (now using RapidFuzz-based keyword matcher v2!)
+from keyword_matcher_v2 import KeywordMatcherV2 as KeywordMatcher, IntentMatch
 from model2vec_matcher import Model2VecMatcher
 from semantic_router_matcher import SemanticRouterMatcher
 from observability_db import ObservabilityDB
@@ -192,14 +193,28 @@ COMMAND_ACTIONS = {
     "/ctx:configure": "enable persistent status bar display",
     "/ctx:stats": "see your time & cost savings",
     "/ctx:verify": "verify and execute detected command with confirmation",
+
+    # Skill-only detections (no commands)
+    "skill:ctx:performance": "analyze and optimize parallel workflow performance",
+    "skill:ctx:parallel-expert": "get guidance on parallelizing tasks effectively",
+    "skill:ctx:help": "discover Contextune features and capabilities",
+    "skill:ctx:worktree": "troubleshoot git worktree issues and conflicts",
 }
 
 # Skill mapping for reliable Claude execution
-# Maps slash commands to skill names (resolved from plugin's skills/ directory)
+# Maps slash commands AND skill detections to skill names
 # Skills are auto-discovered by Claude Code from: contextune/skills/*/SKILL.md
 SKILL_MAPPING = {
+    # Commands with skills
     "/ctx:design": "ctx:architect",    # Plugin skill: skills/software-architect
     "/ctx:research": "ctx:researcher", # Plugin skill: skills/researcher
+
+    # Skills without commands (direct skill suggestions)
+    "skill:ctx:performance": "ctx:performance",
+    "skill:ctx:parallel-expert": "ctx:parallel-expert",
+    "skill:ctx:help": "ctx:help",
+    "skill:ctx:worktree": "ctx:worktree",
+
     # Note: /ctx:plan and /ctx:execute are commands, not skills
     # They execute workflows directly rather than providing guidance
 }
@@ -241,7 +256,7 @@ def get_contextual_tip(match: IntentMatch, detection_count: int) -> str:
 
     # Experienced users (11-20) - promote advanced features
     elif detection_count <= 20:
-        if match.command.startswith("/sc:"):
+        if match.command.startswith("/ctx:"):
             return "Want parallel workflows? Type `/ctx:plan` to work on multiple tasks simultaneously"
         return f"Blazing fast: {match.latency_ms:.2f}ms detection. Type `/ctx:stats` to see all metrics"
 

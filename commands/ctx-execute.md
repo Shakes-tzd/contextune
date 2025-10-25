@@ -1,6 +1,14 @@
 ---
 name: ctx:execute
 description: Execute plan in parallel using git worktrees and multiple Claude sessions
+keywords:
+  - execute plan
+  - run plan
+  - run tasks
+  - parallelize work
+  - work in parallel
+  - execute tasks
+  - run parallel
 executable: true
 ---
 

@@ -1,6 +1,14 @@
 ---
 name: ctx:design
 description: Design system architecture, APIs, and component interfaces with structured workflow
+keywords:
+  - design
+  - architect
+  - architecture
+  - system design
+  - api design
+  - design pattern
+  - structure
 executable: true
 ---
 

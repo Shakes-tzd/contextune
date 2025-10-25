@@ -1,6 +1,15 @@
 ---
-name: issue-orchestrator
+name: agent:issue-orchestrator
 description: GitHub issue management specialist. Creates, updates, labels, links, and manages issues efficiently. Handles bulk operations and templating. Perfect for deterministic GitHub operations at 87% cost savings with Haiku 4.5.
+keywords:
+  - create issue
+  - manage issues
+  - github issues
+  - label issues
+  - bulk issues
+  - issue template
+subagent_type: contextune:issue-orchestrator
+type: agent
 model: haiku
 allowed-tools:
   - Bash

@@ -1,6 +1,18 @@
 ---
 name: ctx:help
 description: Help users discover Contextune capabilities and understand how to use natural language commands. Use when users ask about Contextune features, available commands, how to use the plugin, or what they can do. Activate for questions like "what can Contextune do?", "how do I use this?", "show me examples", "what commands are available?"
+keywords:
+  - what can contextune do
+  - how to use
+  - show me examples
+  - what commands
+  - contextune help
+  - contextune documentation
+  - how does contextune work
+  - what is contextune
+  - available commands
+  - plugin features
+allowed-tools: []
 ---
 
 # CTX:Help - Contextune Discovery & Usage Guide

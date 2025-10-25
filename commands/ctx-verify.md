@@ -1,6 +1,10 @@
 ---
 name: ctx:verify
 description: Verify and execute detected slash command with user confirmation
+keywords:
+  - verify command
+  - confirm command
+  - verification
 ---
 
 # Contextune Verification Agent
