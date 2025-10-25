@@ -127,30 +127,6 @@ Would you like me to execute `{match.command}` instead?
 """.strip()
 
 
-def get_delegation_mode() -> str:
-    """
-    Get delegation mode from config.
-
-    Returns:
-        "auto" - Auto-execute high confidence matches
-        "verify" - Delegate to sub-agent for verification
-        "suggest" - Add context, let main agent decide
-    """
-    try:
-        from pathlib import Path
-        import json
-
-        config_path = Path.home() / ".claude" / "plugins" / "slashsense" / "data" / "user_patterns.json"
-        if config_path.exists():
-            with open(config_path) as f:
-                config = json.load(f)
-                return config.get("delegation_mode", "verify")
-    except:
-        pass
-
-    return "verify"  # Default to safest option
-
-
 def main():
     """Hook entry point."""
 
@@ -195,83 +171,16 @@ def main():
             print(json.dumps(response))
             return
 
-        # Get delegation mode from config
-        delegation_mode = get_delegation_mode()
-        print(f"DEBUG: Delegation mode: {delegation_mode}", file=sys.stderr)
-
-        # DELEGATION MODE: Use sub-agent for verification
-        if delegation_mode == "verify":
-            print(f"DEBUG: Using sub-agent verification", file=sys.stderr)
-
-            # Instruct main agent to spawn verification sub-agent
-            delegation_context = f"""
-
-⚠️ **SLASHSENSE DELEGATION DIRECTIVE** ⚠️
-
-**ACTION REQUIRED**: Immediately spawn a sub-agent using the Task tool to handle user verification.
-
-**Detection Summary**:
-- Detected Command: `{match.command}`
-- Confidence: {match.confidence:.0%}
-- Method: {match.method}
-- Latency: {match.latency_ms:.2f}ms
-- Original Prompt: "{prompt}"
-
-**Your Task**:
-1. Use the Task tool with subagent_type="general-purpose"
-2. Give the sub-agent this prompt:
-
-```
-You are a SlashSense verification agent. Present these options to the user:
-
-🎯 **SlashSense Detection**
-
-I detected you might want to run a slash command:
-
-**Option 1**: Run `{match.command}` ({match.confidence:.0%} confidence)
-**Option 2**: Continue with original: "{prompt[:80]}..."
-
-Which do you prefer? (1, 2, or tell me what you want)
-
-Then execute their choice and report back briefly.
-```
-
-3. DO NOT process the user's original prompt yourself
-4. Wait for sub-agent results
-5. Present sub-agent's findings to user
-
-This preserves your context for the main conversation.
-"""
-
-            response = {
-                "continue": True,
-                "hookSpecificOutput": {
-                    "hookEventName": "UserPromptSubmit",
-                    "additionalContext": delegation_context
-                },
-                "feedback": f"🎯 SlashSense: Spawning verification agent ({match.confidence:.0%} confidence)"
-            }
-
-        # AUTO MODE: High confidence auto-execute (original behavior)
-        elif delegation_mode == "auto":
-            print(f"DEBUG: Auto-executing command: {match.command}", file=sys.stderr)
-            response = {
-                "continue": True,
-                "modifiedPrompt": match.command,
-                "feedback": f"🎯 SlashSense: Auto-executing `{match.command}` ({match.confidence:.0%} confidence, {match.method} match)"
-            }
-
-        # SUGGEST MODE: Add context, let main agent decide
-        else:  # "suggest"
-            print(f"DEBUG: Suggesting to main agent", file=sys.stderr)
-            response = {
-                "continue": True,
-                "hookSpecificOutput": {
-                    "hookEventName": "UserPromptSubmit",
-                    "additionalContext": f"\n\n[SlashSense detected: `{match.command}` with {match.confidence:.0%} confidence via {match.method}]"
-                },
-                "feedback": f"💡 SlashSense: Suggested `{match.command}` ({match.confidence:.0%} confidence)"
-            }
+        # SUGGEST MODE: Add context, let Claude decide
+        print(f"DEBUG: Suggesting command to Claude", file=sys.stderr)
+        response = {
+            "continue": True,
+            "hookSpecificOutput": {
+                "hookEventName": "UserPromptSubmit",
+                "additionalContext": f"\n\n[SlashSense detected: `{match.command}` with {match.confidence:.0%} confidence via {match.method}]"
+            },
+            "feedback": f"💡 SlashSense: Suggested `{match.command}` ({match.confidence:.0%} confidence)"
+        }
 
         print(f"DEBUG: Response: {json.dumps(response)}", file=sys.stderr)
         print(json.dumps(response))

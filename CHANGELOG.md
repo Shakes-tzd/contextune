@@ -7,6 +7,67 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.2] - 2025-10-25
+
+**Status: Architecture Cleanup & Plugin Best Practices Release**
+
+### Added
+
+**Skills for Auto-Discovery:**
+- `parallel-development-expert` - Proactively suggests parallelization when multiple tasks mentioned
+- `intent-recognition` - Helps users discover SlashSense capabilities
+- Skills automatically activate based on user context (no manual invocation)
+- Zero-config discovery mechanism
+
+### Changed
+
+**Plugin Architecture Improvements:**
+- `/ss:configure` - Converted from auto-modification to read-only guide
+  - No longer automatically modifies user files (respects plugin boundaries)
+  - Provides copy-paste snippets for optional manual customization
+  - Explains trade-offs clearly (context cost vs benefits)
+- Hook simplified to "suggest" mode only
+  - Removed "verify" mode (sub-agent spawning)
+  - Removed "auto" mode (auto-execution)
+  - Hook now only adds context, Claude decides what to do
+  - No user configuration needed (hardcoded behavior)
+
+### Removed
+
+- `/ss:intents` command (unnecessary complexity)
+- `commands/slashsense-config.py` (Python dependency removed)
+- `delegation_mode` configuration (no longer needed)
+- `user_patterns.json` config file (hook has no configurable settings)
+- Auto-modification of `~/.claude/CLAUDE.md` (anti-pattern)
+- Auto-modification of `~/.claude/statusline.sh` (anti-pattern)
+
+### Benefits
+
+**Architecture:**
+- ✅ Plugin is self-contained (no user file modifications)
+- ✅ Skills provide automatic discovery (better than CLAUDE.md injection)
+- ✅ Hook is simpler and faster (removed branching logic)
+- ✅ Zero configuration required (works immediately after install)
+- ✅ Follows Claude Code plugin best practices
+
+**User Experience:**
+- ✅ No setup needed - Skills activate automatically
+- ✅ Claude always in control (intelligent decision-making)
+- ✅ Lower context cost (~50 tokens vs 100s-1000s with sub-agents)
+- ✅ Cleaner install/uninstall (no orphaned user file modifications)
+
+**Developer Experience:**
+- ✅ Simpler codebase (removed ~150 lines from hook)
+- ✅ No Python dependency for config (just Bash/Python for hook logic)
+- ✅ Easier to maintain (fewer modes, less complexity)
+
+### Migration Notes
+
+If you previously ran `/ss:configure`:
+1. Manually remove SlashSense section from `~/.claude/CLAUDE.md` (optional)
+2. Manually remove SlashSense section from `~/.claude/statusline.sh` (optional)
+3. Skills now provide discovery automatically (better than static context)
+
 ## [0.5.1] - 2025-10-25
 
 **Status: Command Shortening & Research Release**
