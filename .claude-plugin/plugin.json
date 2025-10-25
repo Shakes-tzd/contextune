@@ -1,7 +1,7 @@
 {
   "name": "slashsense",
-  "version": "0.3.0",
-  "description": "Natural language to slash command mapping with AI-powered Skills and cost-optimized Haiku agents. Enables 81% cost reduction and 2x speedup with three-tier intelligence architecture. Stop memorizing commands—just describe what you want!",
+  "version": "0.5.0",
+  "description": "Natural language to slash command mapping with multi-layered discovery (CLAUDE.md + Status Bar + Skills + Hook). One-time /slashsense:configure setup ensures persistent visibility. 81% cost reduction with Haiku agents. Stop memorizing commands—just describe what you want!",
   "author": {
     "name": "Shakes Dlamini",
     "email": "shakestzd@gmail.com",
@@ -25,7 +25,11 @@
     "cost-optimization",
     "three-tier-architecture",
     "autonomous-execution",
-    "workflow-automation"
+    "workflow-automation",
+    "discovery",
+    "configuration",
+    "statusline",
+    "claude-md"
   ],
   "hooks": "./hooks/hooks.json"
 }

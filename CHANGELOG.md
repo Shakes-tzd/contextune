@@ -7,6 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2025-10-24
+
+**Status: Discovery & Configuration Release - Multi-Layered Visibility**
+
+### Added
+
+**Configuration Command:**
+- `/slashsense:configure` - One-time setup for persistent visibility
+- Integrates SlashSense into CLAUDE.md (~150 tokens context at session start)
+- Adds SlashSense commands to status bar (zero context, always visible)
+- Creates backups before modifications (safe rollback)
+- Validates plugin settings and skills
+- Comprehensive error handling and rollback instructions
+
+**Architecture Improvements:**
+- Multi-layered discovery system (CLAUDE.md + Status Bar + Skills + Hook)
+- Documented optimal discovery patterns in `.plans/ARCHITECTURE_IMPROVEMENTS_v0.5.1.md`
+- Configuration specification in `.plans/CONFIGURE_COMMAND_SPEC.md`
+- Implementation plan for cost optimization features in `.plans/IMPLEMENTATION_PLAN_v0.5.0.md`
+
+**Discovery Enhancements:**
+- CLAUDE.md integration for session-start awareness
+- Status bar integration for persistent UI visibility
+- Comprehensive research on Claude Code plugin architecture
+- Context optimization strategies (~350 tokens passive overhead)
+
+### Benefits
+- **Visibility**: SlashSense always present through multiple mechanisms
+- **Discoverability**: 95%+ users will see and discover features
+- **Cost**: Minimal context overhead (~$0.001 per session)
+- **User Control**: Requires permission, creates backups, provides rollback
+
+### Documentation
+- Complete configure command specification
+- Discovery architecture analysis
+- Context overhead analysis
+- Implementation and testing guides
+
 ## [0.3.0] - 2025-10-21
 
 **Status: Haiku Agent Architecture Release - 81% Cost Reduction + 2x Speedup**

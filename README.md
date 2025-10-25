@@ -7,7 +7,7 @@ Natural language to slash command mapping + AI-powered expert guidance for Claud
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg)](https://docs.claude.com/en/docs/claude-code/plugins)
-[![Version](https://img.shields.io/badge/version-0.3.0-green.svg)](https://github.com/Shakes-tzd/slashsense/releases)
+[![Version](https://img.shields.io/badge/version-0.5.0-green.svg)](https://github.com/Shakes-tzd/slashsense/releases)
 [![Cost Savings](https://img.shields.io/badge/cost%20savings-81%25-brightgreen.svg)](#-new-in-v030-haiku-agent-architecture)
 [![Documentation](https://img.shields.io/badge/docs-mkdocs-blue.svg)](https://yourusername.github.io/slashsense/)
 
@@ -256,6 +256,27 @@ cd slashsense
 # Install locally
 /plugin install @local
 ```
+
+### One-Time Configuration (Recommended)
+
+**NEW in v0.5.0:** Run the configuration command for persistent visibility:
+
+```bash
+/slashsense:configure
+```
+
+This will:
+- ✅ Add SlashSense section to `~/.claude/CLAUDE.md` (~150 tokens, loaded at session start)
+- ✅ Add SlashSense commands to your status bar (zero context, always visible)
+- ✅ Validate plugin settings and skills
+- ✅ Create backups before any changes
+
+**Benefits:**
+- **Always visible:** See `/research | /parallel:plan | /parallel:execute` in status bar
+- **Session awareness:** Claude remembers SlashSense at every session start
+- **Safe:** Creates backups, asks permission, provides rollback instructions
+
+**Without configuration:** SlashSense still works via intent detection, but you won't see visual reminders.
 
 ### Usage
 
