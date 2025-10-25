@@ -1,6 +1,15 @@
 ---
-name: performance-analyzer
+name: agent:performance-analyzer
 description: Benchmark and analyze parallel workflow performance. Measures timing, identifies bottlenecks, calculates speedup metrics (Amdahl's Law), generates cost comparisons, and provides optimization recommendations. Use for workflow performance analysis and cost optimization.
+keywords:
+  - analyze performance
+  - benchmark workflow
+  - measure speed
+  - performance bottleneck
+  - workflow optimization
+  - calculate speedup
+subagent_type: contextune:performance-analyzer
+type: agent
 model: haiku
 allowed-tools:
   - Bash

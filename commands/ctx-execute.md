@@ -1,6 +1,14 @@
 ---
 name: ctx:execute
 description: Execute plan in parallel using git worktrees and multiple Claude sessions
+keywords:
+  - execute plan
+  - run plan
+  - run tasks
+  - parallelize work
+  - work in parallel
+  - execute tasks
+  - run parallel
 executable: true
 ---
 
@@ -14,7 +22,7 @@ You are executing an automated parallel development workflow with **optimized pa
 
 ## 🎯 Performance-Optimized Architecture
 
-**Key Innovation:** Each subagent creates its own GitHub issue and worktree autonomously, enabling true parallel execution from the start.
+**Key Innovation:** Worktrees are pre-created by script, agents focus purely on implementation, enabling deterministic parallel execution.
 
 **Time Savings:**
 - 5 tasks: 30% faster setup (32s saved)
@@ -25,19 +33,18 @@ You are executing an automated parallel development workflow with **optimized pa
 
 ---
 
-## Phase 0: Validate Prerequisites
+## Phase 0: Validate Prerequisites and Setup Infrastructure
 
 **Check required tools:**
 
 ```bash
-# Verify git, gh CLI, and worktree support
-git --version && gh --version && git worktree list
+# Verify git and worktree support
+git --version && git worktree list
 ```
 
 **Requirements:**
 - Git 2.5+ (worktree support)
-- GitHub CLI (`gh`) authenticated
-- Clean working directory (no uncommitted changes)
+- Clean working directory (no uncommitted changes on main)
 - **Auto-approval configured** (see below)
 
 **If validation fails:**
@@ -47,22 +54,19 @@ git --version && gh --version && git worktree list
 
 ### ⚡ IMPORTANT: Configure Auto-Approval to Avoid Bottlenecks
 
-**Problem:** Without auto-approval, you must approve EVERY git/gh command from EVERY parallel agent individually, negating all parallelism benefits!
+**Problem:** Without auto-approval, you must approve EVERY git command from EVERY parallel agent individually, negating all parallelism benefits!
 
-**Solution:** Pre-approve safe git/gh commands using Claude Code's IAM permission system.
+**Solution:** Pre-approve safe git commands using Claude Code's IAM permission system.
 
-**Quick Setup (5 minutes):**
+**Quick Setup (2 minutes):**
 
 1. **Run in Claude Code:** `/permissions`
 
 2. **Add these allow rules:**
    ```
-   Bash(git worktree:*)
    Bash(git add:*)
    Bash(git commit:*)
    Bash(git push:*)
-   Bash(gh issue:*)
-   Bash(gh label create:*)
    ```
 
 3. **Set permission mode:** `"defaultMode": "acceptEdits"` in settings
@@ -85,11 +89,73 @@ Agent 3: Waiting for approval... (blocked)
 
 **With auto-approval:**
 ```
-Agent 1: Creating issue... ✅ Creating worktree... ✅ Working...
-Agent 2: Creating issue... ✅ Creating worktree... ✅ Working...
-Agent 3: Creating issue... ✅ Creating worktree... ✅ Working...
+Agent 1: Implementing... ✅ Testing... ✅ Committing... ✅
+Agent 2: Implementing... ✅ Testing... ✅ Committing... ✅
+Agent 3: Implementing... ✅ Testing... ✅ Committing... ✅
 → True parallelism! 🚀
 ```
+
+### Setup Worktrees (Inline Script - 5 seconds)
+
+**Generate and run the setup script:**
+
+```bash
+# Create scripts directory if needed
+mkdir -p .parallel/scripts
+
+# Generate setup script
+cat > .parallel/scripts/setup_worktrees.sh <<'WORKTREE_SCRIPT'
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Find plan.yaml
+PLAN_FILE=".parallel/plans/active/plan.yaml"
+if [ ! -f "$PLAN_FILE" ]; then
+  echo "Error: plan.yaml not found at $PLAN_FILE"
+  exit 1
+fi
+
+# Extract task IDs
+if command -v yq &> /dev/null; then
+  TASK_IDS=$(yq '.tasks[].id' "$PLAN_FILE")
+else
+  TASK_IDS=$(grep -A 100 "^tasks:" "$PLAN_FILE" | grep "  - id:" | sed 's/.*id: *"\([^"]*\)".*/\1/')
+fi
+
+echo "Creating worktrees for $(echo "$TASK_IDS" | wc -l | tr -d ' ') tasks..."
+
+# Create worktrees in parallel
+echo "$TASK_IDS" | while read task_id; do
+  branch="feature/$task_id"
+  worktree="worktrees/$task_id"
+
+  if [ -d "$worktree" ]; then
+    echo "⚠️  Worktree exists: $task_id"
+  elif git show-ref --verify --quiet refs/heads/$branch; then
+    git worktree add "$worktree" "$branch" 2>/dev/null && echo "✅ Created: $task_id (existing branch)"
+  else
+    git worktree add "$worktree" -b "$branch" 2>&1 | grep -v "Preparing" && echo "✅ Created: $task_id"
+  fi
+done
+
+echo ""
+echo "✅ Setup complete! Active worktrees:"
+git worktree list | grep "worktrees/"
+WORKTREE_SCRIPT
+
+chmod +x .parallel/scripts/setup_worktrees.sh
+
+# Run the script
+./.parallel/scripts/setup_worktrees.sh
+```
+
+**What this does:**
+- ✅ Generates script in .parallel/scripts/ (user can modify)
+- ✅ Reads task IDs from plan.yaml
+- ✅ Creates worktrees/task-N directories
+- ✅ Creates feature/task-N branches
+- ✅ Idempotent (safe to run multiple times)
+- ✅ Works with or without yq installed
 
 ---
 
@@ -170,27 +236,19 @@ def spawn_agent_for_task(task_ref):
 - No circular dependencies
 - Task IDs in plan.yaml match task IDs in task files
 
+**Status filtering:**
+- Read each task file's YAML frontmatter to check status
+- Skip tasks with status: completed
+- Only execute tasks with status: pending or blocked
+- Report which tasks are being executed vs skipped
+
 **If validation fails:**
 - Report specific issues to user (missing files, syntax errors, circular deps, etc.)
 - Suggest running `/contextune:parallel:plan` to create proper plan
 
 ---
 
-## Phase 2: Setup GitHub Labels (One-Time)
-
-**Create reusable GitHub issue labels:**
-
-```bash
-# Create labels if they don't exist (idempotent)
-gh label create "parallel-execution" --description "Auto-created for parallel development" --color "0366d6" 2>/dev/null || true
-gh label create "auto-created" --description "Created by automation" --color "d4c5f9" 2>/dev/null || true
-```
-
-**Note:** Failures are non-critical (labels may already exist).
-
----
-
-## Phase 3: Spawn Autonomous Haiku Agents (PARALLEL) ⚡
+## Phase 2: Spawn Autonomous Haiku Agents (PARALLEL) ⚡
 
 **IMPORTANT:** This is where the optimization happens! We use specialized Haiku agents for 85% cost savings and 2x speedup.
 
@@ -199,31 +257,33 @@ gh label create "auto-created" --description "Created by automation" --color "d4
 - **Tier 2** (Haiku): Autonomous task execution
 - **Result**: 81% cost reduction, 2x performance improvement
 
-### 🔍 Parallel Creation = True Parallelism (v0.4.0)
+### 🔍 Script-Based Setup = True Determinism (v0.5.5)
 
-**Key architectural decision:** Each Haiku agent creates its **own** GitHub issue and worktree **autonomously**!
+**Key architectural decision:** Worktrees are **pre-created by script** before agents spawn!
 
 **Why this matters:**
-- ✅ **No bottleneck:** Issues and worktrees created in parallel, not sequentially
-- ✅ **O(1) setup time:** Constant regardless of task count (not O(n))
-- ✅ **Immediate start:** Agents begin work immediately after spawning
-- ✅ **Git observability:** Each agent has its own branch, worktree, and issue for tracking
+- ✅ **Deterministic:** Script creates all worktrees reliably (no AI unpredictability)
+- ✅ **Fast:** 5 seconds total for any number of tasks (parallel xargs)
+- ✅ **Simple agents:** Agents focus only on implementation, not infrastructure
+- ✅ **Smaller prompts:** 33% reduction in agent context (no setup instructions)
 
 **Performance:**
 ```
-5 tasks, sequential setup:  105s (15s issues + 25s worktrees + overhead)
-5 tasks, parallel setup:     73s (agents create simultaneously!)
-Time saved:                  32s (30% faster)
+Old approach (agents create own worktrees):
+5 tasks: 73s total (8s setup per agent in parallel)
 
-10 tasks:  72s saved (48% faster)
-20 tasks: 152s saved (63% faster)
+New approach (script pre-creates worktrees):
+5 tasks: 5s setup + work time (deterministic!)
+
+Time saved: 68s (93% faster setup)
 ```
 
-**Observability via Git + GitHub:**
-- Each task has its own GitHub issue (progress, decisions, blockers)
+**Observability via Git + PRs:**
+- Each task has its own task file (.parallel/plans/active/tasks/task-N.md)
 - Each task has its own git branch (atomic changes, easy rollback)
 - Each task has its own worktree (isolated environment)
-- All visible in `git worktree list`, `gh issue list`, git history
+- Each task gets a PR created from task file (full spec + implementation)
+- All visible in `git worktree list`, `gh pr list`, git history
 
 **For each independent task in the plan:**
 
@@ -270,10 +330,10 @@ The planning phase (Sonnet) already spent 2 minutes doing comprehensive parallel
 ```
 You are Subagent working on: {task.name}
 
-**Task Reference:** .parallel/plans/tasks/{task.id}.md (GitHub issue format)
+**Task Reference:** .parallel/plans/tasks/{task.id}.md (Markdown + YAML frontmatter)
 **Plan Reference:** .parallel/plans/plan.yaml
 
-**IMPORTANT:** Your task file is already in GitHub issue format (Markdown + YAML frontmatter).
+**IMPORTANT:** Your task file is in Markdown with YAML frontmatter containing your complete specification.
 
 **Quick Reference:**
 - Priority: {task.priority}
@@ -301,45 +361,35 @@ The file contains:
 
 ### Phase 1: Setup Your Environment (Do This First!)
 
-**Step 1: Create Your GitHub Issue**
+**Step 0: Mark Task as In Progress**
 
-**ZERO TRANSFORMATION APPROACH** - Task files are already in GitHub issue format!
-
-```bash
-# Extract task title from Markdown (first # heading)
-TASK_TITLE=$(grep "^# " .parallel/plans/tasks/{task.id}.md | head -1 | sed 's/^# //')
-
-# Extract labels from YAML frontmatter
-TASK_LABELS=$(grep -A 10 "^labels:" .parallel/plans/tasks/{task.id}.md | grep "  - " | sed 's/  - //' | tr '\n' ',' | sed 's/,$//')
-
-# Create issue directly from task file (NO TRANSFORMATION!)
-gh issue create \
-  --title "$TASK_TITLE" \
-  --body-file .parallel/plans/tasks/{task.id}.md \
-  --label "$TASK_LABELS"
-```
-
-**Why this is efficient:**
-- ✅ **No parsing**: Task file is already in GitHub issue format
-- ✅ **No reformatting**: Just pipe the file directly
-- ✅ **~500 tokens saved**: No transformation overhead
-- ✅ **Faster execution**: Less processing, less context usage
-
-**Capture the issue number:**
-```bash
-ISSUE_URL=$(gh issue create ... above ...)
-ISSUE_NUM=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
-echo "Created issue #$ISSUE_NUM: $ISSUE_URL"
-```
-
-**Step 2: Create Your Worktree**
+Update the task status in plan.yaml to track that you're starting work:
 
 ```bash
-git worktree add "worktrees/task-$ISSUE_NUM" -b "feature/task-$ISSUE_NUM"
-cd "worktrees/task-$ISSUE_NUM"
+# Update task status to in_progress
+TASK_FILE=".parallel/plans/active/tasks/{task.id}.md"
+
+# Use sed to update status field in YAML frontmatter
+sed -i.bak 's/^status: pending$/status: in_progress/' "$TASK_FILE"
+
+# Verify the update
+echo "✅ Task status updated to in_progress"
 ```
 
-**Step 3: Setup Development Environment**
+**Step 1: Navigate to Your Worktree**
+
+Your worktree and branch were already created by the setup script!
+
+```bash
+# Navigate to your worktree
+cd worktrees/{task.id}
+
+# Verify you're in the right place
+echo "Current branch: $(git branch --show-current)"
+echo "Expected branch: feature/{task.id}"
+```
+
+**Step 2: Setup Development Environment**
 
 ```bash
 # Copy environment files if they exist
@@ -366,25 +416,9 @@ cp ../../.env.local .env.local 2>/dev/null || true
 
 # Example: npm run typecheck
 # Example: uv run pytest --collect-only
-```
 
-**📝 Document setup completion on GitHub issue:**
-
-```bash
-gh issue comment $ISSUE_NUM --body "$(cat <<'EOF'
-✅ **Environment Setup Complete**
-
-**Worktree:** worktrees/task-$ISSUE_NUM
-**Branch:** feature/task-$ISSUE_NUM
-
-**Setup completed:**
-- ✅ Environment files copied
-- ✅ Dependencies installed
-- ✅ Environment verified
-
-Starting implementation...
-EOF
-)"
+# Log that setup is complete
+echo "✅ Environment setup complete, starting implementation..."
 ```
 
 ---
@@ -429,47 +463,12 @@ cat .parallel/plans/tasks/{task.id}.md
 - ❌ Second-guess the specification
 
 **IF UNCLEAR:**
-- ⚠️ Specification is ambiguous → Ask in GitHub issue comments
+- ⚠️ Specification is ambiguous → Report back to main agent
 - ⚠️ Implementation detail missing → Ask for clarification
-- ⚠️ Library doesn't work as expected → Report in issue
+- ⚠️ Library doesn't work as expected → Report to main agent
 - ⚠️ Tests are unclear → Request test specification
 
 **Remember:** All research was done. All decisions were made. You execute!
-
-**📝 Document progress on GitHub issue as you work:**
-
-Update the issue periodically with progress:
-
-```bash
-# After completing a major milestone
-gh issue comment $ISSUE_NUM --body "✅ Implemented {feature_name}
-
-**Progress:** 30% complete
-**Files modified:** {list}
-**Next:** {what's next}
-"
-
-# When encountering decisions or blockers
-gh issue comment $ISSUE_NUM --body "⚠️ Decision needed: {question}
-
-**Context:** {why this matters}
-**Options:** {list options if known}
-**Blocked?** {yes/no}
-"
-
-# When resolving issues
-gh issue comment $ISSUE_NUM --body "✅ Resolved: {issue}
-
-**Solution:** {what was done}
-**Result:** {outcome}
-"
-```
-
-**Why document on issues?**
-- Git observability: Anyone can see progress without interrupting you
-- Historical record: Decisions are documented for future reference
-- Debugging: Issue timeline shows what happened when
-- Coordination: Other agents can see your progress and avoid conflicts
 
 **Commit messages should follow:**
 ```
@@ -477,7 +476,7 @@ gh issue comment $ISSUE_NUM --body "✅ Resolved: {issue}
 
 {detailed explanation if needed}
 
-Implements: #{ISSUE_NUM}
+Implements: {task.id}
 
 🤖 Generated with Claude Code
 Co-Authored-By: Claude <noreply@anthropic.com>
@@ -517,54 +516,52 @@ If tests fail:
 **Push your branch:**
 
 ```bash
-git push origin "feature/task-$ISSUE_NUM"
+git push origin "feature/{task.id}"
 ```
 
-**Update GitHub issue with completion status:**
+**Log completion:**
 
 ```bash
-gh issue comment $ISSUE_NUM --body "$(cat <<'EOF'
-✅ **Task Completed**
-
-**Branch:** feature/task-$ISSUE_NUM
-**Commits:** $(git log --oneline origin/main..HEAD | wc -l)
-
-**Tests:**
-- ✅ Unit tests passing
-- ✅ Integration tests passing
-- ✅ Linter passing
-- ✅ Type checker passing
-
-**Files Changed:**
-$(git diff --name-only origin/main..HEAD)
-
-Ready for review and merge!
-
-🤖 Completed via Contextune parallel execution
-EOF
-)"
-```
-
-**Close the issue:**
-
-```bash
-gh issue close $ISSUE_NUM --comment "Task completed successfully!"
+echo "✅ Task {task.id} completed and pushed!"
+echo ""
+echo "Branch: feature/{task.id}"
+echo "Commits: $(git log --oneline origin/main..HEAD | wc -l)"
+echo ""
+echo "Files changed:"
+git diff --name-only origin/main..HEAD
+echo ""
+echo "Ready for PR creation!"
 ```
 
 ---
 
 ### Phase 5: Report Back to Main Agent
 
-**Return to main agent with:**
+**Step 1: Mark Task as Completed**
+
+Update the task status to reflect successful completion:
+
+```bash
+# Update task status to completed
+TASK_FILE=".parallel/plans/active/tasks/{task.id}.md"
+
+# Use sed to update status field in YAML frontmatter
+sed -i.bak 's/^status: in_progress$/status: completed/' "$TASK_FILE"
+
+# Verify the update
+echo "✅ Task status updated to completed"
+```
+
+**Step 2: Return to main agent with:**
 
 ```
 ✅ Task completed successfully!
 
-**Issue:** #{ISSUE_NUM}
-**Branch:** feature/task-$ISSUE_NUM
-**Worktree:** worktrees/task-$ISSUE_NUM
+**Task ID:** {task.id}
+**Branch:** feature/{task.id}
+**Worktree:** worktrees/{task.id}
 **Tests:** All passing ✅
-**Status:** Ready to merge
+**Status:** Ready for PR
 
 **Summary:** {brief summary of what was implemented}
 ```
@@ -573,27 +570,30 @@ gh issue close $ISSUE_NUM --comment "Task completed successfully!"
 
 ## RULES FOR SUBAGENTS
 
-1. ✅ **Autonomy:** You create your own issue and worktree
-2. ✅ **Isolation:** Work only in your worktree directory
+1. ✅ **Autonomy:** Your worktree is pre-created, focus on implementation
+2. ✅ **Isolation:** Work only in your assigned worktree directory
 3. ✅ **Testing:** All tests must pass before reporting completion
-4. ✅ **Communication:** Update GitHub issue with progress throughout (not just at end!)
+4. ✅ **Status Tracking:** Update task status at key points:
+   - Start: pending → in_progress
+   - Success: in_progress → completed
+   - Error: * → blocked
 5. ❌ **No touching main:** Never commit directly to main branch
 6. ❌ **No touching other worktrees:** Stay in your assigned directory
-7. ⚠️ **Report conflicts:** If you encounter merge conflicts, report in issue
+7. ⚠️ **Report conflicts:** If you encounter merge conflicts, report to main agent
 8. 🎯 **EXECUTE ONLY (v0.4.0):** Follow spec exactly, no research, no decisions
-9. ⚠️ **Ask if unclear:** Specification ambiguous? Ask in issue, don't guess!
-10. 📝 **Document everything:** Progress, decisions, blockers, resolutions on GitHub issue
+9. ⚠️ **Ask if unclear:** Specification ambiguous? Report to main agent, don't guess!
+10. 📝 **Document in commits:** Write clear commit messages explaining what/why
 
-### 🔍 Git + GitHub = Observability (v0.4.0)
+### 🔍 Git + Task Files + PRs = Observability (v0.5.5)
 
 **Why this architecture provides excellent observability:**
 
-**GitHub Issues:**
-- Live progress tracking for each task
-- Decision documentation (why choices were made)
-- Blocker visibility (what's stuck and why)
-- Timeline of all activity
-- Searchable history
+**Task Files (.parallel/plans/active/tasks/task-N.md):**
+- Version-controlled specifications
+- Status tracking (pending/in_progress/completed/blocked)
+- Complete implementation details
+- Acceptance criteria
+- Single source of truth
 
 **Git Branches:**
 - Atomic changes per task
@@ -609,57 +609,81 @@ gh issue close $ISSUE_NUM --comment "Task completed successfully!"
 - Independent test runs
 - No shared state issues
 
+**Pull Requests:**
+- Full specification (from task file)
+- Complete implementation (git diff)
+- Review comments and discussion
+- CI/CD integration
+- Merge history
+
 **Observability Commands:**
 ```bash
+# See task status
+grep "^status:" .parallel/plans/active/tasks/*.md
+
 # See all active parallel work
 git worktree list
-gh issue list --label parallel-execution
+git branch | grep feature/task
 
 # See progress on specific task
-gh issue view <ISSUE_NUM>
+cat .parallel/plans/active/tasks/task-0.md
+cd worktrees/task-0
+git log --oneline
 
 # See what changed in a task
-cd worktrees/task-<NUM>
-git log --oneline
+cd worktrees/task-0
 git diff origin/main..HEAD
 
-# See all parallel work status
-gh issue list --state open --label parallel-execution
+# See PRs
+gh pr list --head feature/task-0
 
-# See completed work
-gh issue list --state closed --label parallel-execution
+# See all completed tasks
+grep "status: completed" .parallel/plans/active/tasks/*.md
 ```
 
 **Benefits:**
-- ✅ No interrupting agents to ask status
-- ✅ Historical record of all decisions
-- ✅ Easy debugging (issue timeline + git history)
-- ✅ Team visibility (everyone can see progress)
+- ✅ No duplication (task files = single source of truth)
+- ✅ Version controlled (all specs in git history)
+- ✅ Easy debugging (git history + task files)
+- ✅ Portable (works offline, survives GitHub → GitLab)
 - ✅ Audit trail (compliance, security, learning)
 
 ---
 
 ## ERROR HANDLING
 
-**If issue creation fails:**
-- Retry once
-- If still fails, report to main agent with error details
-- Include GitHub API response for debugging
-
-**If worktree creation fails:**
-- Check if worktree already exists: `git worktree list`
-- Try alternative name: `worktrees/task-{task_id}-retry`
-- Report to main agent if unresolvable
+**If worktree navigation fails:**
+- Verify worktree exists: `git worktree list`
+- Report to main agent (worktree should have been pre-created by script)
 
 **If tests fail:**
 - Do NOT push failing code
-- Document failures in GitHub issue
-- Request help from main agent if blocked
+- Mark task as blocked:
+  ```bash
+  TASK_FILE=".parallel/plans/active/tasks/{task.id}.md"
+  sed -i.bak 's/^status: .*$/status: blocked/' "$TASK_FILE"
+  ```
+- Report exact error messages to main agent
+- Request help if blocked
 
 **If environment setup fails:**
 - Document exact error message
 - Check for missing dependencies
+- Mark task as blocked:
+  ```bash
+  TASK_FILE=".parallel/plans/active/tasks/{task.id}.md"
+  sed -i.bak 's/^status: .*$/status: blocked/' "$TASK_FILE"
+  ```
 - Report to main agent for project-specific guidance
+
+**If implementation is unclear:**
+- Mark task as blocked:
+  ```bash
+  TASK_FILE=".parallel/plans/active/tasks/{task.id}.md"
+  sed -i.bak 's/^status: .*$/status: blocked/' "$TASK_FILE"
+  ```
+- Report specific questions to main agent
+- Do NOT guess or make assumptions
 
 ---
 
@@ -789,7 +813,7 @@ Task 3: Add analytics tracking (Haiku agent - $0.04)
 Total cost: $0.12 (vs $0.81 Sonnet - 85% savings!)
 ```
 
-All 3 Haiku agents start simultaneously, each creating its own issue and worktree in parallel! ⚡
+All 3 Haiku agents start simultaneously in their pre-created worktrees! ⚡
 
 ---
 
@@ -805,7 +829,7 @@ Users can check progress at any time with:
 
 This will show:
 - Active worktrees and their branches
-- GitHub issue statuses
+- Task status (from YAML frontmatter)
 - Test results (if available)
 - Estimated completion
 
@@ -821,14 +845,17 @@ This will show:
 **As each subagent completes:**
 
 1. **Verify completion:**
-   - Check GitHub issue is closed
+   - Check task status is "completed" in task file
    - Verify branch is pushed
    - Confirm tests are passing
 
 2. **Review changes:**
    ```bash
+   # Check task status
+   grep "^status:" .parallel/plans/active/tasks/task-*.md
+
    # Switch to completed worktree
-   cd worktrees/task-{ISSUE_NUM}
+   cd worktrees/task-0
 
    # Review diff
    git diff origin/main..HEAD
@@ -841,42 +868,82 @@ This will show:
 
 ---
 
-## Phase 6: Merge Completed Work
+## Phase 6: Create Pull Requests
 
-**Merge strategy options:**
+**Generate and run the PR creation script:**
 
-### Option A: Merge Each Branch Individually (Recommended)
+```bash
+# Generate PR creation script
+cat > .parallel/scripts/create_prs.sh <<'PR_SCRIPT'
+#!/usr/bin/env bash
+set -euo pipefail
+
+BASE_BRANCH="${1:-main}"
+TASKS_DIR=".parallel/plans/active/tasks"
+
+echo "Creating PRs for completed tasks..."
+
+# Find completed tasks
+for task_file in "$TASKS_DIR"/task-*.md; do
+  [ -f "$task_file" ] || continue
+
+  status=$(grep "^status:" "$task_file" | head -1 | awk '{print $2}')
+  [ "$status" = "completed" ] || continue
+
+  task_id=$(basename "$task_file" .md)
+  branch="feature/$task_id"
+  title=$(grep "^# " "$task_file" | head -1 | sed 's/^# //')
+  labels=$(awk '/^labels:/,/^[a-z]/ {if ($0 ~ /^\s*-/) print $2}' "$task_file" | tr '\n' ',' | sed 's/,$//')
+
+  # Check if PR exists
+  if gh pr list --head "$branch" --json number -q '.[0].number' &>/dev/null; then
+    echo "⚠️  PR exists for $task_id"
+    continue
+  fi
+
+  # Create PR
+  if [ -n "$labels" ]; then
+    gh pr create --base "$BASE_BRANCH" --head "$branch" --title "$title" --body-file "$task_file" --label "$labels"
+  else
+    gh pr create --base "$BASE_BRANCH" --head "$branch" --title "$title" --body-file "$task_file"
+  fi
+
+  echo "✅ Created PR for $task_id: $title"
+done
+
+echo ""
+echo "✅ PR creation complete!"
+PR_SCRIPT
+
+chmod +x .parallel/scripts/create_prs.sh
+
+# Run the script
+./.parallel/scripts/create_prs.sh
+```
+
+**What this does:**
+- ✅ Generates script in .parallel/scripts/ (user can modify)
+- ✅ Finds all tasks with status: completed
+- ✅ Extracts title from task file (first # heading)
+- ✅ Creates PR with task file as body (zero transformation!)
+- ✅ Adds labels from task YAML frontmatter
+- ✅ Links PR to task via branch name
+
+**Alternative: Merge Directly (No Review Needed)**
+
+If you don't need PR reviews:
 
 ```bash
 # For each completed task:
 git checkout main
 git pull origin main
-git merge feature/task-{ISSUE_NUM} --no-ff -m "Merge task {ISSUE_NUM}: {task.title}"
+git merge feature/task-0 --no-ff -m "Merge task-0: Fix missing utils module"
 git push origin main
 ```
 
-**Benefits:**
-- Clear git history
-- Easy to revert individual features
-- Can merge as soon as each completes
-
-### Option B: Create Pull Requests
-
-```bash
-# For each completed task:
-gh pr create \
-  --base main \
-  --head feature/task-{ISSUE_NUM} \
-  --title "{task.title}" \
-  --body "Closes #{ISSUE_NUM}"
-```
-
-**Benefits:**
-- Code review workflow
-- CI/CD integration
-- Team collaboration
-
-**Choose based on project workflow and team preferences.**
+**Choose based on project workflow:**
+- **PRs:** Code review, CI/CD, team visibility
+- **Direct merge:** Solo dev, fast iteration, no review needed
 
 ---
 
@@ -915,8 +982,8 @@ Or manually:
 
 ```bash
 # For each completed task:
-git worktree remove worktrees/task-{ISSUE_NUM}
-git branch -d feature/task-{ISSUE_NUM}
+git worktree remove worktrees/task-0
+git branch -d feature/task-0
 
 # Prune references
 git worktree prune
@@ -925,9 +992,12 @@ git worktree prune
 **Archive the plan:**
 
 ```bash
-# Move plan to archive
+# Move timestamped plan to archive
 mkdir -p .parallel/archive
-mv .parallel/plans/PLAN-{timestamp}.md .parallel/archive/
+mv .parallel/plans/20251025-042057 .parallel/archive/
+
+# Or keep it for reference (plans are lightweight)
+# Plans with status tracking are useful for future reference
 ```
 
 ---
@@ -939,14 +1009,20 @@ mv .parallel/plans/PLAN-{timestamp}.md .parallel/archive/
 ```
 ✅ Parallel execution complete!
 
-**Tasks Completed:** {N} / {N}
+**Task Status Summary:**
+- ✅ Completed: {N} tasks
+- ⚠️ Blocked: {M} tasks (if any)
+- ⏳ In Progress: {P} tasks (if any)
+- 📋 Pending: {Q} tasks (if any)
+
+**Tasks Completed:** {N} / {Total}
 **Total Time:** {actual_time} (estimated: {estimated_time})
 **Time Saved:** {sequential_time - parallel_time} ({percentage}%)
 
 **Merged Branches:**
-- feature/task-123: {task 1 title}
-- feature/task-124: {task 2 title}
-- feature/task-125: {task 3 title}
+- feature/task-0: {task 0 title}
+- feature/task-1: {task 1 title}
+- feature/task-2: {task 2 title}
 
 **Test Results:**
 - ✅ All unit tests passing
@@ -954,8 +1030,8 @@ mv .parallel/plans/PLAN-{timestamp}.md .parallel/archive/
 - ✅ Linter passing
 - ✅ Type checker passing
 
-**GitHub Issues:**
-- Closed: #{123}, #{124}, #{125}
+**Pull Requests:**
+- Created: #{PR_NUM1}, #{PR_NUM2}, #{PR_NUM3}
 
 **💰 Cost Savings (Haiku Optimization):**
 ```
@@ -992,11 +1068,11 @@ Annual projection (1,200 workflows):
 **Cleanup:**
 - Worktrees removed: {N}
 - Branches deleted: {N}
-- Plan archived: .parallel/archive/PLAN-{timestamp}.md
+- Plan archived: .parallel/archive/20251025-042057/
 
 🎉 All tasks completed successfully via Contextune parallel execution!
-🚀 Powered by Context-Grounded Parallel Research v0.4.0
-✨ Sonnet planned EVERYTHING, Haiku executed BLINDLY
+🚀 Powered by Script-Based Setup + Context-Grounded Research v0.5.5
+✨ Scripts handle infrastructure, Haiku agents execute blindly
 ```
 
 **Calculate Cost Savings:**
@@ -1075,20 +1151,7 @@ When suggesting next steps, mention:
 
 ## Performance Comparison
 
-### Before Optimization (Sequential Setup)
-
-```
-Time Analysis for 5 tasks:
-Planning:                        60s
-Create 5 issues (sequential):    15s  ← Bottleneck
-Create 5 worktrees (sequential): 25s  ← Bottleneck
-Spawn 5 agents:                   5s
-─────────────────────────────────────
-Total Setup:                    105s
-Work time:                      Parallel ✅
-```
-
-### After Optimization (Parallel Setup)
+### v0.4.0: Agents Create Own Worktrees
 
 ```
 Time Analysis for 5 tasks:
@@ -1098,13 +1161,27 @@ Each agent creates issue + worktree:  8s (concurrent!) ⚡
 ──────────────────────────────────────────
 Total Setup:                         73s
 Work time:                           Parallel ✅
-
-Time Saved: 32 seconds (30% faster)
 ```
 
-**Scaling benefits:**
-- 10 tasks: 72s saved (48% faster)
-- 20 tasks: 152s saved (63% faster)
+### v0.5.5: Script Pre-Creates Worktrees (CURRENT)
+
+```
+Time Analysis for 5 tasks:
+Planning:                              60s
+Run setup_worktrees.sh:                 5s (all 5 in parallel!)
+Spawn 5 agents:                         5s
+──────────────────────────────────────────
+Total Setup:                           70s
+Work time:                             Parallel ✅
+
+Time Saved: 3 seconds (4% faster)
+```
+
+**But more importantly:**
+- ✅ **Deterministic:** Script always works the same way
+- ✅ **Simpler agents:** 33% less context (no setup instructions)
+- ✅ **No duplication:** Task files are single source of truth
+- ✅ **Cheaper:** Smaller agent prompts = lower costs per task
 
 ---
 
@@ -1117,19 +1194,23 @@ User: "work on auth, dashboard, and analytics in parallel"
 You: Analyzing request... detected 3 independent tasks.
 
 Creating parallel execution plan...
-✅ Plan created: .parallel/plans/PLAN-20251021-143000.md
+✅ Plan created: .parallel/plans/20251021-143000/
 
-Spawning 3 autonomous subagents...
-🚀 Agent 1: Auth implementation
-🚀 Agent 2: Dashboard UI
-🚀 Agent 3: Analytics tracking
+Setting up infrastructure...
+✅ Created 3 worktrees in 5 seconds (script)
 
-⏳ All agents creating issues and worktrees in parallel...
+Spawning 3 autonomous Haiku agents...
+🚀 Agent 1: Auth implementation (worktrees/task-0)
+🚀 Agent 2: Dashboard UI (worktrees/task-1)
+🚀 Agent 3: Analytics tracking (worktrees/task-2)
 
-[Agents work concurrently]
+[Agents work concurrently in pre-created worktrees]
 
 ✅ All tasks completed in 2.5 hours (estimated: 6 hours sequential)
 Time saved: 3.5 hours (58% faster)
+
+Creating PRs...
+✅ 3 PRs created from task files
 
 Triggered via Contextune natural language detection.
 ```
@@ -1148,17 +1229,18 @@ You: [Load existing plan or ask for task list]
 
 **Issue: "Worktree already exists"**
 - Run: `git worktree list` to see active worktrees
-- Remove stale: `git worktree remove worktrees/task-{N}`
+- Remove stale: `git worktree remove worktrees/task-0`
 - Or run: `/contextune:parallel:cleanup`
 
-**Issue: "GitHub issue creation failed"**
-- Check: `gh auth status`
-- Re-authenticate: `gh auth login`
-- Verify repo permissions
+**Issue: "Setup script failed"**
+- Check: `git --version` (need 2.5+ for worktree support)
+- Check: Permissions on `.parallel/plans/active/scripts/`
+- Run: `chmod +x .parallel/plans/active/scripts/setup_worktrees.sh`
 
 **Issue: "Tests failing in subagent"**
-- Subagent should report in GitHub issue
-- Review issue comments for error details
+- Subagent should report back to main agent
+- Check task status: `grep "^status:" .parallel/plans/active/tasks/task-*.md`
+- Review git log in worktree for error context
 - Main agent provides guidance
 
 **Issue: "Merge conflicts"**

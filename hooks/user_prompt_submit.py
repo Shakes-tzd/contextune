@@ -4,7 +4,8 @@
 # dependencies = [
 #     "model2vec>=0.3.0",
 #     "semantic-router>=0.1.0",
-#     "numpy>=1.24.0"
+#     "numpy>=1.24.0",
+#     "rapidfuzz>=3.0.0"
 # ]
 # ///
 """
@@ -25,15 +26,17 @@ import sys
 import os
 from pathlib import Path
 from typing import Optional, Dict, Any
+from datetime import datetime
 
 # Add lib directory to Python path
 PLUGIN_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PLUGIN_ROOT / "lib"))
 
-# Import your existing matchers (unchanged!)
-from keyword_matcher import KeywordMatcher, IntentMatch
+# Import matchers (now using RapidFuzz-based keyword matcher v2!)
+from keyword_matcher_v2 import KeywordMatcherV2 as KeywordMatcher, IntentMatch
 from model2vec_matcher import Model2VecMatcher
 from semantic_router_matcher import SemanticRouterMatcher
+from observability_db import ObservabilityDB
 
 
 class ContextuneDetector:
@@ -109,22 +112,186 @@ def should_process(prompt: str) -> bool:
     return True
 
 
-def format_suggestion(match: IntentMatch) -> str:
-    """Format detection result as Claude-friendly suggestion."""
+def write_detection_for_statusline(match: IntentMatch, prompt: str):
+    """Write detection data to observability DB for status line to read."""
+    try:
+        db = ObservabilityDB(".contextune/observability.db")
+        db.set_detection(
+            command=match.command,
+            confidence=match.confidence,
+            method=match.method,
+            prompt_preview=prompt[:60] + ("..." if len(prompt) > 60 else ""),
+            latency_ms=match.latency_ms
+        )
 
-    confidence_label = "HIGH" if match.confidence >= 0.85 else "MEDIUM"
+        # Also log matcher performance
+        db.log_matcher_performance(match.method, match.latency_ms, success=True)
 
-    return f"""
-<contextune_detection>
-🎯 **Command Detected**: `{match.command}`
+        print(f"DEBUG: Wrote detection to observability DB: {match.command} ({match.confidence:.0%} {match.method})", file=sys.stderr)
+    except Exception as e:
+        # Don't fail hook if observability write fails
+        print(f"DEBUG: Failed to write to observability DB: {e}", file=sys.stderr)
+        # Also log the error
+        try:
+            db = ObservabilityDB(".contextune/observability.db")
+            db.log_error("user_prompt_submit", type(e).__name__, str(e))
+        except:
+            pass
 
-**Confidence**: {match.confidence:.0%} ({confidence_label})
-**Method**: {match.method}
-**Latency**: {match.latency_ms:.2f}ms
 
-Would you like me to execute `{match.command}` instead?
-</contextune_detection>
-""".strip()
+def clear_detection_statusline():
+    """Clear status line detection (no match found)."""
+    try:
+        db = ObservabilityDB(".contextune/observability.db")
+        db.clear_detection()
+        print(f"DEBUG: Cleared detection from observability DB", file=sys.stderr)
+    except Exception as e:
+        print(f"DEBUG: Failed to clear detection from observability DB: {e}", file=sys.stderr)
+
+
+def get_detection_count() -> int:
+    """Get total number of detections for progressive tips."""
+    try:
+        db = ObservabilityDB(".contextune/observability.db")
+        stats = db.get_stats()
+        return stats.get("detections", {}).get("total", 0)
+    except:
+        pass
+    return 0
+
+
+def increment_detection_count():
+    """Increment detection counter for progressive disclosure."""
+    try:
+        data_dir = Path.home() / ".claude" / "plugins" / "contextune" / "data"
+        data_dir.mkdir(parents=True, exist_ok=True)
+        stats_file = data_dir / "detection_stats.json"
+
+        stats = {"total_detections": 0, "by_method": {}, "by_command": {}}
+        if stats_file.exists():
+            with open(stats_file) as f:
+                stats = json.load(f)
+
+        stats["total_detections"] = stats.get("total_detections", 0) + 1
+
+        with open(stats_file, "w") as f:
+            json.dump(stats, f, indent=2)
+    except:
+        pass  # Don't fail hook if stats tracking fails
+
+
+# Command action descriptions for directive feedback
+COMMAND_ACTIONS = {
+    # Contextune commands
+    "/ctx:design": "design system architecture with structured workflow",
+    "/ctx:research": "get fast answers using 3 parallel agents",
+    "/ctx:plan": "create parallel development plans",
+    "/ctx:execute": "run tasks in parallel worktrees",
+    "/ctx:status": "monitor parallel task progress",
+    "/ctx:cleanup": "clean up completed worktrees",
+    "/ctx:help": "see example-first command guide",
+    "/ctx:configure": "enable persistent status bar display",
+    "/ctx:stats": "see your time & cost savings",
+    "/ctx:verify": "verify and execute detected command with confirmation",
+
+    # Skill-only detections (no commands)
+    "skill:ctx:performance": "analyze and optimize parallel workflow performance",
+    "skill:ctx:parallel-expert": "get guidance on parallelizing tasks effectively",
+    "skill:ctx:help": "discover Contextune features and capabilities",
+    "skill:ctx:worktree": "troubleshoot git worktree issues and conflicts",
+}
+
+# Skill mapping for reliable Claude execution
+# Maps slash commands AND skill detections to skill names
+# Skills are auto-discovered by Claude Code from: contextune/skills/*/SKILL.md
+SKILL_MAPPING = {
+    # Commands with skills
+    "/ctx:design": "ctx:architect",    # Plugin skill: skills/software-architect
+    "/ctx:research": "ctx:researcher", # Plugin skill: skills/researcher
+
+    # Skills without commands (direct skill suggestions)
+    "skill:ctx:performance": "ctx:performance",
+    "skill:ctx:parallel-expert": "ctx:parallel-expert",
+    "skill:ctx:help": "ctx:help",
+    "skill:ctx:worktree": "ctx:worktree",
+
+    # Note: /ctx:plan and /ctx:execute are commands, not skills
+    # They execute workflows directly rather than providing guidance
+}
+
+def create_skill_augmented_prompt(match: IntentMatch, original_prompt: str) -> str:
+    """
+    Augment prompt with skill suggestion for more reliable execution.
+
+    Evidence: Skills are invoked more reliably than slash commands because
+    they use Claude's native Skill tool (structured, type-safe) vs text expansion.
+
+    Args:
+        match: Detected command and confidence
+        original_prompt: User's original prompt text
+
+    Returns:
+        Augmented prompt that guides Claude to use skill or command
+    """
+    if match.command in SKILL_MAPPING:
+        skill_name = SKILL_MAPPING[match.command]
+        # Strong directive: "You can use your X skill"
+        return f"{original_prompt}. You can use your {skill_name} skill to help with this task."
+    else:
+        # For commands without skills, use directive language
+        action = COMMAND_ACTIONS.get(match.command, "complete this request")
+        return f"{original_prompt}. Please use the {match.command} command to {action}."
+
+
+def get_contextual_tip(match: IntentMatch, detection_count: int) -> str:
+    """Generate directive contextual tip based on usage patterns."""
+
+    # First-time users (1-3 detections)
+    if detection_count <= 3:
+        return "New user? Type `/ctx:help` to see all commands with examples"
+
+    # Early users (4-10 detections) - promote status bar
+    elif detection_count <= 10:
+        return "Enable persistent detection: Type `/ctx:configure` to set up status bar"
+
+    # Experienced users (11-20) - promote advanced features
+    elif detection_count <= 20:
+        if match.command.startswith("/ctx:"):
+            return "Want parallel workflows? Type `/ctx:plan` to work on multiple tasks simultaneously"
+        return f"Blazing fast: {match.latency_ms:.2f}ms detection. Type `/ctx:stats` to see all metrics"
+
+    # Power users (21+) - occasional celebration
+    else:
+        if detection_count % 10 == 0:  # Every 10th detection
+            return f"🎉 {detection_count} detections! Type `/ctx:stats` to see your time & cost savings"
+        return None  # No tip for most interactions
+
+
+def format_suggestion(match: IntentMatch, detection_count: int = 0) -> str:
+    """Format detection with directive, actionable phrasing."""
+
+    # Get action description
+    action = COMMAND_ACTIONS.get(match.command, "execute this command")
+
+    # Build directive message
+    confidence_pct = int(match.confidence * 100)
+
+    # Primary directive message
+    base_msg = f"💡 Type `{match.command}` to {action} ({confidence_pct}% {match.method}"
+
+    # Add latency if fast (show performance)
+    if match.latency_ms < 1.0:
+        base_msg += f", {match.latency_ms:.2f}ms"
+
+    base_msg += ")"
+
+    # Get contextual tip
+    tip = get_contextual_tip(match, detection_count)
+
+    if tip:
+        return f"{base_msg}\n💡 {tip}"
+
+    return base_msg
 
 
 def main():
@@ -163,6 +330,8 @@ def main():
 
         if match is None or match.confidence < 0.7:
             print(f"DEBUG: No match or low confidence, passing through", file=sys.stderr)
+            # Clear status line detection (no match)
+            clear_detection_statusline()
             # No match or low confidence - pass through
             response = {
                 "continue": True,
@@ -171,15 +340,32 @@ def main():
             print(json.dumps(response))
             return
 
-        # SUGGEST MODE: Add context, let Claude decide
-        print(f"DEBUG: Suggesting command to Claude", file=sys.stderr)
+        # Write detection for status line
+        write_detection_for_statusline(match, prompt)
+
+        # Get current detection count for progressive tips
+        detection_count = get_detection_count()
+
+        # Increment counter
+        increment_detection_count()
+
+        # AUGMENT MODE: Modify prompt with skill/command suggestion for reliability
+        print(f"DEBUG: Augmenting prompt for Claude (detection #{detection_count + 1})", file=sys.stderr)
+
+        # Create augmented prompt with skill suggestion
+        augmented_prompt = create_skill_augmented_prompt(match, prompt)
+
+        # Format feedback with contextual tips
+        feedback_msg = format_suggestion(match, detection_count)
+
         response = {
             "continue": True,
+            "modifiedPrompt": augmented_prompt,  # KEY: Augmented prompt for reliable execution
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",
                 "additionalContext": f"\n\n[Contextune detected: `{match.command}` with {match.confidence:.0%} confidence via {match.method}]"
             },
-            "feedback": f"💡 Contextune: Suggested `{match.command}` ({match.confidence:.0%} confidence)"
+            "feedback": feedback_msg
         }
 
         print(f"DEBUG: Response: {json.dumps(response)}", file=sys.stderr)

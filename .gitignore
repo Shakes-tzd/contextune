@@ -80,6 +80,9 @@ Thumbs.db
 # Parallel execution workspace
 .parallel/
 
+# Contextune runtime data (status line detection)
+.contextune/
+
 # Temporary files
 *.tmp
 *.temp

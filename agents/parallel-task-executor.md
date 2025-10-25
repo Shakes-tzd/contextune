@@ -1,6 +1,14 @@
 ---
-name: parallel-task-executor
+name: agent:parallel-task-executor
 description: Autonomous execution of independent development tasks in parallel. Handles complete workflow from issue creation to testing and deployment. Use for any task that can run independently - features, bug fixes, refactoring. Optimized for cost-efficiency with Haiku 4.5.
+keywords:
+  - implement feature
+  - execute task
+  - build feature
+  - complete implementation
+  - autonomous execution
+subagent_type: contextune:parallel-task-executor
+type: agent
 model: haiku
 allowed-tools:
   - Bash

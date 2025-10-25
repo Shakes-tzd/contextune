@@ -1,6 +1,17 @@
 ---
-name: worktree-manager
+name: agent:worktree-manager
 description: Expert git worktree management and troubleshooting. Handles worktree creation, cleanup, lock file resolution, and diagnostic operations. Use for worktree lifecycle management and troubleshooting.
+keywords:
+  - worktree stuck
+  - worktree locked
+  - worktree error
+  - remove worktree failed
+  - cant remove worktree
+  - worktree issue
+  - fix worktree
+  - worktree problem
+subagent_type: contextune:worktree-manager
+type: agent
 model: haiku
 allowed-tools:
   - Bash

@@ -1,6 +1,14 @@
 ---
 name: ctx:stats
 description: View Contextune detection statistics
+keywords:
+  - show stats
+  - statistics
+  - detection stats
+  - performance metrics
+  - stats
+  - metrics
+  - show statistics
 executable: commands/slashsense-stats.py
 ---
 

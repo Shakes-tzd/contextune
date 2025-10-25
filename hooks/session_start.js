@@ -2,37 +2,78 @@
 /**
  * Contextune SessionStart Hook
  *
- * Displays available Contextune commands at session start.
+ * 1. Clears old detection state from status line
+ * 2. Displays available Contextune commands at session start
+ *
  * Uses `feedback` field for ZERO context overhead (0 tokens).
  *
  * Context Cost: 0 tokens (feedback is UI-only, not added to Claude's context)
  */
 
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
+
 function main() {
   try {
+    // Clear old detection state from observability database
+    const dbFile = path.join('.contextune', 'observability.db');
+    try {
+      if (fs.existsSync(dbFile)) {
+        // Fast SQLite DELETE query (0.1ms)
+        execSync(`sqlite3 "${dbFile}" "DELETE FROM current_detection WHERE id = 1"`, {
+          stdio: 'pipe',
+          timeout: 1000
+        });
+        console.error('DEBUG: Cleared old detection from observability DB');
+      }
+    } catch (err) {
+      console.error('DEBUG: Failed to clear detection from observability DB:', err.message);
+      // Non-fatal, continue with session start message
+    }
+
     // Read SessionStart event from stdin (optional - we don't use it)
     // const event = JSON.parse(require('fs').readFileSync(0, 'utf-8'));
 
     const contextuneInfo = `
-💡 Contextune Active (v0.5.4)
+🎯 Contextune Active (v0.5.4) - Natural Language → Slash Commands
 
-Quick Commands:
-  /ctx:research - Fast research with 3 parallel agents (1-2 min, ~$0.07)
-  /ctx:plan - Create parallel development plan
-  /ctx:execute - Execute plan in parallel worktrees
-  /ctx:status - Monitor parallel task progress
-  /ctx:cleanup - Clean up completed worktrees
-  /ctx:configure - Optional customization guide (manual)
-  /ctx:stats - View usage statistics
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Natural Language Examples:
-  • "research best React state library" → /ctx:research
-  • "create parallel plan for auth, dashboard, API" → /ctx:plan
-  • "what can Contextune do?" → skill: intent-recognition
+✨ Try It Now (Just Type These):
 
-Just type naturally—I'll detect your intent automatically!
+  "research best React state management library"
+    → Spawns 3 parallel agents (web + codebase + deps)
+    → Results in 1-2 min, ~$0.07
 
-Note: This message has 0 context cost (UI-only display).
+  "work on auth, dashboard, and API in parallel"
+    → Creates plan + worktrees + parallel execution
+    → 30-70% faster than sequential
+
+  "what can Contextune do?"
+    → Shows full capabilities guide
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 Most Used Commands:
+
+  /ctx:research <query>    Fast answers (3 parallel agents)
+  /ctx:status              Check parallel worktrees progress
+  /ctx:help                Example-first command reference
+
+🔧 Advanced Workflow:
+
+  /ctx:plan                Create parallel development plan
+  /ctx:execute             Run tasks in parallel worktrees
+  /ctx:cleanup             Clean up completed worktrees
+  /ctx:configure           Setup status bar integration
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 Tip: Enable status bar for real-time detection display
+   Run: /ctx:configure
+
+⚡ Zero context overhead - This message costs 0 tokens!
     `.trim();
 
     // Zero-context pattern: feedback shows to user, NOT added to Claude's context

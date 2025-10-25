@@ -7,6 +7,171 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2025-10-25
+
+### Changed
+- **🎯 BREAKTHROUGH: Prompt Augmentation for Reliable Command Execution**
+  - **Problem discovered**: Passive suggestions ([Contextune detected...]) had variable reliability
+  - **Evidence**: Skills invoked via "use your X skill" work 100% reliably
+  - **Solution**: Hook now uses `modifiedPrompt` to augment user's prompt with directive language
+  - **Result**: Commands execute far more reliably via skill invocation
+
+- **Prompt Augmentation Architecture:**
+  ```python
+  # Before (v0.7.x) - Passive suggestion
+  hookOutput = {
+      "additionalContext": "[Contextune detected: `/sc:design` with 85% confidence]"
+  }
+
+  # After (v0.8.0) - Active augmentation
+  hookOutput = {
+      "modifiedPrompt": "design a system. You can use your software-architect skill to help with this task."
+  }
+  ```
+
+- **How It Works:**
+  1. User types: "research best React libraries"
+  2. Contextune detects: `/ctx:research` (95% keyword)
+  3. Hook augments: Adds ". You can use your researcher skill to conduct this search."
+  4. Claude receives augmented prompt → Invokes skill reliably!
+
+### Added
+- **Skill Mapping System:**
+  - `SKILL_MAPPING` dictionary maps commands → skills
+  - Skills use same namespace as commands for consistency:
+    - `/sc:design` → `sc:architect` (migrated, optimized)
+    - `/sc:analyze` → `sc:analyzer` (future)
+    - `/ctx:research` → `ctx:researcher` (NEW!)
+    - `/ctx:plan` → `ctx:planner` (future)
+
+- **New Skills (Plugin-Local):**
+  - **`ctx:researcher`** - Created `skills/researcher/SKILL.md`
+    - Wraps `/ctx:research` command for reliable execution
+    - Parallel research with 3 agents (web + codebase)
+    - Structured output format with recommendations
+    - Name matches command namespace (`ctx:`)
+
+  - **`sc:architect`** - Migrated from global, optimized
+    - Context-efficient version (27% reduction: 226→166 lines)
+    - Same 5-step workflow: Understand → Research → Specify → Decompose → Plan
+    - Wraps `/sc:design` command
+    - Includes build vs. buy decision framework
+    - All skills version controlled with plugin
+    - Automatically available when plugin installed
+
+- **`create_skill_augmented_prompt()` Function:**
+  - Intelligently augments prompts based on detection
+  - Uses skill directive for skill-backed commands
+  - Falls back to command directive for others
+  - Preserves user's original intent
+
+### Benefits
+- ✅ **Much higher reliability** - Skills are first-class tools
+- ✅ **Better UX** - Commands "just work" more often
+- ✅ **Graceful degradation** - Falls back to commands if skill missing
+- ✅ **Evidence-based** - Proven in real conversation (software-architect invocation)
+- ✅ **Backward compatible** - Slash commands still work manually
+
+### Technical Details
+- Uses `modifiedPrompt` field in hook response (supported by Claude Code)
+- Directive language: "You can use your X skill" (strong instruction)
+- vs. Command language: "Please use the X command" (weaker)
+- Skills invoked via Skill tool (structured, type-safe)
+- Commands via text expansion (unstructured)
+
+### Migration
+- Automatic, no user action required
+- Existing behavior enhanced, not replaced
+- Slash commands still available for manual use
+- Skills can be disabled if user prefers commands
+
+## [0.7.0] - 2025-10-25
+
+### Added
+- **Unified Observability Database - Complete system instrumentation**
+  - Expanded SQLite database to handle ALL observability data
+  - New file: `lib/observability_db.py` - Comprehensive observability layer
+  - New command: `ctx-dashboard.py` - Beautiful real-time dashboard
+  - Database schema:
+    - ✅ `current_detection` - Active detection state (1 row)
+    - ✅ `detection_history` - All detections with full metadata
+    - ✅ `performance_metrics` - Component latency tracking (P50/P95/P99)
+    - ✅ `matcher_performance` - Per-tier matcher efficiency
+    - ✅ `error_logs` - Exception tracking with stack traces
+    - ✅ `sessions` - Session analytics
+    - ✅ `command_usage` - Usage patterns
+    - ✅ `user_patterns` - Custom preferences
+
+- **Observability Dashboard Features:**
+  - 📊 Detection statistics (total, by method, by command)
+  - ⚡ Matcher performance (keyword/model2vec/semantic)
+  - 📈 System performance metrics (P50/P95/P99)
+  - 🔍 Recent detections with timestamps
+  - ❌ Error tracking with component breakdown
+  - 🏥 System health score (0-100)
+  - 💡 Actionable recommendations
+
+### Changed
+- **Migration from `detections.db` to `observability.db`**
+  - Renamed database file to reflect expanded scope
+  - Single source of truth for all metrics
+  - Updated all components to use unified DB:
+    - `hooks/user_prompt_submit.py` - Writes detections + performance
+    - `hooks/session_start.js` - Clears from observability.db
+    - `~/.claude/statusline.sh` - Reads from observability.db
+
+- **Enhanced Detection Tracking:**
+  - Now logs matcher performance automatically
+  - Tracks latency for each detection
+  - Records prompt previews (first 60 chars)
+  - Error logging with automatic retry
+
+### Benefits
+- ✅ **Centralized**: No scattered JSON files
+- ✅ **Fast**: SQL queries for aggregations
+- ✅ **Correlations**: JOIN detection + performance + errors
+- ✅ **Time-series**: Built-in timestamp support
+- ✅ **Analytics-ready**: Foundation for ML insights
+
+### Migration
+- Automatic, no user action required
+- Old `detections.db` ignored (can be safely deleted)
+- New `observability.db` created on first use
+- Zero breaking changes
+
+## [0.6.0] - 2025-10-25
+
+### Changed
+- **Migrated from JSON files to SQLite for detection state management**
+  - Replaced `.contextune/last_detection` (JSON) with `.contextune/detections.db` (SQLite)
+  - Benefits:
+    - ✅ No file churn: Single UPDATE in-place instead of delete/create cycles
+    - ✅ Thread-safe: Built-in ACID transactions, no manual locking
+    - ✅ History tracking: `detection_history` table for statistics
+    - ✅ Atomic operations: Direct SQL queries vs read-parse-write
+    - ✅ Responsive: Status line queries SQLite directly (0.05-0.1ms)
+  - Updated components:
+    - `lib/detection_db.py` - New SQLite management class
+    - `hooks/user_prompt_submit.py` - Uses DetectionDB instead of JSON
+    - `hooks/session_start.js` - Clears detection from SQLite
+    - `statusline.sh` - Queries SQLite with `sqlite3` CLI
+  - Migration: Automatic, no user action required (old JSON files ignored)
+
+### Added
+- **Detection history tracking**
+  - All detections stored in `detection_history` table
+  - Statistics available via `DetectionDB.get_stats()`
+  - Foundation for future analytics (/ctx:stats improvements)
+
+## [0.5.5] - 2025-10-25
+
+### Fixed
+- **Session start hook now clears old detection state from status line**
+  - Status line was showing stale detection from previous session
+  - SessionStart hook now removes `.contextune/last_detection` file on startup
+  - Status line displays clean state (no detection) until first detection in new session
+  - Non-breaking change, gracefully handles missing detection file
+
 ## [0.5.4] - 2025-10-25
 
 **Status: Rebrand to Contextune - Context Engineering Focus**

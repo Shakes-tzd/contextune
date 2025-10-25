@@ -1,6 +1,14 @@
 ---
 name: ctx:status
 description: Check status of parallel worktrees and tasks
+keywords:
+  - check status
+  - parallel status
+  - show progress
+  - task status
+  - worktree status
+  - show parallel progress
+  - check parallel
 executable: true
 ---
 

@@ -24,7 +24,7 @@ from typing import List, Optional, Dict, Tuple
 class IntentMatch:
     """Result of intent matching operation."""
 
-    command: str          # e.g., "/sc:analyze"
+    command: str          # e.g., "/ctx:design"
     confidence: float     # 0.0-1.0
     method: str          # "keyword"
     latency_ms: float    # Actual execution time
@@ -40,9 +40,9 @@ class KeywordMatcher:
 
     Example:
         >>> matcher = KeywordMatcher()
-        >>> result = matcher.match("analyze the code quality")
+        >>> result = matcher.match("design a caching system")
         >>> result.command
-        '/sc:analyze'
+        '/ctx:design'
         >>> result.confidence
         0.85
     """
@@ -57,92 +57,55 @@ class KeywordMatcher:
 
     @staticmethod
     def _compile_patterns():
-        """Compile regex patterns for all commands (called once)."""
-        # Define raw patterns for each command
-        patterns = {
-            '/sc:analyze': [
-                r'\banalyze\b',
-                r'\breview\b',
-                r'\baudit\b',
-                r'\binspect\b',
-                r'\bexamine\b',
-                r'\bcheck\s+(code|quality)\b',
-                r'\blook\s+at\b.*\b(code|my)\b',
-                r'\bcan\s+you\s+look\b',
-                r'\bassess\b',
-                r'\bevaluate\b',
-                r'\binvestigate\b',
-                r'\bfor\s+issues\b',
-                r'\bfor\s+problems\b',
-                r'\bfind\s+(issues|problems)\b',
-            ],
-            '/sc:test': [
-                r'\btest\b',
-                r'\bcoverage\b',
-                r'\bunit\s+test\b',
-                r'\brun\s+(?:the\s+)?(?:unit\s+)?tests\b',
-                r'\bvalidate\b',
-            ],
-            '/sc:troubleshoot': [
-                r'\bdebug\b',
-                r'\bfix\b',
-                r'\btroubleshoot\b',
-                r'\bbug\b',
-                r'\berror\b',
-                r'\bissue\b(?!s)',  # "issue" but not "issues" alone
-                r'\bfix\s+(this|the|my)\b',
-                r'\bsolve\b',
-                r'\bresolve\b',
-            ],
-            '/sc:implement': [
-                r'\bimplement\b',
-                r'\bcreate\b',
-                r'\bbuild\b',
-                r'\bdevelop\b',
-                r'\badd\s+feature\b',
-            ],
-            '/sc:explain': [
-                r'\bexplain\b',
-                r'\bdescribe\b',
-                r'\bdocument\b',
-                r'\bwhat\s+does\b',
-                r'\bhow\s+does\b',
-            ],
-            '/sc:improve': [
-                r'\bimprove\b',
-                r'\boptimize\b',
-                r'\brefactor\b',
-                r'\benhance\b',
-                r'\bperformance\b',
-            ],
-            '/sc:design': [
-                r'\bdesign\b',
-                r'\barchitecture\b',
-                r'\bplan\b',
-                r'\bstructure\b',
-            ],
-            '/sc:cleanup': [
-                r'\bcleanup\b',
-                r'\bremove\b',
-                r'\bdelete\b',
-                r'\bclean\s+up\s+code\b',
-            ],
-            '/sc:git': [
-                r'\bcommit\b',
-                r'\bpush\b',
-                r'\bpull\b',
-                r'\bmerge\b',
-                r'\bgit\b',
-            ],
-        }
+        """Load and compile regex patterns from intent_mappings.json."""
+        import json
+        import os
 
-        # Compile patterns with case-insensitive flag
-        for command, pattern_list in patterns.items():
-            for pattern_str in pattern_list:
-                compiled = re.compile(pattern_str, re.IGNORECASE)
-                KeywordMatcher.COMMAND_PATTERNS.append(
-                    (command, compiled, pattern_str)
-                )
+        # Find the JSON file (relative to this script or absolute)
+        json_path = os.path.join(os.path.dirname(__file__), '../data/intent_mappings.json')
+        if not os.path.exists(json_path):
+            json_path = 'data/intent_mappings.json'  # Fallback
+
+        try:
+            with open(json_path, 'r') as f:
+                data = json.load(f)
+
+            # Load patterns from JSON
+            for command, config in data.get('commands', {}).items():
+                # Get regex patterns if they exist
+                if 'patterns' in config:
+                    for pattern_str in config['patterns']:
+                        compiled = re.compile(pattern_str, re.IGNORECASE)
+                        KeywordMatcher.COMMAND_PATTERNS.append(
+                            (command, compiled, pattern_str)
+                        )
+
+            # Load skill patterns (separate section)
+            for skill, config in data.get('skills', {}).items():
+                if 'patterns' in config:
+                    for pattern_str in config['patterns']:
+                        compiled = re.compile(pattern_str, re.IGNORECASE)
+                        KeywordMatcher.COMMAND_PATTERNS.append(
+                            (skill, compiled, pattern_str)
+                        )
+
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            # Fallback: use minimal built-in patterns
+            print(f"Warning: Could not load patterns from JSON: {e}", file=sys.stderr)
+            print("Using fallback patterns", file=sys.stderr)
+
+            # Minimal fallback patterns
+            fallback = {
+                '/ctx:design': [r'\bdesign\b', r'\barchitect\b'],
+                '/ctx:research': [r'\bresearch\b', r'\binvestigate\b'],
+            }
+
+            for command, pattern_list in fallback.items():
+                for pattern_str in pattern_list:
+                    compiled = re.compile(pattern_str, re.IGNORECASE)
+                    KeywordMatcher.COMMAND_PATTERNS.append(
+                        (command, compiled, pattern_str)
+                    )
 
     def match(self, text: str) -> Optional[IntentMatch]:
         """
@@ -191,24 +154,16 @@ if __name__ == '__main__':
         matcher = KeywordMatcher()
 
         test_cases = [
-            ("analyze the code", "/sc:analyze"),
-            ("review the implementation", "/sc:analyze"),
-            ("run tests", "/sc:test"),
-            ("unit test coverage", "/sc:test"),
-            ("debug this issue", "/sc:troubleshoot"),
-            ("fix the bug", "/sc:troubleshoot"),
-            ("implement a new feature", "/sc:implement"),
-            ("create this component", "/sc:implement"),
-            ("explain how this works", "/sc:explain"),
-            ("what does this function do", "/sc:explain"),
-            ("improve performance", "/sc:improve"),
-            ("optimize the code", "/sc:improve"),
-            ("design the architecture", "/sc:design"),
-            ("plan the structure", "/sc:design"),
-            ("cleanup the code", "/sc:cleanup"),
-            ("remove dead code", "/sc:cleanup"),
-            ("git commit", "/sc:git"),
-            ("push to remote", "/sc:git"),
+            ("design the architecture", "/ctx:design"),
+            ("architect the API", "/ctx:design"),
+            ("research best libraries", "/ctx:research"),
+            ("investigate options", "/ctx:research"),
+            ("plan parallel development", "/ctx:plan"),
+            ("create parallel plan", "/ctx:plan"),
+            ("execute parallel tasks", "/ctx:execute"),
+            ("run in parallel", "/ctx:execute"),
+            ("check parallel status", "/ctx:status"),
+            ("cleanup worktrees", "/ctx:cleanup"),
         ]
 
         passed = 0
@@ -241,7 +196,7 @@ if __name__ == '__main__':
 
         for text in test_cases:
             result = matcher.match(text)
-            if result and result.command == "/sc:analyze":
+            if result and result.command == "/ctx:design":
                 passed += 1
                 print(f"✓ Case insensitive: '{text}'")
             else:
@@ -372,10 +327,10 @@ if __name__ == '__main__':
         matcher = KeywordMatcher()
 
         test_cases = [
-            ("can you analyze the code quality", "/sc:analyze"),
-            ("please run the unit tests", "/sc:test"),
-            ("I need to fix this bug in the code", "/sc:troubleshoot"),
-            ("let's implement the new feature together", "/sc:implement"),
+            ("can you design the API architecture", "/ctx:design"),
+            ("please research best state libraries", "/ctx:research"),
+            ("let's create a parallel development plan", "/ctx:plan"),
+            ("I want to execute these tasks in parallel", "/ctx:execute"),
         ]
 
         passed = 0

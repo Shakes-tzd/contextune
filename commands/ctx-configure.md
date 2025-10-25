@@ -1,6 +1,14 @@
 ---
 name: ctx:configure
 description: Learn how to optionally customize your environment for extra Contextune visibility (manual setup guide)
+keywords:
+  - configure
+  - setup
+  - customize
+  - configuration
+  - setup contextune
+  - configure environment
+  - customization guide
 executable: false
 ---
 

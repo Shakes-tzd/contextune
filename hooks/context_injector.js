@@ -316,10 +316,29 @@ function main() {
       // Inject at start of prompt
       const modifiedPrompt = `${contextBlock}\n${prompt}`;
 
-      // Output modified prompt
+      // Build feedback message to show user what was injected
+      const feedbackParts = [`ℹ️ Context injected: ${context.date}`];
+
+      if (context.techStack && Object.keys(context.techStack).length > 0) {
+        if (context.techStack.language) {
+          feedbackParts.push(context.techStack.language);
+        }
+        if (context.techStack.framework) {
+          feedbackParts.push(context.techStack.framework);
+        }
+      }
+
+      if (context.specifications && context.specifications.length > 0) {
+        feedbackParts.push(`${context.specifications.length} spec(s)`);
+      }
+
+      const feedback = feedbackParts.join(', ');
+
+      // Output modified prompt with user feedback
       const output = {
         continue: true,
         modifiedPrompt: modifiedPrompt,
+        feedback: feedback,
         suppressOutput: false
       };
 

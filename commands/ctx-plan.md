@@ -1,6 +1,14 @@
 ---
 name: ctx:plan
 description: Document a development plan for parallel execution (modular YAML)
+keywords:
+  - create plan
+  - development plan
+  - parallel plan
+  - plan tasks
+  - make plan
+  - plan development
+  - create development plan
 executable: true
 ---
 

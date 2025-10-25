@@ -1,6 +1,13 @@
 ---
 name: ctx:research
 description: Fast research using 3 parallel Haiku agents for technical questions and decision-making (1-2 min)
+keywords:
+  - quick research
+  - fast research
+  - parallel research
+  - technical research
+  - investigate question
+  - research question
 executable: true
 ---
 
