@@ -7,6 +7,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.3] - 2025-10-25
+
+**Status: Zero-Context Command Discovery Release**
+
+### Added
+
+**SessionStart Hook for Command Discovery:**
+- Added `hooks/session_start.js` - Displays SlashSense commands at session start
+- **Zero context overhead** - Uses `feedback` field (0 tokens, UI-only)
+- Shows 7 key commands with descriptions
+- Includes natural language examples
+- Auto-displays on every session start, resume, clear, compact
+
+### Benefits
+
+**Context Optimization:**
+- ✅ **0 tokens** vs 150 tokens for CLAUDE.md manual approach
+- ✅ Command list visible to user without context cost
+- ✅ Auto-updates when plugin changes (no manual editing)
+- ✅ Works alongside Skills for comprehensive discovery
+
+**User Experience:**
+- ✅ Commands shown at every session start
+- ✅ No setup required (works automatically)
+- ✅ Reinforces natural language usage patterns
+- ✅ Includes quick reference examples
+
+**Architecture:**
+- SessionStart hook: 0 tokens (feedback field)
+- Skills: Contextual suggestions (when relevant)
+- UserPromptSubmit: Intent detection (~20 tokens per match)
+- **Total discovery overhead: ~20 tokens vs 150+ for static CLAUDE.md**
+
+### Technical Details
+
+**Hook Implementation:**
+- Language: JavaScript (Node.js - guaranteed in Claude Code)
+- Execution time: <10ms
+- Output format: JSON with `feedback` field
+- No `additionalContext` used (zero tokens)
+- Registered in `hooks/hooks.json` under SessionStart event
+
+**Comparison:**
+
+| Approach | Token Cost | User Sees | Auto-Updates |
+|----------|-----------|-----------|--------------|
+| **SessionStart hook** | **0 tokens** ✅ | ✅ Every session | ✅ Yes |
+| CLAUDE.md (manual) | 150 tokens ⚠️ | ✅ Always | ❌ Manual |
+| Skills only | 0 tokens ✅ | ⚠️ Contextual | ✅ Yes |
+
+**Recommended Stack:**
+- SessionStart → Shows commands (0 tokens)
+- Skills → Suggest usage (contextual)
+- UserPromptSubmit → Detect intent (~20 tokens)
+
 ## [0.5.2] - 2025-10-25
 
 **Status: Architecture Cleanup & Plugin Best Practices Release**

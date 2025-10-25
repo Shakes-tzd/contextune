@@ -1,7 +1,7 @@
 {
   "name": "slashsense",
-  "version": "0.5.2",
-  "description": "Natural language to slash command mapping with auto-discovery Skills. Quick research (/ss:research: 3 parallel agents, 1-2 min). Parallel development workflows. Zero-config, self-contained plugin following Claude Code best practices. 87% cost reduction with Haiku agents. Stop memorizing commands—just describe what you want!",
+  "version": "0.5.3",
+  "description": "Natural language to slash command mapping with zero-context auto-discovery (SessionStart hook: 0 tokens!). Quick research (/ss:research: 3 parallel agents, 1-2 min). Parallel development workflows. Skills + Hooks for intelligent command suggestions. Self-contained plugin following Claude Code best practices. 87% cost reduction with Haiku agents. Stop memorizing commands—just describe what you want!",
   "author": {
     "name": "Shakes Dlamini",
     "email": "shakestzd@gmail.com",
