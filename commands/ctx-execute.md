@@ -111,7 +111,7 @@ fi
 if command -v yq &> /dev/null; then
   TASK_IDS=$(yq '.tasks[].id' "$PLAN_FILE")
 else
-  TASK_IDS=$(grep -A 100 "^tasks:" "$PLAN_FILE" | grep "^\s*id:" | sed 's/.*id:\s*"\?\([^"]*\)"\?.*/\1/')
+  TASK_IDS=$(grep -A 100 "^tasks:" "$PLAN_FILE" | grep "  - id:" | sed 's/.*id: *"\([^"]*\)".*/\1/')
 fi
 
 echo "Creating worktrees for $(echo "$TASK_IDS" | wc -l | tr -d ' ') tasks..."
