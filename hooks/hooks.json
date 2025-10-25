@@ -31,6 +31,32 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ${CLAUDE_PLUGIN_ROOT}/hooks/tool_router.py",
+            "timeout": 2000,
+            "description": "Intelligent tool routing for cost optimization"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ${CLAUDE_PLUGIN_ROOT}/hooks/tool_cost_tracker.py",
+            "timeout": 2000,
+            "description": "Track tool costs and optimization opportunities"
+          }
+        ]
+      }
     ]
   }
 }
