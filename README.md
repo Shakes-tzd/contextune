@@ -407,25 +407,37 @@ User prompt: "analyze my code please"
 
 Contextune now writes detection data that can be displayed in Claude Code's status line, giving you instant visual feedback without consuming context tokens.
 
-**Setup:**
+**Quick Setup (2 minutes):**
 
-Add this to your Claude Code statusline configuration:
+1. **Find the statusline script path:**
+   ```bash
+   echo "$HOME/.claude/plugins/contextune/statusline.sh"
+   ```
 
-```json
-{
-  "statusline": {
-    "right": [
-      {"type": "command", "command": "/path/to/contextune/statusline.sh"}
-    ]
-  }
-}
-```
+2. **Add to your Claude Code statusline config** (`~/.claude/settings.json`):
+   ```json
+   {
+     "statusline": {
+       "right": [
+         {"type": "command", "command": "/Users/yourname/.claude/plugins/contextune/statusline.sh"}
+       ]
+     }
+   }
+   ```
+
+3. **Or use the automated setup:**
+   ```bash
+   /ctx:configure
+   ```
+   This command guides you through the setup process.
 
 **What you'll see:**
 
 - `🎯 /sc:analyze (85% via keyword)` - Command detected
 - `🎯 Contextune: Ready` - No active detection
 - Detection updates in real-time as you type
+
+**Tip:** Run `/ctx:configure` for guided setup with automatic path detection
 
 **How it works:**
 

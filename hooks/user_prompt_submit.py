@@ -149,22 +149,85 @@ def clear_detection_statusline():
         print(f"DEBUG: Failed to clear statusline file: {e}", file=sys.stderr)
 
 
-def format_suggestion(match: IntentMatch) -> str:
-    """Format detection result as Claude-friendly suggestion."""
+def get_detection_count() -> int:
+    """Get total number of detections for progressive tips."""
+    try:
+        stats_file = Path.home() / ".claude" / "plugins" / "contextune" / "data" / "detection_stats.json"
+        if stats_file.exists():
+            with open(stats_file) as f:
+                stats = json.load(f)
+                return stats.get("total_detections", 0)
+    except:
+        pass
+    return 0
 
-    confidence_label = "HIGH" if match.confidence >= 0.85 else "MEDIUM"
 
-    return f"""
-<contextune_detection>
-🎯 **Command Detected**: `{match.command}`
+def increment_detection_count():
+    """Increment detection counter for progressive disclosure."""
+    try:
+        data_dir = Path.home() / ".claude" / "plugins" / "contextune" / "data"
+        data_dir.mkdir(parents=True, exist_ok=True)
+        stats_file = data_dir / "detection_stats.json"
 
-**Confidence**: {match.confidence:.0%} ({confidence_label})
-**Method**: {match.method}
-**Latency**: {match.latency_ms:.2f}ms
+        stats = {"total_detections": 0, "by_method": {}, "by_command": {}}
+        if stats_file.exists():
+            with open(stats_file) as f:
+                stats = json.load(f)
 
-Would you like me to execute `{match.command}` instead?
-</contextune_detection>
-""".strip()
+        stats["total_detections"] = stats.get("total_detections", 0) + 1
+
+        with open(stats_file, "w") as f:
+            json.dump(stats, f, indent=2)
+    except:
+        pass  # Don't fail hook if stats tracking fails
+
+
+def get_contextual_tip(match: IntentMatch, detection_count: int) -> str:
+    """Generate contextual tip based on usage patterns."""
+
+    # First-time users (1-3 detections)
+    if detection_count <= 3:
+        return "New? Type '/ctx:help' for quick start guide"
+
+    # Early users (4-10 detections) - promote status bar
+    elif detection_count <= 10:
+        if not (Path(".contextune") / "last_detection").exists():
+            return "Tip: Run '/ctx:configure' to enable status bar display"
+        return "Learning fast! Try '/ctx:research <query>' for parallel agents"
+
+    # Experienced users (11-20) - promote advanced features
+    elif detection_count <= 20:
+        if match.method == "keyword":
+            return f"Fast! {match.latency_ms:.2f}ms detection. Check '/ctx:stats' for metrics"
+        return "Experienced user? Try '/ctx:plan' for parallel workflows"
+
+    # Power users (21+) - occasional reminders
+    else:
+        if detection_count % 10 == 0:  # Every 10th detection
+            return f"🎉 {detection_count} detections! Run '/ctx:stats' to see your savings"
+        return None  # No tip for most interactions
+
+
+def format_suggestion(match: IntentMatch, detection_count: int = 0) -> str:
+    """Format detection result with contextual tips."""
+
+    # Base message
+    base_msg = f"💡 Contextune: Suggested `{match.command}` ({match.confidence:.0%} confidence)"
+
+    # Add method for transparency
+    base_msg += f", {match.method}"
+
+    # Add latency if fast (brag about performance)
+    if match.latency_ms < 1.0:
+        base_msg += f", {match.latency_ms:.2f}ms"
+
+    # Get contextual tip
+    tip = get_contextual_tip(match, detection_count)
+
+    if tip:
+        return f"{base_msg}\n💡 {tip}"
+
+    return base_msg
 
 
 def main():
@@ -216,15 +279,25 @@ def main():
         # Write detection for status line
         write_detection_for_statusline(match, prompt)
 
+        # Get current detection count for progressive tips
+        detection_count = get_detection_count()
+
+        # Increment counter
+        increment_detection_count()
+
         # SUGGEST MODE: Add context, let Claude decide
-        print(f"DEBUG: Suggesting command to Claude", file=sys.stderr)
+        print(f"DEBUG: Suggesting command to Claude (detection #{detection_count + 1})", file=sys.stderr)
+
+        # Format feedback with contextual tips
+        feedback_msg = format_suggestion(match, detection_count)
+
         response = {
             "continue": True,
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",
                 "additionalContext": f"\n\n[Contextune detected: `{match.command}` with {match.confidence:.0%} confidence via {match.method}]"
             },
-            "feedback": f"💡 Contextune: Suggested `{match.command}` ({match.confidence:.0%} confidence)"
+            "feedback": feedback_msg
         }
 
         print(f"DEBUG: Response: {json.dumps(response)}", file=sys.stderr)
