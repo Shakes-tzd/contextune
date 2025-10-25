@@ -1,797 +1,73 @@
 {
   "metadata": {
-    "version": "0.5.4",
-    "created": "2025-10-14",
-    "description": "Base command mappings for Contextune intent detection",
-    "total_commands": 26,
+    "version": "0.8.1",
+    "created": "2025-10-25",
+    "description": "Contextune command mappings for intent detection",
+    "total_commands": 6,
     "documentation": "lib/INTENT_MAPPINGS.md"
   },
   "commands": {
-    "/sc:analyze": {
-      "description": "Analyze code quality, security, performance, and architecture",
-      "category": "Analysis & Investigation",
-      "keywords": [
-        "analyze",
-        "review",
-        "audit",
-        "inspect",
-        "examine",
-        "check quality",
-        "investigate",
-        "look at",
-        "assess",
-        "evaluate",
-        "study code"
-      ],
-      "examples": [
-        "analyze this code",
-        "review the codebase for issues",
-        "check code quality and security",
-        "audit for vulnerabilities",
-        "can you look at my code",
-        "inspect the code for problems",
-        "examine this for issues",
-        "assess the code structure",
-        "evaluate the architecture",
-        "what issues are in this code",
-        "review my implementation"
-      ],
-      "related_flags": [
-        "--think",
-        "--think-hard",
-        "--persona-analyzer",
-        "--persona-security",
-        "--persona-architect",
-        "--focus quality",
-        "--focus security",
-        "--focus architecture",
-        "--seq"
-      ],
-      "auto_personas": ["Analyzer", "Architect", "Security"],
-      "wave_enabled": true,
-      "documentation": "docs/COMMANDS.md"
-    },
-    "/sc:test": {
-      "description": "Execute tests, generate test reports, and maintain test coverage",
-      "category": "Testing & Quality",
-      "keywords": [
-        "test",
-        "run tests",
-        "testing",
-        "coverage",
-        "unit test",
-        "integration test",
-        "e2e",
-        "test suite",
-        "check tests"
-      ],
-      "examples": [
-        "run the tests",
-        "execute all unit tests",
-        "test this feature",
-        "check test coverage",
-        "run integration tests",
-        "test the application",
-        "generate test report",
-        "run e2e tests",
-        "verify tests pass",
-        "check if tests work"
-      ],
-      "related_flags": [
-        "--type unit",
-        "--type integration",
-        "--type e2e",
-        "--coverage",
-        "--watch",
-        "--fix",
-        "--persona-qa",
-        "--play"
-      ],
-      "auto_personas": ["QA"],
-      "wave_enabled": false,
-      "documentation": "commands/sc/test.md"
-    },
-    "/sc:troubleshoot": {
-      "description": "Diagnose and resolve issues in code, builds, or system behavior",
-      "category": "Analysis & Investigation",
-      "keywords": [
-        "troubleshoot",
-        "debug",
-        "fix bug",
-        "solve issue",
-        "problem",
-        "error",
-        "not working",
-        "broken",
-        "failing",
-        "diagnose"
-      ],
-      "examples": [
-        "troubleshoot this error",
-        "debug why this isn't working",
-        "fix this bug",
-        "solve this problem",
-        "why is this failing",
-        "something is broken",
-        "help me debug",
-        "diagnose the issue",
-        "find out what's wrong",
-        "this code has an error"
-      ],
-      "related_flags": [
-        "--think",
-        "--seq",
-        "--persona-analyzer",
-        "--persona-qa",
-        "--play"
-      ],
-      "auto_personas": ["Analyzer", "QA"],
-      "wave_enabled": false,
-      "documentation": "commands/sc/troubleshoot.md"
-    },
-    "/sc:implement": {
-      "description": "Feature and code implementation with intelligent persona activation",
-      "category": "Development & Implementation",
-      "keywords": [
-        "implement",
-        "build",
-        "create",
-        "develop",
-        "add feature",
-        "make",
-        "code",
-        "write",
-        "generate"
-      ],
-      "examples": [
-        "implement a login feature",
-        "build a REST API",
-        "create a new component",
-        "develop a user dashboard",
-        "add authentication",
-        "make a contact form",
-        "code a search feature",
-        "write a data service",
-        "generate API endpoints",
-        "implement this feature"
-      ],
-      "related_flags": [
-        "--type component",
-        "--type api",
-        "--type service",
-        "--type feature",
-        "--framework",
-        "--persona-frontend",
-        "--persona-backend",
-        "--magic",
-        "--c7"
-      ],
-      "auto_personas": ["Frontend", "Backend", "Architect", "Security"],
-      "wave_enabled": true,
-      "documentation": "commands/sc/implement.md"
-    },
-    "/sc:explain": {
-      "description": "Provide clear explanations of code, concepts, or system behavior",
-      "category": "Education & Documentation",
-      "keywords": [
-        "explain",
-        "what does",
-        "how does",
-        "clarify",
-        "describe",
-        "tell me about",
-        "understand",
-        "help me understand",
-        "what is"
-      ],
-      "examples": [
-        "explain how this works",
-        "what does this function do",
-        "how does authentication work here",
-        "clarify this code",
-        "describe the architecture",
-        "tell me about this implementation",
-        "help me understand this pattern",
-        "what is this component for",
-        "explain the data flow",
-        "walk me through this code"
-      ],
-      "related_flags": [
-        "--persona-mentor",
-        "--persona-scribe",
-        "--c7",
-        "--seq"
-      ],
-      "auto_personas": ["Mentor", "Scribe"],
-      "wave_enabled": false,
-      "documentation": "commands/sc/explain.md"
-    },
-    "/sc:improve": {
-      "description": "Apply systematic improvements to code quality, performance, and maintainability",
-      "category": "Quality & Enhancement",
-      "keywords": [
-        "improve",
-        "optimize",
-        "enhance",
-        "refactor",
-        "make better",
-        "polish",
-        "upgrade",
-        "modernize",
-        "performance"
-      ],
-      "examples": [
-        "improve this code",
-        "optimize the performance",
-        "enhance the implementation",
-        "refactor this module",
-        "make this code better",
-        "polish the codebase",
-        "upgrade the architecture",
-        "modernize this code",
-        "improve performance",
-        "optimize this function"
-      ],
-      "related_flags": [
-        "--loop",
-        "--iterations",
-        "--focus performance",
-        "--focus quality",
-        "--persona-refactorer",
-        "--persona-performance",
-        "--seq"
-      ],
-      "auto_personas": ["Refactorer", "Performance", "Architect", "QA"],
-      "wave_enabled": true,
-      "documentation": "commands/sc/improve.md"
-    },
-    "/sc:design": {
+    "/ctx:design": {
       "description": "Design system architecture, APIs, and component interfaces",
-      "category": "Planning & Architecture",
+      "category": "Architecture & Design",
       "keywords": [
         "design",
+        "architect",
         "architecture",
-        "plan",
+        "plan architecture",
         "structure",
-        "model",
-        "schema",
         "api design",
         "system design",
-        "blueprint"
+        "component design",
+        "design pattern",
+        "design system"
       ],
       "examples": [
-        "design a new API",
-        "create system architecture",
-        "plan the database schema",
+        "design a caching system",
+        "architect the API",
+        "design the database schema",
+        "plan the system architecture",
         "design component structure",
-        "model the data flow",
-        "design REST endpoints",
-        "architect the solution",
-        "create a blueprint",
-        "design the system",
-        "plan the architecture"
-      ],
-      "related_flags": [
-        "--type architecture",
-        "--type api",
-        "--type component",
-        "--type database",
-        "--format diagram",
-        "--format spec",
-        "--persona-architect",
-        "--persona-frontend",
-        "--magic",
-        "--seq",
-        "--c7"
-      ],
-      "auto_personas": ["Architect", "Frontend"],
-      "wave_enabled": true,
-      "documentation": "commands/sc/design.md"
-    },
-    "/sc:cleanup": {
-      "description": "Clean up code, remove dead code, and optimize project structure",
-      "category": "Quality & Enhancement",
-      "keywords": [
-        "cleanup",
-        "clean up",
-        "remove dead code",
-        "organize",
-        "tidy",
-        "prune",
-        "simplify",
-        "consolidate"
-      ],
-      "examples": [
-        "cleanup the codebase",
-        "remove dead code",
-        "organize the files",
-        "tidy up this module",
-        "prune unused imports",
-        "simplify the structure",
-        "consolidate duplicates",
-        "clean up dead code",
-        "remove unused code",
-        "organize the project"
-      ],
-      "related_flags": [
-        "--persona-refactorer",
-        "--seq"
-      ],
-      "auto_personas": ["Refactorer"],
-      "wave_enabled": false,
-      "documentation": "commands/sc/cleanup.md"
-    },
-    "/sc:git": {
-      "description": "Git operations with intelligent commit messages and branch management",
-      "category": "Version Control",
-      "keywords": [
-        "git",
-        "commit",
-        "push",
-        "pull",
-        "branch",
-        "merge",
-        "checkout",
-        "status",
-        "diff"
-      ],
-      "examples": [
-        "commit these changes",
-        "push to remote",
-        "create a new branch",
-        "merge this branch",
-        "show git status",
-        "git diff the changes",
-        "checkout a branch",
-        "write a commit message",
-        "stage and commit",
-        "push changes to github"
-      ],
-      "related_flags": [
-        "--persona-devops",
-        "--persona-scribe",
-        "--persona-qa",
-        "--seq"
-      ],
-      "auto_personas": ["DevOps", "Scribe", "QA"],
-      "wave_enabled": false,
-      "documentation": "commands/sc/git.md"
-    },
-    "/sc:build": {
-      "description": "Build, compile, and package projects with error handling and optimization",
-      "category": "Development & Deployment",
-      "keywords": [
-        "build",
-        "compile",
-        "package",
-        "bundle",
-        "deploy",
-        "production build",
-        "webpack",
-        "vite"
-      ],
-      "examples": [
-        "build the project",
-        "compile the code",
-        "create production build",
-        "bundle the application",
-        "deploy to production",
-        "run the build",
-        "package the app",
-        "build for production",
-        "compile and build",
-        "create a deployment bundle"
-      ],
-      "related_flags": [
-        "--persona-frontend",
-        "--persona-backend",
-        "--persona-architect",
-        "--persona-scribe",
-        "--magic",
-        "--c7",
-        "--seq"
-      ],
-      "auto_personas": ["Frontend", "Backend", "Architect", "Scribe"],
-      "wave_enabled": true,
-      "documentation": "commands/sc/build.md"
-    },
-    "/sc:task": {
-      "description": "Execute complex tasks with intelligent workflow management and cross-session persistence",
-      "category": "Task & Workflow Management",
-      "keywords": [
-        "task",
-        "workflow",
-        "manage",
-        "track",
-        "organize tasks",
-        "project management",
-        "todo"
-      ],
-      "examples": [
-        "create a task for this",
-        "manage the workflow",
-        "track this work",
-        "organize these tasks",
-        "break down this project",
-        "manage this feature work",
-        "create todo items",
-        "track implementation progress",
-        "organize the development tasks",
-        "manage this complex task"
-      ],
-      "related_flags": [
-        "--persona-architect",
-        "--persona-analyzer",
-        "--seq"
-      ],
-      "auto_personas": ["Architect", "Analyzer"],
-      "wave_enabled": true,
-      "documentation": "commands/sc/task.md"
-    },
-    "/sc:spawn": {
-      "description": "Break complex tasks into coordinated subtasks with efficient parallel execution",
-      "category": "Meta & Orchestration",
-      "keywords": [
-        "spawn",
-        "parallel",
-        "subtasks",
-        "delegate",
-        "distribute",
-        "concurrent",
-        "multi-agent"
-      ],
-      "examples": [
-        "spawn parallel tasks",
-        "break this into subtasks",
-        "delegate to multiple agents",
-        "run tasks in parallel",
-        "distribute the work",
-        "execute concurrently",
-        "spawn sub-agents",
-        "parallelize this work",
-        "run multiple tasks",
-        "coordinate parallel execution"
-      ],
-      "related_flags": [
-        "--mode test-fix",
-        "--mode feature-dev",
-        "--mode refactor",
-        "--mode manual",
-        "--max-parallel",
-        "--auto-merge",
-        "--cleanup-worktrees",
-        "--persona-analyzer",
-        "--persona-architect",
-        "--seq",
-        "--c7"
-      ],
-      "auto_personas": ["Analyzer", "Architect", "Frontend", "Backend", "DevOps"],
-      "wave_enabled": false,
-      "documentation": "commands/sc/spawn.md"
-    },
-    "/sc:document": {
-      "description": "Create focused documentation for specific components or features",
-      "category": "Documentation",
-      "keywords": [
-        "document",
-        "documentation",
-        "write docs",
-        "create readme",
-        "generate docs",
-        "api docs",
-        "comments"
-      ],
-      "examples": [
-        "document this code",
-        "write documentation",
-        "create a README",
-        "generate API docs",
-        "add code comments",
-        "document the API",
-        "write user documentation",
-        "create technical docs",
-        "document this feature",
-        "generate documentation"
-      ],
-      "related_flags": [
-        "--persona-scribe",
-        "--persona-mentor",
-        "--c7",
-        "--seq"
-      ],
-      "auto_personas": ["Scribe", "Mentor"],
-      "wave_enabled": false,
-      "documentation": "commands/sc/document.md"
-    },
-    "/sc:index": {
-      "description": "Generate comprehensive project documentation and knowledge base",
-      "category": "Documentation & Knowledge",
-      "keywords": [
-        "index",
-        "catalog",
-        "inventory",
-        "map",
-        "search",
-        "find",
-        "browse commands"
-      ],
-      "examples": [
-        "index the project",
-        "create a catalog",
-        "generate project inventory",
-        "map the codebase",
-        "search for commands",
-        "find available features",
-        "browse the commands",
-        "show me what commands exist",
-        "index all files",
-        "catalog the project"
-      ],
-      "related_flags": [
-        "--persona-mentor",
-        "--persona-analyzer",
-        "--seq"
-      ],
-      "auto_personas": ["Mentor", "Analyzer"],
-      "wave_enabled": false,
-      "documentation": "commands/sc/index.md"
-    },
-    "/sc:load": {
-      "description": "Load and analyze project context, configurations, and dependencies",
-      "category": "Context & Configuration",
-      "keywords": [
-        "load",
-        "load context",
-        "analyze project",
-        "understand codebase",
-        "project context",
-        "read config"
-      ],
-      "examples": [
-        "load the project context",
-        "analyze the project structure",
-        "understand this codebase",
-        "load configuration",
-        "read project dependencies",
-        "analyze the architecture",
-        "load project files",
-        "understand the project",
-        "read the codebase",
-        "load everything"
-      ],
-      "related_flags": [
-        "--persona-analyzer",
-        "--persona-architect",
-        "--persona-scribe",
-        "--all-mcp"
-      ],
-      "auto_personas": ["Analyzer", "Architect", "Scribe"],
-      "wave_enabled": false,
-      "documentation": "commands/sc/load.md"
-    },
-    "/sc:help": {
-      "description": "Smart, comprehensive help system for Claude Code and SuperClaude",
-      "category": "Meta & Help",
-      "keywords": [
-        "help",
-        "how to",
-        "guide",
-        "tutorial",
-        "documentation",
-        "instructions",
-        "show me how"
-      ],
-      "examples": [
-        "help with this command",
-        "how do I use this",
-        "show me the guide",
-        "what can you do",
-        "how does this work",
-        "give me instructions",
-        "show me how to",
-        "help me understand",
-        "what commands are available",
-        "how to use SuperClaude"
-      ],
-      "related_flags": [
-        "--persona-mentor",
-        "--persona-scribe"
-      ],
-      "auto_personas": ["Mentor", "Scribe"],
-      "wave_enabled": false,
-      "documentation": "commands/sc/help.md"
-    },
-    "/sc:context": {
-      "description": "Inject project-specific context and preferences into current session",
-      "category": "Context & Configuration",
-      "keywords": [
-        "context",
-        "inject context",
-        "preferences",
-        "settings",
-        "configuration",
-        "project settings"
-      ],
-      "examples": [
-        "load project context",
-        "inject preferences",
-        "apply project settings",
-        "use my configuration",
-        "load my preferences",
-        "apply context",
-        "set project context",
-        "inject configuration",
-        "use project defaults",
-        "apply my settings"
+        "create architecture plan",
+        "design the data model",
+        "architect the solution"
       ],
       "related_flags": [],
       "auto_personas": [],
       "wave_enabled": false,
-      "documentation": "commands/sc/context.md"
+      "documentation": "commands/ctx-design.md"
     },
-    "/sc:learn": {
-      "description": "Capture and store new patterns, solutions, and insights for future reference",
-      "category": "Knowledge Management",
+    "/ctx:research": {
+      "description": "Fast research using 3 parallel Haiku agents for technical questions and decision-making",
+      "category": "Research & Investigation",
       "keywords": [
-        "learn",
-        "remember",
-        "save pattern",
-        "store solution",
-        "capture insight",
-        "remember this"
+        "research",
+        "investigate",
+        "find information",
+        "compare",
+        "what's the best",
+        "which library",
+        "which framework",
+        "what should i use",
+        "look into",
+        "evaluate options"
       ],
       "examples": [
-        "learn this pattern",
-        "remember this solution",
-        "save this approach",
-        "store this insight",
-        "capture this pattern",
-        "remember how we solved this",
-        "learn from this",
-        "save this for later",
-        "remember this technique",
-        "capture this solution"
+        "research best React state libraries",
+        "investigate Python async frameworks",
+        "compare REST vs GraphQL",
+        "what's the best database for authentication",
+        "which testing framework should I use",
+        "find information about caching strategies",
+        "evaluate state management options",
+        "compare TypeScript type libraries",
+        "research deployment options",
+        "investigate authentication solutions"
       ],
-      "related_flags": [
-        "--persona-analyzer",
-        "--persona-architect"
-      ],
-      "auto_personas": ["Analyzer", "Architect"],
+      "related_flags": [],
+      "auto_personas": [],
       "wave_enabled": false,
-      "documentation": "commands/sc/learn.md"
-    },
-    "/sc:template": {
-      "description": "Apply or create templates for common development tasks and project structures",
-      "category": "Code Generation",
-      "keywords": [
-        "template",
-        "boilerplate",
-        "scaffold",
-        "generate from template",
-        "apply template",
-        "use template"
-      ],
-      "examples": [
-        "apply this template",
-        "use component template",
-        "generate from template",
-        "create boilerplate",
-        "apply code template",
-        "use the API template",
-        "generate template code",
-        "create from template",
-        "apply boilerplate",
-        "use project template"
-      ],
-      "related_flags": [
-        "--persona-architect",
-        "--persona-frontend",
-        "--persona-backend",
-        "--c7"
-      ],
-      "auto_personas": ["Architect", "Frontend", "Backend"],
-      "wave_enabled": false,
-      "documentation": "commands/sc/template.md"
-    },
-    "/sc:scaffold": {
-      "description": "Generate project structure with your preferences and proven patterns",
-      "category": "Code Generation",
-      "keywords": [
-        "scaffold",
-        "generate project",
-        "create structure",
-        "initialize",
-        "bootstrap",
-        "setup project"
-      ],
-      "examples": [
-        "scaffold a new project",
-        "generate project structure",
-        "create new app",
-        "initialize the project",
-        "bootstrap a React app",
-        "setup new project",
-        "scaffold component structure",
-        "generate app skeleton",
-        "create project files",
-        "initialize codebase"
-      ],
-      "related_flags": [
-        "--persona-architect",
-        "--persona-frontend",
-        "--persona-backend",
-        "--c7",
-        "--magic"
-      ],
-      "auto_personas": ["Architect", "Frontend", "Backend"],
-      "wave_enabled": false,
-      "documentation": "commands/sc/scaffold.md"
-    },
-    "/sc:estimate": {
-      "description": "Provide development estimates for tasks, features, or projects",
-      "category": "Planning & Estimation",
-      "keywords": [
-        "estimate",
-        "how long",
-        "time estimate",
-        "effort",
-        "complexity",
-        "scope"
-      ],
-      "examples": [
-        "estimate this task",
-        "how long will this take",
-        "provide time estimate",
-        "what's the effort",
-        "estimate complexity",
-        "assess the scope",
-        "how much work is this",
-        "estimate development time",
-        "calculate effort",
-        "estimate this feature"
-      ],
-      "related_flags": [
-        "--persona-analyzer",
-        "--persona-architect",
-        "--seq",
-        "--c7"
-      ],
-      "auto_personas": ["Analyzer", "Architect"],
-      "wave_enabled": false,
-      "documentation": "commands/sc/estimate.md"
-    },
-    "/sc:pattern": {
-      "description": "Search and apply previously successful patterns and solutions",
-      "category": "Knowledge Management",
-      "keywords": [
-        "pattern",
-        "apply pattern",
-        "search patterns",
-        "find solution",
-        "use pattern",
-        "design pattern"
-      ],
-      "examples": [
-        "apply this pattern",
-        "search for patterns",
-        "find similar solutions",
-        "use design pattern",
-        "apply best practice",
-        "find pattern for this",
-        "search previous solutions",
-        "apply proven pattern",
-        "use established pattern",
-        "find matching pattern"
-      ],
-      "related_flags": [
-        "--persona-architect",
-        "--persona-analyzer",
-        "--c7",
-        "--seq"
-      ],
-      "auto_personas": ["Architect", "Analyzer"],
-      "wave_enabled": false,
-      "documentation": "commands/sc/pattern.md"
+      "documentation": "commands/ctx-research.md"
     },
     "/ctx:plan": {
       "description": "Document a development plan for parallel execution",
@@ -816,11 +92,8 @@
         "create development plan",
         "plan parallel strategy"
       ],
-      "related_flags": [
-        "--think",
-        "--persona-architect"
-      ],
-      "auto_personas": ["Architect"],
+      "related_flags": [],
+      "auto_personas": [],
       "wave_enabled": false,
       "documentation": "commands/ctx-plan.md"
     },
@@ -849,10 +122,7 @@
         "spawn agents for parallel work",
         "run parallel execution"
       ],
-      "related_flags": [
-        "--max-parallel",
-        "--seq"
-      ],
+      "related_flags": [],
       "auto_personas": [],
       "wave_enabled": true,
       "documentation": "commands/ctx-execute.md"
@@ -904,88 +174,28 @@
         "clean parallel tasks",
         "remove parallel branches"
       ],
-      "related_flags": [
-        "--aggressive",
-        "--dry-run"
-      ],
-      "auto_personas": [],
-      "wave_enabled": false,
-      "documentation": "commands/ctx-cleanup.md"
-    },
-    "/ctx:research": {
-      "description": "Fast research using 3 parallel Haiku agents for technical questions and decision-making",
-      "category": "Research & Investigation",
-      "keywords": [
-        "research",
-        "investigate",
-        "find information",
-        "compare",
-        "what's the best",
-        "which library",
-        "which framework",
-        "what should i use",
-        "look into",
-        "evaluate options"
-      ],
-      "examples": [
-        "research best React state libraries",
-        "investigate Python async frameworks",
-        "compare REST vs GraphQL",
-        "what's the best database for authentication",
-        "which testing framework should I use",
-        "find information about caching strategies",
-        "evaluate state management options",
-        "compare TypeScript type libraries",
-        "research deployment options",
-        "investigate authentication solutions"
-      ],
       "related_flags": [],
       "auto_personas": [],
       "wave_enabled": false,
-      "documentation": "commands/ctx-research.md"
+      "documentation": "commands/ctx-cleanup.md"
     }
   },
-  "aliases": {
-    "analyse": "/sc:analyze",
-    "examine": "/sc:analyze",
-    "review": "/sc:analyze",
-    "debug": "/sc:troubleshoot",
-    "fix": "/sc:troubleshoot",
-    "create": "/sc:implement",
-    "develop": "/sc:implement",
-    "optimize": "/sc:improve",
-    "refactor": "/sc:improve",
-    "enhance": "/sc:improve",
-    "docs": "/sc:document",
-    "readme": "/sc:document",
-    "commit": "/sc:git",
-    "push": "/sc:git",
-    "help": "/sc:help"
-  },
+  "aliases": {},
   "natural_language_patterns": {
     "question_words": ["what", "how", "why", "when", "where", "can you", "could you", "would you"],
-    "imperative_verbs": ["analyze", "review", "test", "build", "create", "fix", "explain", "improve", "design", "document"],
-    "negation_indicators": ["not working", "broken", "failing", "issue", "error", "problem"],
-    "quality_indicators": ["better", "optimize", "improve", "enhance", "refactor", "clean up"],
-    "learning_indicators": ["explain", "what does", "how does", "help me understand", "clarify"],
-    "action_indicators": ["implement", "build", "create", "develop", "add", "make", "generate"]
+    "imperative_verbs": ["design", "research", "plan", "execute", "check", "cleanup"],
+    "action_indicators": ["design", "research", "plan", "execute", "parallelize", "monitor", "cleanup"]
   },
   "context_triggers": {
-    "performance_keywords": ["slow", "performance", "optimize", "speed", "latency", "bottleneck"],
-    "security_keywords": ["security", "vulnerability", "attack", "exploit", "auth", "authentication", "authorization"],
-    "testing_keywords": ["test", "coverage", "unit test", "integration", "e2e", "playwright"],
-    "architecture_keywords": ["design", "architecture", "structure", "pattern", "system", "scalability"],
-    "documentation_keywords": ["document", "docs", "readme", "comments", "explain", "clarify"],
-    "git_keywords": ["commit", "push", "pull", "branch", "merge", "git", "version control"]
+    "architecture_keywords": ["design", "architect", "architecture", "structure", "pattern", "system"],
+    "research_keywords": ["research", "investigate", "compare", "evaluate", "find", "which", "best"],
+    "parallel_keywords": ["parallel", "worktree", "concurrent", "multiple", "spawn", "execute"]
   },
   "confidence_scoring": {
     "exact_keyword_match": 1.0,
     "partial_keyword_match": 0.7,
-    "synonym_match": 0.6,
     "context_match": 0.5,
     "example_similarity": 0.8,
-    "alias_match": 0.9,
-    "multi_keyword_match_bonus": 0.2,
-    "negation_penalty": -0.1
+    "multi_keyword_match_bonus": 0.2
   }
 }

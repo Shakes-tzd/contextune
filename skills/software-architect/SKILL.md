@@ -1,9 +1,9 @@
 ---
-name: sc:architect
+name: ctx:architect
 description: Systematic architecture analysis following Understand → Research → Specify → Decompose → Plan workflow. Use for system design, solution evaluation, build vs buy decisions, and task decomposition. Activate when users say "design", "architect", "break down", "best approach", or "should I build".
 ---
 
-# SC:Architect (Context-Optimized)
+# CTX:Architect - Structured Design Workflow
 
 Senior architect workflow: Understand → Research → Specify → Decompose → Plan
 
@@ -154,13 +154,13 @@ Task E (needs D) ──> Task F (needs E)
 
 ## Integration with Contextune
 
-This skill is invoked automatically when Contextune detects `/sc:design` command.
+This skill is invoked automatically when Contextune detects `/ctx:design` command.
 
 **Workflow:**
-1. User types: "design a global observability system"
-2. Contextune detects: `/sc:design`
-3. Hook augments: "...You can use your sc:architect skill..."
-4. This skill activates → Follows 5-step workflow
-5. Returns comprehensive architecture analysis
+1. User types: "design a caching system"
+2. Contextune detects: `/ctx:design`
+3. Hook augments: "You can use your ctx:architect skill..."
+4. Claude should ask: "I detected this is a design task. Would you like me to use the ctx:architect skill (structured workflow) or proceed directly?"
+5. User chooses, workflow proceeds
 
 **Output:** Structured specifications, researched alternatives, executable plan with dependencies

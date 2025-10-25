@@ -57,82 +57,17 @@ class KeywordMatcher:
 
     @staticmethod
     def _compile_patterns():
-        """Compile regex patterns for all commands (called once)."""
+        """Compile regex patterns for all Contextune commands (called once)."""
         # Define raw patterns for each command
         patterns = {
-            '/sc:analyze': [
-                r'\banalyze\b',
-                r'\breview\b',
-                r'\baudit\b',
-                r'\binspect\b',
-                r'\bexamine\b',
-                r'\bcheck\s+(code|quality)\b',
-                r'\blook\s+at\b.*\b(code|my)\b',
-                r'\bcan\s+you\s+look\b',
-                r'\bassess\b',
-                r'\bevaluate\b',
-                r'\binvestigate\b',
-                r'\bfor\s+issues\b',
-                r'\bfor\s+problems\b',
-                r'\bfind\s+(issues|problems)\b',
-            ],
-            '/sc:test': [
-                r'\btest\b',
-                r'\bcoverage\b',
-                r'\bunit\s+test\b',
-                r'\brun\s+(?:the\s+)?(?:unit\s+)?tests\b',
-                r'\bvalidate\b',
-            ],
-            '/sc:troubleshoot': [
-                r'\bdebug\b',
-                r'\bfix\b',
-                r'\btroubleshoot\b',
-                r'\bbug\b',
-                r'\berror\b',
-                r'\bissue\b(?!s)',  # "issue" but not "issues" alone
-                r'\bfix\s+(this|the|my)\b',
-                r'\bsolve\b',
-                r'\bresolve\b',
-            ],
-            '/sc:implement': [
-                r'\bimplement\b',
-                r'\bcreate\b',
-                r'\bbuild\b',
-                r'\bdevelop\b',
-                r'\badd\s+feature\b',
-            ],
-            '/sc:explain': [
-                r'\bexplain\b',
-                r'\bdescribe\b',
-                r'\bdocument\b',
-                r'\bwhat\s+does\b',
-                r'\bhow\s+does\b',
-            ],
-            '/sc:improve': [
-                r'\bimprove\b',
-                r'\boptimize\b',
-                r'\brefactor\b',
-                r'\benhance\b',
-                r'\bperformance\b',
-            ],
-            '/sc:design': [
+            '/ctx:design': [
                 r'\bdesign\b',
+                r'\barchitect\b',
                 r'\barchitecture\b',
-                r'\bplan\b',
-                r'\bstructure\b',
-            ],
-            '/sc:cleanup': [
-                r'\bcleanup\b',
-                r'\bremove\b',
-                r'\bdelete\b',
-                r'\bclean\s+up\s+code\b',
-            ],
-            '/sc:git': [
-                r'\bcommit\b',
-                r'\bpush\b',
-                r'\bpull\b',
-                r'\bmerge\b',
-                r'\bgit\b',
+                r'\bplan\s+architecture\b',
+                r'\bapi\s+design\b',
+                r'\bsystem\s+design\b',
+                r'\bdesign\s+pattern\b',
             ],
             '/ctx:research': [
                 r'\bresearch\b',
@@ -144,6 +79,32 @@ class KeywordMatcher:
                 r'\bwhat\s+should\s+i\s+use\b',
                 r'\blook\s+into\b',
                 r'\bevaluate\s+options\b',
+            ],
+            '/ctx:plan': [
+                r'\bplan\s+parallel\b',
+                r'\bparallel\s+plan\b',
+                r'\bcreate\s+plan\b',
+                r'\borganize\s+tasks\b',
+                r'\bdevelopment\s+plan\b',
+            ],
+            '/ctx:execute': [
+                r'\bexecute\s+parallel\b',
+                r'\brun\s+parallel\b',
+                r'\bparallelize\b',
+                r'\bwork\s+parallel\b',
+                r'\bspawn\s+agents\b',
+            ],
+            '/ctx:status': [
+                r'\bparallel\s+status\b',
+                r'\bcheck\s+parallel\b',
+                r'\bworktree\s+status\b',
+                r'\bmonitor\s+parallel\b',
+            ],
+            '/ctx:cleanup': [
+                r'\bcleanup\s+parallel\b',
+                r'\bclean\s+worktree\b',
+                r'\bremove\s+worktree\b',
+                r'\bcleanup\s+worktree\b',
             ],
         }
 

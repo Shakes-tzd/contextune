@@ -181,19 +181,8 @@ def increment_detection_count():
 
 # Command action descriptions for directive feedback
 COMMAND_ACTIONS = {
-    # SuperClaude commands
-    "/sc:analyze": "analyze code quality, security & performance",
-    "/sc:test": "run tests with comprehensive reports",
-    "/sc:implement": "implement features with expert guidance",
-    "/sc:improve": "optimize code quality & performance",
-    "/sc:troubleshoot": "diagnose and fix issues",
-    "/sc:explain": "get clear code explanations",
-    "/sc:design": "design system architecture",
-    "/sc:git": "commit with smart messages",
-    "/sc:build": "build and package your project",
-    "/sc:cleanup": "clean up code and remove dead code",
-
     # Contextune commands
+    "/ctx:design": "design system architecture with structured workflow",
     "/ctx:research": "get fast answers using 3 parallel agents",
     "/ctx:plan": "create parallel development plans",
     "/ctx:execute": "run tasks in parallel worktrees",
@@ -202,16 +191,17 @@ COMMAND_ACTIONS = {
     "/ctx:help": "see example-first command guide",
     "/ctx:configure": "enable persistent status bar display",
     "/ctx:stats": "see your time & cost savings",
+    "/ctx:verify": "verify and execute detected command with confirmation",
 }
 
 # Skill mapping for reliable Claude execution
 # Maps slash commands to skill names (resolved from plugin's skills/ directory)
 # Skills are auto-discovered by Claude Code from: contextune/skills/*/SKILL.md
 SKILL_MAPPING = {
-    "/sc:design": "sc:architect",      # Plugin skill: skills/software-architect
-    "/sc:analyze": "sc:analyzer",      # Future: skills/code-analyzer
+    "/ctx:design": "ctx:architect",    # Plugin skill: skills/software-architect
     "/ctx:research": "ctx:researcher", # Plugin skill: skills/researcher
-    "/ctx:plan": "ctx:planner",        # Future: skills/parallel-planner
+    # Note: /ctx:plan and /ctx:execute are commands, not skills
+    # They execute workflows directly rather than providing guidance
 }
 
 def create_skill_augmented_prompt(match: IntentMatch, original_prompt: str) -> str:
