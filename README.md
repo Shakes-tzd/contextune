@@ -401,6 +401,56 @@ User prompt: "analyze my code please"
 - **50-70%**: Fallback match (requires confirmation)
 - **<50%**: No suggestion (pass through)
 
+### 📊 Status Line Integration
+
+**NEW in v0.5.4:** Real-time detection display in your status line!
+
+Contextune now writes detection data that can be displayed in Claude Code's status line, giving you instant visual feedback without consuming context tokens.
+
+**Setup:**
+
+Add this to your Claude Code statusline configuration:
+
+```json
+{
+  "statusline": {
+    "right": [
+      {"type": "command", "command": "/path/to/contextune/statusline.sh"}
+    ]
+  }
+}
+```
+
+**What you'll see:**
+
+- `🎯 /sc:analyze (85% via keyword)` - Command detected
+- `🎯 Contextune: Ready` - No active detection
+- Detection updates in real-time as you type
+
+**How it works:**
+
+```
+UserPromptSubmit Hook
+    ↓
+Detects intent (keyword/model2vec/semantic)
+    ↓
+Writes to .contextune/last_detection
+    ↓
+statusline.sh reads file
+    ↓
+Status line displays: 🎯 /sc:analyze (85% via keyword)
+```
+
+**Benefits:**
+- ✅ Zero context overhead (file-based, not in conversation)
+- ✅ Real-time visibility of what Contextune detected
+- ✅ See detection method and confidence at a glance
+- ✅ Works alongside other status line modules
+
+**Requirements:**
+- Bash shell
+- `jq` (optional, for pretty formatting)
+
 ---
 
 ## Development
@@ -534,6 +584,7 @@ Benchmarked on M1 MacBook Pro:
 - [x] `/ctx:execute` command
 - [x] `/ctx:status` command
 - [x] `/ctx:cleanup` command
+- [x] Status line integration (v0.5.4)
 - [ ] Auto-discovery of all plugin commands
 - [ ] Learning mode (capture corrections)
 - [ ] Custom pattern editor

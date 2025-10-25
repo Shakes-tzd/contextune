@@ -25,6 +25,7 @@ import sys
 import os
 from pathlib import Path
 from typing import Optional, Dict, Any
+from datetime import datetime
 
 # Add lib directory to Python path
 PLUGIN_ROOT = Path(__file__).parent.parent
@@ -109,6 +110,45 @@ def should_process(prompt: str) -> bool:
     return True
 
 
+def write_detection_for_statusline(match: IntentMatch, prompt: str):
+    """Write detection data to file for status line to read."""
+    try:
+        # Create .contextune directory in current working directory
+        contextune_dir = Path(".contextune")
+        contextune_dir.mkdir(exist_ok=True)
+
+        detection_file = contextune_dir / "last_detection"
+
+        # Write detection with timestamp
+        detection_data = {
+            "command": match.command,
+            "confidence": round(match.confidence, 2),
+            "method": match.method,
+            "latency_ms": round(match.latency_ms, 2),
+            "timestamp": datetime.utcnow().isoformat(),
+            "prompt_preview": prompt[:60] + ("..." if len(prompt) > 60 else "")
+        }
+
+        with open(detection_file, "w") as f:
+            json.dump(detection_data, f, indent=2)
+
+        print(f"DEBUG: Wrote detection to {detection_file}", file=sys.stderr)
+    except Exception as e:
+        # Don't fail hook if statusline write fails
+        print(f"DEBUG: Failed to write statusline file: {e}", file=sys.stderr)
+
+
+def clear_detection_statusline():
+    """Clear status line detection (no match found)."""
+    try:
+        detection_file = Path(".contextune/last_detection")
+        if detection_file.exists():
+            detection_file.unlink()
+            print(f"DEBUG: Cleared detection file", file=sys.stderr)
+    except Exception as e:
+        print(f"DEBUG: Failed to clear statusline file: {e}", file=sys.stderr)
+
+
 def format_suggestion(match: IntentMatch) -> str:
     """Format detection result as Claude-friendly suggestion."""
 
@@ -163,6 +203,8 @@ def main():
 
         if match is None or match.confidence < 0.7:
             print(f"DEBUG: No match or low confidence, passing through", file=sys.stderr)
+            # Clear status line detection (no match)
+            clear_detection_statusline()
             # No match or low confidence - pass through
             response = {
                 "continue": True,
@@ -170,6 +212,9 @@ def main():
             }
             print(json.dumps(response))
             return
+
+        # Write detection for status line
+        write_detection_for_statusline(match, prompt)
 
         # SUGGEST MODE: Add context, let Claude decide
         print(f"DEBUG: Suggesting command to Claude", file=sys.stderr)
