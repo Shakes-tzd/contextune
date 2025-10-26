@@ -47,8 +47,8 @@ class KeywordMatcher:
         0.85
     """
 
-    # Command patterns: (command, compiled_regex, pattern_description)
-    COMMAND_PATTERNS: List[Tuple[str, re.Pattern, str]] = []
+    # Command patterns: (command, compiled_regex, pattern_description, confidence)
+    COMMAND_PATTERNS: List[Tuple[str, re.Pattern, str, float]] = []
 
     def __init__(self):
         """Initialize the keyword matcher with compiled regex patterns."""
@@ -74,19 +74,33 @@ class KeywordMatcher:
             for command, config in data.get('commands', {}).items():
                 # Get regex patterns if they exist
                 if 'patterns' in config:
-                    for pattern_str in config['patterns']:
+                    for pattern_entry in config['patterns']:
+                        # Support both [pattern, confidence] and plain string patterns
+                        if isinstance(pattern_entry, list):
+                            pattern_str, confidence = pattern_entry
+                        else:
+                            pattern_str = pattern_entry
+                            confidence = 0.85  # Default confidence
+
                         compiled = re.compile(pattern_str, re.IGNORECASE)
                         KeywordMatcher.COMMAND_PATTERNS.append(
-                            (command, compiled, pattern_str)
+                            (command, compiled, pattern_str, confidence)
                         )
 
             # Load skill patterns (separate section)
             for skill, config in data.get('skills', {}).items():
                 if 'patterns' in config:
-                    for pattern_str in config['patterns']:
+                    for pattern_entry in config['patterns']:
+                        # Support both [pattern, confidence] and plain string patterns
+                        if isinstance(pattern_entry, list):
+                            pattern_str, confidence = pattern_entry
+                        else:
+                            pattern_str = pattern_entry
+                            confidence = 0.85  # Default confidence
+
                         compiled = re.compile(pattern_str, re.IGNORECASE)
                         KeywordMatcher.COMMAND_PATTERNS.append(
-                            (skill, compiled, pattern_str)
+                            (skill, compiled, pattern_str, confidence)
                         )
 
         except (FileNotFoundError, json.JSONDecodeError) as e:
@@ -104,7 +118,7 @@ class KeywordMatcher:
                 for pattern_str in pattern_list:
                     compiled = re.compile(pattern_str, re.IGNORECASE)
                     KeywordMatcher.COMMAND_PATTERNS.append(
-                        (command, compiled, pattern_str)
+                        (command, compiled, pattern_str, 0.85)
                     )
 
     def match(self, text: str) -> Optional[IntentMatch]:
@@ -127,12 +141,12 @@ class KeywordMatcher:
             return None
 
         # Check each pattern until first match
-        for command, pattern, pattern_str in self.COMMAND_PATTERNS:
+        for command, pattern, pattern_str, confidence in self.COMMAND_PATTERNS:
             if pattern.search(text):
                 latency_ms = (time.perf_counter() - start_time) * 1000
                 return IntentMatch(
                     command=command,
-                    confidence=0.85,
+                    confidence=confidence,
                     method="keyword",
                     latency_ms=latency_ms,
                     matched_patterns=[pattern_str]
