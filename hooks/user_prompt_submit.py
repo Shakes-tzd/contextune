@@ -572,17 +572,42 @@ def main():
         # Create augmented prompt with skill suggestion
         augmented_prompt = create_skill_augmented_prompt(match, prompt)
 
-        # Format feedback with Haiku analysis (if available)
-        feedback_msg = format_interactive_suggestion(match, haiku_analysis, detection_count)
+        # Format interactive suggestion with Haiku analysis (if available)
+        interactive_msg = format_interactive_suggestion(match, haiku_analysis, detection_count)
+
+        # Determine the best command to use
+        # If Haiku suggests alternatives and it's not the best match, use the first alternative
+        best_command = match.command
+        if haiku_analysis and not haiku_analysis.get("is_best_match", True):
+            alternatives = haiku_analysis.get("alternatives", [])
+            if alternatives:
+                best_command = alternatives[0]
+                print(f"DEBUG: Haiku suggests using {best_command} instead of {match.command}", file=sys.stderr)
+
+        # Create augmented prompt with the best command (potentially corrected by Haiku)
+        if best_command != match.command:
+            # Use Haiku's suggested command
+            action = COMMAND_ACTIONS.get(best_command, "complete this request")
+            if best_command in SKILL_MAPPING:
+                skill_name = SKILL_MAPPING[best_command]
+                augmented_prompt = f"{prompt}. You can use your {skill_name} skill to help with this task."
+            else:
+                augmented_prompt = f"{prompt}. Please use the {best_command} command to {action}."
+        else:
+            # Use original detection
+            augmented_prompt = create_skill_augmented_prompt(match, prompt)
+
+        # HYBRID MODE: Show detection + auto-execute with better command
+        # Prepend the interactive message to the prompt so Claude relays it to user
+        print(f"DEBUG: Using hybrid mode - show analysis and auto-execute {best_command}", file=sys.stderr)
 
         response = {
             "continue": True,
-            "modifiedPrompt": augmented_prompt,  # KEY: Augmented prompt for reliable execution
+            "modifiedPrompt": f"[Contextune detected your intent and is using {best_command}]\n\n{augmented_prompt}",
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",
-                "additionalContext": f"\n\n[Contextune detected: `{match.command}` with {match.confidence:.0%} confidence via {match.method}]"
-            },
-            "feedback": feedback_msg
+                "additionalContext": f"\n\n{interactive_msg}\n\n[Contextune auto-executing: `{best_command}`]"
+            }
         }
 
         print(f"DEBUG: Response: {json.dumps(response)}", file=sys.stderr)
