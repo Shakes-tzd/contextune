@@ -12,6 +12,34 @@ Contextune is a Claude Code plugin that provides natural language to slash comma
 
 ## Critical Development Rules
 
+### Versioning
+
+**Version Increment Rule:**
+- ALL version changes increment by **0.0.1** (patch level only)
+- Current: 0.8.3 → Next: 0.8.4 → After: 0.8.5
+- NO major/minor bumps (0.9.0, 1.0.0, etc.)
+
+**Files to Update:**
+1. `.claude-plugin/plugin.json` - `version` field
+2. `.claude-plugin/marketplace.json` - `version` field (marketplace and plugin entry)
+3. Update both files in same commit
+
+**Example:**
+```json
+// .claude-plugin/plugin.json
+{
+  "version": "0.8.4"  // Was 0.8.3
+}
+
+// .claude-plugin/marketplace.json
+{
+  "version": "0.8.4",  // Marketplace version
+  "plugins": [{
+    "version": "0.8.4"  // Plugin version
+  }]
+}
+```
+
 ### Package Management - UV Only
 
 **ALWAYS use UV for Python operations:**
