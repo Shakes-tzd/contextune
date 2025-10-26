@@ -15,6 +15,7 @@ Confidence: Fixed at 0.85 for all keyword matches
 """
 
 import re
+import sys
 import time
 from dataclasses import dataclass
 from typing import List, Optional, Dict, Tuple
@@ -87,7 +88,20 @@ class KeywordMatcher:
                             (command, compiled, pattern_str, confidence)
                         )
 
-            # Load skill patterns (separate section)
+                # Also load keywords and convert to simple patterns
+                if 'keywords' in config:
+                    for keyword in config['keywords']:
+                        # Convert keyword to word boundary pattern
+                        # e.g., "design" -> r'\bdesign\b'
+                        pattern_str = r'\b' + re.escape(keyword) + r'\b'
+                        confidence = 0.85  # Default confidence for keywords
+
+                        compiled = re.compile(pattern_str, re.IGNORECASE)
+                        KeywordMatcher.COMMAND_PATTERNS.append(
+                            (command, compiled, keyword, confidence)
+                        )
+
+            # Load skill patterns and keywords (separate section)
             for skill, config in data.get('skills', {}).items():
                 if 'patterns' in config:
                     for pattern_entry in config['patterns']:
@@ -101,6 +115,17 @@ class KeywordMatcher:
                         compiled = re.compile(pattern_str, re.IGNORECASE)
                         KeywordMatcher.COMMAND_PATTERNS.append(
                             (skill, compiled, pattern_str, confidence)
+                        )
+
+                # Also load skill keywords
+                if 'keywords' in config:
+                    for keyword in config['keywords']:
+                        pattern_str = r'\b' + re.escape(keyword) + r'\b'
+                        confidence = 0.85
+
+                        compiled = re.compile(pattern_str, re.IGNORECASE)
+                        KeywordMatcher.COMMAND_PATTERNS.append(
+                            (skill, compiled, keyword, confidence)
                         )
 
         except (FileNotFoundError, json.JSONDecodeError) as e:
