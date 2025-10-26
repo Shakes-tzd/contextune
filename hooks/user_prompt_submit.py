@@ -548,8 +548,17 @@ def main():
         engineer = ClaudeCodeHaikuEngineer()
         haiku_analysis = None
 
-        # Try to get Haiku analysis for better suggestions
-        if engineer.is_available():
+        # Selective triggering: Only run Haiku for low-confidence or fuzzy/semantic matches
+        # High-confidence exact matches (0.95+) are reliable and don't need Haiku validation
+        should_run_haiku = match.confidence < 0.95 or match.method in ['fuzzy', 'semantic']
+
+        if should_run_haiku:
+            print(f"DEBUG: Triggering Haiku analysis (confidence={match.confidence:.2f}, method={match.method})", file=sys.stderr)
+        else:
+            print(f"DEBUG: Skipping Haiku analysis (high-confidence {match.method} match: {match.confidence:.2f})", file=sys.stderr)
+
+        # Try to get Haiku analysis for better suggestions (only if needed)
+        if should_run_haiku and engineer.is_available():
             print(f"DEBUG: Running Haiku analysis...", file=sys.stderr)
             available_commands = load_available_commands()
             haiku_analysis = engineer.analyze_and_enhance(
@@ -563,6 +572,8 @@ def main():
                 print(f"DEBUG: Haiku analysis: {json.dumps(haiku_analysis)}", file=sys.stderr)
             else:
                 print(f"DEBUG: Haiku analysis failed or timed out", file=sys.stderr)
+        elif not should_run_haiku:
+            print(f"DEBUG: Haiku analysis skipped (selective triggering)", file=sys.stderr)
         else:
             print(f"DEBUG: Claude Code CLI not available, skipping Haiku analysis", file=sys.stderr)
 
