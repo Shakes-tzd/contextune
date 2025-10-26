@@ -24,22 +24,20 @@ Hook Protocol:
 """
 
 import json
-import sys
-import os
 import subprocess
+import sys
 from pathlib import Path
-from typing import Optional, Dict, Any, List
-from datetime import datetime
+from typing import Any
 
 # Add lib directory to Python path
 PLUGIN_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PLUGIN_ROOT / "lib"))
 
 # Import matchers (now using RapidFuzz-based keyword matcher v2!)
-from keyword_matcher_v2 import KeywordMatcherV2 as KeywordMatcher, IntentMatch
+from keyword_matcher_v2 import IntentMatch, KeywordMatcherV2 as KeywordMatcher
 from model2vec_matcher import Model2VecMatcher
-from semantic_router_matcher import SemanticRouterMatcher
 from observability_db import ObservabilityDB
+from semantic_router_matcher import SemanticRouterMatcher
 
 
 class ContextuneDetector:
@@ -74,7 +72,7 @@ class ContextuneDetector:
             self._semantic = m if m.is_available() else None
         return self._semantic
 
-    def detect(self, text: str) -> Optional[IntentMatch]:
+    def detect(self, text: str) -> IntentMatch | None:
         """Detect intent using 3-tier cascade."""
 
         # Tier 1: Keyword (always available)
@@ -118,10 +116,7 @@ class ClaudeCodeHaikuEngineer:
         if self._claude_available is None:
             try:
                 result = subprocess.run(
-                    ["claude", "--version"],
-                    capture_output=True,
-                    text=True,
-                    timeout=2
+                    ["claude", "--version"], capture_output=True, text=True, timeout=2
                 )
                 self._claude_available = result.returncode == 0
             except (FileNotFoundError, subprocess.TimeoutExpired):
@@ -134,9 +129,9 @@ class ClaudeCodeHaikuEngineer:
         prompt: str,
         detected_command: str,
         confidence: float,
-        available_commands: List[str],
-        timeout: int = 30
-    ) -> Optional[Dict[str, Any]]:
+        available_commands: list[str],
+        timeout: int = 30,
+    ) -> dict[str, Any] | None:
         """
         Analyze prompt using Claude Code headless mode and suggest enhancements.
 
@@ -182,17 +177,18 @@ Be concise. Focus on actionability."""
             # Call Claude Code headless with Haiku model
             cmd = [
                 "claude",
-                "--model", "claude-haiku-4-5",
-                "-p", analysis_prompt,
-                "--output-format", "json",
-                "--allowedTools", ""  # No tools needed for this analysis
+                "--model",
+                "claude-haiku-4-5",
+                "-p",
+                analysis_prompt,
+                "--output-format",
+                "json",
+                "--allowedTools",
+                "",  # No tools needed for this analysis
             ]
 
             result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=timeout
+                cmd, capture_output=True, text=True, timeout=timeout
             )
 
             if result.returncode != 0:
@@ -235,15 +231,15 @@ def should_process(prompt: str) -> bool:
     """Check if prompt needs intent detection."""
     if not prompt or not prompt.strip():
         return False
-    
+
     # Skip if already a command
     if prompt.strip().startswith("/"):
         return False
-    
+
     # Skip if too short
     if len(prompt.strip().split()) < 3:
         return False
-    
+
     return True
 
 
@@ -256,13 +252,16 @@ def write_detection_for_statusline(match: IntentMatch, prompt: str):
             confidence=match.confidence,
             method=match.method,
             prompt_preview=prompt[:60] + ("..." if len(prompt) > 60 else ""),
-            latency_ms=match.latency_ms
+            latency_ms=match.latency_ms,
         )
 
         # Also log matcher performance
         db.log_matcher_performance(match.method, match.latency_ms, success=True)
 
-        print(f"DEBUG: Wrote detection to observability DB: {match.command} ({match.confidence:.0%} {match.method})", file=sys.stderr)
+        print(
+            f"DEBUG: Wrote detection to observability DB: {match.command} ({match.confidence:.0%} {match.method})",
+            file=sys.stderr,
+        )
     except Exception as e:
         # Don't fail hook if observability write fails
         print(f"DEBUG: Failed to write to observability DB: {e}", file=sys.stderr)
@@ -279,9 +278,12 @@ def clear_detection_statusline():
     try:
         db = ObservabilityDB(".contextune/observability.db")
         db.clear_detection()
-        print(f"DEBUG: Cleared detection from observability DB", file=sys.stderr)
+        print("DEBUG: Cleared detection from observability DB", file=sys.stderr)
     except Exception as e:
-        print(f"DEBUG: Failed to clear detection from observability DB: {e}", file=sys.stderr)
+        print(
+            f"DEBUG: Failed to clear detection from observability DB: {e}",
+            file=sys.stderr,
+        )
 
 
 def get_detection_count() -> int:
@@ -328,7 +330,6 @@ COMMAND_ACTIONS = {
     "/ctx:configure": "enable persistent status bar display",
     "/ctx:stats": "see your time & cost savings",
     "/ctx:verify": "verify and execute detected command with confirmation",
-
     # Skill-only detections (no commands)
     "skill:ctx:performance": "analyze and optimize parallel workflow performance",
     "skill:ctx:parallel-expert": "get guidance on parallelizing tasks effectively",
@@ -341,18 +342,17 @@ COMMAND_ACTIONS = {
 # Skills are auto-discovered by Claude Code from: contextune/skills/*/SKILL.md
 SKILL_MAPPING = {
     # Commands with skills
-    "/ctx:design": "ctx:architect",    # Plugin skill: skills/software-architect
-    "/ctx:research": "ctx:researcher", # Plugin skill: skills/researcher
-
+    "/ctx:design": "ctx:architect",  # Plugin skill: skills/software-architect
+    "/ctx:research": "ctx:researcher",  # Plugin skill: skills/researcher
     # Skills without commands (direct skill suggestions)
     "skill:ctx:performance": "ctx:performance",
     "skill:ctx:parallel-expert": "ctx:parallel-expert",
     "skill:ctx:help": "ctx:help",
     "skill:ctx:worktree": "ctx:worktree",
-
     # Note: /ctx:plan and /ctx:execute are commands, not skills
     # They execute workflows directly rather than providing guidance
 }
+
 
 def create_skill_augmented_prompt(match: IntentMatch, original_prompt: str) -> str:
     """
@@ -402,10 +402,10 @@ def get_contextual_tip(match: IntentMatch, detection_count: int) -> str:
         return None  # No tip for most interactions
 
 
-def load_available_commands() -> List[str]:
+def load_available_commands() -> list[str]:
     """Load list of all available commands for Claude Code."""
     # Return all commands from COMMAND_ACTIONS
-    return [cmd for cmd in COMMAND_ACTIONS.keys() if cmd.startswith("/")]
+    return [cmd for cmd in COMMAND_ACTIONS if cmd.startswith("/")]
 
 
 def format_suggestion(match: IntentMatch, detection_count: int = 0) -> str:
@@ -418,7 +418,9 @@ def format_suggestion(match: IntentMatch, detection_count: int = 0) -> str:
     confidence_pct = int(match.confidence * 100)
 
     # Primary directive message
-    base_msg = f"💡 Type `{match.command}` to {action} ({confidence_pct}% {match.method}"
+    base_msg = (
+        f"💡 Type `{match.command}` to {action} ({confidence_pct}% {match.method}"
+    )
 
     # Add latency if fast (show performance)
     if match.latency_ms < 1.0:
@@ -436,9 +438,7 @@ def format_suggestion(match: IntentMatch, detection_count: int = 0) -> str:
 
 
 def format_interactive_suggestion(
-    match: IntentMatch,
-    analysis: Optional[Dict[str, Any]],
-    detection_count: int = 0
+    match: IntentMatch, analysis: dict[str, Any] | None, detection_count: int = 0
 ) -> str:
     """
     Format interactive suggestion with Haiku analysis.
@@ -467,7 +467,7 @@ def format_interactive_suggestion(
         if not analysis.get("is_best_match", True):
             alternatives = analysis.get("alternatives", [])
             if alternatives:
-                base_msg += f"\n\n💡 Better alternatives:"
+                base_msg += "\n\n💡 Better alternatives:"
                 for alt in alternatives[:3]:
                     alt_action = COMMAND_ACTIONS.get(alt, "execute this command")
                     base_msg += f"\n  • `{alt}` - {alt_action}"
@@ -498,20 +498,19 @@ def main():
         prompt = event.get("prompt", "")
 
         # DEBUG: Log what we received
-        print(f"DEBUG: Contextune hook triggered with prompt: '{prompt}'", file=sys.stderr)
+        print(
+            f"DEBUG: Contextune hook triggered with prompt: '{prompt}'", file=sys.stderr
+        )
 
         # Check if we should process
         if not should_process(prompt):
-            print(f"DEBUG: Skipping prompt (should_process=False)", file=sys.stderr)
+            print("DEBUG: Skipping prompt (should_process=False)", file=sys.stderr)
             # Pass through unchanged
-            response = {
-                "continue": True,
-                "suppressOutput": True
-            }
+            response = {"continue": True, "suppressOutput": True}
             print(json.dumps(response))
             return
 
-        print(f"DEBUG: Processing prompt (should_process=True)", file=sys.stderr)
+        print("DEBUG: Processing prompt (should_process=True)", file=sys.stderr)
 
         # Initialize detector
         detector = ContextuneDetector()
@@ -522,14 +521,13 @@ def main():
         print(f"DEBUG: Detection result: {match}", file=sys.stderr)
 
         if match is None or match.confidence < 0.7:
-            print(f"DEBUG: No match or low confidence, passing through", file=sys.stderr)
+            print(
+                "DEBUG: No match or low confidence, passing through", file=sys.stderr
+            )
             # Clear status line detection (no match)
             clear_detection_statusline()
             # No match or low confidence - pass through
-            response = {
-                "continue": True,
-                "suppressOutput": True
-            }
+            response = {"continue": True, "suppressOutput": True}
             print(json.dumps(response))
             return
 
@@ -542,11 +540,15 @@ def main():
         # Increment counter
         increment_detection_count()
 
-        print(f"DEBUG: Command detected (detection #{detection_count + 1})", file=sys.stderr)
+        print(
+            f"DEBUG: Command detected (detection #{detection_count + 1})",
+            file=sys.stderr,
+        )
 
         # Initialize Haiku engineer for interactive analysis
         engineer = ClaudeCodeHaikuEngineer()
         haiku_analysis = None
+        haiku_latency_ms = 0.0
 
         # Selective triggering: Only run Haiku for low-confidence or fuzzy/semantic matches
         # High-confidence exact matches (0.95+) are reliable and don't need Haiku validation
@@ -561,39 +563,97 @@ def main():
         if should_run_haiku and engineer.is_available():
             print(f"DEBUG: Running Haiku analysis...", file=sys.stderr)
             available_commands = load_available_commands()
+
+            # Track Haiku analysis latency
+            import time
+
+            haiku_start = time.perf_counter()
+
             haiku_analysis = engineer.analyze_and_enhance(
                 prompt=prompt,
                 detected_command=match.command,
                 confidence=match.confidence,
                 available_commands=available_commands,
-                timeout=30
+                timeout=30,
             )
+
+            haiku_latency_ms = (time.perf_counter() - haiku_start) * 1000
+
             if haiku_analysis:
-                print(f"DEBUG: Haiku analysis: {json.dumps(haiku_analysis)}", file=sys.stderr)
+                print(
+                    f"DEBUG: Haiku analysis: {json.dumps(haiku_analysis)}",
+                    file=sys.stderr,
+                )
             else:
                 print(f"DEBUG: Haiku analysis failed or timed out", file=sys.stderr)
         elif not should_run_haiku:
             print(f"DEBUG: Haiku analysis skipped (selective triggering)", file=sys.stderr)
         else:
-            print(f"DEBUG: Claude Code CLI not available, skipping Haiku analysis", file=sys.stderr)
+            print(
+                "DEBUG: Claude Code CLI not available, skipping Haiku analysis",
+                file=sys.stderr,
+            )
 
         # AUGMENT MODE: Modify prompt with skill/command suggestion for reliability
-        print(f"DEBUG: Augmenting prompt for Claude", file=sys.stderr)
+        print("DEBUG: Augmenting prompt for Claude", file=sys.stderr)
 
         # Create augmented prompt with skill suggestion
         augmented_prompt = create_skill_augmented_prompt(match, prompt)
 
         # Format interactive suggestion with Haiku analysis (if available)
-        interactive_msg = format_interactive_suggestion(match, haiku_analysis, detection_count)
+        interactive_msg = format_interactive_suggestion(
+            match, haiku_analysis, detection_count
+        )
 
         # Determine the best command to use
         # If Haiku suggests alternatives and it's not the best match, use the first alternative
         best_command = match.command
+        correction_accepted = False
+
         if haiku_analysis and not haiku_analysis.get("is_best_match", True):
             alternatives = haiku_analysis.get("alternatives", [])
             if alternatives:
                 best_command = alternatives[0]
-                print(f"DEBUG: Haiku suggests using {best_command} instead of {match.command}", file=sys.stderr)
+                correction_accepted = True
+                print(
+                    f"DEBUG: Haiku suggests using {best_command} instead of {match.command}",
+                    file=sys.stderr,
+                )
+
+        # Log correction to observability DB
+        if haiku_analysis:
+            try:
+                db = ObservabilityDB(".contextune/observability.db")
+
+                # Estimate token counts (rough approximation)
+                # Haiku prompt is ~150 tokens + command list + user prompt
+                prompt_tokens = (
+                    150 + len(prompt.split()) + len(load_available_commands()) * 5
+                )
+                # Response is typically ~50-100 tokens
+                completion_tokens = (
+                    50 + len(str(haiku_analysis.get("suggestion", ""))) // 4
+                )
+
+                db.log_correction(
+                    original_command=match.command,
+                    corrected_command=best_command,
+                    original_confidence=match.confidence,
+                    correction_accepted=correction_accepted,
+                    model_name="haiku-4-5",
+                    reasoning=haiku_analysis.get("suggestion", ""),
+                    prompt_tokens=prompt_tokens,
+                    completion_tokens=completion_tokens,
+                    latency_ms=haiku_latency_ms,
+                    session_id=event.get("session_id", ""),
+                    prompt_preview=prompt[:100],
+                )
+                print(
+                    f"DEBUG: Logged correction to observability DB (accepted={correction_accepted})",
+                    file=sys.stderr,
+                )
+            except Exception as e:
+                print(f"DEBUG: Failed to log correction: {e}", file=sys.stderr)
 
         # Create augmented prompt with the best command (potentially corrected by Haiku)
         if best_command != match.command:
@@ -603,22 +663,27 @@ def main():
                 skill_name = SKILL_MAPPING[best_command]
                 augmented_prompt = f"{prompt}. You can use your {skill_name} skill to help with this task."
             else:
-                augmented_prompt = f"{prompt}. Please use the {best_command} command to {action}."
+                augmented_prompt = (
+                    f"{prompt}. Please use the {best_command} command to {action}."
+                )
         else:
             # Use original detection
             augmented_prompt = create_skill_augmented_prompt(match, prompt)
 
         # HYBRID MODE: Show detection + auto-execute with better command
         # Prepend the interactive message to the prompt so Claude relays it to user
-        print(f"DEBUG: Using hybrid mode - show analysis and auto-execute {best_command}", file=sys.stderr)
+        print(
+            f"DEBUG: Using hybrid mode - show analysis and auto-execute {best_command}",
+            file=sys.stderr,
+        )
 
         response = {
             "continue": True,
             "modifiedPrompt": f"[Contextune detected your intent and is using {best_command}]\n\n{augmented_prompt}",
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",
-                "additionalContext": f"\n\n{interactive_msg}\n\n[Contextune auto-executing: `{best_command}`]"
-            }
+                "additionalContext": f"\n\n{interactive_msg}\n\n[Contextune auto-executing: `{best_command}`]",
+            },
         }
 
         print(f"DEBUG: Response: {json.dumps(response)}", file=sys.stderr)
@@ -627,12 +692,10 @@ def main():
     except Exception as e:
         # Log error but don't block Claude
         import traceback
+
         print(f"Contextune error: {e}", file=sys.stderr)
         print(f"DEBUG: Traceback: {traceback.format_exc()}", file=sys.stderr)
-        response = {
-            "continue": True,
-            "suppressOutput": True
-        }
+        response = {"continue": True, "suppressOutput": True}
         print(json.dumps(response))
 
 

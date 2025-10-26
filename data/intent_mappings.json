@@ -33,6 +33,11 @@
         "command reference",
         "getting started"
       ],
+      "patterns": [
+        ["^\\s*(?:show|what|where|list)\\s+(?:is\\s+)?(?:the\\s+)?help\\b", 0.95],
+        ["\\bhelp\\s+(?:command|reference|guide|menu|documentation|docs)\\b", 0.95],
+        ["(?:^|need|want)\\s+help\\b(?!\\s+(?:me|us|you|with))", 0.85]
+      ],
       "category": "General",
       "file": "commands/ctx-help.md"
     },
