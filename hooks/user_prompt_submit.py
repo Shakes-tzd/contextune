@@ -16,6 +16,8 @@ Detects slash commands from natural language prompts using 3-tier cascade:
 2. Model2Vec embeddings (0.2ms, 30% coverage)
 3. Semantic Router (50ms, 10% coverage)
 
+Uses Claude Code headless mode for interactive prompt analysis and suggestions.
+
 Hook Protocol:
 - Input: JSON via stdin with {"prompt": "...", "session_id": "..."}
 - Output: JSON via stdout with {"continue": true, "feedback": "..."}
@@ -24,8 +26,9 @@ Hook Protocol:
 import json
 import sys
 import os
+import subprocess
 from pathlib import Path
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 from datetime import datetime
 
 # Add lib directory to Python path
@@ -48,52 +51,184 @@ class ContextuneDetector:
     2. Model2VecMatcher (if available)
     3. SemanticRouterMatcher (if API key available)
     """
-    
+
     def __init__(self):
         self._keyword = None
         self._model2vec = None
         self._semantic = None
-        
+
     def _get_keyword(self):
         if self._keyword is None:
             self._keyword = KeywordMatcher()
         return self._keyword
-    
+
     def _get_model2vec(self):
         if self._model2vec is None:
             m = Model2VecMatcher()
             self._model2vec = m if m.is_available() else None
         return self._model2vec
-    
+
     def _get_semantic(self):
         if self._semantic is None:
             m = SemanticRouterMatcher()
             self._semantic = m if m.is_available() else None
         return self._semantic
-    
+
     def detect(self, text: str) -> Optional[IntentMatch]:
         """Detect intent using 3-tier cascade."""
-        
+
         # Tier 1: Keyword (always available)
         result = self._get_keyword().match(text)
         if result:
             return result
-        
+
         # Tier 2: Model2Vec
         m2v = self._get_model2vec()
         if m2v:
             result = m2v.match(text)
             if result:
                 return result
-        
+
         # Tier 3: Semantic Router
         sem = self._get_semantic()
         if sem:
             result = sem.match(text)
             if result:
                 return result
-        
+
         return None
+
+
+class ClaudeCodeHaikuEngineer:
+    """
+    Uses Claude Code headless mode to analyze prompts and provide interactive suggestions.
+
+    Benefits:
+    - No separate API key needed (uses existing Claude Code auth)
+    - Integrated billing with Claude Code
+    - Fast Haiku model for cost optimization
+    - Interactive blocking mode for user feedback
+    """
+
+    def __init__(self):
+        self._claude_available = None
+
+    def is_available(self) -> bool:
+        """Check if Claude Code CLI is available."""
+        if self._claude_available is None:
+            try:
+                result = subprocess.run(
+                    ["claude", "--version"],
+                    capture_output=True,
+                    text=True,
+                    timeout=2
+                )
+                self._claude_available = result.returncode == 0
+            except (FileNotFoundError, subprocess.TimeoutExpired):
+                self._claude_available = False
+
+        return self._claude_available
+
+    def analyze_and_enhance(
+        self,
+        prompt: str,
+        detected_command: str,
+        confidence: float,
+        available_commands: List[str],
+        timeout: int = 30
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Analyze prompt using Claude Code headless mode and suggest enhancements.
+
+        Args:
+            prompt: User's original prompt
+            detected_command: Command detected by cascade
+            confidence: Detection confidence (0-1)
+            available_commands: List of all available commands
+            timeout: Timeout in seconds
+
+        Returns:
+            Dict with analysis results or None if unavailable/failed
+        """
+        if not self.is_available():
+            return None
+
+        # Build analysis prompt for Haiku
+        analysis_prompt = f"""You are a prompt enhancement assistant for Contextune, a Claude Code plugin.
+
+USER'S PROMPT: "{prompt}"
+
+DETECTED COMMAND: {detected_command}
+DETECTION CONFIDENCE: {confidence:.0%}
+
+AVAILABLE ALTERNATIVES:
+{chr(10).join(f"- {cmd}" for cmd in available_commands[:10])}
+
+TASK: Analyze the user's prompt and provide:
+1. Whether the detected command is the best match (true/false)
+2. Alternative commands if better matches exist
+3. A brief, helpful suggestion for the user
+
+RESPONSE FORMAT (JSON):
+{{
+  "is_best_match": true/false,
+  "alternatives": ["command1", "command2"],
+  "suggestion": "Brief suggestion text"
+}}
+
+Be concise. Focus on actionability."""
+
+        try:
+            # Call Claude Code headless with Haiku model
+            cmd = [
+                "claude",
+                "--model", "claude-haiku-4-5",
+                "-p", analysis_prompt,
+                "--output-format", "json",
+                "--allowedTools", ""  # No tools needed for this analysis
+            ]
+
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=timeout
+            )
+
+            if result.returncode != 0:
+                print(f"DEBUG: Claude Code error: {result.stderr}", file=sys.stderr)
+                return None
+
+            # Parse Claude's response - it's nested in a wrapper object
+            claude_response = json.loads(result.stdout)
+
+            # Extract the actual result (may be nested in "result" field)
+            if "result" in claude_response:
+                result_text = claude_response["result"]
+                # Result may contain JSON in markdown code blocks
+                if "```json" in result_text:
+                    # Extract JSON from markdown code block
+                    json_start = result_text.find("```json") + 7
+                    json_end = result_text.find("```", json_start)
+                    result_text = result_text[json_start:json_end].strip()
+
+                # Parse the extracted JSON
+                analysis = json.loads(result_text)
+                return analysis
+            else:
+                # If no "result" field, assume the whole response is the analysis
+                return claude_response
+
+        except subprocess.TimeoutExpired:
+            print(f"DEBUG: Claude Code timeout after {timeout}s", file=sys.stderr)
+            return None
+        except json.JSONDecodeError as e:
+            print(f"DEBUG: Failed to parse Claude response: {e}", file=sys.stderr)
+            print(f"DEBUG: Raw output: {result.stdout[:200]}", file=sys.stderr)
+            return None
+        except Exception as e:
+            print(f"DEBUG: Haiku engineer error: {e}", file=sys.stderr)
+            return None
 
 
 def should_process(prompt: str) -> bool:
@@ -267,6 +402,12 @@ def get_contextual_tip(match: IntentMatch, detection_count: int) -> str:
         return None  # No tip for most interactions
 
 
+def load_available_commands() -> List[str]:
+    """Load list of all available commands for Claude Code."""
+    # Return all commands from COMMAND_ACTIONS
+    return [cmd for cmd in COMMAND_ACTIONS.keys() if cmd.startswith("/")]
+
+
 def format_suggestion(match: IntentMatch, detection_count: int = 0) -> str:
     """Format detection with directive, actionable phrasing."""
 
@@ -290,6 +431,58 @@ def format_suggestion(match: IntentMatch, detection_count: int = 0) -> str:
 
     if tip:
         return f"{base_msg}\n💡 {tip}"
+
+    return base_msg
+
+
+def format_interactive_suggestion(
+    match: IntentMatch,
+    analysis: Optional[Dict[str, Any]],
+    detection_count: int = 0
+) -> str:
+    """
+    Format interactive suggestion with Haiku analysis.
+
+    Args:
+        match: Detected command match
+        analysis: Haiku analysis results (optional)
+        detection_count: Total detections for contextual tips
+
+    Returns:
+        Formatted suggestion message
+    """
+    # Get action description
+    action = COMMAND_ACTIONS.get(match.command, "execute this command")
+    confidence_pct = int(match.confidence * 100)
+
+    # Base detection message
+    base_msg = f"🎯 Detected: `{match.command}` ({confidence_pct}% via {match.method})"
+
+    # Add latency if fast
+    if match.latency_ms < 1.0:
+        base_msg += f"\n⚡ Detection speed: {match.latency_ms:.2f}ms"
+
+    # Add Haiku analysis if available
+    if analysis:
+        if not analysis.get("is_best_match", True):
+            alternatives = analysis.get("alternatives", [])
+            if alternatives:
+                base_msg += f"\n\n💡 Better alternatives:"
+                for alt in alternatives[:3]:
+                    alt_action = COMMAND_ACTIONS.get(alt, "execute this command")
+                    base_msg += f"\n  • `{alt}` - {alt_action}"
+
+        suggestion = analysis.get("suggestion")
+        if suggestion:
+            base_msg += f"\n\n💬 Suggestion: {suggestion}"
+    else:
+        # Fallback without analysis
+        base_msg += f"\n\n📝 Action: Type `{match.command}` to {action}"
+
+    # Get contextual tip
+    tip = get_contextual_tip(match, detection_count)
+    if tip:
+        base_msg += f"\n\n💡 Tip: {tip}"
 
     return base_msg
 
@@ -349,14 +542,38 @@ def main():
         # Increment counter
         increment_detection_count()
 
+        print(f"DEBUG: Command detected (detection #{detection_count + 1})", file=sys.stderr)
+
+        # Initialize Haiku engineer for interactive analysis
+        engineer = ClaudeCodeHaikuEngineer()
+        haiku_analysis = None
+
+        # Try to get Haiku analysis for better suggestions
+        if engineer.is_available():
+            print(f"DEBUG: Running Haiku analysis...", file=sys.stderr)
+            available_commands = load_available_commands()
+            haiku_analysis = engineer.analyze_and_enhance(
+                prompt=prompt,
+                detected_command=match.command,
+                confidence=match.confidence,
+                available_commands=available_commands,
+                timeout=30
+            )
+            if haiku_analysis:
+                print(f"DEBUG: Haiku analysis: {json.dumps(haiku_analysis)}", file=sys.stderr)
+            else:
+                print(f"DEBUG: Haiku analysis failed or timed out", file=sys.stderr)
+        else:
+            print(f"DEBUG: Claude Code CLI not available, skipping Haiku analysis", file=sys.stderr)
+
         # AUGMENT MODE: Modify prompt with skill/command suggestion for reliability
-        print(f"DEBUG: Augmenting prompt for Claude (detection #{detection_count + 1})", file=sys.stderr)
+        print(f"DEBUG: Augmenting prompt for Claude", file=sys.stderr)
 
         # Create augmented prompt with skill suggestion
         augmented_prompt = create_skill_augmented_prompt(match, prompt)
 
-        # Format feedback with contextual tips
-        feedback_msg = format_suggestion(match, detection_count)
+        # Format feedback with Haiku analysis (if available)
+        feedback_msg = format_interactive_suggestion(match, haiku_analysis, detection_count)
 
         response = {
             "continue": True,

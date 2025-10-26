@@ -204,6 +204,27 @@ Optimize now?"
 - **Model2Vec Embeddings** (0.2ms) - 30% of queries
 - **Semantic Router** (50ms) - 10% of queries
 
+### 🤖 **Haiku-Powered Interactive Analysis** (NEW in v0.9.0)
+Uses Claude Code headless mode with Haiku to provide intelligent command suggestions:
+- **Fast analysis**: 1-2 seconds for comprehensive prompt evaluation
+- **Smart alternatives**: Suggests better commands when initial match isn't optimal
+- **No API key needed**: Uses your existing Claude Code authentication
+- **Context-aware**: Understands your workflow and suggests command sequences
+
+**Example:**
+```
+You: "can you help me research the best React state libraries"
+Detected: /ctx:help (100% via fuzzy, 0.64ms)
+
+💡 Better alternatives:
+  • /ctx:research - get fast answers using 3 parallel agents
+  • /ctx:plan - create parallel development plans
+
+💬 Haiku suggests: Use '/ctx:research' to quickly investigate React
+state libraries in parallel (2 min, ~$0.07). If you want a structured
+development plan afterward, follow with '/ctx:plan'.
+```
+
 ### 🎯 **Smart Intent Detection & Auto-Execution**
 Understands natural variations and **automatically executes** the detected command:
 - "analyze my code" → Auto-executes `/sc:analyze`
