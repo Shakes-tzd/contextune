@@ -49,14 +49,24 @@
   background: linear-gradient(90deg, rgba(31, 111, 235, 0.98) 0%, rgba(26, 188, 156, 0.98) 100%);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.md-tabs__list {
+  white-space: nowrap;
+  padding: 0;
+  margin: 0;
 }
 
 .md-tabs__link {
   font-weight: 500;
   font-size: 0.85rem;
-  padding: 1rem 1.5rem;
+  padding: 1rem 1.25rem;
   transition: all 0.2s ease;
   opacity: 0.9;
+  white-space: nowrap;
+  display: inline-block;
 }
 
 .md-tabs__link:hover {
@@ -80,6 +90,36 @@
   font-size: 1.1rem;
   font-weight: 600;
   margin-left: 0.5rem;
+}
+
+/* Fix search bar overlap with GitHub link */
+.md-search {
+  max-width: 300px;
+  margin-right: 1rem;
+}
+
+@media screen and (max-width: 76.1875em) {
+  .md-search {
+    max-width: 250px;
+  }
+}
+
+@media screen and (max-width: 60em) {
+  .md-search {
+    max-width: 200px;
+  }
+}
+
+/* Ensure proper spacing for header items */
+.md-header__inner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.md-header__source {
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 /* ============================================
