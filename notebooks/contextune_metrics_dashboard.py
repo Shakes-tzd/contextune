@@ -5,7 +5,7 @@ app = marimo.App(width="medium")
 
 
 @app.cell
-def __():
+def _():
     import marimo as mo
     import sqlite3
     import pandas as pd
@@ -15,27 +15,29 @@ def __():
 
     sns.set_style("whitegrid")
     plt.rcParams['figure.figsize'] = (12, 6)
-    return datetime, mo, pd, plt, seaborn, sns, sqlite3, timedelta
+    return datetime, mo, pd, plt, sqlite3, timedelta
 
 
 @app.cell
-def __(mo):
-    mo.md("""
+def _(mo):
+    mo.md(
+        """
     # Contextune Detection Quality Dashboard
 
-    **Version 0.8.7 Improvements:**
-    - Context-aware keyword matching (63% → <15% false positives)
-    - Haiku correction logging
-    - Selective Haiku triggering (60% cost reduction)
-    - Fixed KeywordMatcher to load patterns from JSON
+    **Version 0.8.8 Improvements:**
+    - Context-aware /ctx:help filtering (eliminates "help me X" false positives)
+    - Pattern-based action verb detection ("help me", "can you help")
+    - Internal prompt filtering (prevents Haiku feedback loops)
+    - Haiku correction logging and selective triggering
 
     This dashboard visualizes the impact of these improvements on detection quality, cost, and performance.
-    """)
+    """
+    )
     return
 
 
 @app.cell
-def __(mo):
+def _(mo):
     date_range = mo.ui.slider(
         start=1,
         stop=90,
@@ -45,7 +47,7 @@ def __(mo):
     )
 
     refresh_button = mo.ui.refresh(
-        options=["1s", "5s", "10s", "30s", "1m", "off"],
+        options=["1s", "5s", "10s", "30s", "1m"],
         default_interval="10s"
     )
 
@@ -54,7 +56,7 @@ def __(mo):
 
 
 @app.cell
-def __(date_range, datetime, mo, pd, refresh_button, sqlite3, timedelta):
+def _(date_range, datetime, pd, refresh_button, sqlite3, timedelta):
     # Trigger refresh when button changes
     _ = refresh_button
 
@@ -78,17 +80,17 @@ def __(date_range, datetime, mo, pd, refresh_button, sqlite3, timedelta):
         """,
         conn
     )
-    return conn, cutoff_date, db_path, detection_df
+    return conn, cutoff_date, detection_df
 
 
 @app.cell
-def __(mo):
-    mo.md("## 1. False Positive Rate Analysis")
+def _(mo):
+    mo.md("""## 1. False Positive Rate Analysis""")
     return
 
 
 @app.cell
-def __(detection_df, pd, plt):
+def _(detection_df, pd, plt):
     daily_stats = detection_df.copy()
     daily_stats['date'] = pd.to_datetime(daily_stats['date']).dt.date
 
@@ -121,17 +123,17 @@ def __(detection_df, pd, plt):
 
     plt.tight_layout()
     plt.gca()
-    return ax1, ax2, command_dist, daily_help, daily_stats, fig
+    return (daily_help,)
 
 
 @app.cell
-def __(mo):
-    mo.md("## 2. Haiku Correction Effectiveness")
+def _(mo):
+    mo.md("""## 2. Haiku Correction Effectiveness""")
     return
 
 
 @app.cell
-def __(conn, cutoff_date, pd):
+def _(conn, cutoff_date, pd):
     corrections_df = pd.read_sql_query(
         f"""
         SELECT
@@ -153,7 +155,7 @@ def __(conn, cutoff_date, pd):
 
 
 @app.cell
-def __(corrections_df, plt):
+def _(corrections_df, plt):
     if len(corrections_df) > 0:
         fig2, (ax3, ax4) = plt.subplots(1, 2, figsize=(14, 5))
 
@@ -193,17 +195,17 @@ def __(corrections_df, plt):
                 ha='center', va='center', fontsize=14)
         plt.axis('off')
         plt.gca()
-    return acceptance_stats, ax3, ax4, colors, fig2, labels, sizes
-
-
-@app.cell
-def __(mo):
-    mo.md("## 3. Cost Savings Analysis")
     return
 
 
 @app.cell
-def __(corrections_df, detection_df, pd, plt):
+def _(mo):
+    mo.md("""## 3. Cost Savings Analysis""")
+    return
+
+
+@app.cell
+def _(corrections_df, detection_df, pd, plt):
     daily_cost = corrections_df.copy()
     daily_cost['date'] = pd.to_datetime(daily_cost['date']).dt.date
 
@@ -243,29 +245,17 @@ def __(corrections_df, detection_df, pd, plt):
 
     plt.tight_layout()
     plt.gca()
-    return (
-        avg_cost,
-        ax5,
-        ax6,
-        cost_summary,
-        daily_cost,
-        daily_detection_counts,
-        daily_detections,
-        fig3,
-        haiku_calls,
-        haiku_usage_pct,
-        total_cost,
-    )
+    return (cost_summary,)
 
 
 @app.cell
-def __(mo):
-    mo.md("## 4. Summary Statistics")
+def _(mo):
+    mo.md("""## 4. Summary Statistics""")
     return
 
 
 @app.cell
-def __(corrections_df, cost_summary, daily_help, detection_df, mo):
+def _(corrections_df, cost_summary, daily_help, detection_df, mo):
     total_detections_summary = len(detection_df)
     avg_help_rate = daily_help['help_percentage'].mean() if len(daily_help) > 0 else 0
     total_haiku_calls = len(corrections_df)
@@ -292,24 +282,17 @@ def __(corrections_df, cost_summary, daily_help, detection_df, mo):
     - Average cost per call: **${(total_cost_summary / total_haiku_calls if total_haiku_calls > 0 else 0):.4f}**
     - Estimated monthly savings: **${((100 - avg_haiku_usage) / 100 * 0.90 * 30):.2f}** (vs 100% Haiku usage)
     """)
-    return (
-        acceptance_rate,
-        avg_haiku_usage,
-        avg_help_rate,
-        total_cost_summary,
-        total_detections_summary,
-        total_haiku_calls,
-    )
-
-
-@app.cell
-def __(mo):
-    mo.md("## 5. Recent Detection Logs")
     return
 
 
 @app.cell
-def __(detection_df, mo):
+def _(mo):
+    mo.md("""## 5. Recent Detection Logs""")
+    return
+
+
+@app.cell
+def _(detection_df, mo):
     # Show last 50 detections in a table
     recent_logs = detection_df.head(50).copy()
 
@@ -325,12 +308,13 @@ def __(detection_df, mo):
         pagination=True,
         page_size=10
     )
-    return (recent_logs,)
+    return
 
 
 @app.cell
-def __(mo):
-    mo.md("""
+def _(mo):
+    mo.md(
+        """
     ---
 
     ### How to Use This Dashboard
@@ -341,18 +325,20 @@ def __(mo):
     4. **Track cost savings** from selective Haiku triggering
     5. **Review recent logs** in the table to see individual detections
 
-    ### Expected Results (v0.8.7)
+    ### Expected Results (v0.8.8)
 
-    - ✅ /ctx:help detection rate should drop from 63% to <15%
+    - ✅ /ctx:help false positives eliminated ("help me X" patterns filtered)
     - ✅ Haiku usage should stabilize around 40% (60% reduction)
     - ✅ Correction acceptance rate indicates Haiku value
     - ✅ Cost trends show significant savings over time
-    - ✅ Recent logs show context-aware patterns working correctly
+    - ✅ Recent logs show context-aware filtering working correctly
+    - ✅ No internal Haiku prompts in detection history
 
     **Database:** `.contextune/observability.db`
-    **Version:** 0.8.7
+    **Version:** 0.8.8
     **Generated with:** Marimo + Claude Code
-    """)
+    """
+    )
     return
 
 

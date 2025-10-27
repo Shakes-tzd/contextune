@@ -151,11 +151,34 @@ class KeywordMatcherV2:
         except Exception as e:
             print(f"Warning: Could not parse {filepath}: {e}", file=sys.stderr)
 
+    def _is_help_with_action(self, text: str) -> bool:
+        """
+        Check if 'help' appears with action verbs (e.g., 'help me', 'help you').
+
+        These are NOT requests for help documentation, but requests for assistance.
+        Returns True if this is a help-with-action pattern (should NOT match /ctx:help).
+        """
+        # Patterns that indicate "help with action" not "help documentation"
+        action_patterns = [
+            r'\bhelp\s+(me|us|you|them)\b',  # "help me research"
+            r'\b(can|could|would|will)\s+you\s+help\b',  # "can you help"
+            r'\bhelp\s+\w+\s+(with|to|for)\b',  # "help implement with"
+        ]
+
+        text_lower = text.lower()
+        for pattern in action_patterns:
+            if re.search(pattern, text_lower):
+                return True
+        return False
+
     def match(self, text: str) -> Optional[IntentMatch]:
         """
-        Fuzzy match input text against all keywords.
+        Fuzzy match input text against all keywords with context-aware filtering.
 
         Uses RapidFuzz for typo tolerance. Returns best match above threshold.
+
+        Special handling for /ctx:help to avoid false positives when "help"
+        appears with action verbs like "help me research".
 
         Args:
             text: User's natural language query
@@ -180,6 +203,11 @@ class KeywordMatcherV2:
                 # This checks if keyword appears as a substring with fuzzy matching
                 score = fuzz.partial_ratio(keyword.lower(), text) / 100.0
 
+                # Context-aware filtering for /ctx:help
+                if command == '/ctx:help' and self._is_help_with_action(text):
+                    # Skip this match - user wants help WITH something, not help docs
+                    continue
+
                 if score > best_score:
                     best_score = score
                     best_match = command
@@ -200,7 +228,7 @@ class KeywordMatcherV2:
         return None
 
     def match_all(self, text: str, threshold: float = 0.70) -> List[IntentMatch]:
-        """Return all matches above threshold, sorted by confidence."""
+        """Return all matches above threshold with context-aware filtering, sorted by confidence."""
         start_time = time.perf_counter()
 
         if not text or not text.strip():
@@ -210,6 +238,10 @@ class KeywordMatcherV2:
         matches = []
 
         for command, keywords in self.keyword_index.items():
+            # Skip /ctx:help if this is a help-with-action pattern
+            if command == '/ctx:help' and self._is_help_with_action(text):
+                continue
+
             best_keyword_score = 0.0
             best_keyword = ""
 

@@ -236,6 +236,10 @@ def should_process(prompt: str) -> bool:
     if prompt.strip().startswith("/"):
         return False
 
+    # Skip internal Haiku analysis prompts (prevent feedback loop)
+    if prompt.startswith("You are a prompt enhancement assistant"):
+        return False
+
     # Skip if too short
     if len(prompt.strip().split()) < 3:
         return False
