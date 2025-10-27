@@ -537,6 +537,61 @@ sqlite3 ~/.claude/plugins/contextune/data/observability.db \
 - `feature/name`: Feature development
 - `fix/name`: Bug fixes
 
+### CHANGELOG Maintenance (CRITICAL)
+
+**ALWAYS update CHANGELOG.md** - This is how we preserve context across sessions without bloating conversations.
+
+**What belongs in CHANGELOG:**
+- ✅ **Architecture decisions** - Why we chose approach X over Y
+- ✅ **Research findings** - What we discovered (even if not implemented)
+- ✅ **Design discussions** - Key insights that informed implementation
+- ✅ **Implementation work** - What was built, files modified, impact
+- ✅ **Lessons learned** - What worked, what didn't, why
+- ✅ **Technical debt** - Known limitations, future improvements
+- ✅ **Breaking changes** - Anything users need to know
+
+**Format for discussions:**
+```markdown
+### Changed - [Feature Name] (YYYY-MM-DD)
+
+**Context:** Why we needed this / problem we were solving
+
+**Research Conducted:**
+- Key findings from investigation
+- Libraries/tools evaluated
+- Methodologies explored
+
+**Architecture Designed:**
+- High-level approach
+- Components/phases
+- Key decisions (build vs buy, etc.)
+
+**Files Modified:**
+- path/to/file.py - What changed and why
+
+**Impact:**
+- User-facing benefits
+- Developer benefits
+- Performance/cost improvements
+
+**Next Steps:** (if not implemented yet)
+- What needs to happen next
+- Dependencies or blockers
+```
+
+**When to update:**
+- ✅ End of every significant discussion (even if no code written)
+- ✅ After completing implementation work
+- ✅ When making architectural decisions
+- ✅ After research/discovery phase
+- ✅ Before ending a session
+
+**Why this matters:**
+- **Context preservation** - Future sessions can read changelog instead of replaying conversations
+- **Decision rationale** - Document WHY not just WHAT
+- **Knowledge sharing** - Team members understand evolution
+- **Audit trail** - Track what was discussed vs what was implemented
+
 ### Commit Messages
 
 Use conventional commits:

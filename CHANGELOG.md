@@ -7,6 +7,67 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed - Token-Based Effort Estimation (2025-10-27)
+
+**Context:** Time-based estimates (hours/days) are poor metrics in AI-assisted parallel development where agents execute simultaneously. Tokens directly represent computational cost.
+
+**Research Conducted:**
+- Spawned 3 parallel research agents investigating:
+  1. **Web Research:** Existing libraries (Anthropic Token Counting API, tiktoken, TokenCost, PreflightLLMCost)
+  2. **Codebase Analysis:** Found existing token tracking in `observability_db.py` (prompt_tokens, completion_tokens, total_cost_usd)
+  3. **Methodology Analysis:** Complexity multipliers (0.15×, 0.30×, 0.75×) and task-type output ratios (0.05-0.40×)
+
+**Key Finding:** No industry-standard frameworks exist yet (emerging practice), but infrastructure is available and Contextune already tracks actual tokens.
+
+**Architecture Designed:**
+- Used `software-architect` skill to design complete token estimation system
+- 5-phase implementation plan with 14 tasks
+- Estimated effort: 95K tokens ($0.112 Haiku) or 22-32h sequential
+- Created `docs/TOKEN_ESTIMATION_ARCHITECTURE.md` (748 lines)
+
+**Components:**
+1. Token Estimation Engine (context + reasoning + output formulas)
+2. Database Schema Extension (task_estimates + calibration_history tables)
+3. CLI Tools (estimate-tokens, accuracy-report)
+4. Integration Layer (features.yaml scripts, /ctx:plan command)
+5. Validation System (estimated vs actual comparison)
+6. Calibration Engine (auto-adjust formulas based on 30-day rolling average)
+
+**Formula:**
+```
+total_tokens = context + reasoning + output
+
+Where:
+  context = sum(file_tokens) + description_tokens
+  reasoning = context × complexity_multiplier[0.15|0.30|0.75]
+  output = context × output_ratio[0.05-0.40]
+```
+
+**Files Modified:**
+- `CLAUDE.md` - Added comprehensive token estimation section with complexity tiers, cost calculations, best practices
+- `features.yaml` - Converted all 15 features from hours to tokens with breakdown (context/reasoning/output) and costs
+- `scripts/feature-status.py` - Display tokens with thousands separators and Haiku cost
+- `scripts/feature-execute.py` - Show token breakdown table in implementation plans
+
+**Impact:**
+- Total project effort: 315K tokens = $0.366 (Haiku) vs $2.028 (Sonnet)
+- Enables cost-aware decisions (model selection, parallelization)
+- Foundation for real-time cost tracking and calibration
+- Accuracy targets: ±15-20% (Month 1), ±10-15% (Month 3)
+
+**Build vs Buy:**
+- **BUY:** tiktoken (token counting), TokenCost (multi-model pricing) - both free
+- **BUILD:** Output prediction heuristics, DB integration, calibration system
+
+**Next Steps:**
+1. Implement Phase 1 (foundation tasks: formulas, pricing config)
+2. Extend observability_db.py schema (task_estimates table)
+3. Build TokenEstimator class with estimation engine
+4. Integrate with /ctx:plan for automatic task estimation
+5. Collect data and validate accuracy after 2 weeks
+
+**Discussion Note:** Confirmed that GitHub issues are redundant per `copilot-delegate/OLD_VS_NEW_DESIGN.md` - plan.yaml as single source of truth eliminates duplication and 60-80s setup overhead.
+
 ## [0.8.0] - 2025-10-25
 
 ### Changed
