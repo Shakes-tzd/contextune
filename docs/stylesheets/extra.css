@@ -1,0 +1,331 @@
+/* ============================================
+   Contextune - Modern Documentation Styles
+   ============================================ */
+
+:root {
+  /* Brand Colors */
+  --ctx-primary: #5e72e4;
+  --ctx-primary-light: #7889f0;
+  --ctx-primary-dark: #4c5fd4;
+  --ctx-accent: #11cdef;
+  --ctx-success: #2dce89;
+  --ctx-warning: #fb6340;
+  --ctx-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --ctx-gradient-alt: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+
+  /* Spacing */
+  --ctx-space-xs: 0.5rem;
+  --ctx-space-sm: 1rem;
+  --ctx-space-md: 2rem;
+  --ctx-space-lg: 4rem;
+
+  /* Shadows */
+  --ctx-shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+  --ctx-shadow-md: 0 4px 12px rgba(0,0,0,0.15);
+  --ctx-shadow-lg: 0 8px 24px rgba(0,0,0,0.2);
+  --ctx-shadow-glow: 0 0 20px rgba(94, 114, 228, 0.3);
+}
+
+/* ============================================
+   Hero Section - Modern Gradient Header
+   ============================================ */
+
+.md-typeset h1:first-of-type {
+  font-size: 3.5rem;
+  font-weight: 800;
+  background: var(--ctx-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+/* Hero subtitle */
+.md-typeset h1:first-of-type + blockquote {
+  border-left: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--md-default-fg-color--light);
+  background: none;
+}
+
+.md-typeset h1:first-of-type + blockquote p {
+  margin: 0;
+  font-style: normal;
+}
+
+/* Badge container */
+.md-typeset p:has(img[alt*="Version"]) {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 2rem 0;
+}
+
+.md-typeset p:has(img[alt*="Version"]) img {
+  height: 24px;
+  border-radius: 4px;
+  transition: transform 0.2s ease;
+}
+
+.md-typeset p:has(img[alt*="Version"]) img:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ctx-shadow-md);
+}
+
+/* ============================================
+   Feature Cards - Modern Card Design
+   ============================================ */
+
+/* Target the feature list */
+.md-typeset h3 + p:has(strong) {
+  background: linear-gradient(135deg, rgba(94, 114, 228, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border-left: 4px solid var(--ctx-primary);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  box-shadow: var(--ctx-shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.md-typeset h3 + p:has(strong):hover {
+  box-shadow: var(--ctx-shadow-md);
+  transform: translateY(-2px);
+  border-left-color: var(--ctx-accent);
+}
+
+/* Feature headings with icons */
+.md-typeset h3:has(+ p strong) {
+  font-size: 1.5rem;
+  color: var(--ctx-primary);
+  margin-top: 3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Add icon before feature headings */
+.md-typeset h3:has(+ p strong)::before {
+  content: "✨";
+  font-size: 1.75rem;
+  display: inline-block;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* ============================================
+   Code Blocks - Enhanced Styling
+   ============================================ */
+
+.md-typeset pre > code {
+  border-radius: 8px;
+  box-shadow: var(--ctx-shadow-md);
+}
+
+.md-typeset .highlight {
+  margin: 1.5rem 0;
+}
+
+/* ============================================
+   Tables - Modern Design
+   ============================================ */
+
+.md-typeset table:not([class]) {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--ctx-shadow-sm);
+  font-size: 0.9rem;
+}
+
+.md-typeset table:not([class]) thead {
+  background: var(--ctx-gradient);
+}
+
+.md-typeset table:not([class]) th {
+  color: white !important;
+  font-weight: 600;
+  padding: 1rem;
+}
+
+.md-typeset table:not([class]) tr:hover {
+  background-color: rgba(94, 114, 228, 0.05);
+}
+
+.md-typeset table:not([class]) td {
+  padding: 1rem;
+}
+
+/* ============================================
+   Buttons & CTAs
+   ============================================ */
+
+.md-typeset a.md-button {
+  background: var(--ctx-gradient);
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  box-shadow: var(--ctx-shadow-md);
+  transition: all 0.3s ease;
+}
+
+.md-typeset a.md-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ctx-shadow-lg), var(--ctx-shadow-glow);
+}
+
+/* ============================================
+   Navigation - Enhanced Header
+   ============================================ */
+
+.md-header {
+  background: linear-gradient(90deg, rgba(94, 114, 228, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--ctx-shadow-md);
+}
+
+.md-header__title {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================
+   Sidebar - Modern Navigation
+   ============================================ */
+
+.md-nav__item--active > .md-nav__link {
+  color: var(--ctx-primary);
+  font-weight: 600;
+  border-left: 3px solid var(--ctx-primary);
+  padding-left: calc(0.6rem - 3px);
+}
+
+.md-nav__link:hover {
+  color: var(--ctx-accent);
+}
+
+/* ============================================
+   Admonitions - Enhanced Callouts
+   ============================================ */
+
+.md-typeset .admonition {
+  border-radius: 8px;
+  box-shadow: var(--ctx-shadow-sm);
+  border-left-width: 4px;
+}
+
+.md-typeset .admonition.tip {
+  border-left-color: var(--ctx-success);
+}
+
+.md-typeset .admonition.warning {
+  border-left-color: var(--ctx-warning);
+}
+
+.md-typeset .admonition.info {
+  border-left-color: var(--ctx-accent);
+}
+
+/* ============================================
+   ROI Section - Special Styling
+   ============================================ */
+
+.md-typeset h2:contains("ROI") + p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+/* Highlight metrics */
+.md-typeset strong {
+  color: var(--ctx-primary);
+  font-weight: 600;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media screen and (max-width: 76.1875em) {
+  .md-typeset h1:first-of-type {
+    font-size: 2.5rem;
+  }
+
+  .md-typeset h1:first-of-type + blockquote {
+    font-size: 1.2rem;
+  }
+}
+
+@media screen and (max-width: 44.9375em) {
+  .md-typeset h1:first-of-type {
+    font-size: 2rem;
+  }
+
+  .md-typeset h1:first-of-type + blockquote {
+    font-size: 1rem;
+  }
+}
+
+/* ============================================
+   Dark Mode Adjustments
+   ============================================ */
+
+[data-md-color-scheme="slate"] {
+  --ctx-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+[data-md-color-scheme="slate"] .md-header {
+  background: linear-gradient(90deg, rgba(94, 114, 228, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+  backdrop-filter: blur(10px);
+}
+
+[data-md-color-scheme="slate"] .md-typeset h3 + p:has(strong) {
+  background: linear-gradient(135deg, rgba(94, 114, 228, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+}
+
+/* ============================================
+   Custom Animations
+   ============================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.md-content {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* ============================================
+   Stats & Metrics - Visual Enhancement
+   ============================================ */
+
+.md-typeset code {
+  background-color: rgba(94, 114, 228, 0.1);
+  border: 1px solid rgba(94, 114, 228, 0.2);
+  border-radius: 4px;
+  padding: 0.2em 0.4em;
+  font-weight: 600;
+  color: var(--ctx-primary);
+}
+
+/* Highlight percentage improvements */
+.md-typeset :not(pre) > code:contains("%") {
+  background: linear-gradient(135deg, rgba(45, 206, 137, 0.15) 0%, rgba(45, 206, 137, 0.05) 100%);
+  border-color: var(--ctx-success);
+  color: var(--ctx-success);
+  font-weight: 700;
+}
