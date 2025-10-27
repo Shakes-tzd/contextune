@@ -25,8 +25,8 @@ The Parallel Setup Pattern eliminates sequential bottlenecks in multi-agent work
 3. [Performance Analysis](#performance-analysis)
 4. [Implementation Guide](#implementation-guide)
 5. [Architecture Diagrams](#architecture-diagrams)
-6. [Benefits & Trade-offs](#benefits--trade-offs)
-7. [Challenges & Solutions](#challenges--solutions)
+6. [Benefits & Trade-offs](#benefits-trade-offs)
+7. [Challenges & Solutions](#challenges-solutions)
 8. [Best Practices](#best-practices)
 9. [Future Optimizations](#future-optimizations)
 

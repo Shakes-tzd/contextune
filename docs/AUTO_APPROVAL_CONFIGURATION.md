@@ -481,8 +481,7 @@ But still validate:
 
 - [Claude Code IAM Documentation](https://docs.claude.com/en/docs/claude-code/iam.md)
 - [Claude Code Hooks Documentation](https://docs.claude.com/en/docs/claude-code/hooks.md)
-- [Contextune Parallel Execution](commands/contextune-parallel-execute.md)
 
 ---
 
-**Last Updated:** 2025-10-21 (v0.4.0)
+**Last Updated:** 2025-10-26 (v0.8.9)

@@ -289,7 +289,6 @@ Assessment: ✅ Good (25 minutes)
 - [Auto-Approval Configuration](AUTO_APPROVAL_CONFIGURATION.md) - Automation setup
 
 ### Guides
-- [Migration Guide v0.3.0](MIGRATION_GUIDE_v0.3.0.md) - Upgrade from v0.2.0
 - [Research Agents Guide](RESEARCH_AGENTS_GUIDE.md) - Parallel research workflows
 - [Parallel Setup Pattern](PARALLEL_SETUP_PATTERN.md) - Git worktree workflows
 

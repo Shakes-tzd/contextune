@@ -804,7 +804,7 @@ Contextune + Skills = **The most natural way to use Claude Code.**
 **Date:** 2025-10-21
 **License:** MIT
 
-**Questions?** Check [skills/README.md](../skills/README.md) or open a GitHub issue!
+**Questions?** Check [Skills System](SKILLS.md) or open a GitHub issue!
 
 ---
 

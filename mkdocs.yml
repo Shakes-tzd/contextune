@@ -207,7 +207,6 @@ nav:
       - Auto-Approval Configuration: AUTO_APPROVAL_CONFIGURATION.md
 
   - Guides:
-      - Migration Guide v0.3.0: MIGRATION_GUIDE_v0.3.0.md
       - Research Agents Guide: RESEARCH_AGENTS_GUIDE.md
       - Parallel Setup Pattern: PARALLEL_SETUP_PATTERN.md
       - Subagent Instructions: subagent-instructions.md

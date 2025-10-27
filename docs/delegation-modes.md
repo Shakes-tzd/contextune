@@ -254,6 +254,6 @@ A: Yes, Contextune detects any slash command it's trained on.
 ---
 
 **See also:**
-- [Architecture](./architecture.md)
-- [Configuration](./configuration.md)
-- [Usage Guide](./usage.md)
+- [Haiku Agent Architecture](HAIKU_AGENT_ARCHITECTURE.md)
+- [Cost Optimization Guide](COST_OPTIMIZATION_GUIDE.md)
+- [Smart Tool Routing](delegation-modes.md)
