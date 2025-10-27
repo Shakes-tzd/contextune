@@ -1,6 +1,8 @@
-# Contextune 🎵
-
-> **Precision-Tuned Context Engineering for Claude Code**
+<div align="center">
+  <img src="docs/assets/images/logo.svg" alt="Contextune Logo" width="120" height="120">
+  <h1>Contextune</h1>
+  <p><strong>Precision-Tuned Context Engineering for Claude Code</strong></p>
+</div>
 
 Optimize context flow with modular plans (95% fewer tokens), parallel workflows (81% cost reduction), and zero-transformation architecture. Contextune your workflows for peak performance!
 

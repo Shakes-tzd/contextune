@@ -64,7 +64,7 @@
         ]
       }
     ],
-    "CompactStart": [
+    "PreCompact": [
       {
         "matcher": "*",
         "hooks": [

@@ -21,8 +21,8 @@ theme:
     # Light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: indigo
-      accent: indigo
+      primary: blue
+      accent: teal
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
@@ -30,13 +30,15 @@ theme:
     # Dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: indigo
-      accent: indigo
+      primary: blue
+      accent: teal
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
   
   # Logo and favicon
+  logo: assets/images/logo.svg
+  favicon: assets/images/logo.svg
   icon:
     repo: fontawesome/brands/github
   
@@ -208,6 +210,7 @@ nav:
 
   - Guides:
       - Research Agents Guide: RESEARCH_AGENTS_GUIDE.md
+      - Research Agent Template - Web Search: research-agents/WEB_SEARCH_SOLUTIONS.md
       - Parallel Setup Pattern: PARALLEL_SETUP_PATTERN.md
       - Subagent Instructions: subagent-instructions.md
 

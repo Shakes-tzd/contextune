@@ -1268,7 +1268,6 @@ Excellent! Problem solved with minimal additional cost.
 - Main agent provides targeted guidance
 - Haiku applies fix successfully
 - Total cost still significantly lower than full Sonnet execution
-```
 
 ---
 

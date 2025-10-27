@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp"]
+    },
+    "logfire": {
+      "command": "uvx",
+      "args": ["logfire-mcp@latest"],
+      "env": {
+        "LOGFIRE_TOKEN": "${LOGFIRE_TOKEN}",
+        "LOGFIRE_READ_TOKEN": "${LOGFIRE_READ_TOKEN}"
+      }
+    }
+  }
+}

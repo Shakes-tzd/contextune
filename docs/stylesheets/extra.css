@@ -4,14 +4,14 @@
 
 :root {
   /* Brand Colors */
-  --ctx-primary: #5e72e4;
-  --ctx-primary-light: #7889f0;
-  --ctx-primary-dark: #4c5fd4;
-  --ctx-accent: #11cdef;
+  --ctx-primary: #1f6feb;       /* deep blue */
+  --ctx-primary-light: #4ea8de; /* bright blue */
+  --ctx-primary-dark: #143d7a;  /* navy */
+  --ctx-accent: #1abc9c;        /* teal accent */
   --ctx-success: #2dce89;
   --ctx-warning: #fb6340;
-  --ctx-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --ctx-gradient-alt: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --ctx-gradient: linear-gradient(135deg, #1f6feb 0%, #1abc9c 100%);
+  --ctx-gradient-alt: linear-gradient(135deg, #0ba5ec 0%, #23d3a1 100%);
 
   /* Spacing */
   --ctx-space-xs: 0.5rem;
@@ -23,7 +23,7 @@
   --ctx-shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
   --ctx-shadow-md: 0 4px 12px rgba(0,0,0,0.15);
   --ctx-shadow-lg: 0 8px 24px rgba(0,0,0,0.2);
-  --ctx-shadow-glow: 0 0 20px rgba(94, 114, 228, 0.3);
+  --ctx-shadow-glow: 0 0 20px rgba(31, 111, 235, 0.3);
 }
 
 /* ============================================
@@ -83,7 +83,7 @@
 
 /* Target the feature list */
 .md-typeset h3 + p:has(strong) {
-  background: linear-gradient(135deg, rgba(94, 114, 228, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(31, 111, 235, 0.05) 0%, rgba(26, 188, 156, 0.05) 100%);
   border-left: 4px solid var(--ctx-primary);
   padding: 1.5rem;
   border-radius: 8px;
@@ -156,7 +156,7 @@
 }
 
 .md-typeset table:not([class]) tr:hover {
-  background-color: rgba(94, 114, 228, 0.05);
+  background-color: rgba(31, 111, 235, 0.08);
 }
 
 .md-typeset table:not([class]) td {
@@ -187,14 +187,63 @@
    ============================================ */
 
 .md-header {
-  background: linear-gradient(90deg, rgba(94, 114, 228, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
-  backdrop-filter: blur(10px);
-  box-shadow: var(--ctx-shadow-md);
+  background: linear-gradient(120deg, rgba(3, 15, 32, 0.97) 0%, rgba(8, 33, 47, 0.97) 55%, rgba(10, 65, 63, 0.95) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 10px 25px rgba(2, 8, 20, 0.65);
+  backdrop-filter: blur(14px);
+}
+
+.md-header__inner {
+  align-items: center;
+  gap: 1.25rem;
+  padding-block: 0.35rem;
 }
 
 .md-header__title {
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.05em;
+}
+
+.md-header__button {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  padding: 0.4rem;
+  transition: background 0.2s ease, border 0.2s ease;
+}
+
+.md-header__button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.md-search__form {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.05);
+  min-width: 16rem;
+}
+
+.md-search__input {
+  color: #f1f5f9;
+}
+
+.md-search__input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.md-search__icon {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.md-header__source {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding-inline: 0.9rem;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 /* ============================================
@@ -210,6 +259,46 @@
 
 .md-nav__link:hover {
   color: var(--ctx-accent);
+}
+
+/* ============================================
+   Top Tabs - Streamlined Primary Nav
+   ============================================ */
+
+.md-tabs {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding-block: 0.3rem 0.6rem;
+  margin-top: -0.35rem;
+}
+
+.md-tabs__item {
+  margin: 0 0.3rem;
+}
+
+.md-tabs__link {
+  color: rgba(255, 255, 255, 0.72);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: color 0.2s ease, background 0.2s ease, border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.md-tabs__item--active .md-tabs__link {
+  color: #ecfdf5;
+  background: rgba(26, 188, 156, 0.18);
+  border-color: rgba(26, 188, 156, 0.5);
+  box-shadow: 0 12px 28px rgba(2, 8, 20, 0.45);
+}
+
+.md-tabs__link:focus-visible,
+.md-tabs__link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* ============================================
@@ -278,16 +367,16 @@
    ============================================ */
 
 [data-md-color-scheme="slate"] {
-  --ctx-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --ctx-gradient: linear-gradient(135deg, #0a3d62 0%, #13c4a3 100%);
 }
 
 [data-md-color-scheme="slate"] .md-header {
-  background: linear-gradient(90deg, rgba(94, 114, 228, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+  background: linear-gradient(90deg, rgba(20, 61, 122, 0.6) 0%, rgba(19, 196, 163, 0.6) 100%);
   backdrop-filter: blur(10px);
 }
 
 [data-md-color-scheme="slate"] .md-typeset h3 + p:has(strong) {
-  background: linear-gradient(135deg, rgba(94, 114, 228, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(20, 61, 122, 0.15) 0%, rgba(19, 196, 163, 0.15) 100%);
 }
 
 /* ============================================
@@ -314,8 +403,8 @@
    ============================================ */
 
 .md-typeset code {
-  background-color: rgba(94, 114, 228, 0.1);
-  border: 1px solid rgba(94, 114, 228, 0.2);
+  background-color: rgba(31, 111, 235, 0.08);
+  border: 1px solid rgba(31, 111, 235, 0.2);
   border-radius: 4px;
   padding: 0.2em 0.4em;
   font-weight: 600;
