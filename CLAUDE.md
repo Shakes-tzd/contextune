@@ -428,6 +428,106 @@ def benchmark_matcher(matcher, queries, iterations=100):
     print(f"P99: {sorted(latencies)[int(len(latencies)*0.99)]:.2f}ms")
 ```
 
+## Token-Based Effort Estimation
+
+### Why Tokens Instead of Time?
+
+In AI-assisted parallel development with agents, **time is a poor metric** for effort estimation:
+- Parallel agents execute simultaneously (not additive time)
+- LLM response time varies by load/model
+- Human time ≠ computational effort
+- Tokens directly represent computational cost
+
+**Token estimation = True cost of AI-assisted work**
+
+### Token Estimation Formula
+
+```
+Total Tokens = Context + Reasoning + Output
+
+Context Tokens   = Files read + Documentation + Dependencies
+Reasoning Tokens = Analysis + Planning + Decision-making
+Output Tokens    = Code written + Tests + Documentation + Commits
+```
+
+### Complexity Tiers
+
+| Complexity | Token Range | Equivalent Time* | Example Tasks |
+|------------|-------------|------------------|---------------|
+| **Small**  | 5K-15K      | 4-6h sequential  | Update model string, fix bug, add simple feature |
+| **Medium** | 15K-40K     | 8-16h sequential | Add new matcher, integrate tool, refactor module |
+| **Large**  | 40K-80K     | 16-24h sequential| Redesign architecture, add major feature, migration |
+| **Complex**| 80K+        | 24h+ sequential  | Complete system overhaul, new subsystem |
+
+*Equivalent time shown for reference only - actual parallel execution much faster
+
+### Cost Calculations
+
+Using Contextune's model pricing:
+
+```python
+# Haiku 4.5 (execution agent)
+input_cost  = tokens * 0.00025 / 1000  # $0.00025 per 1K input
+output_cost = tokens * 0.00125 / 1000  # $0.00125 per 1K output
+
+# Sonnet 4.5 (planning/complex reasoning)
+input_cost  = tokens * 0.003 / 1000    # $0.003 per 1K input
+output_cost = tokens * 0.015 / 1000    # $0.015 per 1K output
+```
+
+### Estimation Guidelines
+
+**Small tasks (5-15K tokens):**
+- Context: 2-5K (read 1-2 files)
+- Reasoning: 1-3K (simple logic)
+- Output: 2-7K (small code changes)
+- Cost: $0.01-0.02 (Haiku), $0.05-0.15 (Sonnet)
+
+**Medium tasks (15-40K tokens):**
+- Context: 5-15K (read multiple files, docs)
+- Reasoning: 3-10K (planning, design)
+- Output: 7-15K (substantial changes)
+- Cost: $0.02-0.05 (Haiku), $0.15-0.40 (Sonnet)
+
+**Large tasks (40-80K tokens):**
+- Context: 15-30K (codebase exploration)
+- Reasoning: 10-20K (architecture decisions)
+- Output: 15-30K (major implementation)
+- Cost: $0.05-0.10 (Haiku), $0.40-0.80 (Sonnet)
+
+### Tracking Token Usage
+
+Contextune already tracks token usage via:
+- `lib/observability_db.py` - Logs prompt/completion tokens per operation
+- `hooks/tool_cost_tracker.py` - Calculates costs with model pricing
+
+Query actual usage:
+```bash
+# View token usage for recent operations
+sqlite3 ~/.claude/plugins/contextune/data/observability.db \
+  "SELECT operation, prompt_tokens, completion_tokens, total_cost_usd
+   FROM model_corrections ORDER BY timestamp DESC LIMIT 10"
+```
+
+### Best Practices
+
+1. **Estimate tokens during planning**
+   - Break down context/reasoning/output for each task
+   - Use complexity tiers as rough guide
+
+2. **Choose appropriate model**
+   - Haiku for execution (known plan, low thinking needed)
+   - Sonnet for complex reasoning (architecture, design)
+
+3. **Track actual vs estimated**
+   - Compare estimates to observability_db.py logs
+   - Refine estimation over time
+
+4. **Optimize for tokens**
+   - Minimize context (read only necessary files)
+   - Reuse reasoning (build on previous analysis)
+   - Batch output (multiple changes in one prompt)
+
 ## Git Workflow
 
 ### Branch Strategy

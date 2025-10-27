@@ -14,8 +14,14 @@ metadata:
 # Prioritization scoring
 # Priority = (Impact Score / Effort Score) * Risk Multiplier
 # Impact: 1-10 (cost savings, UX, reliability, performance)
-# Effort: 1-10 (hours, complexity, testing)
+# Effort: 1-10 (tokens, complexity, testing)
 # Risk: 0.5 (high), 0.75 (medium), 1.0 (low)
+#
+# Token-Based Estimation:
+# - Small: 5K-15K tokens (simple changes, low complexity)
+# - Medium: 15K-40K tokens (substantial changes, moderate complexity)
+# - Large: 40K-80K tokens (major changes, high complexity)
+# - Complex: 80K+ tokens (architectural changes, very high complexity)
 
 features:
   # ============================================================
@@ -45,10 +51,21 @@ features:
       score: 9  # High impact
 
     effort:
-      estimate_hours: 4
+      estimated_tokens: 10000  # 10K tokens (Small complexity)
+      token_breakdown:
+        context: 3000    # Read user_prompt_submit.py, understand ClaudeCodeHaikuEngineer
+        reasoning: 2000  # Simple model string update decision
+        output: 5000     # Code change, tests, benchmarks, docs
       complexity: "low"
       risk: "low"
       score: 2  # Low effort
+
+      # Cost estimates
+      cost_haiku: "$0.012"     # (3K × $0.00025 + 7K × $0.00125) / 1000
+      cost_sonnet: "$0.045"    # (3K × $0.003 + 7K × $0.015) / 1000
+
+      # Time reference (sequential execution)
+      equivalent_hours: 4
 
     priority_score: 4.5  # 9/2 * 1.0
 
@@ -110,10 +127,21 @@ features:
       score: 7  # Medium-high impact
 
     effort:
-      estimate_hours: 16
+      estimated_tokens: 30000  # 30K tokens (Medium complexity)
+      token_breakdown:
+        context: 8000    # Read hook, config system, additionalContext docs
+        reasoning: 7000  # Design 3-tier confidence system, UX flow
+        output: 15000    # Implementation, tests, documentation
       complexity: "medium"
       risk: "medium"
       score: 6  # Medium effort
+
+      # Cost estimates
+      cost_haiku: "$0.035"     # (8K × $0.00025 + 22K × $0.00125) / 1000
+      cost_sonnet: "$0.195"    # (8K × $0.003 + 22K × $0.015) / 1000
+
+      # Time reference (sequential execution)
+      equivalent_hours: 16
 
     priority_score: 0.875  # 7/6 * 0.75
 
@@ -179,10 +207,21 @@ features:
       score: 8  # High impact
 
     effort:
-      estimate_hours: 12
+      estimated_tokens: 28000  # 28K tokens (Medium complexity)
+      token_breakdown:
+        context: 7000    # Read tool schemas, hook docs, existing patterns
+        reasoning: 6000  # Design optimization rules, safety checks
+        output: 15000    # Implementation, comprehensive tests
       complexity: "medium"
       risk: "medium"
       score: 5  # Medium effort
+
+      # Cost estimates
+      cost_haiku: "$0.032"     # (7K × $0.00025 + 21K × $0.00125) / 1000
+      cost_sonnet: "$0.177"    # (7K × $0.003 + 21K × $0.015) / 1000
+
+      # Time reference (sequential execution)
+      equivalent_hours: 12
 
     priority_score: 1.2  # 8/5 * 0.75
 
@@ -247,10 +286,21 @@ features:
       score: 7
 
     effort:
-      estimate_hours: 8
+      estimated_tokens: 15000  # 15K tokens (Small-Medium complexity)
+      token_breakdown:
+        context: 4000    # Read Explore docs, agent patterns, routing logic
+        reasoning: 3000  # Design detection keywords, routing strategy
+        output: 8000     # Agent creation, hook integration, tests
       complexity: "low"
       risk: "low"
       score: 3
+
+      # Cost estimates
+      cost_haiku: "$0.018"     # (4K × $0.00025 + 11K × $0.00125) / 1000
+      cost_sonnet: "$0.099"    # (4K × $0.003 + 11K × $0.015) / 1000
+
+      # Time reference (sequential execution)
+      equivalent_hours: 8
 
     priority_score: 2.33  # 7/3 * 1.0
 
@@ -311,10 +361,21 @@ features:
       score: 6
 
     effort:
-      estimate_hours: 8
+      estimated_tokens: 18000  # 18K tokens (Small-Medium complexity)
+      token_breakdown:
+        context: 5000    # Read hook, SlashCommand tool docs, safety requirements
+        reasoning: 4000  # Design safe command list, auto-execute logic
+        output: 9000     # Implementation, safety tests, documentation
       complexity: "medium"
       risk: "medium"
       score: 4
+
+      # Cost estimates
+      cost_haiku: "$0.021"     # (5K × $0.00025 + 13K × $0.00125) / 1000
+      cost_sonnet: "$0.117"    # (5K × $0.003 + 13K × $0.015) / 1000
+
+      # Time reference (sequential execution)
+      equivalent_hours: 8
 
     priority_score: 1.125  # 6/4 * 0.75
 
@@ -378,10 +439,21 @@ features:
       score: 5
 
     effort:
-      estimate_hours: 8
+      estimated_tokens: 16000  # 16K tokens (Medium complexity)
+      token_breakdown:
+        context: 4000    # Read observability DB, SessionEnd hook docs
+        reasoning: 3000  # Design summary metrics, tip generation logic
+        output: 9000     # Hook script, DB queries, formatting, tests
       complexity: "low"
       risk: "low"
       score: 3
+
+      # Cost estimates
+      cost_haiku: "$0.019"     # (4K × $0.00025 + 12K × $0.00125) / 1000
+      cost_sonnet: "$0.105"    # (4K × $0.003 + 12K × $0.015) / 1000
+
+      # Time reference (sequential execution)
+      equivalent_hours: 8
 
     priority_score: 1.67  # 5/3 * 1.0
 
@@ -442,10 +514,21 @@ features:
       score: 4
 
     effort:
-      estimate_hours: 24
+      estimated_tokens: 50000  # 50K tokens (Large complexity)
+      token_breakdown:
+        context: 12000   # Read MCP protocol, structured content docs, examples
+        reasoning: 13000 # Design server architecture, tool schema, protocol
+        output: 25000    # Server implementation, tools, tests, integration
       complexity: "high"
       risk: "medium"
       score: 8
+
+      # Cost estimates
+      cost_haiku: "$0.058"     # (12K × $0.00025 + 38K × $0.00125) / 1000
+      cost_sonnet: "$0.321"    # (12K × $0.003 + 38K × $0.015) / 1000
+
+      # Time reference (sequential execution)
+      equivalent_hours: 24
 
     priority_score: 0.375  # 4/8 * 0.75
 
@@ -509,10 +592,21 @@ features:
       score: 3
 
     effort:
-      estimate_hours: 6
+      estimated_tokens: 12000  # 12K tokens (Small complexity)
+      token_breakdown:
+        context: 3000    # Read hook, /doctor integration docs
+        reasoning: 2000  # Design diagnostic checks, error messages
+        output: 7000     # Implementation, tests, documentation
       complexity: "low"
       risk: "low"
       score: 2
+
+      # Cost estimates
+      cost_haiku: "$0.014"     # (3K × $0.00025 + 9K × $0.00125) / 1000
+      cost_sonnet: "$0.078"    # (3K × $0.003 + 9K × $0.015) / 1000
+
+      # Time reference (sequential execution)
+      equivalent_hours: 6
 
     priority_score: 1.5  # 3/2 * 1.0
 
@@ -571,10 +665,21 @@ features:
       score: 4
 
     effort:
-      estimate_hours: 12
+      estimated_tokens: 22000  # 22K tokens (Medium complexity)
+      token_breakdown:
+        context: 6000    # Read plugin validation docs, CI/CD patterns
+        reasoning: 5000  # Design workflow, validation strategy
+        output: 11000    # GitHub Actions, scripts, tests, documentation
       complexity: "medium"
       risk: "low"
       score: 4
+
+      # Cost estimates
+      cost_haiku: "$0.026"     # (6K × $0.00025 + 16K × $0.00125) / 1000
+      cost_sonnet: "$0.144"    # (6K × $0.003 + 16K × $0.015) / 1000
+
+      # Time reference (sequential execution)
+      equivalent_hours: 12
 
     priority_score: 1.0  # 4/4 * 1.0
 
@@ -633,10 +738,21 @@ features:
       score: 2
 
     effort:
-      estimate_hours: 4
+      estimated_tokens: 9000   # 9K tokens (Small complexity)
+      token_breakdown:
+        context: 2000    # Read sandbox docs, tool routing patterns
+        reasoning: 2000  # Design sandbox detection, warning logic
+        output: 5000     # Implementation, tests, documentation
       complexity: "low"
       risk: "low"
       score: 2
+
+      # Cost estimates
+      cost_haiku: "$0.011"     # (2K × $0.00025 + 7K × $0.00125) / 1000
+      cost_sonnet: "$0.061"    # (2K × $0.003 + 7K × $0.015) / 1000
+
+      # Time reference (sequential execution)
+      equivalent_hours: 4
 
     priority_score: 1.0  # 2/2 * 1.0
 
@@ -694,10 +810,21 @@ features:
       score: 6
 
     effort:
-      estimate_hours: 16
+      estimated_tokens: 35000  # 35K tokens (Medium-Large complexity)
+      token_breakdown:
+        context: 9000    # Read agent patterns, model docs, complexity metrics
+        reasoning: 8000  # Design complexity scoring, model selection logic
+        output: 18000    # Scorer implementation, agent updates, tests, tracking
       complexity: "high"
       risk: "medium"
       score: 6
+
+      # Cost estimates
+      cost_haiku: "$0.041"     # (9K × $0.00025 + 26K × $0.00125) / 1000
+      cost_sonnet: "$0.228"    # (9K × $0.003 + 26K × $0.015) / 1000
+
+      # Time reference (sequential execution)
+      equivalent_hours: 16
 
     priority_score: 0.75  # 6/6 * 0.75
 
@@ -757,10 +884,21 @@ features:
       score: 2
 
     effort:
-      estimate_hours: 8
+      estimated_tokens: 14000  # 14K tokens (Small-Medium complexity)
+      token_breakdown:
+        context: 4000    # Read Plan subagent docs, skill patterns
+        reasoning: 3000  # Design skill structure, activation triggers
+        output: 7000     # Skill documentation, examples, tests
       complexity: "low"
       risk: "low"
       score: 3
+
+      # Cost estimates
+      cost_haiku: "$0.017"     # (4K × $0.00025 + 10K × $0.00125) / 1000
+      cost_sonnet: "$0.093"    # (4K × $0.003 + 10K × $0.015) / 1000
+
+      # Time reference (sequential execution)
+      equivalent_hours: 8
 
     priority_score: 0.67  # 2/3 * 1.0
 
@@ -818,10 +956,21 @@ features:
       score: 1
 
     effort:
-      estimate_hours: 8
+      estimated_tokens: 18000  # 18K tokens (Small-Medium complexity)
+      token_breakdown:
+        context: 5000    # Research thinking mode APIs, visual effects
+        reasoning: 4000  # Design integration approach, UX flow
+        output: 9000     # Implementation, tests, documentation
       complexity: "medium"
       risk: "low"
       score: 4
+
+      # Cost estimates
+      cost_haiku: "$0.021"     # (5K × $0.00025 + 13K × $0.00125) / 1000
+      cost_sonnet: "$0.117"    # (5K × $0.003 + 13K × $0.015) / 1000
+
+      # Time reference (sequential execution)
+      equivalent_hours: 8
 
     priority_score: 0.25  # 1/4 * 1.0
 
@@ -875,10 +1024,21 @@ features:
       score: 1
 
     effort:
-      estimate_hours: 16
+      estimated_tokens: 38000  # 38K tokens (Medium-Large complexity)
+      token_breakdown:
+        context: 10000   # Research history APIs, integration patterns
+        reasoning: 9000  # Design integration architecture, determine value
+        output: 19000    # Implementation, tests, documentation
       complexity: "high"
       risk: "medium"
       score: 7
+
+      # Cost estimates
+      cost_haiku: "$0.044"     # (10K × $0.00025 + 28K × $0.00125) / 1000
+      cost_sonnet: "$0.245"    # (10K × $0.003 + 28K × $0.015) / 1000
+
+      # Time reference (sequential execution)
+      equivalent_hours: 16
 
     priority_score: 0.107  # 1/7 * 0.75
 
@@ -931,10 +1091,21 @@ features:
       score: 5
 
     effort:
-      estimate_hours: 0
+      estimated_tokens: 0      # 0 tokens (Already completed)
+      token_breakdown:
+        context: 0       # N/A
+        reasoning: 0     # N/A
+        output: 0        # N/A
       complexity: "N/A"
       risk: "N/A"
       score: 0
+
+      # Cost estimates
+      cost_haiku: "$0.000"
+      cost_sonnet: "$0.000"
+
+      # Time reference
+      equivalent_hours: 0
 
     priority_score: 0  # Already done
 
@@ -1011,9 +1182,15 @@ summary:
     performance_improvement: "+300% (search tasks)"
 
   estimated_total_effort:
-    hours: 147
-    weeks: 4  # At 40 hours/week
-    months: 1  # With parallel execution
+    tokens: 315000  # 315K tokens total
+    cost_haiku: "$0.366"     # If all executed with Haiku
+    cost_sonnet: "$2.028"    # If all executed with Sonnet
+    savings_vs_sonnet: "82%"  # Using Haiku where appropriate
+
+    # Time reference (sequential execution)
+    equivalent_hours: 147
+    equivalent_weeks: 4   # At 40 hours/week sequential
+    equivalent_months: 1  # With parallel execution
 
 # ============================================================
 # EXECUTION PLAN
@@ -1021,35 +1198,47 @@ summary:
 
 execution_plan:
   phase_1_quick_wins:
-    duration: "1-2 weeks"
+    duration: "1-2 weeks (sequential) | 2-3 days (parallel)"
     features: ["feat-001", "feat-002", "feat-006"]
     parallel: true
     blockers: []
-    estimated_hours: 28
+    estimated_tokens: 56000    # 56K tokens total
+    cost_haiku: "$0.066"       # If all executed with Haiku
+    cost_sonnet: "$0.345"      # If all executed with Sonnet
+    equivalent_hours: 28
     estimated_value: "$200/month + 30% UX + 20% engagement"
 
   phase_2_core:
-    duration: "2-4 weeks"
+    duration: "2-4 weeks (sequential) | 3-5 days (parallel after feat-001)"
     features: ["feat-003", "feat-004", "feat-005"]
     parallel: false  # Depends on feat-001
     blockers: ["feat-001"]
-    estimated_hours: 28
+    estimated_tokens: 61000    # 61K tokens total
+    cost_haiku: "$0.071"       # If all executed with Haiku
+    cost_sonnet: "$0.393"      # If all executed with Sonnet
+    equivalent_hours: 28
     estimated_value: "$50/month + 40% reliability + 25% UX"
 
   phase_3_advanced:
-    duration: "1-2 months"
+    duration: "1-2 months (sequential) | 5-7 days (parallel)"
     features: ["feat-007", "feat-009", "feat-011"]
     parallel: true
     blockers: []
-    estimated_hours: 52
+    estimated_tokens: 107000   # 107K tokens total
+    cost_haiku: "$0.125"       # If all executed with Haiku
+    cost_sonnet: "$0.693"      # If all executed with Sonnet
+    equivalent_hours: 52
     estimated_value: "$100/month + power user features"
 
   phase_4_polish:
-    duration: "ongoing"
+    duration: "ongoing | 2-3 days (parallel)"
     features: ["feat-008", "feat-010", "feat-012"]
     parallel: true
     blockers: []
-    estimated_hours: 18
+    estimated_tokens: 35000    # 35K tokens total
+    cost_haiku: "$0.042"       # If all executed with Haiku
+    cost_sonnet: "$0.232"      # If all executed with Sonnet
+    equivalent_hours: 18
     estimated_value: "Quality improvements"
 
 # ============================================================
@@ -1057,42 +1246,45 @@ execution_plan:
 # ============================================================
 
 roadmap: |
-  PHASE 1 (Weeks 1-2): Quick Wins
-  ┌────────────────────────────────────────────┐
-  │ feat-001: Haiku 4.5          (4h)   ████  │
-  │ feat-002: AskUserQuestion   (16h)   ████  │
-  │ feat-006: SessionEnd         (8h)   ████  │
-  │                                            │
-  │ Parallel execution: 3 worktrees            │
-  │ Value: $200/month + 30% UX                 │
-  └────────────────────────────────────────────┘
+  PHASE 1 (2-3 days parallel): Quick Wins
+  ┌──────────────────────────────────────────────────┐
+  │ feat-001: Haiku 4.5         10K tokens   ████    │
+  │ feat-002: AskUserQuestion   30K tokens   ████    │
+  │ feat-006: SessionEnd        16K tokens   ████    │
+  │                                                   │
+  │ Parallel: 3 worktrees | 56K tokens | $0.066      │
+  │ Value: $200/month + 30% UX                        │
+  └──────────────────────────────────────────────────┘
 
-  PHASE 2 (Weeks 3-6): Core Improvements
-  ┌────────────────────────────────────────────┐
-  │ feat-003: PreToolUse        (12h)   ████  │
-  │ feat-004: Explore            (8h)   ████  │
-  │ feat-005: SlashCommand       (8h)   ████  │
-  │                                            │
-  │ Sequential: Depends on feat-001            │
-  │ Value: $50/month + 40% reliability         │
-  └────────────────────────────────────────────┘
+  PHASE 2 (3-5 days after feat-001): Core Improvements
+  ┌──────────────────────────────────────────────────┐
+  │ feat-003: PreToolUse        28K tokens   ████    │
+  │ feat-004: Explore           15K tokens   ████    │
+  │ feat-005: SlashCommand      18K tokens   ████    │
+  │                                                   │
+  │ Sequential: feat-001 → rest | 61K | $0.071       │
+  │ Value: $50/month + 40% reliability                │
+  └──────────────────────────────────────────────────┘
 
-  PHASE 3 (Weeks 7-14): Advanced Features
-  ┌────────────────────────────────────────────┐
-  │ feat-007: MCP Server        (24h)   ████  │
-  │ feat-009: CI/CD             (12h)   ████  │
-  │ feat-011: Dynamic Models    (16h)   ████  │
-  │                                            │
-  │ Parallel execution: 3 worktrees            │
-  │ Value: $100/month + power features         │
-  └────────────────────────────────────────────┘
+  PHASE 3 (5-7 days parallel): Advanced Features
+  ┌──────────────────────────────────────────────────┐
+  │ feat-007: MCP Server        50K tokens   ████    │
+  │ feat-009: CI/CD             22K tokens   ████    │
+  │ feat-011: Dynamic Models    35K tokens   ████    │
+  │                                                   │
+  │ Parallel: 3 worktrees | 107K tokens | $0.125     │
+  │ Value: $100/month + power features                │
+  └──────────────────────────────────────────────────┘
 
-  PHASE 4 (Ongoing): Quality & Polish
-  ┌────────────────────────────────────────────┐
-  │ feat-008: /doctor            (6h)   ████  │
-  │ feat-010: Sandbox            (4h)   ████  │
-  │ feat-012: Plan Subagent      (8h)   ████  │
-  │                                            │
-  │ Parallel execution: 3 worktrees            │
-  │ Value: Quality improvements                │
-  └────────────────────────────────────────────┘
+  PHASE 4 (2-3 days parallel): Quality & Polish
+  ┌──────────────────────────────────────────────────┐
+  │ feat-008: /doctor           12K tokens   ████    │
+  │ feat-010: Sandbox            9K tokens   ████    │
+  │ feat-012: Plan Subagent     14K tokens   ████    │
+  │                                                   │
+  │ Parallel: 3 worktrees | 35K tokens | $0.042      │
+  │ Value: Quality improvements                       │
+  └──────────────────────────────────────────────────┘
+
+  TOTAL: 259K tokens | $0.304 (Haiku) | $1.663 (Sonnet)
+  Time: 12-18 days (parallel) vs 4 weeks (sequential)

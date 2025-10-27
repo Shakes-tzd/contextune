@@ -160,7 +160,8 @@ def show_features(data: dict, args):
         status = feature["status"]
         priority = feature["priority"]
         phase = feature.get("phase", 0)
-        hours = feature["effort"]["estimate_hours"]
+        tokens = feature["effort"]["estimated_tokens"]
+        cost_haiku = feature["effort"].get("cost_haiku", "N/A")
         deps = feature.get("dependencies", [])
 
         # Status color and symbol
@@ -173,10 +174,12 @@ def show_features(data: dict, args):
             style=status_color,
         )
 
-        # Details
+        # Details - Display tokens with cost
+        tokens_display = f"{tokens:,}" if tokens > 0 else "0"
         console.print(
             f"   Status: [{status_color}]{status}[/{status_color}] | "
-            f"Priority: {priority} | Phase: {phase} | Effort: {hours}h"
+            f"Priority: {priority} | Phase: {phase} | "
+            f"Tokens: {tokens_display} ({cost_haiku} Haiku)"
         )
 
         # Dependencies

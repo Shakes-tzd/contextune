@@ -144,7 +144,15 @@ def show_feature_details(feature: dict):
     console.print(f"  Status: [yellow]{feature['status']}[/yellow]")
     console.print(f"  Priority: {feature['priority']}")
     console.print(f"  Phase: {feature.get('phase', 0)}")
-    console.print(f"  Estimated effort: {feature['effort']['estimate_hours']}h")
+
+    # Token-based effort display
+    tokens = feature['effort']['estimated_tokens']
+    cost_haiku = feature['effort'].get('cost_haiku', 'N/A')
+    cost_sonnet = feature['effort'].get('cost_sonnet', 'N/A')
+    tokens_display = f"{tokens:,}" if tokens > 0 else "0"
+
+    console.print(f"  Estimated tokens: [cyan]{tokens_display}[/cyan]")
+    console.print(f"  Cost (Haiku): [green]{cost_haiku}[/green] | Cost (Sonnet): [yellow]{cost_sonnet}[/yellow]")
     console.print(f"  Complexity: {feature['effort']['complexity']}")
     console.print(f"  Risk: {feature['effort']['risk']}")
     console.print()
@@ -154,6 +162,22 @@ def show_implementation_plan(feature: dict):
     """Show implementation plan."""
     console.print("[bold]Implementation Plan:[/bold]")
     console.print()
+
+    # Show token breakdown
+    token_breakdown = feature["effort"].get("token_breakdown", {})
+    if token_breakdown:
+        console.print("[bold]Token Breakdown:[/bold]")
+        context = token_breakdown.get("context", 0)
+        reasoning = token_breakdown.get("reasoning", 0)
+        output = token_breakdown.get("output", 0)
+        total = feature["effort"]["estimated_tokens"]
+
+        console.print(f"  Context:   {context:>6,} tokens  (reading files, docs)")
+        console.print(f"  Reasoning: {reasoning:>6,} tokens  (planning, design)")
+        console.print(f"  Output:    {output:>6,} tokens  (code, tests, docs)")
+        console.print(f"  {'─' * 45}")
+        console.print(f"  Total:     {total:>6,} tokens")
+        console.print()
 
     console.print("[bold]Files to modify:[/bold]")
     for file in feature["implementation"]["files"]:
