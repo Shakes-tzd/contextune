@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Main gradient: Purple to Indigo -->
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Light gradient for highlights -->
+    <linearGradient id="lightGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8b9ded;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#b794d4;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Radial gradient for depth -->
+    <radialGradient id="radialGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#764ba2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#667eea;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+
+  <!-- Background circle (optional, for contrast) -->
+  <!-- <circle cx="128" cy="128" r="120" fill="#f8f9fa" opacity="0.1"/> -->
+
+  <!-- Main "C" shape composed of flowing segments -->
+  <g id="contextune-mark">
+    <!-- Top outer arc -->
+    <path d="M 200 80
+             A 90 90 0 0 1 220 128
+             A 70 70 0 0 0 180 90
+             Z"
+          fill="url(#mainGradient)">
+      <animate attributeName="opacity" values="1;0.85;1" dur="3s" repeatCount="indefinite" />
+    </path>
+
+    <!-- Right outer arc -->
+    <path d="M 220 128
+             A 90 90 0 0 1 200 176
+             A 70 70 0 0 0 220 128
+             Z"
+          fill="url(#lightGradient)">
+      <animate attributeName="opacity" values="0.9;1;0.9" dur="3s" begin="0.5s" repeatCount="indefinite" />
+    </path>
+
+    <!-- Bottom outer arc -->
+    <path d="M 200 176
+             A 90 90 0 0 1 128 200
+             A 70 70 0 0 0 180 166
+             Z"
+          fill="url(#mainGradient)">
+      <animate attributeName="opacity" values="0.85;1;0.85" dur="3s" begin="1s" repeatCount="indefinite" />
+    </path>
+
+    <!-- Center flow circle (creates the "C" opening) -->
+    <circle cx="128" cy="128" r="55" fill="none" stroke="url(#radialGradient)" stroke-width="28"
+            stroke-dasharray="220 120"
+            stroke-dashoffset="-50"
+            stroke-linecap="round">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        from="0 128 128"
+        to="360 128 128"
+        dur="20s"
+        repeatCount="indefinite" />
+    </circle>
+
+    <!-- Inner accent arcs -->
+    <path d="M 90 60
+             A 80 80 0 0 0 36 128
+             A 60 60 0 0 1 80 75
+             Z"
+          fill="url(#lightGradient)"
+          opacity="0.5">
+      <animate attributeName="opacity" values="0.4;0.6;0.4" dur="3s" begin="1.5s" repeatCount="indefinite" />
+    </path>
+  </g>
+</svg>
