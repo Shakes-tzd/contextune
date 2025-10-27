@@ -1,0 +1,14 @@
+{
+  "type": "github-pr",
+  "operation": "create",
+  "prompt": "Create a GitHub pull request with the following details:\n\nTitle: {{TITLE}}\nBody: {{BODY}}\nBase branch: {{BASE}}\nHead branch: {{HEAD}}\n\nUse the gh CLI to create the PR and return the result in JSON format:\n{\n  \"pr_number\": <number>,\n  \"pr_url\": \"<url>\",\n  \"title\": \"<title>\",\n  \"base\": \"<base-branch>\",\n  \"head\": \"<head-branch>\",\n  \"status\": \"created\"\n}",
+  "template_variables": {
+    "TITLE": "PR title here",
+    "BODY": "Detailed description of changes",
+    "BASE": "main",
+    "HEAD": "feature/branch-name"
+  },
+  "example": {
+    "prompt": "Create a GitHub pull request with the following details:\n\nTitle: Add user authentication with OAuth\nBody: This PR implements OAuth authentication using Auth0.\n\nChanges:\n- Add Auth0 configuration\n- Implement login/logout flows\n- Add protected route middleware\n- Update tests\n\nFixes #123\n\nBase branch: main\nHead branch: feature/oauth-auth\n\nUse the gh CLI to create the PR and return the result in JSON format."
+  }
+}

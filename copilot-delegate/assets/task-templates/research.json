@@ -1,0 +1,12 @@
+{
+  "type": "research",
+  "operation": "library-comparison",
+  "prompt": "Research and compare the following options: {{OPTIONS}}\n\nComparison criteria: {{CRITERIA}}\n\nFor each option, provide:\n1. Current version and maintenance status\n2. Key features\n3. Pros and cons\n4. Best use cases\n5. Community adoption (GitHub stars, npm downloads)\n6. Score for each criterion (1-10)\n\nReturn results in JSON format:\n{\n  \"comparison\": [\n    {\n      \"name\": \"<option-name>\",\n      \"version\": \"<version>\",\n      \"features\": [\"<feature1>\", \"<feature2>\"],\n      \"pros\": [\"<pro1>\", \"<pro2>\"],\n      \"cons\": [\"<con1>\", \"<con2>\"],\n      \"stats\": {\n        \"github_stars\": <number>,\n        \"npm_weekly_downloads\": \"<number>\"\n      },\n      \"scores\": {\n        \"<criterion1>\": <1-10>,\n        \"<criterion2>\": <1-10>\n      }\n    }\n  ],\n  \"recommendation\": {\n    \"choice\": \"<recommended-option>\",\n    \"reasoning\": \"<why>\"\n  }\n}",
+  "template_variables": {
+    "OPTIONS": "option1, option2, option3",
+    "CRITERIA": "bundle-size, ease-of-use, performance, ecosystem"
+  },
+  "example": {
+    "prompt": "Research and compare the following React state management libraries: zustand, jotai, recoil\n\nComparison criteria: bundle-size, ease-of-use, performance, ecosystem, TypeScript support\n\nFor each library, provide:\n1. Current version and maintenance status\n2. Key features\n3. Pros and cons\n4. Best use cases\n5. Community adoption (GitHub stars, npm downloads)\n6. Score for each criterion (1-10)\n\nReturn results in JSON format with all requested information."
+  }
+}

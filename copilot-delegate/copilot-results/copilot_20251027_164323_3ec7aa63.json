@@ -1,0 +1,7 @@
+{
+  "strengths": [
+    "Translating natural language into shell commands and git operations with context-aware suggestions",
+    "Explaining complex command-line tools and their output in plain English to reduce learning curves",
+    "Providing interactive command refinement through conversation before execution to prevent mistakes"
+  ]
+}

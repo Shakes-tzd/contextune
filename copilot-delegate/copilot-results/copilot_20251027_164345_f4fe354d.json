@@ -1,0 +1,65 @@
+I'll help you explore React state management resources and examples. Let me search for relevant information in GitHub repositories.
+
+✓ Search code
+   ↪ {"total_count":0,"incomplete_results":false}
+
+✓ Search repositories
+   ↪ {"total_count":671,"incomplete_results":false,"items":[{"id":21737465,"name":...
+
+Let me search more specifically for React state management libraries and resources:
+
+✓ Search repositories
+   ↪ {"total_count":12,"incomplete_results":false,"items":[{"id":135786093,"name":...
+
+✓ Search repositories
+   ↪ {"total_count":24,"incomplete_results":false,"items":[{"id":36535156,"name":"...
+
+Great! Here are the **top React state management libraries and resources** I found:
+
+## **Popular State Management Libraries**
+
+1. **Redux** (61K ⭐) - https://github.com/reduxjs/redux
+   - Predictable global state management
+   - Most mature ecosystem
+
+2. **Zustand** (55K ⭐) - https://github.com/pmndrs/zustand
+   - Minimal, fast, and scalable
+   - Simple API with hooks support
+
+3. **MobX** (28K ⭐) - https://github.com/mobxjs/mobx
+   - Simple, scalable reactive state
+   - Less boilerplate than Redux
+
+4. **Jotai** (20K ⭐) - https://github.com/pmndrs/jotai
+   - Primitive and flexible atomic state
+   - Bottom-up approach
+
+## **Redux Ecosystem**
+- **React-Redux** (23K ⭐) - Official React bindings
+- **Redux Toolkit** - Modern Redux development
+- **Reselect** (19K ⭐) - Memoized selectors
+- **Redux Thunk** (17K ⭐) - Async middleware
+
+## **Learning Resources**
+
+1. **React TypeScript Cheatsheets** (46K ⭐)
+   https://github.com/typescript-cheatsheets/react
+
+2. **ReactJS Interview Questions** (43K ⭐)
+   https://github.com/sudheerj/reactjs-interview-questions
+
+3. **Awesome React Hooks** (10K ⭐)
+   https://github.com/rehooks/awesome-react-hooks
+
+4. **Constate** (4K ⭐) - React Context + State simplified
+   https://github.com/diegohaz/constate
+
+Would you like me to dive deeper into any specific state management solution or create examples?
+
+
+Total usage est:       1 Premium request
+Total duration (API):  21.0s
+Total duration (wall): 23.6s
+Total code changes:    0 lines added, 0 lines removed
+Usage by model:
+    claude-sonnet-4.5    55.5k input, 931 output, 0 cache read, 0 cache write (Est. 1 Premium request)

@@ -1,0 +1,6 @@
+{
+  "error": "Delegation failed or timed out",
+  "duration_seconds": .007122000,
+  "timeout_seconds": 60,
+  "output": "./scripts/delegate_copilot.sh: line 92: timeout: command not found\n"
+}

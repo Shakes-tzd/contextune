@@ -1,0 +1,13 @@
+{
+  "type": "github-issue",
+  "operation": "create",
+  "prompt": "Create a GitHub issue with the following details:\n\nTitle: {{TITLE}}\nBody: {{BODY}}\nLabels: {{LABELS}}\n\nUse the gh CLI to create the issue and return the result in JSON format:\n{\n  \"issue_number\": <number>,\n  \"issue_url\": \"<url>\",\n  \"title\": \"<title>\",\n  \"status\": \"created\"\n}",
+  "template_variables": {
+    "TITLE": "Issue title here",
+    "BODY": "Detailed description of the issue",
+    "LABELS": "bug, priority-high"
+  },
+  "example": {
+    "prompt": "Create a GitHub issue with the following details:\n\nTitle: Fix authentication bug in OAuth flow\nBody: Users are unable to login using OAuth. The error occurs at auth.ts line 42 when attempting to exchange the auth code for a token. Error message: 'invalid_grant'.\nLabels: bug, priority-high, auth\n\nUse the gh CLI to create the issue and return the result in JSON format."
+  }
+}

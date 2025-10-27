@@ -1,0 +1,301 @@
+#!/bin/bash
+# research_from_plan.sh - DEPRECATED
+#
+# ⚠️ DEPRECATED: This script is no longer needed!
+#
+# WHY DEPRECATED:
+# The /ctx:plan command now includes comprehensive parallel research via 5 agents:
+#   1. Web Search - Similar Solutions
+#   2. Web Search - Libraries/Tools
+#   3. Codebase Pattern Search
+#   4. Specification Validation
+#   5. Dependency Analysis
+#
+# Research findings are embedded in:
+#   - .parallel/plans/plan.yaml (research: section)
+#   - .parallel/plans/tasks/*.md (Implementation Approach sections)
+#
+# NO SEPARATE RESEARCH STEP NEEDED!
+#
+# Migration: Use /ctx:plan instead (research included automatically)
+#
+# Original purpose: Pre-implementation research reading from plan.yaml
+# Version 2: Reads directly from plan.yaml, no GitHub dependency
+
+set -euo pipefail
+
+echo "⚠️  DEPRECATED: This script is no longer needed!"
+echo ""
+echo "The /ctx:plan command now includes comprehensive parallel research."
+echo "Research findings are embedded in plan.yaml and task markdown files."
+echo ""
+echo "Use /ctx:plan to create research-backed plans automatically."
+echo ""
+exit 1
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+COPILOT_DELEGATE_DIR="$(dirname "$SCRIPT_DIR")"
+
+# Colors
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+# Configuration
+PLAN_FILE=${1:-.parallel/plan.yaml}
+RESEARCH_DIR=$(dirname "$PLAN_FILE")/research
+
+echo -e "${BLUE}═══════════════════════════════════════════════${NC}"
+echo -e "${BLUE}  Pre-Implementation Research from plan.yaml${NC}"
+echo -e "${BLUE}═══════════════════════════════════════════════${NC}"
+echo ""
+
+# Validate plan file exists
+if [ ! -f "$PLAN_FILE" ]; then
+  echo -e "${RED}Error: Plan file not found: $PLAN_FILE${NC}"
+  echo -e "${YELLOW}Run ./init_plan.sh first${NC}"
+  exit 1
+fi
+
+# Check if auto_research is enabled
+AUTO_RESEARCH=$(yq '.parallel_config.auto_research' "$PLAN_FILE")
+
+if [ "$AUTO_RESEARCH" != "true" ]; then
+  echo -e "${YELLOW}auto_research is disabled in plan.yaml${NC}"
+  echo -e "${YELLOW}Set parallel_config.auto_research: true to enable${NC}"
+  exit 0
+fi
+
+# Create research directory
+mkdir -p "$RESEARCH_DIR"
+
+echo -e "${BLUE}Reading tasks from plan.yaml...${NC}"
+echo ""
+
+# Get task count
+TASK_COUNT=$(yq '.tasks | length' "$PLAN_FILE")
+echo -e "Found ${GREEN}$TASK_COUNT${NC} tasks to research"
+echo ""
+
+# Process each task
+TASK_INDEX=0
+while [ $TASK_INDEX -lt $TASK_COUNT ]; do
+  # Extract task details
+  TASK_ID=$(yq ".tasks[$TASK_INDEX].id" "$PLAN_FILE")
+  TASK_TITLE=$(yq ".tasks[$TASK_INDEX].title" "$PLAN_FILE")
+  TASK_DESC=$(yq ".tasks[$TASK_INDEX].description" "$PLAN_FILE")
+  RESEARCH_KEYWORDS=$(yq ".tasks[$TASK_INDEX].research_keywords | join(\", \")" "$PLAN_FILE")
+
+  echo -e "${BLUE}Task $((TASK_INDEX+1))/$TASK_COUNT:${NC} $TASK_ID"
+  echo -e "  Title: $TASK_TITLE"
+  echo -e "  Keywords: ${YELLOW}$RESEARCH_KEYWORDS${NC}"
+
+  # Skip if no keywords
+  if [ "$RESEARCH_KEYWORDS" == "null" ] || [ -z "$RESEARCH_KEYWORDS" ]; then
+    echo -e "  ${YELLOW}⚠ No research keywords, skipping${NC}"
+    echo ""
+    TASK_INDEX=$((TASK_INDEX+1))
+    continue
+  fi
+
+  # Check if research already exists
+  RESEARCH_FILE="$RESEARCH_DIR/$TASK_ID.json"
+  if [ -f "$RESEARCH_FILE" ]; then
+    echo -e "  ${YELLOW}ℹ Research already exists, skipping${NC}"
+    echo -e "  ${YELLOW}Delete $RESEARCH_FILE to re-research${NC}"
+    echo ""
+    TASK_INDEX=$((TASK_INDEX+1))
+    continue
+  fi
+
+  # Build comprehensive research prompt
+  RESEARCH_PROMPT="Research best practices and current approaches for implementing this task (current year: 2025):
+
+**Task:** $TASK_TITLE
+
+**Description:**
+$TASK_DESC
+
+**Keywords:** $RESEARCH_KEYWORDS
+
+Provide comprehensive research including:
+
+1. **Current Best Practices (2025)**
+   - What are the recommended approaches as of 2025?
+   - What's changed recently that we should know?
+
+2. **Recommended Libraries/Tools**
+   - Which libraries/packages should be used?
+   - Include specific versions
+   - Why each is recommended
+
+3. **Design Patterns**
+   - What proven patterns apply to this task?
+   - Examples of good implementations
+
+4. **Common Pitfalls**
+   - What mistakes do developers commonly make?
+   - How to avoid them
+
+5. **Code Examples**
+   - Brief examples of key patterns
+   - Focus on structure, not full implementation
+
+6. **Testing Strategy**
+   - How should this be tested?
+   - What test cases are critical?
+
+Return as structured JSON:
+{
+  \"task_id\": \"$TASK_ID\",
+  \"researched_at\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+  \"best_practices\": [
+    \"practice 1\",
+    \"practice 2\"
+  ],
+  \"recommended_libraries\": [
+    {
+      \"name\": \"library-name\",
+      \"version\": \"1.2.3\",
+      \"purpose\": \"what it does\",
+      \"why\": \"why use this\"
+    }
+  ],
+  \"patterns\": [
+    {
+      \"name\": \"pattern name\",
+      \"description\": \"when/how to use\",
+      \"example\": \"code snippet\"
+    }
+  ],
+  \"pitfalls\": [
+    \"pitfall 1 and how to avoid\",
+    \"pitfall 2 and how to avoid\"
+  ],
+  \"examples\": [
+    {
+      \"concept\": \"what this demonstrates\",
+      \"code\": \"example code\"
+    }
+  ],
+  \"testing_strategy\": \"overview of testing approach\",
+  \"test_cases\": [
+    \"critical test case 1\",
+    \"critical test case 2\"
+  ]
+}"
+
+  # Create temp task file
+  TEMP_TASK=$(mktemp)
+  cat > "$TEMP_TASK" <<EOF
+{
+  "prompt": $(echo "$RESEARCH_PROMPT" | jq -Rs .)
+}
+EOF
+
+  # Delegate to Copilot
+  echo -e "  ${BLUE}Researching...${NC}"
+  "$COPILOT_DELEGATE_DIR/scripts/delegate_copilot.sh" \
+    --task-file "$TEMP_TASK" \
+    --output "$RESEARCH_FILE" > /dev/null 2>&1
+
+  # Clean up
+  rm -f "$TEMP_TASK"
+
+  if [ -f "$RESEARCH_FILE" ]; then
+    # Validate JSON
+    if jq empty "$RESEARCH_FILE" 2>/dev/null; then
+      echo -e "  ${GREEN}✅ Research completed${NC}"
+    else
+      echo -e "  ${YELLOW}⚠ Research completed but not valid JSON${NC}"
+    fi
+  else
+    echo -e "  ${RED}✗ Research failed${NC}"
+  fi
+
+  echo ""
+  TASK_INDEX=$((TASK_INDEX+1))
+done
+
+# Create research summary
+SUMMARY_FILE="$RESEARCH_DIR/summary.md"
+
+echo -e "${BLUE}Creating research summary...${NC}"
+
+cat > "$SUMMARY_FILE" <<EOF
+# Pre-Implementation Research Summary
+
+**Generated:** $(date +"%Y-%m-%d %H:%M:%S")
+**Plan:** $PLAN_FILE
+**Tasks Researched:** $TASK_COUNT
+
+---
+
+EOF
+
+# Add each task's summary
+for research_file in "$RESEARCH_DIR"/*.json; do
+  if [ -f "$research_file" ] && [ "$(basename "$research_file")" != "summary.md" ]; then
+    TASK_ID=$(basename "$research_file" .json)
+
+    # Get task title from plan
+    TASK_TITLE=$(yq ".tasks[] | select(.id == \"$TASK_ID\") | .title" "$PLAN_FILE")
+
+    cat >> "$SUMMARY_FILE" <<EOF
+## $TASK_ID: $TASK_TITLE
+
+EOF
+
+    # Extract key points with jq
+    if jq empty "$research_file" 2>/dev/null; then
+      echo "**Best Practices:**" >> "$SUMMARY_FILE"
+      jq -r '.best_practices[]? | "- \(.)"' "$research_file" >> "$SUMMARY_FILE" 2>/dev/null || echo "- (See research file)" >> "$SUMMARY_FILE"
+      echo "" >> "$SUMMARY_FILE"
+
+      echo "**Recommended Libraries:**" >> "$SUMMARY_FILE"
+      jq -r '.recommended_libraries[]? | "- **\(.name)** (\(.version)) - \(.purpose)"' "$research_file" >> "$SUMMARY_FILE" 2>/dev/null || echo "- (See research file)" >> "$SUMMARY_FILE"
+      echo "" >> "$SUMMARY_FILE"
+
+      echo "**Key Pitfalls:**" >> "$SUMMARY_FILE"
+      jq -r '.pitfalls[]? | "- \(.)"' "$research_file" >> "$SUMMARY_FILE" 2>/dev/null || echo "- (See research file)" >> "$SUMMARY_FILE"
+      echo "" >> "$SUMMARY_FILE"
+    fi
+
+    echo "**Full Research:** [\`$research_file\`]($research_file)" >> "$SUMMARY_FILE"
+    echo "" >> "$SUMMARY_FILE"
+    echo "---" >> "$SUMMARY_FILE"
+    echo "" >> "$SUMMARY_FILE"
+  fi
+done
+
+echo ""
+echo -e "${BLUE}═══════════════════════════════════════════════${NC}"
+echo -e "${GREEN}✅ Research Phase Complete!${NC}"
+echo -e "${BLUE}═══════════════════════════════════════════════${NC}"
+echo ""
+
+# Count research files
+RESEARCH_COUNT=$(ls -1 "$RESEARCH_DIR"/*.json 2>/dev/null | wc -l | tr -d ' ')
+echo -e "${BLUE}Research files created:${NC} $RESEARCH_COUNT"
+ls -1 "$RESEARCH_DIR"/*.json 2>/dev/null | while read file; do
+  echo -e "  📄 $(basename "$file")"
+done
+
+echo ""
+echo -e "${BLUE}Summary:${NC} $SUMMARY_FILE"
+echo ""
+
+echo -e "${GREEN}✓ Agents will implement with research-backed approach!${NC}"
+echo ""
+echo -e "${YELLOW}Next steps:${NC}"
+echo -e "  1. Review: ${BLUE}cat $SUMMARY_FILE${NC}"
+echo -e "  2. Setup worktrees: ${BLUE}./setup_worktrees_from_plan.sh${NC}"
+echo -e "  3. Spawn agents: ${BLUE}./spawn_agents_from_plan.sh${NC}"
+echo ""
+
+# Note: Research directory is gitignored (cache only)
+echo -e "${YELLOW}Note:${NC} Research files are cached in $RESEARCH_DIR (gitignored)"
+echo -e "      Delete and re-run to refresh research"
+echo ""

@@ -1,0 +1,9 @@
+{
+  "status": "success",
+  "duration_seconds": 24.805812000,
+  "timestamp": "2025-10-27T20:44:09Z",
+  "tokens_estimate": 567,
+  "characters":     2268,
+  "cli": "copilot",
+  "result_file": "./copilot-results/copilot_20251027_164345_f4fe354d.json"
+}
