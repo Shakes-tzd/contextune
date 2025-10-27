@@ -1,6 +1,6 @@
 {
   "name": "contextune",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "Precision-tuned context engineering for Claude Code. Optimize context flow with modular plans (95% fewer tokens), parallel workflows (81% cost reduction), and zero-transformation architecture. Quick research (/ctx:research: 3 parallel agents, 1-2 min). Contextune your workflows for peak performance!",
   "author": {
     "name": "Shakes Dlamini",
