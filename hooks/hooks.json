@@ -9,6 +9,12 @@
             "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/session_start.js",
             "timeout": 1000,
             "description": "Display Contextune commands (zero context overhead)"
+          },
+          {
+            "type": "command",
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/version_checker.js",
+            "timeout": 3000,
+            "description": "Check for plugin updates (once per day)"
           }
         ]
       }
