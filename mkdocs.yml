@@ -1,15 +1,15 @@
-site_name: SlashSense
-site_description: Natural language to slash command mapping for Claude Code
+site_name: Contextune
+site_description: Precision-tuned context engineering for Claude Code. Optimize context flow with modular plans, parallel workflows, and zero-transformation architecture.
 site_author: Shakes Dlamini
-site_url: https://Shakes-tzd.github.io/slashsense/
+site_url: https://Shakes-tzd.github.io/contextune/
 
 # Repository
-repo_name: Shakes-tzd/slashsense
-repo_url: https://github.com/Shakes-tzd/slashsense
-edit_uri: edit/main/docs/
+repo_name: Shakes-tzd/contextune
+repo_url: https://github.com/Shakes-tzd/contextune
+edit_uri: edit/master/docs/
 
 # Copyright
-copyright: Copyright &copy; 2025 SlashSense Contributors
+copyright: Copyright &copy; 2025 Contextune Contributors
 
 # Theme Configuration
 theme:
@@ -188,44 +188,36 @@ extra:
 # Navigation structure
 nav:
   - Home: index.md
-  
-  - Getting Started:
-      - Installation: getting-started/installation.md
-      - Quick Start: getting-started/quickstart.md
-      - Configuration: getting-started/configuration.md
-  
-  - User Guide:
-      - Basic Usage: user-guide/usage.md
-      - Command Detection: user-guide/commands.md
-      - Custom Patterns: user-guide/custom-patterns.md
-      - Advanced Configuration: user-guide/advanced.md
-  
+
+  - Core Features:
+      - Smart Tool Routing: delegation-modes.md
+      - Observability: OBSERVABILITY.md
+      - Prompt Augmentation: PROMPT_AUGMENTATION.md
+      - Skills System: SKILLS.md
+
   - Architecture:
-      - Overview: architecture/overview.md
-      - Detection Cascade: architecture/detection-cascade.md
-      - Hook System: architecture/hooks.md
-      - Performance: architecture/performance.md
-  
-  - API Reference:
-      - Overview: api/index.md
-      - Keyword Matcher: api/keyword_matcher.md
-      - Model2Vec Matcher: api/model2vec_matcher.md
-      - Semantic Router Matcher: api/semantic_router_matcher.md
-      - Unified Detector: api/unified_detector.md
-      - Hook Implementation: api/user_prompt_submit.md
-  
-  - Development:
-      - Contributing: development/contributing.md
-      - Development Setup: development/setup.md
-      - Testing: development/testing.md
-      - Documentation: development/documentation.md
-      - Release Process: development/release.md
-  
-  - About:
-      - Changelog: about/changelog.md
-      - FAQ: about/faq.md
-      - Troubleshooting: about/troubleshooting.md
-      - License: about/license.md
+      - Haiku Agent Architecture: HAIKU_AGENT_ARCHITECTURE.md
+      - Agent Architecture Summary: AGENT_ARCHITECTURE_SUMMARY.md
+      - Agent Integration Guide: AGENT_INTEGRATION_GUIDE.md
+      - Cost Optimization: COST_OPTIMIZATION_GUIDE.md
+
+  - Usage & Integration:
+      - Usage Integration: USAGE_INTEGRATION.md
+      - Usage Reality Check: USAGE_REALITY_CHECK.md
+      - Auto-Approval Configuration: AUTO_APPROVAL_CONFIGURATION.md
+
+  - Guides:
+      - Migration Guide v0.3.0: MIGRATION_GUIDE_v0.3.0.md
+      - Research Agents Guide: RESEARCH_AGENTS_GUIDE.md
+      - Parallel Setup Pattern: PARALLEL_SETUP_PATTERN.md
+      - Subagent Instructions: subagent-instructions.md
+
+  - Implementation:
+      - Implementation Summary: IMPLEMENTATION_SUMMARY.md
+      - Skills Implementation: SKILLS_IMPLEMENTATION_SUMMARY.md
+      - Skills Enhancement: SKILLS_ENHANCEMENT.md
+      - Hook Output Report: HOOK_OUTPUT_REPORT.md
+      - Hook Output Analysis: hook-output-analysis.md
 
 # Watch additional files during development
 watch:

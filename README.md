@@ -7,7 +7,7 @@ Optimize context flow with modular plans (95% fewer tokens), parallel workflows 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg)](https://docs.claude.com/en/docs/claude-code/plugins)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/Shakes-tzd/contextune/releases)
+[![Version](https://img.shields.io/badge/version-0.9.0-green.svg)](https://github.com/Shakes-tzd/contextune/releases)
 [![Cost Savings](https://img.shields.io/badge/cost%20savings-81%25-brightgreen.svg)](#-cost-optimization)
 [![Context Optimization](https://img.shields.io/badge/token%20savings-95%25-brightgreen.svg)](#-context-engineering)
 [![Documentation](https://img.shields.io/badge/docs-contextune.com-blue.svg)](https://contextune.com/)
@@ -34,7 +34,58 @@ Claude: [Executes /sc:test automatically]
 
 ---
 
-## 🚀 NEW in v0.3.0: Haiku Agent Architecture
+## 🚀 NEW in v0.9.0: Context Engineering Framework
+
+**Complete context optimization with session duration tracking, usage monitoring, and smart tool routing**
+
+Contextune v0.9.0 introduces comprehensive context engineering features that maximize session duration and minimize costs.
+
+### 📊 Session Duration Tracking (NEW)
+
+**Measure context preservation effectiveness**:
+```bash
+# View session metrics
+./scripts/view_session_metrics.sh
+
+# Example output:
+Session: session_1730000000
+Started: 2025-10-26 21:00:00
+First Compact: 2025-10-26 21:28:00
+Duration: 28.0 minutes
+Status: ✅ Good context preservation
+```
+
+**Thresholds**:
+- ⚠️ Short (<10 min): Needs optimization
+- ✅ Good (10-30 min): Healthy usage
+- 🎯 Excellent (30+ min): Excellent preservation
+
+### 💰 Usage Monitoring & Optimization (v0.8.9)
+
+**Automatic cost optimization based on quota consumption**:
+- **At 90% weekly usage**: Auto-switch to Haiku (87% savings)
+- **Parallel task limits**: 2 concurrent at high usage
+- **Three-tier fallback**: Headless → Estimation → Manual paste
+
+**Track usage**:
+```bash
+/usage                # Claude Code's usage command
+/contextune:usage     # Paste output to track in Contextune
+```
+
+### ⚡ Smart Tool Routing (v0.9.0)
+
+**Intelligent delegation of expensive operations**:
+- Read >1000 lines → Delegate to Haiku
+- Complex Bash → Delegate to Haiku
+- Fast operations → Keep on Sonnet
+
+**Cost savings**: 77-87% per delegated operation
+**Context benefit**: 3x longer sessions before compaction
+
+---
+
+## 🚀 v0.3.0: Haiku Agent Architecture
 
 **81% cost reduction + 2x speedup with three-tier intelligence**
 
