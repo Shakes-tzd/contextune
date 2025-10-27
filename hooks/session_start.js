@@ -26,6 +26,16 @@ function main() {
           timeout: 1000
         });
         console.error('DEBUG: Cleared old detection from observability DB');
+
+        // Track session start time
+        const startTime = Date.now() / 1000; // Unix timestamp
+        const sessionId = `session_${startTime}`;
+
+        execSync(`sqlite3 "${dbFile}" "INSERT OR REPLACE INTO sessions (session_id, start_time, total_detections, total_errors) VALUES ('${sessionId}', ${startTime}, 0, 0)"`, {
+          stdio: 'pipe',
+          timeout: 1000
+        });
+        console.error(`DEBUG: Session started: ${sessionId} at ${new Date(startTime * 1000).toISOString()}`);
       }
     } catch (err) {
       console.error('DEBUG: Failed to clear detection from observability DB:', err.message);

@@ -57,6 +57,19 @@
           }
         ]
       }
+    ],
+    "CompactStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/compact_start.js",
+            "timeout": 1000,
+            "description": "Track context compaction for measuring context preservation"
+          }
+        ]
+      }
     ]
   }
 }
