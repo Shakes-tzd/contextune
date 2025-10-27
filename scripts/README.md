@@ -2,55 +2,60 @@
 
 **Purpose:** Manage feature improvements using `features.yaml` tracking system.
 
+**Technology:** Python with UV inline script metadata (PEP 723) - no installation needed!
+
 ---
 
 ## Quick Start
 
 ```bash
 # View all features
-./scripts/feature-status.sh
+uv run scripts/feature-status.py
 
 # View dependency graph
-./scripts/feature-graph.sh
+uv run scripts/feature-graph.py
 
 # Execute a feature
-./scripts/feature-execute.sh feat-001
+uv run scripts/feature-execute.py feat-001
 
 # Mark feature as completed
-./scripts/feature-complete.sh feat-001
+uv run scripts/feature-complete.py feat-001
 ```
+
+**Why UV?** Dependencies (pyyaml, rich) are automatically installed on first run. No manual setup needed!
 
 ---
 
 ## Scripts
 
-### 1. feature-status.sh
+### 1. feature-status.py
 
 **Purpose:** Show feature status, dependencies, and execution recommendations.
 
 **Usage:**
 ```bash
-./scripts/feature-status.sh [OPTIONS]
+uv run scripts/feature-status.py [OPTIONS]
 
 Options:
   --phase N               Show only Phase N features
   --priority LEVEL        Show only PRIORITY features (critical, high, medium, low)
   --status STATUS         Show only STATUS features (planned, in_progress, completed, blocked)
+  --independent           Show only independent features (no dependencies)
 ```
 
 **Examples:**
 ```bash
 # Show all features
-./scripts/feature-status.sh
+uv run scripts/feature-status.py
 
 # Show Phase 1 features only
-./scripts/feature-status.sh --phase 1
+uv run scripts/feature-status.py --phase 1
 
 # Show critical priority features
-./scripts/feature-status.sh --priority critical
+uv run scripts/feature-status.py --priority critical
 
-# Show planned features
-./scripts/feature-status.sh --status planned
+# Show independent features (ready to execute in parallel)
+uv run scripts/feature-status.py --independent
 ```
 
 **Output:**
@@ -61,13 +66,13 @@ Options:
 
 ---
 
-### 2. feature-execute.sh
+### 2. feature-execute.py
 
 **Purpose:** Execute feature implementation by creating worktree.
 
 **Usage:**
 ```bash
-./scripts/feature-execute.sh FEATURE_ID
+uv run scripts/feature-execute.py FEATURE_ID
 ```
 
 **What it does:**
@@ -82,7 +87,7 @@ Options:
 **Example:**
 ```bash
 # Execute feat-001 (Haiku 4.5 Integration)
-./scripts/feature-execute.sh feat-001
+uv run scripts/feature-execute.py feat-001
 
 # Creates:
 #   worktrees/feat-001/
@@ -97,13 +102,13 @@ Options:
 
 ---
 
-### 3. feature-graph.sh
+### 3. feature-graph.py
 
 **Purpose:** Generate dependency graph visualization.
 
 **Usage:**
 ```bash
-./scripts/feature-graph.sh [--format FORMAT]
+uv run scripts/feature-graph.py [--format FORMAT]
 
 Formats:
   text      ASCII art visualization (default)
@@ -114,14 +119,14 @@ Formats:
 **Examples:**
 ```bash
 # Text format (terminal)
-./scripts/feature-graph.sh
+uv run scripts/feature-graph.py
 
 # Generate PNG image
-./scripts/feature-graph.sh --format dot > graph.dot
+uv run scripts/feature-graph.py --format dot > graph.dot
 dot -Tpng graph.dot -o feature-graph.png
 
 # Generate Mermaid diagram (for GitHub)
-./scripts/feature-graph.sh --format mermaid > GRAPH.md
+uv run scripts/feature-graph.py --format mermaid > GRAPH.md
 ```
 
 **Output (text format):**
@@ -132,13 +137,13 @@ dot -Tpng graph.dot -o feature-graph.png
 
 ---
 
-### 4. feature-complete.sh
+### 4. feature-complete.py
 
 **Purpose:** Mark feature as completed.
 
 **Usage:**
 ```bash
-./scripts/feature-complete.sh FEATURE_ID
+uv run scripts/feature-complete.py FEATURE_ID
 ```
 
 **What it does:**
@@ -151,7 +156,7 @@ dot -Tpng graph.dot -o feature-graph.png
 **Example:**
 ```bash
 # Mark feat-001 as completed
-./scripts/feature-complete.sh feat-001
+uv run scripts/feature-complete.py feat-001
 
 # Output:
 #   ✓ Status updated to: completed
@@ -372,9 +377,10 @@ dot -Tpng graph.dot -o docs/feature-graph.png
 
 ## Requirements
 
-- **yq:** YAML processor
+- **UV:** Python package manager (already installed with Contextune plugin!)
   ```bash
-  brew install yq
+  # UV handles dependencies automatically via inline script metadata
+  # No manual installation of pyyaml, rich, etc. needed!
   ```
 
 - **Git:** For worktree management
@@ -382,20 +388,25 @@ dot -Tpng graph.dot -o docs/feature-graph.png
   # Already installed with Claude Code
   ```
 
-- **Optional: Graphviz** (for dot format)
+- **Optional: Graphviz** (for dot format visualization)
   ```bash
   brew install graphviz
+  # Only needed if you want to generate PNG images from dot format
   ```
 
 ---
 
 ## Troubleshooting
 
-### "yq: command not found"
+### "uv: command not found"
 
-Install yq:
+UV should be installed with the Contextune plugin. If missing:
 ```bash
-brew install yq
+# Install UV
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Or via pip
+pip install uv
 ```
 
 ### "Worktree already exists"
@@ -409,7 +420,7 @@ git worktree remove worktrees/feat-001 --force
 
 Complete dependent features first:
 ```bash
-./scripts/feature-graph.sh
+uv run scripts/feature-graph.py
 # See what needs to be done first
 ```
 
@@ -417,7 +428,7 @@ Complete dependent features first:
 
 Check feature ID:
 ```bash
-./scripts/feature-status.sh | grep feat-
+uv run scripts/feature-status.py | grep feat-
 ```
 
 ---
@@ -476,7 +487,7 @@ wait
 
 ```bash
 # After completing feat-001
-./scripts/feature-complete.sh feat-001
+uv run scripts/feature-complete.py feat-001
 
 # Output shows:
 #   Features now unblocked:
@@ -484,8 +495,8 @@ wait
 #     ✓ feat-004: Explore Subagent Integration
 #
 #   You can now execute:
-#     ./scripts/feature-execute.sh feat-003
-#     ./scripts/feature-execute.sh feat-004
+#     uv run scripts/feature-execute.py feat-003
+#     uv run scripts/feature-execute.py feat-004
 ```
 
 ---
@@ -501,8 +512,8 @@ When adding new features to `features.yaml`:
 5. Update summary statistics
 6. Run validation:
    ```bash
-   yq . features.yaml > /dev/null
-   # Should produce no errors
+   python -c "import yaml; yaml.safe_load(open('features.yaml'))"
+   # Should produce no errors if YAML is valid
    ```
 
 ---
