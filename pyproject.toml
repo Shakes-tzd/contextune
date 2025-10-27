@@ -37,6 +37,8 @@ dependencies = [
     "semantic-router>=0.1.0",
     "numpy>=1.24.0,<2.0.0",
     "rapidfuzz>=3.0.0",
+    "duckdb>=1.4.1",
+    "sqlglot>=27.28.1",
 ]
 
 # Development dependencies
@@ -362,6 +364,9 @@ dev-dependencies = [
     "mkdocstrings[python]>=0.25.0",
     "ruff>=0.6.0",
     "mypy>=1.11.0",
+    "marimo>=0.17.2",
+    "matplotlib>=3.10.7",
+    "seaborn>=0.13.2",
 ]
 
 # UV will use these when resolving dependencies
