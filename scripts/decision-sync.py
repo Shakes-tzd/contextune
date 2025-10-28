@@ -47,27 +47,79 @@ try:
 except ImportError:
     console = None
 
-# Import extraction functions from session_end_extractor
-sys.path.insert(0, str(Path(__file__).parent.parent / 'hooks'))
-
+# Hybrid import: Try shared module, fallback to embedded copy
 try:
-    from session_end_extractor import (
+    # Try importing from shared lib (DRY when it works)
+    sys.path.insert(0, str(Path(__file__).parent.parent / 'lib'))
+    from extraction_patterns import (
         extract_designs,
         extract_decisions,
-        extract_assistant_text
+        extract_assistant_text,
+        extract_research,
+        extract_title
     )
 except ImportError:
-    print("Warning: Could not import from session_end_extractor, using fallback", file=sys.stderr)
-    extract_designs = None
-    extract_decisions = None
-    extract_assistant_text = None
+    # Fallback: Embedded copy (reliability when imports fail)
+    def extract_assistant_text(entry):
+        """Extract text from assistant message."""
+        if entry.get('type') != 'assistant':
+            return None
+        message = entry.get('message', {})
+        if not isinstance(message, dict):
+            return None
+        content = message.get('content', [])
+        if isinstance(content, str):
+            return content
+        elif isinstance(content, list):
+            return ' '.join(b.get('text', '') for b in content if b.get('type') == 'text')
+        return None
+
+    def extract_title(content):
+        """Extract title from markdown."""
+        match = re.search(r"^#\s+(.+?)$", content, re.MULTILINE)
+        return match.group(1).strip() if match else None
+
+    def extract_designs(transcript):
+        """Find design proposals."""
+        designs = []
+        for i, entry in enumerate(transcript):
+            text = extract_assistant_text(entry)
+            if not text:
+                continue
+            patterns = [r"\*\*Type:\*\* Design", r"## Architecture", r"## Task Breakdown"]
+            if sum(len(re.findall(p, text, re.IGNORECASE)) for p in patterns) >= 3:
+                designs.append({'index': i, 'timestamp': entry.get('timestamp', ''), 'content': text, 'pattern_count': 3})
+        return designs
+
+    def extract_decisions(transcript):
+        """Find decisions."""
+        decisions = []
+        for entry in transcript:
+            text = extract_assistant_text(entry)
+            if not text:
+                continue
+            if sum(len(re.findall(p, text, re.IGNORECASE)) for p in [r"## Decision:", r"### Alternatives"]) >= 2:
+                decisions.append({'timestamp': entry.get('timestamp', ''), 'content': text})
+        return decisions
+
+    def extract_research(transcript):
+        """Find research."""
+        research = []
+        for entry in transcript:
+            text = extract_assistant_text(entry)
+            if not text:
+                continue
+            match = re.search(r'## Research:\s*(.+?)$', text, re.MULTILINE)
+            if match:
+                research.append({'topic': match.group(1).strip(), 'findings': [text[:200]], 'timestamp': entry.get('timestamp', '')})
+        return research
 
 def find_conversation_transcripts(project_filter: Optional[str] = None) -> List[Path]:
     """
     Find all conversation transcript files.
 
     Args:
-        project_filter: Optional path to specific project
+        project_filter: Optional path to specific project (e.g. /Users/user/project)
 
     Returns:
         List of transcript file paths
@@ -80,10 +132,20 @@ def find_conversation_transcripts(project_filter: Optional[str] = None) -> List[
     transcripts = []
 
     if project_filter:
-        # Scan specific project only
-        project_transcripts = Path(project_filter).parent
-        if project_transcripts.exists():
-            transcripts.extend(project_transcripts.glob("*.jsonl"))
+        # Convert project path to transcript directory name
+        # /Users/shakes/DevProjects/contextune → -Users-shakes-DevProjects-contextune
+        project_path = Path(project_filter).resolve()
+        normalized = str(project_path).replace('/', '-')
+        transcript_dir = projects_dir / normalized
+
+        if transcript_dir.exists():
+            transcripts.extend(transcript_dir.glob("*.jsonl"))
+        else:
+            # Try all subdirs that contain the project name
+            project_name = project_path.name
+            for project_dir in projects_dir.iterdir():
+                if project_dir.is_dir() and project_name.lower() in project_dir.name.lower():
+                    transcripts.extend(project_dir.glob("*.jsonl"))
     else:
         # Scan all projects
         for project_dir in projects_dir.iterdir():
@@ -102,52 +164,7 @@ def read_transcript(transcript_path: Path) -> List[dict]:
             console.print(f"[yellow]Warning: Failed to read {transcript_path.name}: {e}[/yellow]")
         return []
 
-def extract_research_from_transcript(transcript: List[dict]) -> List[dict]:
-    """
-    Extract research findings from conversation transcript.
-
-    Looks for extraction-optimized format:
-    - ## Research: [Topic]
-    - ### Key Findings (YAML blocks)
-    """
-    research_entries = []
-
-    for entry in transcript:
-        text = extract_assistant_text(entry) if extract_assistant_text else None
-        if not text:
-            continue
-
-        # Detect research pattern
-        research_match = re.search(r'## Research:\s*(.+?)$', text, re.MULTILINE)
-        if not research_match:
-            continue
-
-        topic = research_match.group(1).strip()
-
-        # Extract findings YAML block
-        findings_yaml = re.search(r'### Key Findings\n\n```yaml\n(.*?)```', text, re.DOTALL)
-        findings = []
-
-        if findings_yaml:
-            try:
-                findings_data = yaml.safe_load(findings_yaml.group(1))
-                if isinstance(findings_data, dict) and 'findings' in findings_data:
-                    findings = [f.get('finding', '') for f in findings_data['findings']]
-            except:
-                pass
-
-        # Extract recommendations
-        recommendations = re.findall(r'###? Recommendations?\n\n(.+?)(?=\n##|\Z)', text, re.DOTALL)
-
-        research_entries.append({
-            'topic': topic,
-            'findings': findings if findings else [f"Research from conversation about {topic}"],
-            'recommendations': recommendations[0] if recommendations else '',
-            'timestamp': entry.get('timestamp', ''),
-            'content_snippet': text[:500]
-        })
-
-    return research_entries
+# extract_research imported from lib or fallback above
 
 def populate_from_transcripts(
     decisions_path: Path,
@@ -221,7 +238,7 @@ def populate_from_transcripts(
                 } for d in decisions])
 
             # Extract research
-            research = extract_research_from_transcript(transcript)
+            research = extract_research(transcript)
             stats['research_found'] += len(research)
             all_research.extend([{
                 **r,
@@ -257,9 +274,9 @@ def populate_from_transcripts(
                 'features': {'entries': []}
             }
 
-        # Append research entries (with meaningful content!)
+        # Append research entries
         if all_research:
-            for i, research in enumerate(all_research[:50], 1):  # Limit to 50
+            for i, research in enumerate(all_research[:50], 1):
                 entry = {
                     'id': f'res-{i:03d}',
                     'topic': research['topic'],
@@ -273,6 +290,40 @@ def populate_from_transcripts(
                     'status': 'active'
                 }
                 data['research']['entries'].append(entry)
+
+        # Append plan entries (NEW!)
+        if all_plans:
+            for i, plan in enumerate(all_plans[:20], 1):  # Limit to 20
+                title = extract_title(plan['content']) or f"Plan {i}"
+                entry = {
+                    'id': f'plan-{i:03d}',
+                    'title': title,
+                    'summary': plan['content'][:500] + '...',  # First 500 chars
+                    'conversation_link': {
+                        'session_id': plan['session'],
+                        'timestamp': plan['timestamp']
+                    },
+                    'created_at': datetime.now().isoformat(),
+                    'status': 'active'
+                }
+                data['plans']['entries'].append(entry)
+
+        # Append decision entries (NEW!)
+        if all_decisions:
+            for i, decision in enumerate(all_decisions[:20], 1):
+                title = extract_title(decision['content']) or f"Decision {i}"
+                entry = {
+                    'id': f'dec-{i:03d}',
+                    'title': title,
+                    'summary': decision['content'][:500] + '...',
+                    'conversation_link': {
+                        'session_id': decision['session'],
+                        'timestamp': decision['timestamp']
+                    },
+                    'created_at': datetime.now().isoformat(),
+                    'status': 'accepted'
+                }
+                data['decisions']['entries'].append(entry)
 
         # Update metadata
         data['metadata']['last_scan'] = datetime.now().isoformat()
