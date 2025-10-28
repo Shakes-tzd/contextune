@@ -158,7 +158,7 @@ After all 3 agents complete, synthesize findings:
 ---
 
 **Cost:** $0.06-0.08 (3 Haiku agents × ~$0.02 each)
-**Time:** 1-2 minutes (parallel execution)
+**Execution:** Parallel (3 agents simultaneously)
 ```
 
 ---
@@ -213,7 +213,7 @@ Compatibility: ✅ All compatible with Node 18+
 ---
 
 **Cost:** $0.07
-**Time:** 1.2 minutes
+**Execution:** Fast parallel research
 ```
 
 ---
@@ -268,7 +268,7 @@ Compatibility: ✅ All compatible with Node 18+
 
 **Performance:**
 - All 3 agents run in parallel
-- Wall clock time: 1-2 minutes (not 3× sequential)
+- Parallel execution (not sequential)
 - Uses Haiku 4.5 for cost optimization
 
 **Context Preservation:**

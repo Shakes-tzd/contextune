@@ -63,7 +63,7 @@ Fast technical research using 3 parallel Haiku agents.
 - Dependency check (what's installed vs needed)
 - Recommendation with reasoning
 
-**Time:** 1-2 minutes | **Cost:** ~$0.07
+**Execution:** Fast parallel | **Cost:** ~$0.07
 
 ---
 

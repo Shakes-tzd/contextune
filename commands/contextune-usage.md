@@ -68,7 +68,7 @@ Based on your current usage, Contextune provides:
 
 📊 Historical Trends:
   • Average daily usage: 12.9% (7-day trend)
-  • Projected time to limit: ~18 hours
+  • Projected usage to limit: [calculation]
   • Cost savings from Haiku: $0.42 this week
 ```
 
@@ -170,8 +170,8 @@ When manual data isn't available, Contextune estimates usage from tracked operat
 
 ```python
 # Rough estimates (Claude 3.5 limits)
-SESSION_LIMIT = 200,000 tokens  # ~12 hours
-WEEKLY_LIMIT = 1,000,000 tokens  # ~7 days
+SESSION_LIMIT = 200,000 tokens  # Per session limit
+WEEKLY_LIMIT = 1,000,000 tokens  # Per week limit
 
 # Calculation
 session_percent = (tracked_tokens / SESSION_LIMIT) * 100

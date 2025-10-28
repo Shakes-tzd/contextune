@@ -49,7 +49,7 @@ Current Status:
 
 ⚠️  Warnings:
   • 89% weekly usage - approaching limit
-  • Reset in 3 days, 9 hours
+  • Reset in: [time remaining]
 
 💡 Recommendations:
   • Switch research tasks to Haiku (87% cost savings)
