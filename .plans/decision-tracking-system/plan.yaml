@@ -1,0 +1,217 @@
+# Decision Tracking System Implementation Plan
+# Version: 1.0
+# Created: 2025-10-27
+# Execution: /ctx:execute with Haiku agents
+
+metadata:
+  title: "Decision Tracking System for Contextune"
+  version: "1.0"
+  created: "2025-10-27"
+  estimated_total_tokens: 60000
+  estimated_cost_haiku: "$0.070"
+  execution_mode: "parallel"
+
+overview: |
+  Implement YAML-based decision tracking system to preserve context across sessions
+  without bloating conversations.
+
+  **Design Principle:** Reuse existing patterns (features.yaml, feature-*.py scripts)
+  to minimize new code and enable Haiku blind execution. 95% copy/paste, 5% adaptation.
+
+  **What We're Building:**
+  - decisions.yaml: Track research, plans, and decisions (like features.yaml)
+  - CLI tools: Search, add, lifecycle management (like feature-*.py)
+  - Skill: Auto-track decisions during conversations (like existing skills)
+  - Hook: Remind to review decisions at session end (like existing hooks)
+
+  **Why This Works:**
+  - Copy working code patterns (no invention needed)
+  - Templates provided for all files (Haiku just fills in)
+  - Independent tasks (full parallel execution)
+  - Built-in validation (clear success criteria)
+
+research_completed:
+  - topic: "ADR best practices and YAML vs Markdown"
+    findings: |
+      - ADR is industry standard (AWS, Google, Azure)
+      - YAML beats Markdown for: queryability, tooling, validation
+      - YAML can embed Markdown in text fields (best of both)
+      - Existing Contextune patterns already use YAML successfully
+    conclusion: "Use pure YAML with embedded Markdown for long-form text"
+
+architecture:
+  file_structure: |
+    contextune/
+    ├── decisions.yaml                      # Main database (like features.yaml)
+    ├── decisions.template.yaml             # User template
+    ├── scripts/
+    │   ├── decision-search.py             # Query tool (copy feature-status.py)
+    │   ├── decision-add.py                # Add entries (copy feature-execute.py)
+    │   ├── decision-report.py             # Generate index (new, simple)
+    │   └── decision-lifecycle.py          # Archive old entries (new, simple)
+    ├── docs/
+    │   ├── DECISION_INDEX.md              # Auto-generated quick reference
+    │   └── archive/
+    │       └── decisions-2025-Q4.yaml     # Archived entries
+    ├── skills/
+    │   └── decision-tracker/
+    │       └── SKILL.md                   # Auto-invoked (copy researcher pattern)
+    └── hooks/
+        └── session_end_decision.js        # Reminder (copy existing hook)
+
+  data_structure: |
+    decisions.yaml contains 4 sections:
+    1. metadata: Project info, retention policy
+    2. index: Quick counts (research: 3, plans: 2, decisions: 5)
+    3. {research,plans,decisions}: Full entries with:
+       - Structured metadata (id, date, status, tags)
+       - Long-form text (context, findings, rationale) in Markdown
+       - References (links to docs, code)
+       - Lifecycle (status, expiry, superseded_by)
+
+  lifecycle_strategy: |
+    - Research: Expires after 6 months (tech changes)
+    - Plans: Archives 90 days after completion
+    - Decisions: Never auto-archives (unless superseded)
+    - Archive: Quarterly files in docs/archive/
+
+phases:
+  phase_1:
+    name: "Foundation - Core Files"
+    duration: "30-45 min (parallel)"
+    tasks: ["task-1", "task-2", "task-3", "task-4"]
+    parallelizable: true
+    estimated_tokens: 48000
+
+  phase_2:
+    name: "Integration - Skills & Hooks"
+    duration: "20-30 min (parallel)"
+    tasks: ["task-5", "task-6", "task-7"]
+    parallelizable: true
+    dependencies: ["phase_1"]
+    estimated_tokens: 36000
+
+  phase_3:
+    name: "Validation & Documentation"
+    duration: "10-15 min"
+    tasks: ["task-8"]
+    parallelizable: false
+    dependencies: ["phase_2"]
+    estimated_tokens: 8000
+
+tasks:
+  - file: "tasks/task-1.md"
+    id: "task-1"
+    title: "Create decisions.yaml Schema"
+    type: "implement"
+    complexity: "simple"
+    estimated_tokens: 12000
+    priority: "blocker"
+    dependencies: []
+    copy_from: "features.yaml"
+    template_included: true
+
+  - file: "tasks/task-2.md"
+    id: "task-2"
+    title: "Create decision-search.py CLI Tool"
+    type: "implement"
+    complexity: "simple"
+    estimated_tokens: 12000
+    priority: "high"
+    dependencies: []
+    copy_from: "scripts/feature-status.py"
+    changes: "Adapt to read decisions.yaml, filter by type/status/tags"
+    template_included: true
+
+  - file: "tasks/task-3.md"
+    id: "task-3"
+    title: "Create decision-add.py CLI Tool"
+    type: "implement"
+    complexity: "simple"
+    estimated_tokens: 12000
+    priority: "high"
+    dependencies: []
+    copy_from: "scripts/feature-execute.py"
+    changes: "Adapt to append entries to decisions.yaml with validation"
+    template_included: true
+
+  - file: "tasks/task-4.md"
+    id: "task-4"
+    title: "Create decision-lifecycle.py Script"
+    type: "implement"
+    complexity: "medium"
+    estimated_tokens: 12000
+    priority: "medium"
+    dependencies: []
+    copy_from: null
+    template_included: true
+    description: "Archive expired research/completed plans, generate reports"
+
+  - file: "tasks/task-5.md"
+    id: "task-5"
+    title: "Create Decision Tracker Skill"
+    type: "implement"
+    complexity: "medium"
+    estimated_tokens: 15000
+    priority: "high"
+    dependencies: ["task-1", "task-3"]
+    copy_from: "skills/researcher/SKILL.md"
+    changes: "Add decision detection and YAML write logic"
+    template_included: true
+
+  - file: "tasks/task-6.md"
+    id: "task-6"
+    title: "Create Session End Hook"
+    type: "implement"
+    complexity: "simple"
+    estimated_tokens: 8000
+    priority: "medium"
+    dependencies: ["task-1"]
+    copy_from: "hooks/tool_cost_tracker.py"
+    changes: "Adapt to remind about decisions made in session"
+    template_included: true
+
+  - file: "tasks/task-7.md"
+    id: "task-7"
+    title: "Update CLAUDE.md and Generate Index"
+    type: "implement"
+    complexity: "simple"
+    estimated_tokens: 13000
+    priority: "high"
+    dependencies: ["task-1", "task-2"]
+    copy_from: null
+    template_included: true
+    description: "Import DECISION_INDEX.md, update documentation section"
+
+  - file: "tasks/task-8.md"
+    id: "task-8"
+    title: "Validation and Testing"
+    type: "test"
+    complexity: "simple"
+    estimated_tokens: 8000
+    priority: "blocker"
+    dependencies: ["task-1", "task-2", "task-3", "task-4", "task-5", "task-6", "task-7"]
+    copy_from: null
+    template_included: true
+    description: "Run all validation checks, test end-to-end workflow"
+
+success_criteria:
+  - "decisions.yaml exists and is valid YAML"
+  - "CLI tools can search, add, and lifecycle manage entries"
+  - "Skill auto-invokes on decision discussions"
+  - "Hook reminds at session end"
+  - "CLAUDE.md imports DECISION_INDEX.md"
+  - "All validation tests pass"
+  - "Documentation complete with examples"
+
+rollback_plan:
+  - "Keep decisions.yaml (even if tools incomplete)"
+  - "Can be queried manually with yq/python"
+  - "Remove skill/hook if causing issues"
+  - "Disable CLAUDE.md import if too verbose"
+
+notes:
+  - "This is a Contextune plugin feature, not project-specific"
+  - "Users get this automatically when plugin installed"
+  - "Templates provided for users' own projects"
+  - "RAG integration (Phase 2) planned for future when >100 entries"

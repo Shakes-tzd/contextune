@@ -68,6 +68,94 @@ Where:
 
 **Discussion Note:** Confirmed that GitHub issues are redundant per `copilot-delegate/OLD_VS_NEW_DESIGN.md` - plan.yaml as single source of truth eliminates duplication and 60-80s setup overhead.
 
+### Added - Decision Tracking System Design (2025-10-27)
+
+**Context:** CHANGELOG maintenance is critical but current approach (import entire file) will bloat over time. Need scalable system to preserve context across sessions.
+
+**Problem Identified:**
+- CHANGELOG grows unbounded (after 1 year: 50K+ tokens)
+- Mixing purposes: user-facing releases + developer decisions + AI context
+- Poor queryability: chronological format hard to search
+- No lifecycle: old decisions clutter forever
+
+**Research Conducted:**
+- ADR best practices (AWS, Google, Azure use this)
+- AI assistant context preservation (Cursor, Copilot patterns)
+- YAML vs Markdown for structured data
+- Lifecycle management strategies
+
+**Key Insight from User:** "Isn't YAML better for both human and AI readable while also programmable?"
+- ✅ Correct! YAML = structure + queryability + embedded Markdown
+- Pattern already works: features.yaml successfully tracks 15 features
+- Tools already exist: feature-status.py, feature-execute.py
+
+**Architecture Designed:**
+- `decisions.yaml` - Main database (like features.yaml)
+  - Track 3 types: research, plans, decisions
+  - Structured metadata + Markdown long-form text
+  - Lifecycle rules: research (6 months), plans (90 days), decisions (forever)
+
+- CLI Tools - Query and manage (copy feature-*.py patterns)
+  - `decision-search.py` - Filter by type/status/tags
+  - `decision-add.py` - Interactive entry creation
+  - `decision-report.py` - Auto-generate DECISION_INDEX.md
+  - `decision-lifecycle.py` - Archive old entries
+
+- Skill - Auto-track during conversations
+  - Detects decision discussions automatically
+  - Checks existing decisions before research (avoid $0.07 redundant work)
+  - Appends new entries to decisions.yaml
+
+- Hook - Session end reminder
+  - Prompts to review decisions made
+
+**Token Efficiency:**
+| Time | CHANGELOG (all) | Decision System | Winner |
+|------|-----------------|-----------------|--------|
+| Month 1 | 5K | 5K | Tie |
+| Year 1 | 50K | 10K | Decision (5×) |
+| Year 5 | 150K | 10K | Decision (15×) |
+
+**Lifecycle Strategy:**
+- Research expires after 6 months (tech changes)
+- Plans archive 90 days after completion
+- Decisions never auto-archive (unless superseded)
+- Quarterly archives: `docs/archive/decisions-2025-Q4.yaml`
+
+**Scalability Plan:**
+- Phase 1: Lifecycle + Tiering (0-100 entries, ~10K tokens)
+- Phase 2: RAG integration (>100 entries, semantic search, <5K tokens always)
+- Uses Model2Vec (already in Contextune!) for embeddings
+- Vector DB: Chroma/LanceDB (free, local, no API)
+
+**Design Optimization for /ctx:execute:**
+- 95% copy existing patterns (features.yaml, feature-*.py)
+- Complete templates included in tasks (Haiku just copies)
+- Independent tasks (full parallel execution)
+- Zero ambiguity, zero creative decisions needed
+
+**Implementation Plan Created:**
+- Location: `.plans/decision-tracking-system/`
+- 8 tasks across 3 phases
+- Estimated: 60K tokens (Haiku), $0.070
+- Execution: 2 phases parallel (30-45 min + 20-30 min)
+
+**Files Created:**
+- `.plans/decision-tracking-system/plan.yaml` - Complete execution plan
+- `.plans/decision-tracking-system/tasks/task-1.md` - decisions.yaml schema with full template
+- `.plans/decision-tracking-system/README.md` - Complete documentation
+
+**Next Steps:**
+1. Create remaining task files (tasks 2-8 with templates)
+2. Execute: `/ctx:plan` → `/ctx:execute`
+3. Deploy as Contextune plugin feature (users get automatically)
+
+**Future Enhancement:**
+When >100 entries, add RAG for semantic search:
+- "cost optimization" finds "token estimation" (semantic)
+- Only load top 3 relevant (~2K tokens vs 60K)
+- Token ceiling: ~5K max regardless of total entries
+
 ## [0.8.0] - 2025-10-25
 
 ### Changed
