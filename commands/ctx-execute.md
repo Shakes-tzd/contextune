@@ -246,68 +246,62 @@ Check if a plan was output in the conversation (extraction-optimized format):
 
 ---
 
-### Extraction Process (Automatic)
+### Extraction Process (Automatic from Transcript!)
 
-**When plan is found in conversation, extract it automatically:**
+**IMPORTANT:** Plans can be extracted automatically from the conversation transcript!
 
-**Step 1: Parse Plan Structure**
+**How it works:**
 
-Extract the YAML block under `## Plan Structure`:
+1. **Check if plan.yaml already exists:**
+   ```bash
+   [ -f .parallel/plans/plan.yaml ] && echo "Found" || echo "Not found"
+   ```
 
-```python
-import re
-import yaml
+2. **If NOT found, extract from current session:**
+   ```bash
+   # Run extraction script - it finds and extracts plan automatically
+   ./scripts/extract-current-plan.sh
+   ```
 
-# Find the plan in conversation
-plan_match = re.search(r'## Plan Structure\s*```yaml\n(.*?)```', conversation, re.DOTALL)
-if plan_match:
-    plan_yaml = yaml.safe_load(plan_match.group(1))
+   **What the script does:**
+   - Finds current session's transcript file automatically
+   - Scans transcript for plan output (searches for **Type:** Plan marker)
+   - Extracts ## Plan Structure YAML block
+   - Extracts all ### Task N: sections
+   - Writes to .parallel/plans/plan.yaml and tasks/*.md
+   - Creates helper directories
+
+3. **Verify extraction:**
+   ```bash
+   # Check that files were created
+   ls -la .parallel/plans/
+   cat .parallel/plans/plan.yaml
+   ```
+
+**Workflow options:**
+
+**Option 1: Same-session extraction (Recommended)**
+```
+1. User runs /ctx:plan → Plan output in conversation
+2. User reviews, requests changes if needed
+3. User runs /ctx:execute → Script extracts from transcript automatically
+4. Execution proceeds immediately
 ```
 
-**Step 2: Parse Task Details**
-
-For each `### Task N:` section, extract:
-- YAML frontmatter (between \`\`\`yaml blocks)
-- Markdown content (objective, approach, files, tests, etc.)
-
-```python
-# Find all task sections
-task_pattern = r'### Task (\d+): (.+?)\n.*?```yaml\n(.*?)```\n(.*?)(?=###|---|\Z)'
-tasks = re.findall(task_pattern, conversation, re.DOTALL)
-
-for task_num, task_name, task_yaml, task_content in tasks:
-    task_data = yaml.safe_load(task_yaml)
-    # Write to tasks/task-{task_num}.md
+**Option 2: SessionEnd extraction (Alternative)**
+```
+1. User runs /ctx:plan → Plan output in conversation
+2. User ends session → SessionEnd hook extracts to .parallel/plans/
+3. User starts new session → Runs /ctx:execute → Files already exist
 ```
 
-**Step 3: Create Directory Structure**
+**Both work! Same-session is faster, SessionEnd is more automatic.**
 
-```bash
-mkdir -p .parallel/plans/tasks
-mkdir -p .parallel/plans/templates
-mkdir -p .parallel/plans/scripts
-```
-
-**Step 4: Write Extracted Files**
-
-- `plan.yaml` ← From Plan Structure YAML
-- `tasks/task-N.md` ← From Task N sections
-- `templates/task-template.md` ← Template for adding tasks
-- `scripts/add_task.sh` ← Helper for adding tasks
-- `scripts/generate_full.sh` ← Helper for regenerating PLAN_FULL.md
-
-**Step 5: Report Extraction**
-
-```
-✅ Extracted plan from conversation!
-
-**Created:**
-- .parallel/plans/plan.yaml
-- {N} task files in tasks/
-- Helper scripts and templates
-
-**Proceeding with execution...**
-```
+**If extraction fails:**
+- Script will show error message
+- Check: Was plan output in extraction-optimized format?
+- Check: Does plan have **Type:** Plan marker?
+- Fallback: Ask user to run `/ctx:plan` first
 
 ---
 
