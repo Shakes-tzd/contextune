@@ -26,6 +26,7 @@ Hook Protocol:
 import json
 import subprocess
 import sys
+import re
 from pathlib import Path
 from typing import Any
 
@@ -412,6 +413,114 @@ def load_available_commands() -> list[str]:
     return [cmd for cmd in COMMAND_ACTIONS if cmd.startswith("/")]
 
 
+def load_available_skills() -> dict[str, str]:
+    """
+    Load all available skills from plugin.
+
+    Returns:
+        Dict mapping directory names to skill names
+        e.g., {'software-architect': 'ctx:architect'}
+    """
+    skills_dir = PLUGIN_ROOT / 'skills'
+
+    if not skills_dir.exists():
+        return {}
+
+    skill_map = {}
+
+    for skill_dir in skills_dir.iterdir():
+        if not skill_dir.is_dir():
+            continue
+
+        skill_file = skill_dir / 'SKILL.md'
+        if not skill_file.exists():
+            continue
+
+        # Read skill name from frontmatter
+        try:
+            with open(skill_file) as f:
+                content = f.read()
+                match = re.search(r'^name:\s*(.+)$', content, re.MULTILINE)
+                if match:
+                    skill_name = match.group(1).strip()
+                    skill_map[skill_dir.name] = skill_name
+        except:
+            continue
+
+    return skill_map
+
+
+def detect_skill_invocation(prompt: str) -> tuple[bool, str]:
+    """
+    Detect if user is trying to invoke a skill explicitly.
+
+    Returns:
+        (is_skill_invocation, attempted_skill_name)
+    """
+    patterns = [
+        r'use (?:the )?([a-z\-:]+) skill',
+        r'with (?:the )?([a-z\-:]+) skill',
+        r'([a-z\-:]+) skill to',
+        r'activate (?:the )?([a-z\-:]+)',
+        r'invoke (?:the )?([a-z\-:]+)',
+    ]
+
+    for pattern in patterns:
+        match = re.search(pattern, prompt.lower())
+        if match:
+            return True, match.group(1)
+
+    return False, ''
+
+
+def find_correct_skill_name(attempted_name: str, skill_map: dict[str, str]) -> tuple[str | None, int]:
+    """
+    Find correct skill name using fuzzy matching.
+
+    Args:
+        attempted_name: What user tried to use
+        skill_map: Directory → skill name mapping
+
+    Returns:
+        (correct_name, confidence_score)
+    """
+    from rapidfuzz import fuzz
+
+    # Exact directory match
+    if attempted_name in skill_map:
+        return skill_map[attempted_name], 100
+
+    # Exact skill name match (already correct)
+    if attempted_name in skill_map.values():
+        return attempted_name, 100
+
+    # Fuzzy match
+    best_match = None
+    best_score = 0
+
+    for directory, skill_name in skill_map.items():
+        # Directory name
+        score = fuzz.ratio(attempted_name, directory)
+        if score > best_score and score > 70:
+            best_score = score
+            best_match = skill_name
+
+        # Skill name
+        score = fuzz.ratio(attempted_name, skill_name)
+        if score > best_score and score > 70:
+            best_score = score
+            best_match = skill_name
+
+        # Skill name without prefix
+        skill_base = skill_name.replace('ctx:', '')
+        score = fuzz.ratio(attempted_name, skill_base)
+        if score > best_score and score > 70:
+            best_score = score
+            best_match = skill_name
+
+    return best_match, best_score if best_match else 0
+
+
 def format_suggestion(match: IntentMatch, detection_count: int = 0) -> str:
     """Format detection with directive, actionable phrasing."""
 
@@ -515,6 +624,46 @@ def main():
             return
 
         print("DEBUG: Processing prompt (should_process=True)", file=sys.stderr)
+
+        # SKILL DETECTION: Check if user is trying to invoke a skill
+        is_skill_invocation, attempted_skill = detect_skill_invocation(prompt)
+
+        if is_skill_invocation:
+            print(f"DEBUG: Skill invocation detected: '{attempted_skill}'", file=sys.stderr)
+
+            # Load available skills
+            skill_map = load_available_skills()
+            print(f"DEBUG: Loaded {len(skill_map)} skills", file=sys.stderr)
+
+            # Find correct skill name
+            correct_skill, confidence = find_correct_skill_name(attempted_skill, skill_map)
+
+            if correct_skill and confidence > 70:
+                if attempted_skill != correct_skill:
+                    # Suggest correction
+                    suggestion = f"""💡 Skill Name Correction
+
+Detected: Trying to use '{attempted_skill}' skill
+Correct name: '{correct_skill}' (match confidence: {confidence}%)
+
+Use: {correct_skill}
+
+Available skills:
+{chr(10).join(f'  • {name} (directory: {dir})' for dir, name in skill_map.items())}
+"""
+                    print(f"DEBUG: Suggesting skill name correction: {attempted_skill} → {correct_skill}", file=sys.stderr)
+
+                    response = {
+                        "continue": True,
+                        "additionalContext": suggestion,
+                        "suppressOutput": False
+                    }
+                    print(json.dumps(response))
+                    return
+                else:
+                    print(f"DEBUG: Skill name already correct: {correct_skill}", file=sys.stderr)
+            else:
+                print(f"DEBUG: No matching skill found for '{attempted_skill}'", file=sys.stderr)
 
         # Initialize detector
         detector = ContextuneDetector()

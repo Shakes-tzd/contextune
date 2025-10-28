@@ -225,9 +225,91 @@ def spawn_agent_for_task(task_ref):
 - ✅ If same session (tasks just created) → already in context!
 
 **If no plan exists:**
-- Ask user: "No plan.yaml found. Would you like to create one with `/contextune:parallel:plan`?"
-- Wait for user response
-- If user provides task list directly, create minimal inline YAML plan
+
+Check if a plan was output in the conversation (extraction-optimized format):
+
+1. **Search conversation for plan markers:**
+   - Look for `**Type:** Plan` in recent messages
+   - Look for `## Plan Structure` header
+   - Look for YAML block with `metadata:` and `tasks:`
+
+2. **If plan found in conversation:**
+   - Extract plan automatically (see extraction process below)
+   - Create .parallel/plans/ directory structure
+   - Write extracted files
+   - Continue with execution
+
+3. **If no plan in conversation:**
+   - Ask user: "No plan found. Would you like to create one with `/ctx:plan`?"
+   - Wait for user response
+   - If user provides task list directly, ask them to run `/ctx:plan` first
+
+---
+
+### Extraction Process (Automatic)
+
+**When plan is found in conversation, extract it automatically:**
+
+**Step 1: Parse Plan Structure**
+
+Extract the YAML block under `## Plan Structure`:
+
+```python
+import re
+import yaml
+
+# Find the plan in conversation
+plan_match = re.search(r'## Plan Structure\s*```yaml\n(.*?)```', conversation, re.DOTALL)
+if plan_match:
+    plan_yaml = yaml.safe_load(plan_match.group(1))
+```
+
+**Step 2: Parse Task Details**
+
+For each `### Task N:` section, extract:
+- YAML frontmatter (between \`\`\`yaml blocks)
+- Markdown content (objective, approach, files, tests, etc.)
+
+```python
+# Find all task sections
+task_pattern = r'### Task (\d+): (.+?)\n.*?```yaml\n(.*?)```\n(.*?)(?=###|---|\Z)'
+tasks = re.findall(task_pattern, conversation, re.DOTALL)
+
+for task_num, task_name, task_yaml, task_content in tasks:
+    task_data = yaml.safe_load(task_yaml)
+    # Write to tasks/task-{task_num}.md
+```
+
+**Step 3: Create Directory Structure**
+
+```bash
+mkdir -p .parallel/plans/tasks
+mkdir -p .parallel/plans/templates
+mkdir -p .parallel/plans/scripts
+```
+
+**Step 4: Write Extracted Files**
+
+- `plan.yaml` ← From Plan Structure YAML
+- `tasks/task-N.md` ← From Task N sections
+- `templates/task-template.md` ← Template for adding tasks
+- `scripts/add_task.sh` ← Helper for adding tasks
+- `scripts/generate_full.sh` ← Helper for regenerating PLAN_FULL.md
+
+**Step 5: Report Extraction**
+
+```
+✅ Extracted plan from conversation!
+
+**Created:**
+- .parallel/plans/plan.yaml
+- {N} task files in tasks/
+- Helper scripts and templates
+
+**Proceeding with execution...**
+```
+
+---
 
 **Plan validation:**
 - plan.yaml exists and has valid YAML syntax
@@ -515,9 +597,13 @@ If tests fail:
 
 **Push your branch:**
 
+Use git push (single command is OK per DRY strategy):
+
 ```bash
 git push origin "feature/{task.id}"
 ```
+
+**Note:** If you need commit + push workflow, use `../../scripts/commit_and_push.sh` instead.
 
 **Log completion:**
 
@@ -931,15 +1017,19 @@ chmod +x .parallel/scripts/create_prs.sh
 
 **Alternative: Merge Directly (No Review Needed)**
 
-If you don't need PR reviews:
+If you don't need PR reviews, use the merge script:
 
 ```bash
 # For each completed task:
-git checkout main
-git pull origin main
-git merge feature/task-0 --no-ff -m "Merge task-0: Fix missing utils module"
-git push origin main
+./scripts/merge_and_cleanup.sh task-0 "Fix missing utils module"
 ```
+
+**Script handles:**
+- ✅ Checkout and pull main
+- ✅ Merge with --no-ff
+- ✅ Push to remote
+- ✅ Automatic conflict detection
+- ✅ Error recovery with Haiku
 
 **Choose based on project workflow:**
 - **PRs:** Code review, CI/CD, team visibility
@@ -978,16 +1068,12 @@ git push origin main
 /contextune:parallel:cleanup
 ```
 
-Or manually:
-
-```bash
-# For each completed task:
-git worktree remove worktrees/task-0
-git branch -d feature/task-0
-
-# Prune references
-git worktree prune
-```
+**The command handles:**
+- ✅ Removes all completed worktrees
+- ✅ Deletes merged branches
+- ✅ Prunes stale references
+- ✅ Safety checks (won't delete unmerged work)
+- ✅ Atomic operations (all or nothing)
 
 **Archive the plan:**
 
@@ -1016,8 +1102,9 @@ mv .parallel/plans/20251025-042057 .parallel/archive/
 - 📋 Pending: {Q} tasks (if any)
 
 **Tasks Completed:** {N} / {Total}
-**Total Time:** {actual_time} (estimated: {estimated_time})
-**Time Saved:** {sequential_time - parallel_time} ({percentage}%)
+**Actual Wall-Clock Time:** {actual_time}
+**Speedup vs Sequential:** {speedup_factor}x faster
+**Token Usage:** {total_tokens} tokens (~${cost})
 
 **Merged Branches:**
 - feature/task-0: {task 0 title}

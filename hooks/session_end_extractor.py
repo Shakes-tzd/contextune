@@ -90,6 +90,68 @@ def extract_designs(transcript: list[dict]) -> list[dict]:
     return designs
 
 
+def extract_plans(transcript: list[dict]) -> list[dict]:
+    """
+    Find all parallel development plans in conversation.
+
+    Detection patterns (from extraction-optimized style):
+    - **Type:** Plan
+    - ## Plan Structure
+    - YAML block with metadata: and tasks:
+    - ## Task Details
+    """
+    plans = []
+
+    for i, entry in enumerate(transcript):
+        if entry.get("type") != "assistant":
+            continue
+
+        message = entry.get("message", {})
+        if isinstance(message, dict):
+            content = message.get("content", [])
+            # Handle both old format (string) and new format (list)
+            if isinstance(content, str):
+                text = content
+            elif isinstance(content, list):
+                # Extract text from content blocks
+                text = " ".join(
+                    block.get("text", "")
+                    for block in content
+                    if block.get("type") == "text"
+                )
+            else:
+                continue
+        else:
+            continue
+
+        # Detect extraction-optimized plan patterns
+        patterns = [
+            r"\*\*Type:\*\* Plan",
+            r"## Plan Structure",
+            r"## Task Details",
+            r"```yaml\n.*?metadata:",
+            r"```yaml\n.*?tasks:",
+            r"\*\*Status:\*\* (Ready|Draft)",
+        ]
+
+        pattern_count = sum(
+            len(re.findall(p, text, re.IGNORECASE | re.DOTALL)) for p in patterns
+        )
+
+        # Require at least 3 patterns for plan detection
+        if pattern_count >= 3:
+            plans.append(
+                {
+                    "index": i,
+                    "timestamp": entry.get("timestamp", ""),
+                    "content": text,
+                    "pattern_count": pattern_count,
+                }
+            )
+
+    return plans
+
+
 def extract_yaml_blocks(content: str) -> list[dict]:
     """
     Extract YAML blocks from markdown content.

@@ -27,9 +27,11 @@ You are executing the parallel planning workflow. Your task is to analyze the co
 - ✅ Priority + dependencies (what actually matters for execution)
 
 **DRY Strategy Note:**
-- Modular files justified for **active plans** (frequent updates/reordering)
-- For **documentation/designs** (read-only after creation): Use extraction-optimized output format instead
-- Let SessionEnd/PreCompact hooks extract documentation automatically (no Write tool needed)
+- Plans use **extraction-optimized output format** (visibility + iteration)
+- NO Write tool during planning (user sees full plan in conversation)
+- `/ctx:execute` extracts plan automatically when needed
+- SessionEnd hook as backup (extracts at session end)
+- Result: Modular files created automatically, zero manual work
 
 This command is part of the Contextune plugin and can be triggered via natural language or explicitly with `/contextune:parallel:plan`.
 
@@ -272,32 +274,53 @@ This synthesis will be embedded in the plan document and used to create detailed
 
 ---
 
-## Step 3: Create Plan Directory Structure
+## Step 3: Output Extraction-Optimized Plan Format
 
-Create the modular plan directory structure:
+**IMPORTANT:** Do NOT use the Write tool. Output the plan in structured format in the conversation.
 
-```bash
-mkdir -p .parallel/plans/tasks
-mkdir -p .parallel/plans/templates
-mkdir -p .parallel/plans/scripts
+The `/ctx:execute` command will extract this automatically to modular files when the user runs it.
+
+Your output will be automatically extracted to:
 ```
-
-If this fails, report the error to the user and stop.
+.parallel/plans/
+├── plan.yaml           ← From your Plan Structure YAML
+├── tasks/
+│   ├── task-0.md      ← From your Task 0 section
+│   ├── task-1.md      ← From your Task 1 section
+│   └── ...
+├── templates/
+│   └── task-template.md
+└── scripts/
+    ├── add_task.sh
+    └── generate_full.sh
+```
 
 ---
 
-## Step 4: Generate Modular YAML Plan
+## Step 4: Output Plan in Extraction-Optimized Format
 
-### 4.1 Create plan.yaml
+Output your plan in this structured markdown format. The extraction process will parse this into modular files automatically.
 
-Create the main plan file at `.parallel/plans/plan.yaml` using the Write tool.
+**Format Template:**
 
-Use the current timestamp in format: `YYYYMMDD-HHMMSS`
+```markdown
+# Implementation Plan: {Feature Name}
 
-The `plan.yaml` MUST follow this structure:
+**Type:** Plan
+**Status:** Ready
+**Created:** {YYYYMMDD-HHMMSS}
 
-```yaml
-# Plan metadata (lightweight!)
+---
+
+## Overview
+
+{2-3 sentence description of what this plan accomplishes}
+
+---
+
+## Plan Structure
+
+\`\`\`yaml
 metadata:
   name: "{Feature Name}"
   created: "{YYYYMMDD-HHMMSS}"
@@ -410,13 +433,13 @@ changelog:
 - If tasks created in same session → already in context, no re-read needed!
 - If new session → model reads specific task files only when spawning agents
 
-### 4.2 Create Individual Task Files
+\`\`\`
 
-For each task identified, create a separate Markdown file: `.parallel/plans/tasks/task-{N}.md`
+---
 
-**IMPORTANT:** Tasks are stored in **GitHub issue format** (Markdown + YAML frontmatter) to eliminate transformation overhead in Haiku agents!
+## Task Details
 
-**Task Markdown Structure:**
+For each task in your plan, output a task section using this format:
 
 ```markdown
 ---
@@ -493,299 +516,53 @@ labels:
 🤖 Auto-created via Contextune parallel execution
 ```
 
-**Why Markdown instead of YAML?**
-- ✅ **Zero transformation**: Haiku agents pipe directly to `gh issue create --body-file`
-- ✅ **~500 tokens saved per task** (no parsing, no reformatting)
-- ✅ **GitHub-native format**: Emoji, checkboxes, formatting work natively
-- ✅ **Human-readable**: Preview in any markdown viewer
+**Important:** Output one task section for EACH task in your plan. Repeat the structure above for task-0, task-1, task-2, etc.
 
-Create one task file for each task (task-0.md, task-1.md, etc.).
-
-### 4.3 Create Task Template
-
-Create `.parallel/plans/templates/task-template.md` for users to copy when adding tasks:
+**End the plan output with:**
 
 ```markdown
 ---
-id: task-NEW
-priority: medium  # blocker | high | medium | low
-status: pending   # pending | in_progress | completed | blocked
-dependencies: []
-labels:
-  - parallel-execution
-  - auto-created
-  - priority-medium
----
 
-# Task Name
+## References
 
-## 🎯 Objective
+- [Related documentation]
+- [Related code]
+```
 
-Clear description of what this task accomplishes.
-
-## 🛠️ Implementation Approach
-
-Describe the approach here.
-
-**Libraries:**
-- `library-name` - Why needed
-
-**Pattern to follow:**
-- **File:** `path/to/file.ts:line`
-- **Description:** What pattern to follow
-
-## 📁 Files to Touch
-
-**Create:**
-- `path/to/new/file.ts`
-
-**Modify:**
-- `path/to/existing/file.ts`
-
-**Delete:**
-- (if any)
-
-## 🧪 Tests Required
-
-**Unit:**
-- [ ] Test specific functionality
-- [ ] Test edge cases
-
-**Integration:**
-- [ ] Test integration with other components
-
-## ✅ Acceptance Criteria
-
-- [ ] All unit tests pass
-- [ ] Functionality works as specified
-- [ ] Code follows project conventions
-
-## ⚠️ Potential Conflicts
-
-**Files:**
-- (if any conflicts, list here)
-
-## 📝 Notes
-
-Additional context, gotchas, or decisions.
+This completes the extraction-optimized plan format.
 
 ---
 
-**Worktree:** `worktrees/task-NEW`
-**Branch:** `feature/task-NEW`
+## Step 5: Validate Your Plan Output
 
-🤖 Auto-created via Contextune parallel execution
-```
+Before finishing, verify your conversation output includes:
 
-### 4.4 Create Helper Scripts
+1. ✅ **Detection markers:** `**Type:** Plan` header
+2. ✅ **Plan Structure section:** With valid YAML block containing:
+   - `metadata:` with name, created, status
+   - `tasks:` array with id, name, file, priority, dependencies
+   - `shared_resources:`, `testing:`, `success_criteria:`
+3. ✅ **Task Details sections:** One `### Task N:` section per task
+4. ✅ **Task YAML frontmatter:** Each task has valid YAML between \`\`\`yaml blocks
+5. ✅ **At least 1 task defined**
+6. ✅ **Valid dependencies:** No circular deps, all referenced tasks exist
+7. ✅ **Priorities set:** Each task has blocker/high/medium/low
+8. ✅ **NO time estimates:** Only tokens, complexity, priority
 
-**Script 1: add_task.sh** - Add new task to plan
+**Extraction will happen automatically when user runs `/ctx:execute` or at session end.**
 
-Create `.parallel/plans/scripts/add_task.sh`:
-
-```bash
-#!/bin/bash
-# Helper: Add new task to plan
-
-TASK_NUM=$1
-TASK_NAME=$2
-
-if [ -z "$TASK_NUM" ] || [ -z "$TASK_NAME" ]; then
-  echo "Usage: ./add_task.sh <task-num> <task-name>"
-  echo ""
-  echo "Example: ./add_task.sh 5 'Implement user authentication'"
-  exit 1
-fi
-
-# Copy template
-cp templates/task-template.md tasks/task-$TASK_NUM.md
-
-# Update task ID and name in file
-sed -i '' "s/task-NEW/task-$TASK_NUM/g" tasks/task-$TASK_NUM.md
-sed -i '' "s/Task Name/$TASK_NAME/g" tasks/task-$TASK_NUM.md
-
-echo "✅ Created tasks/task-$TASK_NUM.md"
-echo ""
-echo "📝 Now add reference to plan.yaml:"
-echo ""
-echo "  - id: \"task-$TASK_NUM\""
-echo "    file: \"tasks/task-$TASK_NUM.md\""
-echo "    priority: \"medium\"  # Change as needed"
-echo ""
-echo "Then edit tasks/task-$TASK_NUM.md to fill in details."
-echo ""
-echo "Finally, run: ./scripts/generate_full.sh"
-```
-
-**Script 2: generate_full.sh** - Regenerate PLAN_FULL.md from task files
-
-Create `.parallel/plans/scripts/generate_full.sh`:
-
-```bash
-#!/bin/bash
-# Helper: Regenerate PLAN_FULL.md from modular task files
-
-PLAN_FILE="plan.yaml"
-OUTPUT_FILE="PLAN_FULL.md"
-
-if [ ! -f "$PLAN_FILE" ]; then
-  echo "❌ Error: plan.yaml not found"
-  exit 1
-fi
-
-echo "📝 Generating $OUTPUT_FILE from modular task files..."
-
-# Extract metadata from plan.yaml
-PLAN_NAME=$(grep "name:" $PLAN_FILE | head -1 | sed 's/.*name: *"\(.*\)".*/\1/')
-CREATED=$(grep "created:" $PLAN_FILE | head -1 | sed 's/.*created: *"\(.*\)".*/\1/')
-STATUS=$(grep "status:" $PLAN_FILE | head -1 | sed 's/.*status: *"\(.*\)".*/\1/')
-
-# Start output file
-cat > $OUTPUT_FILE <<EOF
-# Development Plan: $PLAN_NAME
-
-**Created:** $CREATED
-**Status:** $STATUS
+If you notice issues in your output, fix them before reporting to user.
 
 ---
 
-EOF
-
-# Extract overview
-echo "## 📋 Overview" >> $OUTPUT_FILE
-echo "" >> $OUTPUT_FILE
-grep -A 10 "overview:" $PLAN_FILE | tail -n +2 | sed '/^$/d' | sed 's/^  //' >> $OUTPUT_FILE
-echo "" >> $OUTPUT_FILE
-echo "---" >> $OUTPUT_FILE
-echo "" >> $OUTPUT_FILE
-
-# Append each task file
-TASK_COUNT=0
-for TASK_REF in $(grep "file:" $PLAN_FILE | sed 's/.*file: *"\(.*\)".*/\1/'); do
-  TASK_FILE="$TASK_REF"
-  if [ -f "$TASK_FILE" ]; then
-    echo "  ✅ Adding $TASK_FILE"
-    cat "$TASK_FILE" >> $OUTPUT_FILE
-    echo "" >> $OUTPUT_FILE
-    echo "---" >> $OUTPUT_FILE
-    echo "" >> $OUTPUT_FILE
-    ((TASK_COUNT++))
-  else
-    echo "  ⚠️  Warning: $TASK_FILE not found"
-  fi
-done
-
-echo ""
-echo "✅ Generated $OUTPUT_FILE with $TASK_COUNT tasks"
-echo ""
-echo "📖 Read entire plan: cat PLAN_FULL.md"
-echo "🔍 Read single task: cat tasks/task-N.md"
-```
-
-Make both executable:
-```bash
-chmod +x .parallel/plans/scripts/add_task.sh
-chmod +x .parallel/plans/scripts/generate_full.sh
-```
-
----
-
-## Step 5: Add .parallel/ to .gitignore
-
-Check if `.gitignore` exists and contains `.parallel/`:
-
-```bash
-grep -q "^\.parallel/" .gitignore 2>/dev/null
-```
-
-If the grep command exits with non-zero status, add `.parallel/` to `.gitignore`:
-
-Use the Edit tool to add to `.gitignore`:
-```
-.parallel/
-```
-
-If `.gitignore` doesn't exist, create it using the Write tool.
-
-Commit the change:
-```bash
-git add .gitignore
-git commit -m "chore: add .parallel/ to gitignore"
-```
-
-If the commit fails (e.g., already exists), continue anyway.
-
----
-
-## Step 5: Generate PLAN_FULL.md (Human Review Only)
-
-After creating all task files, generate the consolidated plan for human review:
-
-```bash
-cd .parallel/plans
-./scripts/generate_full.sh
-```
-
-**IMPORTANT:** `PLAN_FULL.md` is for **human review only**!
-- ✅ User runs `cat PLAN_FULL.md` to review the full plan
-- ❌ Model NEVER reads this file
-- ❌ Model uses `plan.yaml` as index/TOC instead
-
-**Why this matters:**
-- If tasks were created in same session → already in model context (don't re-read!)
-- If new session → model reads `plan.yaml` index, then specific task files as needed
-- PLAN_FULL.md would waste context by re-loading everything unnecessarily
-
----
-
-## Step 6: Validate the Plan
-
-Before reporting to the user, verify:
-
-1. **plan.yaml exists** (use Read tool to confirm)
-2. **All task files exist** (check each tasks/task-N.md)
-3. **Valid YAML syntax in plan.yaml** (no parse errors)
-4. **Valid YAML frontmatter in each task** (no parse errors)
-5. **At least 1 task defined** in plan.yaml
-6. **Task references match files** (plan.yaml IDs = actual task file IDs)
-7. **Dependencies are valid** (no circular deps, referenced tasks exist)
-8. **Priorities are set** (blocker/high/medium/low)
-9. **PLAN_FULL.md generated** (should exist)
-
-**Quick validation:**
-```bash
-# Check YAML syntax
-python3 -c "import yaml; yaml.safe_load(open('.parallel/plans/plan.yaml'))"
-
-# Check all task files exist
-for task in $(grep "file:" .parallel/plans/plan.yaml | cut -d'"' -f2); do
-  [ -f ".parallel/plans/$task" ] || echo "Missing: $task"
-done
-
-# Check PLAN_FULL.md exists
-[ -f ".parallel/plans/PLAN_FULL.md" ] || echo "Warning: PLAN_FULL.md not generated"
-```
-
-If validation fails, report the error to the user and ask for guidance.
-
----
-
-## Step 7: Report to User
+## Step 6: Report to User
 
 Tell the user:
 
 ```
-📋 Created modular plan: .parallel/plans/
+📋 Plan created in extraction-optimized format!
 
-**Structure:**
-- plan.yaml (main plan with metadata)
-- tasks/*.md ({N} GitHub-ready task files)
-- PLAN_FULL.md (consolidated single-file view)
-- templates/task-template.md (for adding tasks)
-- scripts/add_task.sh (helper: add tasks)
-- scripts/generate_full.sh (helper: regenerate PLAN_FULL.md)
-
-**Task Summary:**
+**Plan Summary:**
 - {N} total tasks
 - {X} can run in parallel
 - {Y} have dependencies (sequential)
@@ -797,29 +574,40 @@ Tell the user:
 - Medium: {list task IDs}
 - Low: {list task IDs}
 
-**Key Benefits:**
-✅ **Zero transformation**: Tasks in GitHub issue format → Haiku agents pipe directly
-✅ **~500 tokens saved per task** (no parsing, no reformatting)
-✅ **Single-read option**: PLAN_FULL.md for full overview (no N+1 reads)
-✅ **Modular editing**: Add/remove/update tasks without touching others
-✅ **95% fewer tokens** for updates (edit one task vs entire plan)
-✅ **GitHub-native**: Emoji, checkboxes, formatting work natively
+**What Happens Next:**
 
-**Next Steps:**
-1. Review full plan: `cat .parallel/plans/PLAN_FULL.md`
-2. Review individual tasks: `ls .parallel/plans/tasks/`
-3. Execute: `/contextune:parallel:execute`
+The plan above will be automatically extracted to modular files when you:
+1. Run `/ctx:execute` - Extracts and executes immediately
+2. End this session - SessionEnd hook extracts automatically
 
-**How to Add Tasks Later:**
-```bash
-cd .parallel/plans
-./scripts/add_task.sh 10 "New Task Name"
-# Edit tasks/task-10.md to fill in details
-# Add reference to plan.yaml
-./scripts/generate_full.sh  # Regenerate PLAN_FULL.md
+**Extraction Output:**
+```
+.parallel/plans/
+├── plan.yaml           (main plan with metadata)
+├── tasks/
+│   ├── task-0.md      (GitHub-ready task files)
+│   ├── task-1.md
+│   └── ...
+├── templates/
+│   └── task-template.md
+└── scripts/
+    ├── add_task.sh
+    └── generate_full.sh
 ```
 
-Ready to execute? Run `/contextune:parallel:execute` to start parallel development.
+**Key Benefits:**
+✅ **Full visibility**: You see complete plan in conversation
+✅ **Easy iteration**: Ask for changes before extraction
+✅ **Zero manual work**: Extraction happens automatically
+✅ **Modular files**: Edit individual tasks after extraction
+✅ **Perfect DRY**: Plan exists once (conversation), extracted once (files)
+
+**Next Steps:**
+1. Review the plan above (scroll up if needed)
+2. Request changes: "Change task 2 to use React instead of Vue"
+3. When satisfied, run: `/ctx:execute`
+
+Ready to execute? Run `/ctx:execute` to extract and start parallel development.
 ```
 
 Include a warning if:
@@ -832,35 +620,29 @@ Include a warning if:
 
 ## Error Handling
 
-**If directory creation fails:**
-- Check permissions
-- Report error to user
-- Suggest manual creation: `mkdir -p .parallel/plans/{tasks,templates,scripts}`
-
-**If Write tool fails:**
-- Check if file already exists (read it first)
-- Report error to user
-- Suggest manual file creation
-
-**If YAML syntax is invalid:**
-- Report YAML parse error to user
-- Show which file has syntax error
-- Suggest fixing with YAML validator
+**If YAML syntax is invalid in your output:**
+- Check your YAML blocks for syntax errors
+- Validate with a YAML parser before outputting
+- Common issues: Improper indentation, missing quotes, unclosed brackets
 
 **If task dependencies are circular:**
-- Report circular dependency chain (e.g., task-1 → task-2 → task-1)
-- Suggest breaking the cycle
-- Block execution until fixed
-
-**If git commit fails:**
-- Check if there are uncommitted changes
-- Report to user but continue (not critical)
+- Detect the cycle (e.g., task-1 → task-2 → task-1)
+- Fix the dependencies in your output
+- Ensure each task can complete before its dependents start
 
 **If conversation context is insufficient:**
 - Ask user for clarification:
   - What features do they want to implement?
   - Which tasks can run independently?
   - Are there any dependencies?
+  - What libraries or patterns should be used?
+
+**If extraction fails (reported by `/ctx:execute`):**
+- The user will see error messages from the extraction process
+- Common fixes:
+  - Ensure `**Type:** Plan` header is present
+  - Verify YAML blocks are properly formatted
+  - Check that task IDs match between plan and task sections
 
 ---
 
@@ -878,22 +660,21 @@ When users say things like "plan parallel development for X, Y, Z", Contextune r
 
 ## Notes
 
-- Always create a modular plan even if the user's request is brief
+- Output plans in extraction-optimized format (NO Write tool)
 - Break down vague requests into specific, actionable tasks
 - Ask clarifying questions if the scope is unclear
 - Prioritize task independence to maximize parallelization
 - Document assumptions in each task's notes section
-- Keep individual task files focused and concise (50-100 lines)
-- **NO TIME ESTIMATES** - use priority and dependencies instead
-- Each task file should be self-contained and readable on its own
-- The plan.yaml should be lightweight (just references and metadata)
-- **Always run generate_full.sh after creating/modifying tasks**
+- **NO TIME ESTIMATES** - use priority, dependencies, and tokens instead
+- Ensure each task section is self-contained and complete
+- The plan YAML should be lightweight (just references and metadata)
+- **Extraction happens automatically** when user runs `/ctx:execute` or ends session
 
-**Benefits of Hybrid Markdown Architecture:**
-- **Zero transformation**: Tasks already in GitHub issue format (~500 tokens saved per task!)
-- **Single-read option**: PLAN_FULL.md for full overview (no N+1 reads)
-- **Modular editing**: 95% fewer tokens for updates (edit one task vs entire plan)
-- **Better git diffs**: One task file changed vs entire plan
-- **GitHub-native**: Emoji, checkboxes, formatting work natively
-- **Parallel editing**: Multiple people can edit different tasks
-- **Clearer structure**: One file = one concern
+**Benefits of Extraction-Based Approach:**
+- **Full visibility**: User sees complete plan in conversation
+- **Easy iteration**: User can request changes before extraction
+- **Perfect DRY**: Plan exists once (conversation), extracted once (files)
+- **Zero manual work**: No Write tool calls, extraction is automatic
+- **Modular output**: Extracted files are modular and editable
+- **GitHub-native**: Tasks in GitHub issue format (zero transformation!)
+- **Token efficient**: ~500 tokens saved per task (no parsing overhead)
