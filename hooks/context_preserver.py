@@ -4,12 +4,18 @@
 # dependencies = ["pyyaml>=6.0"]
 # ///
 """
-Automated Context Preservation Hook (PreCompact)
+Enhanced Context Preservation Hook (PreCompact) with Checkpoint Pattern
 
-Automatically extracts working context from conversation transcript
-before compaction and writes to scratch_pad.md for next session.
+Implements checkpoint pattern for long sessions:
+1. Extracts COMPLETED plans to .plans/ (permanent storage)
+2. Preserves IN-PROGRESS work to scratch_pad.md (ephemeral transfer)
+3. Enables compact-after-plan workflow
 
-Eliminates manual copying of Claude's last message.
+Benefits:
+- Each plan becomes a checkpoint (permanent)
+- Compaction clears old discussion (reduces bloat)
+- Working context stays focused on current plan
+- Cumulative documentation without context pollution
 """
 
 import json
@@ -17,9 +23,13 @@ import sys
 import re
 from pathlib import Path
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
+import yaml
 
-# High-value patterns indicating working context worth preserving
+# Import extraction functions from session_end_extractor
+sys.path.insert(0, str(Path(__file__).parent))
+
+# High-value patterns for in-progress work
 HIGH_VALUE_PATTERNS = [
     r'## Architecture',
     r'## Implementation',
@@ -27,198 +37,324 @@ HIGH_VALUE_PATTERNS = [
     r'## Solution:',
     r'```yaml',
     r'```python',
-    r'decision-sync\.py',
-    r'decision-link\.py',
     r'Option \d+:',
     r'Let me design',
     r'Enhanced schema:',
-    r'Auto-population',
-    r'file_path.*\.md',
     r'task-\d+\.md',
-    r'Updated plan:',
-    r'### \d+\.',  # Numbered sections
 ]
 
-def extract_last_claude_message(transcript_path: str) -> Optional[str]:
+# Plan completion markers
+PLAN_COMPLETION_MARKERS = [
+    r'\*\*Type:\*\* (Design|Plan|Architecture)',
+    r'\*\*Status:\*\* (Complete|Ready)',
+    r'## Success Criteria',
+    r'## Task Breakdown',
+    r'Ready for: /ctx:plan',
+    r'Ready for: /ctx:execute',
+]
+
+def read_full_transcript(transcript_path: str) -> List[dict]:
     """
-    Extract the last message from Claude in the conversation.
+    Read full conversation transcript.
 
     Args:
-        transcript_path: Path to conversation transcript file
+        transcript_path: Path to transcript JSONL file
 
     Returns:
-        Last Claude message content or None if not found
+        List of conversation entries
     """
     try:
         with open(transcript_path, 'r') as f:
-            content = f.read()
-
-        # Claude Code transcript format - try JSON lines first
-        lines = content.strip().split('\n')
-        for line in reversed(lines):
-            try:
-                entry = json.loads(line)
-                if entry.get('role') == 'assistant':
-                    return entry.get('content', '')
-            except json.JSONDecodeError:
-                continue
-
-        # Fallback: look for last message with "assistant:" prefix
-        assistant_messages = re.findall(r'assistant:\s*(.*?)(?=\nuser:|$)', content, re.DOTALL)
-        if assistant_messages:
-            return assistant_messages[-1].strip()
-
-        return None
-
+            return [json.loads(line) for line in f if line.strip()]
     except Exception as e:
         print(f"DEBUG: Failed to read transcript: {e}", file=sys.stderr)
+        return []
+
+def extract_assistant_text(entry: dict) -> Optional[str]:
+    """Extract text from assistant message entry."""
+    if entry.get('type') != 'assistant':
         return None
 
-def detect_working_context(message: str) -> int:
-    """
-    Count high-value patterns in message to determine if it contains
-    working context worth preserving.
+    message = entry.get('message', {})
+    if not isinstance(message, dict):
+        return None
 
-    Args:
-        message: Claude's message content
+    content = message.get('content', [])
 
-    Returns:
-        Number of high-value patterns detected
+    # Handle both formats
+    if isinstance(content, str):
+        return content
+    elif isinstance(content, list):
+        return ' '.join(
+            block.get('text', '')
+            for block in content
+            if block.get('type') == 'text'
+        )
+
+    return None
+
+def is_completed_plan(text: str) -> int:
     """
-    if not message:
+    Detect if text contains a COMPLETED plan.
+
+    Returns count of completion markers (≥2 = completed plan)
+    """
+    if not text:
         return 0
 
     count = 0
-    for pattern in HIGH_VALUE_PATTERNS:
-        matches = re.findall(pattern, message, re.IGNORECASE)
+    for pattern in PLAN_COMPLETION_MARKERS:
+        matches = re.findall(pattern, text, re.IGNORECASE)
         count += len(matches)
 
     return count
 
-def extract_structured_content(message: str) -> dict:
+def extract_plans_from_transcript(transcript: List[dict]) -> List[dict]:
     """
-    Extract structured content sections from message.
+    Extract all completed plans from conversation.
 
     Args:
-        message: Claude's message content
+        transcript: Full conversation transcript
 
     Returns:
-        Dict with extracted sections (yaml_blocks, code_blocks, sections)
+        List of {index, timestamp, content, completion_score} dicts
     """
-    result = {
-        'yaml_blocks': [],
-        'code_blocks': [],
-        'sections': [],
-        'full_message': message
-    }
+    plans = []
 
-    # Extract YAML blocks
-    yaml_blocks = re.findall(r'```yaml\n(.*?)```', message, re.DOTALL)
-    result['yaml_blocks'] = yaml_blocks
+    for i, entry in enumerate(transcript):
+        text = extract_assistant_text(entry)
+        if not text:
+            continue
 
-    # Extract code blocks
-    code_blocks = re.findall(r'```(?:python|bash|javascript)\n(.*?)```', message, re.DOTALL)
-    result['code_blocks'] = code_blocks
+        completion_score = is_completed_plan(text)
 
-    # Extract major sections (## headings)
-    sections = re.findall(r'##\s+(.+?)(?=\n##|\Z)', message, re.DOTALL)
-    result['sections'] = sections
+        # Require ≥2 completion markers for a plan
+        if completion_score >= 2:
+            plans.append({
+                'index': i,
+                'timestamp': entry.get('timestamp', ''),
+                'content': text,
+                'completion_score': completion_score
+            })
 
-    return result
+    return plans
 
-def write_scratch_pad(project_root: Path, content: dict, session_id: str):
+def extract_yaml_blocks(content: str) -> List[dict]:
+    """Extract and parse YAML blocks."""
+    yaml_blocks = re.findall(r'```yaml\n(.*?)```', content, re.DOTALL)
+    parsed = []
+
+    for block in yaml_blocks:
+        try:
+            data = yaml.safe_load(block)
+            if data:
+                parsed.append(data)
+        except yaml.YAMLError:
+            continue
+
+    return parsed
+
+def extract_title(content: str) -> Optional[str]:
+    """Extract title from markdown (# Title)."""
+    match = re.search(r'^#\s+(.+?)$', content, re.MULTILINE)
+    return match.group(1).strip() if match else None
+
+def sanitize_topic(title: str) -> str:
+    """Convert title to filesystem-safe slug."""
+    slug = re.sub(r'[^\w\s-]', '', title.lower())
+    slug = re.sub(r'[-\s]+', '-', slug)
+    return slug[:50]
+
+def save_plan_to_disk(project_root: Path, plan: dict, session_id: str) -> bool:
     """
-    Write extracted content to scratch_pad.md in project root.
+    Save completed plan to .plans/ directory.
 
     Args:
         project_root: Project root directory
-        content: Extracted structured content
+        plan: Plan dict with content
         session_id: Current session ID
+
+    Returns:
+        bool indicating success
     """
+    try:
+        content = plan['content']
+
+        # Extract title and create topic slug
+        title = extract_title(content) or 'untitled-plan'
+        topic_slug = sanitize_topic(title)
+
+        # Create .plans directory
+        plans_dir = project_root / '.plans' / topic_slug
+        plans_dir.mkdir(parents=True, exist_ok=True)
+
+        # Write design.md
+        design_file = plans_dir / 'design.md'
+        with open(design_file, 'w') as f:
+            f.write(content)
+
+        print(f"DEBUG: ✅ Checkpoint: Saved plan to {design_file}", file=sys.stderr)
+
+        # Extract and save tasks if present
+        yaml_blocks = extract_yaml_blocks(content)
+        task_count = 0
+
+        for yaml_data in yaml_blocks:
+            if 'tasks' in yaml_data and isinstance(yaml_data['tasks'], list):
+                tasks_dir = plans_dir / 'tasks'
+                tasks_dir.mkdir(exist_ok=True)
+
+                for task in yaml_data['tasks']:
+                    if not isinstance(task, dict):
+                        continue
+
+                    task_id = task.get('id', f'task-{task_count + 1}')
+                    task_file = tasks_dir / f"{task_id}.md"
+
+                    with open(task_file, 'w') as f:
+                        # YAML frontmatter
+                        f.write('---\n')
+                        yaml.dump(task, f, default_flow_style=False, sort_keys=False)
+                        f.write('---\n\n')
+
+                        # Task body
+                        title = task.get('title', 'Untitled')
+                        f.write(f"# {task_id}: {title}\n\n")
+                        f.write(task.get('description', '(To be filled in)\n'))
+
+                    task_count += 1
+
+        if task_count:
+            print(f"DEBUG: ✅ Checkpoint: Saved {task_count} task files", file=sys.stderr)
+
+        return True
+
+    except Exception as e:
+        print(f"DEBUG: Failed to save plan: {e}", file=sys.stderr)
+        return False
+
+def extract_last_message_for_scratch_pad(transcript_path: str) -> Optional[str]:
+    """Extract last Claude message for scratch_pad."""
+    try:
+        with open(transcript_path, 'r') as f:
+            lines = f.readlines()
+
+        for line in reversed(lines):
+            try:
+                entry = json.loads(line)
+                if entry.get('type') == 'assistant':
+                    message = entry.get('message', {})
+                    if isinstance(message, dict):
+                        content = message.get('content', [])
+                        if isinstance(content, list):
+                            text = ' '.join(
+                                block.get('text', '')
+                                for block in content
+                                if block.get('type') == 'text'
+                            )
+                            return text if text.strip() else None
+            except json.JSONDecodeError:
+                continue
+
+        return None
+
+    except Exception as e:
+        print(f"DEBUG: Failed to extract last message: {e}", file=sys.stderr)
+        return None
+
+def write_scratch_pad(project_root: Path, content: str, session_id: str):
+    """Write in-progress work to scratch_pad.md."""
     scratch_pad = project_root / 'scratch_pad.md'
 
     with open(scratch_pad, 'w') as f:
-        f.write(f"# Context Preserved from Compaction\n\n")
+        f.write(f"# In-Progress Context from Compaction\n\n")
         f.write(f"**Session ID:** {session_id}\n")
         f.write(f"**Preserved:** {datetime.now().isoformat()}\n")
         f.write(f"**Auto-extracted by:** PreCompact hook\n\n")
         f.write("---\n\n")
+        f.write(content)
 
-        # Write full message
-        f.write("## Last Claude Message (Full Context)\n\n")
-        f.write(content['full_message'])
-        f.write("\n\n---\n\n")
-
-        # Write extracted structured content
-        if content['yaml_blocks']:
-            f.write("## Extracted YAML Blocks\n\n")
-            for i, block in enumerate(content['yaml_blocks'], 1):
-                f.write(f"### YAML Block {i}\n\n")
-                f.write(f"```yaml\n{block}```\n\n")
-
-        if content['code_blocks']:
-            f.write("## Extracted Code Blocks\n\n")
-            for i, block in enumerate(content['code_blocks'], 1):
-                f.write(f"### Code Block {i}\n\n")
-                f.write(f"```\n{block}```\n\n")
-
-    print(f"DEBUG: ✅ Preserved context to {scratch_pad}", file=sys.stderr)
+    print(f"DEBUG: ✅ Preserved in-progress work to scratch_pad.md", file=sys.stderr)
 
 def main():
     """
-    PreCompact hook entry point.
+    Enhanced PreCompact hook with checkpoint pattern.
 
-    Reads conversation transcript, extracts last Claude message,
-    detects working context, and writes to scratch_pad.md if valuable.
+    1. Extracts COMPLETED plans to .plans/ (checkpoints)
+    2. Preserves IN-PROGRESS work to scratch_pad.md
+    3. Enables compact-after-plan workflow
     """
     try:
-        # Read hook data
         hook_data = json.loads(sys.stdin.read())
 
         transcript_path = hook_data.get('transcript_path', '')
         session_id = hook_data.get('session_id', 'unknown')
         trigger = hook_data.get('trigger', 'unknown')
 
-        print(f"DEBUG: PreCompact triggered ({trigger})", file=sys.stderr)
-        print(f"DEBUG: Transcript path: {transcript_path}", file=sys.stderr)
+        print(f"DEBUG: PreCompact checkpoint triggered ({trigger})", file=sys.stderr)
 
-        # Extract last Claude message
-        last_message = extract_last_claude_message(transcript_path)
+        if not transcript_path or not Path(transcript_path).exists():
+            print("DEBUG: Transcript not found", file=sys.stderr)
+            output = {"continue": True}
+            print(json.dumps(output))
+            sys.exit(0)
 
-        if not last_message:
-            print("DEBUG: No Claude message found in transcript", file=sys.stderr)
-            return
+        # Find project root
+        project_root = Path.cwd()
+        transcript_dir = Path(transcript_path).parent
+        temp_root = transcript_dir
+        while temp_root.parent != temp_root:
+            if (temp_root / '.git').exists() or (temp_root / 'pyproject.toml').exists():
+                project_root = temp_root
+                break
+            temp_root = temp_root.parent
 
-        # Detect if message contains working context
-        pattern_count = detect_working_context(last_message)
+        print(f"DEBUG: Project root: {project_root}", file=sys.stderr)
 
-        print(f"DEBUG: Detected {pattern_count} high-value patterns", file=sys.stderr)
+        # Step 1: Extract COMPLETED plans (checkpoint pattern)
+        print(f"DEBUG: Scanning for completed plans...", file=sys.stderr)
+        transcript = read_full_transcript(transcript_path)
+        completed_plans = extract_plans_from_transcript(transcript)
 
-        # Threshold: preserve if ≥3 high-value patterns
-        if pattern_count >= 3:
-            print("DEBUG: Working context detected, preserving...", file=sys.stderr)
+        print(f"DEBUG: Found {len(completed_plans)} completed plans", file=sys.stderr)
 
-            # Extract structured content
-            structured = extract_structured_content(last_message)
+        plans_saved = 0
+        for plan in completed_plans:
+            if save_plan_to_disk(project_root, plan, session_id):
+                plans_saved += 1
 
-            # Find project root (walk up from transcript location)
-            project_root = Path(transcript_path).parent
-            while project_root.parent != project_root:
-                if (project_root / '.git').exists() or (project_root / 'pyproject.toml').exists():
-                    break
-                project_root = project_root.parent
+        if plans_saved:
+            print(f"DEBUG: 🎯 Checkpoint: {plans_saved} completed plans saved to .plans/", file=sys.stderr)
 
-            # Write to scratch_pad.md
-            write_scratch_pad(project_root, structured, session_id)
+        # Step 2: Preserve IN-PROGRESS work to scratch_pad.md
+        last_message = extract_last_message_for_scratch_pad(transcript_path)
 
-            print(f"DEBUG: 🎯 Context preserved ({len(last_message)} chars, {pattern_count} patterns)", file=sys.stderr)
-        else:
-            print(f"DEBUG: No significant working context ({pattern_count} patterns < 3 threshold)", file=sys.stderr)
+        if last_message:
+            # Check if last message is in-progress work (not a completed plan)
+            completion_score = is_completed_plan(last_message)
+
+            if completion_score < 2:
+                # In-progress work - save to scratch_pad
+                pattern_count = len([p for p in HIGH_VALUE_PATTERNS
+                                   if re.search(p, last_message, re.IGNORECASE)])
+
+                if pattern_count >= 3:
+                    write_scratch_pad(project_root, last_message, session_id)
+                    print(f"DEBUG: ✅ Preserved in-progress work ({pattern_count} patterns)", file=sys.stderr)
+            else:
+                print(f"DEBUG: Last message is completed plan (already extracted)", file=sys.stderr)
+
+        # Summary
+        print(f"DEBUG: 📋 Checkpoint Summary:", file=sys.stderr)
+        print(f"DEBUG:   Completed plans: {plans_saved} saved to .plans/", file=sys.stderr)
+        print(f"DEBUG:   In-progress work: {'saved to scratch_pad.md' if last_message and completion_score < 2 else 'none'}", file=sys.stderr)
 
     except Exception as e:
-        print(f"DEBUG: Context preservation failed: {e}", file=sys.stderr)
+        print(f"DEBUG: Checkpoint failed: {e}", file=sys.stderr)
+        import traceback
+        traceback.print_exc(file=sys.stderr)
 
-    # Always continue (don't block compaction)
+    # Always continue
     output = {"continue": True}
     print(json.dumps(output))
     sys.exit(0)
