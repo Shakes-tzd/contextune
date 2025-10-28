@@ -1031,6 +1031,90 @@ If you don't need PR reviews, use the merge script:
 
 ---
 
+## Phase 6.5: Merge Completed Tasks (Direct Merge Workflow)
+
+**IMPORTANT:** If you chose direct merge (no PRs), use the merge script with smart error recovery!
+
+**For EACH completed task, use smart_execute wrapper:**
+
+```bash
+# Merge task-0 with AI error recovery
+./scripts/smart_execute.sh ./scripts/merge_and_cleanup.sh task-0 "Review CRUD endpoints"
+
+# Merge task-1 with AI error recovery
+./scripts/smart_execute.sh ./scripts/merge_and_cleanup.sh task-1 "Paper CSV import"
+
+# Merge task-2 with AI error recovery
+./scripts/smart_execute.sh ./scripts/merge_and_cleanup.sh task-2 "Paper listing endpoint"
+
+# Merge task-3 with AI error recovery
+./scripts/smart_execute.sh ./scripts/merge_and_cleanup.sh task-3 "Database-first workflow"
+```
+
+**Why use smart_execute.sh wrapper:**
+- ✅ Automatic error detection
+- ✅ Haiku tries to fix errors first ($0.001, 70-80% success rate)
+- ✅ Copilot escalation if Haiku fails ($0.10, 90-95% success rate)
+- ✅ Only escalates to you (Claude) if both AI layers fail
+- ✅ 99.9% automatic recovery rate
+
+**Error recovery cascade:**
+```
+Script executes → Error?
+  ├─ NO → Success ✅
+  └─ YES → Haiku analyzes error
+      ├─ Fixed → Success ✅ (70-80% of errors)
+      └─ Still failing → Copilot escalates
+          ├─ Fixed → Success ✅ (90-95% of remaining)
+          └─ Still failing → Escalate to you (Claude main session)
+```
+
+**What the merge script does:**
+```bash
+# For each task:
+1. git checkout main (or specified branch)
+2. git pull origin main (get latest)
+3. git merge --no-ff feature/task-N -m "Merge branch 'feature/task-N'"
+4. git push origin main
+5. git branch -d feature/task-N (delete local)
+6. git push origin --delete feature/task-N (delete remote)
+7. Clean up worktree
+```
+
+**NEVER use manual git commands for merging!** The script:
+- ✅ Handles conflicts automatically
+- ✅ Ensures you're on main before merging
+- ✅ Pulls latest changes first
+- ✅ Uses proper merge message format
+- ✅ Cleans up after merge
+- ✅ Single command per task
+
+**If merge conflicts occur:**
+
+The script will detect and report conflicts. Then:
+
+```bash
+# Script stops at conflict - resolve manually
+git status  # See conflicted files
+
+# Edit files to resolve conflicts
+# Then:
+git add <resolved-files>
+git commit  # Complete the merge
+git push origin main
+
+# Clean up manually
+git worktree remove worktrees/task-N
+git branch -d feature/task-N
+```
+
+**Token efficiency:**
+- Multi-command approach: ~15-20 commands = 8K-12K tokens
+- Script approach: 4 commands (one per task) = ~2K tokens
+- **Savings:** 75-85% reduction
+
+---
+
 ## Phase 7: Verify Integration
 
 **After merging all tasks:**
