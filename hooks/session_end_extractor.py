@@ -331,6 +331,97 @@ def write_task_files(plans_dir: Path, content: str) -> int:
     return task_count
 
 
+def write_plan_files(project_root: Path, plans: list[dict], session_id: str) -> int:
+    """
+    Write extracted plans to .parallel/plans/ directory.
+
+    Returns: Number of plans written
+    """
+    if not plans:
+        return 0
+
+    # Use most comprehensive plan (highest pattern count)
+    best_plan = max(plans, key=lambda p: p["pattern_count"])
+    content = best_plan["content"]
+
+    # Extract plan YAML from ## Plan Structure section
+    plan_yaml_match = re.search(
+        r"## Plan Structure\s*```yaml\n(.*?)```", content, re.DOTALL | re.IGNORECASE
+    )
+    if not plan_yaml_match:
+        print("DEBUG: Could not find Plan Structure YAML block", file=sys.stderr)
+        return 0
+
+    try:
+        plan_data = yaml.safe_load(plan_yaml_match.group(1))
+    except yaml.YAMLError as e:
+        print(f"DEBUG: Failed to parse plan YAML: {e}", file=sys.stderr)
+        return 0
+
+    # Extract plan name for directory
+    plan_name = plan_data.get("metadata", {}).get("name", "untitled-plan")
+    plan_slug = sanitize_topic(plan_name)
+
+    # Create .parallel/plans directory
+    plans_dir = project_root / ".parallel" / "plans"
+    plans_dir.mkdir(parents=True, exist_ok=True)
+
+    # Write plan.yaml
+    plan_file = plans_dir / "plan.yaml"
+    with open(plan_file, "w") as f:
+        yaml.dump(plan_data, f, default_flow_style=False, sort_keys=False)
+
+    print(f"DEBUG: ✅ Wrote plan to {plan_file}", file=sys.stderr)
+
+    # Extract and write task files from ## Task Details sections
+    task_pattern = r"### Task (\d+):\s*(.+?)\n.*?```yaml\n(.*?)```\n(.*?)(?=###|---|\Z)"
+    task_matches = re.findall(task_pattern, content, re.DOTALL)
+
+    if task_matches:
+        tasks_dir = plans_dir / "tasks"
+        tasks_dir.mkdir(exist_ok=True)
+
+        for task_num, task_name, task_yaml_str, task_content in task_matches:
+            try:
+                task_yaml = yaml.safe_load(task_yaml_str)
+            except yaml.YAMLError as e:
+                print(
+                    f"DEBUG: Failed to parse task-{task_num} YAML: {e}", file=sys.stderr
+                )
+                continue
+
+            task_id = task_yaml.get("id", f"task-{task_num}")
+            task_file = tasks_dir / f"{task_id}.md"
+
+            with open(task_file, "w") as f:
+                # Write YAML frontmatter
+                f.write("---\n")
+                yaml.dump(task_yaml, f, default_flow_style=False, sort_keys=False)
+                f.write("---\n\n")
+
+                # Write task name
+                f.write(f"# {task_name.strip()}\n\n")
+
+                # Write task content
+                f.write(task_content.strip())
+                f.write("\n")
+
+        print(
+            f"DEBUG: ✅ Wrote {len(task_matches)} task files", file=sys.stderr
+        )
+
+    # Create helper scripts (templates)
+    scripts_dir = plans_dir / "scripts"
+    templates_dir = plans_dir / "templates"
+    scripts_dir.mkdir(exist_ok=True)
+    templates_dir.mkdir(exist_ok=True)
+
+    # Helper scripts content would go here (add_task.sh, generate_full.sh)
+    # For now, just create the directories
+
+    return 1
+
+
 def extract_decisions(transcript: list[dict]) -> list[dict]:
     """
     Find architectural decisions in conversation.
@@ -692,18 +783,21 @@ def main():
 
         # Extract components
         designs = extract_designs(transcript)
+        plans = extract_plans(transcript)
         decisions_found = extract_decisions(transcript)
 
         print(f"DEBUG: Found {len(designs)} design proposals", file=sys.stderr)
+        print(f"DEBUG: Found {len(plans)} parallel plans", file=sys.stderr)
         print(f"DEBUG: Found {len(decisions_found)} decision points", file=sys.stderr)
 
         # Write structured files
         designs_written = write_design_files(project_root, designs, session_id)
+        plans_written = write_plan_files(project_root, plans, session_id)
         decisions_written = append_decisions(project_root, decisions_found, session_id)
 
-        if designs_written or decisions_written:
+        if designs_written or plans_written or decisions_written:
             print(
-                f"DEBUG: ✅ Extracted {designs_written} designs, {decisions_written} decisions",
+                f"DEBUG: ✅ Extracted {designs_written} designs, {plans_written} plans, {decisions_written} decisions",
                 file=sys.stderr,
             )
         else:
