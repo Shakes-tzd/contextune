@@ -6,6 +6,12 @@
         "hooks": [
           {
             "type": "command",
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/session_start_git_context.js",
+            "timeout": 2000,
+            "description": "Git-powered context injection - differential updates since last session (~1-2K tokens)"
+          },
+          {
+            "type": "command",
             "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/context_restorer.js",
             "timeout": 2000,
             "description": "Restore working context from scratch_pad.md (DRY context transfer)"
@@ -48,6 +54,12 @@
       {
         "matcher": "*",
         "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ${CLAUDE_PLUGIN_ROOT}/hooks/pre_tool_use_state_sync.py",
+            "timeout": 1000,
+            "description": "State sync - check if files changed externally before Edit/Write (~300 tokens only when needed)"
+          },
           {
             "type": "command",
             "command": "uv run ${CLAUDE_PLUGIN_ROOT}/hooks/pre_tool_use_git_advisor.py",
@@ -101,9 +113,15 @@
         "hooks": [
           {
             "type": "command",
+            "command": "uv run ${CLAUDE_PLUGIN_ROOT}/hooks/session_end_recorder.py",
+            "timeout": 2000,
+            "description": "Record session metadata for next session's git context (~100 tokens write only)"
+          },
+          {
+            "type": "command",
             "command": "uv run ${CLAUDE_PLUGIN_ROOT}/hooks/session_end_extractor.py",
             "timeout": 5000,
-            "description": "Extract completed work to .plans/ (zero conversation overhead)"
+            "description": "Extract completed work to .plans/ and decisions.yaml (zero conversation overhead)"
           }
         ]
       }
