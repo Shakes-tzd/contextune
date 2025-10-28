@@ -600,6 +600,32 @@ def format_interactive_suggestion(
     return base_msg
 
 
+def detect_git_workflow(prompt: str) -> tuple[bool, str | None]:
+    """
+    Detect git workflow patterns in natural language.
+
+    Returns: (is_git_workflow, script_command)
+    """
+    prompt_lower = prompt.lower()
+
+    # Git workflow patterns
+    patterns = [
+        # Commit and push
+        (r'\b(commit|save|push|commit.*push|push.*commit)\b', '/ctx:git-commit'),
+        # Create PR
+        (r'\b(create.*pr|make.*pr|open.*pr|pull.*request)\b', None),  # TODO: /ctx:git-pr
+        # Merge
+        (r'\b(merge|merge.*branch)\b', None),  # TODO: /ctx:git-merge
+    ]
+
+    for pattern, command in patterns:
+        if re.search(pattern, prompt_lower):
+            print(f"DEBUG: Git workflow detected: {pattern} → {command}", file=sys.stderr)
+            return True, command
+
+    return False, None
+
+
 def main():
     """Hook entry point."""
 
@@ -624,6 +650,41 @@ def main():
             return
 
         print("DEBUG: Processing prompt (should_process=True)", file=sys.stderr)
+
+        # GIT WORKFLOW DETECTION: Check if user wants git workflow
+        is_git_workflow, git_command = detect_git_workflow(prompt)
+
+        if is_git_workflow and git_command:
+            print(f"DEBUG: Git workflow detected, suggesting: {git_command}", file=sys.stderr)
+
+            feedback = f"""⚡ Git Workflow Detected
+
+Your request matches a git workflow pattern.
+
+💡 **Recommended:** Use the deterministic slash command instead:
+   `{git_command}`
+
+**Benefits:**
+- ✅ 93-97% token reduction (~$0.002 vs ~$0.037-0.086)
+- ✅ Single command execution
+- ✅ Deterministic, tested workflow
+- ✅ Auto-detects remote
+- ✅ Proper error handling
+
+**Example:**
+```
+{git_command}
+```
+
+Continuing with your original prompt, but consider using the slash command for efficiency."""
+
+            response = {
+                "continue": True,
+                "additionalContext": feedback,
+                "suppressOutput": False
+            }
+            print(json.dumps(response))
+            return
 
         # SKILL DETECTION: Check if user is trying to invoke a skill
         is_skill_invocation, attempted_skill = detect_skill_invocation(prompt)

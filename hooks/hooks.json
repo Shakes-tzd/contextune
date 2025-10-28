@@ -50,9 +50,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "uv run ${CLAUDE_PLUGIN_ROOT}/hooks/git_workflow_detector.py",
+            "command": "uv run ${CLAUDE_PLUGIN_ROOT}/hooks/pre_tool_use_git_advisor.py",
             "timeout": 1000,
-            "description": "Suggest optimized scripts for git workflows (90-97% token reduction)"
+            "description": "Git workflow advisor - suggests scripts for multi-tool workflows (93-97% token reduction)"
           },
           {
             "type": "command",
