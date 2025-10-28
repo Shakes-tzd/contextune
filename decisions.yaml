@@ -1,243 +1,1122 @@
-# Contextune Decisions & Context Preservation System
-# Version: 1.0
-# Created: 2025-10-28
-# Purpose: Central registry for decisions, research, plans, and features
-#          with automatic conversation linking and selective context loading
-
 metadata:
-  project: "contextune"
-  version: "1.0"
-  created: "2025-10-28T00:00:00Z"
-  last_scan: null
-  auto_population_enabled: false  # Will enable in task-1
-  description: |
-    Unified system for tracking architectural decisions, research findings,
-    implementation plans, and feature status with bounded expiration and
-    conversation references for context preservation.
-
-conversations:
-  scanned_count: 0
-  last_scanned_timestamp: null
-  sessions_with_decisions: 0
-  description: |
-    Conversation tracking metadata. Task-1 will populate by scanning
-    conversation history and linking decisions to session IDs and
-    message history lines.
-
+  project: contextune
+  version: '1.0'
+  last_scan: '2025-10-28T02:40:19.241935Z'
+  auto_population_enabled: true
 research:
-  # Example entry structure (task-1 will populate with real findings)
-  # - id: "res-001"
-  #   topic: "Token estimation methodologies"
-  #   category: "architecture"  # architecture, performance, tools, integration
-  #   findings:
-  #     - "Haiku 4.5 costs 87% less than Sonnet for execution tasks"
-  #     - "Token-based estimation more accurate than time estimates"
-  #     - "Parallel execution with agents enables cost-effective scaling"
-  #   methodology: |
-  #     Analyzed model pricing, token costs across task types,
-  #     and parallelization efficiency with Haiku agents.
-  #   sources:
-  #     - "Claude pricing documentation"
-  #     - "Internal benchmarks"
-  #   conversation_link:
-  #     session_id: "abc123def456"
-  #     timestamp: 1729771380131
-  #     prompt: "Research token estimation methodologies"
-  #     history_line: 1234
-  #   created_at: "2025-10-27T15:00:00Z"
-  #   expires_at: "2026-04-27T15:00:00Z"  # 6 months from creation
-  #   status: "active"  # active, expired, archived
-  #   permanent: false
-  description: |
-    Research findings with 6-month expiration. Links directly to
-    conversation history for reproducibility. Task-1 will extract
-    research from conversation logs automatically.
-  entries: []
+  entries:
+  - id: res-001
+    topic: Can you now ultrathink and explore the hooks we currently ha
+    category: discovery
+    findings:
+    - 'Research from: Can you now ultrathink and explore the hooks we currently have
+      and how they work'
+    methodology: Extracted from conversation history
+    sources:
+    - Can you now ultrathink and explore the hooks we currently have and how they
+      work
+    conversation_link:
+      session_id: hist-0
+      timestamp: 1759771380131
+      prompt: Can you now ultrathink and explore the hooks we currently have and how
+        they work
+      project: /Users/shakes/.claude
+      history_line: 0
+    created_at: '2025-10-28T02:40:19.240913Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.240913+00:00Z
+  - id: res-002
+    topic: Please ultrathink and now research for the best practices fo
+    category: discovery
+    findings:
+    - 'Research from: Please ultrathink and now research for the best practices for
+      hook design and come up with a plan to'
+    methodology: Extracted from conversation history
+    sources:
+    - 'Please ultrathink and now research for the best practices for hook design and
+      come up with a plan to ensure that the hooks that need to communicate with claude
+      code communicate and those that need to '
+    conversation_link:
+      session_id: hist-2
+      timestamp: 1759772734241
+      prompt: 'Please ultrathink and now research for the best practices for hook
+        design and come up with a plan to ensure that the hooks that need to communicate
+        with claude code communicate and those that need to '
+      project: /Users/shakes/.claude
+      history_line: 2
+    created_at: '2025-10-28T02:40:19.240956Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.240956+00:00Z
+  - id: res-003
+    topic: please research how https://solve.it.com works and help me u
+    category: discovery
+    findings:
+    - 'Research from: please research how https://solve.it.com works and help me understand
+      the premise'
+    methodology: Extracted from conversation history
+    sources:
+    - please research how https://solve.it.com works and help me understand the premise
+    conversation_link:
+      session_id: hist-6
+      timestamp: 1759775699696
+      prompt: please research how https://solve.it.com works and help me understand
+        the premise
+      project: /Users/shakes/DevProjects/cabanga
+      history_line: 6
+    created_at: '2025-10-28T02:40:19.240970Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.240970+00:00Z
+  - id: res-004
+    topic: your descriptions show me that you might have limited your r
+    category: discovery
+    findings:
+    - 'Research from: your descriptions show me that you might have limited your research
+      to understanding how each of the'
+    methodology: Extracted from conversation history
+    sources:
+    - 'your descriptions show me that you might have limited your research to understanding
+      how each of the tool work independently. However, these tools currently in 2025
+      work together in amazing ways. The '
+    conversation_link:
+      session_id: hist-8
+      timestamp: 1759776643374
+      prompt: 'your descriptions show me that you might have limited your research
+        to understanding how each of the tool work independently. However, these tools
+        currently in 2025 work together in amazing ways. The '
+      project: /Users/shakes/DevProjects/cabanga
+      history_line: 8
+    created_at: '2025-10-28T02:40:19.240981Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.240981+00:00Z
+  - id: res-005
+    topic: I would rather use sqlite or duckdb. can you research and th
+    category: discovery
+    findings:
+    - 'Research from: I would rather use sqlite or duckdb. can you research and then
+      choose the best one for the use case.'
+    methodology: Extracted from conversation history
+    sources:
+    - I would rather use sqlite or duckdb. can you research and then choose the best
+      one for the use case. We cna use both if necessary
+    conversation_link:
+      session_id: hist-14
+      timestamp: 1759784380048
+      prompt: I would rather use sqlite or duckdb. can you research and then choose
+        the best one for the use case. We cna use both if necessary
+      project: /Users/shakes/DevProjects/cabanga
+      history_line: 14
+    created_at: '2025-10-28T02:40:19.240990Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.240990+00:00Z
+  - id: res-006
+    topic: 'wont I need a dashboard notebook that can be an entry point '
+    category: discovery
+    findings:
+    - 'Research from: wont I need a dashboard notebook that can be an entry point
+      to the rest? Can you research and see if'
+    methodology: Extracted from conversation history
+    sources:
+    - wont I need a dashboard notebook that can be an entry point to the rest? Can
+      you research and see if this is possible in marimo?
+    conversation_link:
+      session_id: hist-15
+      timestamp: 1759784687061
+      prompt: wont I need a dashboard notebook that can be an entry point to the rest?
+        Can you research and see if this is possible in marimo?
+      project: /Users/shakes/DevProjects/cabanga
+      history_line: 15
+    created_at: '2025-10-28T02:40:19.241000Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241000+00:00Z
+  - id: res-007
+    topic: 'Please ultrathink about the workflow we just completed from '
+    category: discovery
+    findings:
+    - 'Research from: Please ultrathink about the workflow we just completed from
+      identifying the isues using playwrite to'
+    methodology: Extracted from conversation history
+    sources:
+    - Please ultrathink about the workflow we just completed from identifying the
+      isues using playwrite to creating git hub issues to working on these in parallel
+      as you have done about and then research th
+    conversation_link:
+      session_id: hist-23
+      timestamp: 1759788031052
+      prompt: Please ultrathink about the workflow we just completed from identifying
+        the isues using playwrite to creating git hub issues to working on these in
+        parallel as you have done about and then research th
+      project: /Users/shakes/DevProjects/cabanga
+      history_line: 23
+    created_at: '2025-10-28T02:40:19.241010Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241010+00:00Z
+  - id: res-008
+    topic: given the following manuscript @/Users/shakes/Library/Mobile
+    category: discovery
+    findings:
+    - 'Research from: given the following manuscript @/Users/shakes/Library/Mobile
+      Documents/com~apple~CloudDocs/Projects/'
+    methodology: Extracted from conversation history
+    sources:
+    - given the following manuscript @/Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Projects/Moreen
+      Projects/NLP Manuscript/nlp_manuscript_draft_files/NLP Methodology/NLP_Manuscript_Draft_MWN_v
+    conversation_link:
+      session_id: hist-33
+      timestamp: 1760224816924
+      prompt: given the following manuscript @/Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Projects/Moreen
+        Projects/NLP Manuscript/nlp_manuscript_draft_files/NLP Methodology/NLP_Manuscript_Draft_MWN_v
+      project: /Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Projects/AI
+        Engineering/ai-structured-data-extractor
+      history_line: 33
+    created_at: '2025-10-28T02:40:19.241019Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241019+00:00Z
+  - id: res-009
+    topic: Please ultrathink and research the DSPY documentation and th
+    category: discovery
+    findings:
+    - 'Research from: Please ultrathink and research the DSPY documentation and then
+      create a plan to incoporate it to thi'
+    methodology: Extracted from conversation history
+    sources:
+    - Please ultrathink and research the DSPY documentation and then create a plan
+      to incoporate it to this project and create the spec for this projecto
+    conversation_link:
+      session_id: hist-39
+      timestamp: 1760309633029
+      prompt: Please ultrathink and research the DSPY documentation and then create
+        a plan to incoporate it to this project and create the spec for this projecto
+      project: /Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Projects/AI
+        Engineering/ai-structured-data-extractor
+      history_line: 39
+    created_at: '2025-10-28T02:40:19.241029Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241029+00:00Z
+  - id: res-010
+    topic: Please ultrathink and reasearch how claude enables the use o
+    category: discovery
+    findings:
+    - 'Research from: Please ultrathink and reasearch how claude enables the use of
+      git worktrees to run work in parallel '
+    methodology: Extracted from conversation history
+    sources:
+    - Please ultrathink and reasearch how claude enables the use of git worktrees
+      to run work in parallel and and also research how claude enable the use of claude
+      on github to work on pull requests as well
+    conversation_link:
+      session_id: hist-46
+      timestamp: 1760385302477
+      prompt: Please ultrathink and reasearch how claude enables the use of git worktrees
+        to run work in parallel and and also research how claude enable the use of
+        claude on github to work on pull requests as well
+      project: /Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Projects/AI
+        Engineering/ai-structured-data-extractor
+      history_line: 46
+    created_at: '2025-10-28T02:40:19.241038Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241038+00:00Z
+  - id: res-011
+    topic: Please ultrathink and help me trim down the memory files whi
+    category: discovery
+    findings:
+    - 'Research from: Please ultrathink and help me trim down the memory files which
+      are currently taking up a lot of cont'
+    methodology: Extracted from conversation history
+    sources:
+    - 'Please ultrathink and help me trim down the memory files which are currently
+      taking up a lot of context [Pasted text #1 +38 lines]. Please research claude
+      code and how to manage context then help me m'
+    conversation_link:
+      session_id: hist-63
+      timestamp: 1760389584003
+      prompt: 'Please ultrathink and help me trim down the memory files which are
+        currently taking up a lot of context [Pasted text #1 +38 lines]. Please research
+        claude code and how to manage context then help me m'
+      project: /Users/shakes/.claude
+      history_line: 63
+    created_at: '2025-10-28T02:40:19.241047Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241047+00:00Z
+  - id: res-012
+    topic: can you make /sc:help be the first slash command or have its
+    category: discovery
+    findings:
+    - 'Research from: can you make /sc:help be the first slash command or have its
+      own section eg: ```.claude (general)|He'
+    methodology: Extracted from conversation history
+    sources:
+    - 'can you make /sc:help be the first slash command or have its own section eg:
+      ```.claude (general)|Help: /sc:help | Quick: /analyze | /implement | /improve  |
+      Flags:--delegate --uc --persona-architect '
+    conversation_link:
+      session_id: hist-73
+      timestamp: 1760395823206
+      prompt: 'can you make /sc:help be the first slash command or have its own section
+        eg: ```.claude (general)|Help: /sc:help | Quick: /analyze | /implement | /improve  |
+        Flags:--delegate --uc --persona-architect '
+      project: /Users/shakes/.claude
+      history_line: 73
+    created_at: '2025-10-28T02:40:19.241057Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241057+00:00Z
+  - id: res-013
+    topic: Can you research how dynamic the status line is because it s
+    category: discovery
+    findings:
+    - 'Research from: Can you research how dynamic the status line is because it seems
+      like it remains stale as shown in t'
+    methodology: Extracted from conversation history
+    sources:
+    - Can you research how dynamic the status line is because it seems like it remains
+      stale as shown in the following screenshot where its showing that 99.4% memory
+      is available yet the claude native stasu
+    conversation_link:
+      session_id: hist-85
+      timestamp: 1760400713837
+      prompt: Can you research how dynamic the status line is because it seems like
+        it remains stale as shown in the following screenshot where its showing that
+        99.4% memory is available yet the claude native stasu
+      project: /Users/shakes/.claude
+      history_line: 85
+    created_at: '2025-10-28T02:40:19.241066Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241066+00:00Z
+  - id: res-014
+    topic: /sc:analyze system --think-hard --persona-architect --c7
+    category: discovery
+    findings:
+    - 'Research from: /sc:analyze system --think-hard --persona-architect --c7'
+    methodology: Extracted from conversation history
+    sources:
+    - /sc:analyze system --think-hard --persona-architect --c7
+    conversation_link:
+      session_id: hist-87
+      timestamp: 1760402141001
+      prompt: /sc:analyze system --think-hard --persona-architect --c7
+      project: /Users/shakes/.claude
+      history_line: 87
+    created_at: '2025-10-28T02:40:19.241075Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241075+00:00Z
+  - id: res-015
+    topic: /sc:analyze system --think-hard --persona-architect --c7
+    category: discovery
+    findings:
+    - 'Research from: /sc:analyze system --think-hard --persona-architect --c7'
+    methodology: Extracted from conversation history
+    sources:
+    - /sc:analyze system --think-hard --persona-architect --c7
+    conversation_link:
+      session_id: hist-88
+      timestamp: 1760402141465
+      prompt: /sc:analyze system --think-hard --persona-architect --c7
+      project: /Users/shakes/.claude
+      history_line: 88
+    created_at: '2025-10-28T02:40:19.241084Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241084+00:00Z
+  - id: res-016
+    topic: I want to /sc:analyze the codebase
+    category: discovery
+    findings:
+    - 'Research from: I want to /sc:analyze the codebase'
+    methodology: Extracted from conversation history
+    sources:
+    - I want to /sc:analyze the codebase
+    conversation_link:
+      session_id: hist-93
+      timestamp: 1760457965739
+      prompt: I want to /sc:analyze the codebase
+      project: /Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Projects/AI
+        Engineering/ai-structured-data-extractor
+      history_line: 93
+    created_at: '2025-10-28T02:40:19.241093Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241093+00:00Z
+  - id: res-017
+    topic: I want to /sc:analyze the codebase
+    category: discovery
+    findings:
+    - 'Research from: I want to /sc:analyze the codebase'
+    methodology: Extracted from conversation history
+    sources:
+    - I want to /sc:analyze the codebase
+    conversation_link:
+      session_id: hist-97
+      timestamp: 1760458046171
+      prompt: I want to /sc:analyze the codebase
+      project: /Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Projects/AI
+        Engineering/ai-structured-data-extractor
+      history_line: 97
+    created_at: '2025-10-28T02:40:19.241102Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241102+00:00Z
+  - id: res-018
+    topic: 'it seems like it is runnig [Image #1]. However the requireme'
+    category: discovery
+    findings:
+    - 'Research from: it seems like it is runnig [Image #1]. However the requirement
+      for to have the actual slash command '
+    methodology: Extracted from conversation history
+    sources:
+    - 'it seems like it is runnig [Image #1]. However the requirement for to have
+      the actual slash command in the prompt like this "I want to /sc:analyze the
+      codebase" as opposed to it detecting "I want to a'
+    conversation_link:
+      session_id: hist-98
+      timestamp: 1760458341997
+      prompt: 'it seems like it is runnig [Image #1]. However the requirement for
+        to have the actual slash command in the prompt like this "I want to /sc:analyze
+        the codebase" as opposed to it detecting "I want to a'
+      project: /Users/shakes/.claude
+      history_line: 98
+    created_at: '2025-10-28T02:40:19.241112Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241112+00:00Z
+  - id: res-019
+    topic: it seems like the context injection is only looking at the s
+    category: discovery
+    findings:
+    - 'Research from: it seems like the context injection is only looking at the sc
+      slash commands instead of looking at a'
+    methodology: Extracted from conversation history
+    sources:
+    - it seems like the context injection is only looking at the sc slash commands
+      instead of looking at all slash commands available. Moreover, I want to make
+      sure that whenever ask it to do research and d
+    conversation_link:
+      session_id: hist-105
+      timestamp: 1760472549082
+      prompt: it seems like the context injection is only looking at the sc slash
+        commands instead of looking at all slash commands available. Moreover, I want
+        to make sure that whenever ask it to do research and d
+      project: /Users/shakes/.claude
+      history_line: 105
+    created_at: '2025-10-28T02:40:19.241121Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241121+00:00Z
+  - id: res-020
+    topic: before we continue. can you research claude code's new plugg
+    category: discovery
+    findings:
+    - 'Research from: before we continue. can you research claude code''s new pluggins
+      feature and see if there are existin'
+    methodology: Extracted from conversation history
+    sources:
+    - 'before we continue. can you research claude code''s new pluggins feature and
+      see if there are existing plugings that have been developed by other users that
+      already lead to the behavior I am trying to '
+    conversation_link:
+      session_id: hist-106
+      timestamp: 1760472969875
+      prompt: 'before we continue. can you research claude code''s new pluggins feature
+        and see if there are existing plugings that have been developed by other users
+        that already lead to the behavior I am trying to '
+      project: /Users/shakes/.claude
+      history_line: 106
+    created_at: '2025-10-28T02:40:19.241130Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241130+00:00Z
+  - id: res-021
+    topic: The current project is a claude code plugin. Please carefull
+    category: discovery
+    findings:
+    - 'Research from: The current project is a claude code plugin. Please carefully
+      analyze the code and review the claude'
+    methodology: Extracted from conversation history
+    sources:
+    - The current project is a claude code plugin. Please carefully analyze the code
+      and review the claude code documentation on plugins to make sure that everythig
+      is up to standard
+    conversation_link:
+      session_id: hist-107
+      timestamp: 1760479559715
+      prompt: The current project is a claude code plugin. Please carefully analyze
+        the code and review the claude code documentation on plugins to make sure
+        that everythig is up to standard
+      project: /Users/shakes/DevProjects/slashsense
+      history_line: 107
+    created_at: '2025-10-28T02:40:19.241141Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241141+00:00Z
+  - id: res-022
+    topic: currently these pallel execusion workflow is just in this pr
+    category: discovery
+    findings:
+    - 'Research from: currently these pallel execusion workflow is just in this project.
+      Can you ultrathink
 
-plans:
-  # Example entry structure (task-3 will populate from .plans/ directory)
-  # - id: "plan-001"
-  #   title: "JWT Authentication System"
-  #   category: "feature"  # feature, refactor, architecture, integration
-  #   description: |
-  #     Design and implement JWT-based authentication with
-  #     refresh token rotation and secure storage.
-  #   design_file: ".plans/jwt-authentication/design.md"
-  #   implementation_file: ".plans/jwt-authentication/implementation.md"
-  #   status: "design"  # design, approved, in_progress, completed, blocked
-  #   phases:
-  #     - id: "phase-1"
-  #       title: "JWT Implementation"
-  #       status: "in_progress"
-  #     - id: "phase-2"
-  #       title: "Refresh Token Rotation"
-  #       status: "planned"
-  #   conversation_link:
-  #     session_id: "xyz789abc123"
-  #     timestamp: 1729771390000
-  #     prompt: "Design JWT authentication system"
-  #     history_line: 5678
-  #   created_at: "2025-10-27T10:00:00Z"
-  #   completed_at: null
-  #   archived_at: null  # Set to 90 days after completion
-  #   related_decisions: ["dec-002", "dec-005"]
-  #   owner: null
-  description: |
-    Implementation plans linked to .plans/ directory files.
-    Automatically archived 90 days after completion.
-    Task-3 will scan .plans/ and populate this section.
-  entries: []
+      and research c'
+    methodology: Extracted from conversation history
+    sources:
+    - 'currently these pallel execusion workflow is just in this project. Can you
+      ultrathink
 
+      and research claude code plugings to see if the parallel workflow can be part
+      of the plugin so that I can be avail'
+    conversation_link:
+      session_id: hist-116
+      timestamp: 1760499845322
+      prompt: 'currently these pallel execusion workflow is just in this project.
+        Can you ultrathink
+
+        and research claude code plugings to see if the parallel workflow can be part
+        of the plugin so that I can be avail'
+      project: /Users/shakes/DevProjects/slashsense
+      history_line: 116
+    created_at: '2025-10-28T02:40:19.241150Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241150+00:00Z
+  - id: res-023
+    topic: Please research and help me add my pluggin to the market pla
+    category: discovery
+    findings:
+    - 'Research from: Please research and help me add my pluggin to the market place.
+      Moreover, how do I esure that if i m'
+    methodology: Extracted from conversation history
+    sources:
+    - Please research and help me add my pluggin to the market place. Moreover, how
+      do I esure that if i make updates users can be able to get them?
+    conversation_link:
+      session_id: hist-123
+      timestamp: 1760525224506
+      prompt: Please research and help me add my pluggin to the market place. Moreover,
+        how do I esure that if i make updates users can be able to get them?
+      project: /Users/shakes/DevProjects/slashsense
+      history_line: 123
+    created_at: '2025-10-28T02:40:19.241159Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241159+00:00Z
+  - id: res-024
+    topic: analyze my code
+    category: discovery
+    findings:
+    - 'Research from: analyze my code'
+    methodology: Extracted from conversation history
+    sources:
+    - analyze my code
+    conversation_link:
+      session_id: hist-148
+      timestamp: 1760527891087
+      prompt: analyze my code
+      project: /Users/shakes/DevProjects/slashsense
+      history_line: 148
+    created_at: '2025-10-28T02:40:19.241168Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241168+00:00Z
+  - id: res-025
+    topic: analyze this code
+    category: discovery
+    findings:
+    - 'Research from: analyze this code'
+    methodology: Extracted from conversation history
+    sources:
+    - analyze this code
+    conversation_link:
+      session_id: hist-219
+      timestamp: 1760530664340
+      prompt: analyze this code
+      project: /Users/shakes/DevProjects/slashsense
+      history_line: 219
+    created_at: '2025-10-28T02:40:19.241178Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241178+00:00Z
+  - id: res-026
+    topic: 'Before we continue, can you ultrathink and also research on '
+    category: discovery
+    findings:
+    - 'Research from: Before we continue, can you ultrathink and also research on
+      anthropics new skills feature https://ww'
+    methodology: Extracted from conversation history
+    sources:
+    - 'Before we continue, can you ultrathink and also research on anthropics new
+      skills feature https://www.anthropic.com/news/skills and also think about and
+      research how I could download my data from the '
+    conversation_link:
+      session_id: hist-312
+      timestamp: 1760737788611
+      prompt: 'Before we continue, can you ultrathink and also research on anthropics
+        new skills feature https://www.anthropic.com/news/skills and also think about
+        and research how I could download my data from the '
+      project: /Users/shakes/DevProjects/cabanga
+      history_line: 312
+    created_at: '2025-10-28T02:40:19.241187Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241187+00:00Z
+  - id: res-027
+    topic: lets explore the json files in @data/data-2025-10-17-21-56-3
+    category: discovery
+    findings:
+    - 'Research from: lets explore the json files in @data/data-2025-10-17-21-56-32-batch-0000/conversations.json
+      and @dat'
+    methodology: Extracted from conversation history
+    sources:
+    - lets explore the json files in @data/data-2025-10-17-21-56-32-batch-0000/conversations.json
+      and @data/data-2025-10-17-21-56-32-batch-0000/projects.json and research how
+      I can use  https://datasette.io
+    conversation_link:
+      session_id: hist-313
+      timestamp: 1760740061181
+      prompt: lets explore the json files in @data/data-2025-10-17-21-56-32-batch-0000/conversations.json
+        and @data/data-2025-10-17-21-56-32-batch-0000/projects.json and research how
+        I can use  https://datasette.io
+      project: /Users/shakes/DevProjects/cabanga
+      history_line: 313
+    created_at: '2025-10-28T02:40:19.241196Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241196+00:00Z
+  - id: res-028
+    topic: proceed with Phase 2 first then create the create a conversa
+    category: discovery
+    findings:
+    - 'Research from: proceed with Phase 2 first then create the create a conversation
+      browser notebook. I was using datas'
+    methodology: Extracted from conversation history
+    sources:
+    - 'proceed with Phase 2 first then create the create a conversation browser notebook.
+      I was using dataset with the following ./scripts/launch_datasette.sh 8008   to
+      explore the conversations then realed '
+    conversation_link:
+      session_id: hist-321
+      timestamp: 1760748202966
+      prompt: 'proceed with Phase 2 first then create the create a conversation browser
+        notebook. I was using dataset with the following ./scripts/launch_datasette.sh
+        8008   to explore the conversations then realed '
+      project: /Users/shakes/DevProjects/cabanga
+      history_line: 321
+    created_at: '2025-10-28T02:40:19.241206Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241206+00:00Z
+  - id: res-029
+    topic: 'please research and help me install openscad [Pasted text #2'
+    category: discovery
+    findings:
+    - 'Research from: please research and help me install openscad [Pasted text #2
+      +17 lines][Image #1]'
+    methodology: Extracted from conversation history
+    sources:
+    - 'please research and help me install openscad [Pasted text #2 +17 lines][Image
+      #1]'
+    conversation_link:
+      session_id: hist-333
+      timestamp: 1760817458725
+      prompt: 'please research and help me install openscad [Pasted text #2 +17 lines][Image
+        #1]'
+      project: /Users/shakes/DevProjects/OpenSCADAI
+      history_line: 333
+    created_at: '2025-10-28T02:40:19.241215Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241215+00:00Z
+  - id: res-030
+    topic: please review how the database connection is done in @analyz
+    category: discovery
+    findings:
+    - 'Research from: please review how the database connection is done in @analyze/conversation_browser.py
+      and make sure '
+    methodology: Extracted from conversation history
+    sources:
+    - please review how the database connection is done in @analyze/conversation_browser.py
+      and make sure that all database connections are using the @data/db.py module
+      to prevent the following error SQL er
+    conversation_link:
+      session_id: hist-340
+      timestamp: 1760823752804
+      prompt: please review how the database connection is done in @analyze/conversation_browser.py
+        and make sure that all database connections are using the @data/db.py module
+        to prevent the following error SQL er
+      project: /Users/shakes/DevProjects/cabanga
+      history_line: 340
+    created_at: '2025-10-28T02:40:19.241224Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241224+00:00Z
+  - id: res-031
+    topic: before we proceed with execution can you use the software-ar
+    category: discovery
+    findings:
+    - 'Research from: before we proceed with execution can you use the software-architect
+      skill to investigate if this par'
+    methodology: Extracted from conversation history
+    sources:
+    - 'before we proceed with execution can you use the software-architect skill to
+      investigate if this parallel plan is up to standard and if it is consisetent
+      with @ARCHITECTURE.md and @GETTING_STARTED.md '
+    conversation_link:
+      session_id: hist-364
+      timestamp: 1760831596169
+      prompt: 'before we proceed with execution can you use the software-architect
+        skill to investigate if this parallel plan is up to standard and if it is
+        consisetent with @ARCHITECTURE.md and @GETTING_STARTED.md '
+      project: /Users/shakes/DevProjects/OpenSCADAI
+      history_line: 364
+    created_at: '2025-10-28T02:40:19.241235Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241235+00:00Z
+  - id: res-032
+    topic: 'please use the software architect to analyze and figure out '
+    category: discovery
+    findings:
+    - 'Research from: please use the software architect to analyze and figure out
+      what the issue is [Pasted text #1 +40 li'
+    methodology: Extracted from conversation history
+    sources:
+    - 'please use the software architect to analyze and figure out what the issue
+      is [Pasted text #1 +40 lines]'
+    conversation_link:
+      session_id: hist-381
+      timestamp: 1760838846826
+      prompt: 'please use the software architect to analyze and figure out what the
+        issue is [Pasted text #1 +40 lines]'
+      project: /Users/shakes/DevProjects/OpenSCADAI
+      history_line: 381
+    created_at: '2025-10-28T02:40:19.241244Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241244+00:00Z
+  - id: res-033
+    topic: can you also research the ash documentation and make sure th
+    category: discovery
+    findings:
+    - 'Research from: can you also research the ash documentation and make sure that
+      the ash skill has uptodate patterns'
+    methodology: Extracted from conversation history
+    sources:
+    - can you also research the ash documentation and make sure that the ash skill
+      has uptodate patterns
+    conversation_link:
+      session_id: hist-385
+      timestamp: 1760842244289
+      prompt: can you also research the ash documentation and make sure that the ash
+        skill has uptodate patterns
+      project: /Users/shakes/DevProjects/OpenSCADAI
+      history_line: 385
+    created_at: '2025-10-28T02:40:19.241253Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241253+00:00Z
+  - id: res-034
+    topic: the generation worked but the tracing is not showing everyth
+    category: discovery
+    findings:
+    - 'Research from: the generation worked but the tracing is not showing everything
+      [Image #2][Pasted text #1 +38 lines]'
+    methodology: Extracted from conversation history
+    sources:
+    - 'the generation worked but the tracing is not showing everything [Image #2][Pasted
+      text #1 +38 lines]. can you use the software architect to research and figureout
+      how they do llm observability for eli'
+    conversation_link:
+      session_id: hist-438
+      timestamp: 1760861771056
+      prompt: 'the generation worked but the tracing is not showing everything [Image
+        #2][Pasted text #1 +38 lines]. can you use the software architect to research
+        and figureout how they do llm observability for eli'
+      project: /Users/shakes/DevProjects/OpenSCADAI
+      history_line: 438
+    created_at: '2025-10-28T02:40:19.241262Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241262+00:00Z
+  - id: res-035
+    topic: the actual openscad application and ui does not look that gr
+    category: discovery
+    findings:
+    - 'Research from: the actual openscad application and ui does not look that great
+      [Image #1] can you research if there'
+    methodology: Extracted from conversation history
+    sources:
+    - 'the actual openscad application and ui does not look that great [Image #1]
+      can you research if there is a way to intergrate it in to our application use
+      the software architect.'
+    conversation_link:
+      session_id: hist-444
+      timestamp: 1760864726880
+      prompt: 'the actual openscad application and ui does not look that great [Image
+        #1] can you research if there is a way to intergrate it in to our application
+        use the software architect.'
+      project: /Users/shakes/DevProjects/OpenSCADAI
+      history_line: 444
+    created_at: '2025-10-28T02:40:19.241272Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241272+00:00Z
+  - id: res-036
+    topic: Preferably the gold standard processing should be first. Ple
+    category: discovery
+    findings:
+    - 'Research from: Preferably the gold standard processing should be first. Please
+      research the typical systematic revi'
+    methodology: Extracted from conversation history
+    sources:
+    - Preferably the gold standard processing should be first. Please research the
+      typical systematic review workflow. I imagine that I researcher starts with
+      a question and they define their criteria and e
+    conversation_link:
+      session_id: hist-459
+      timestamp: 1760873506819
+      prompt: Preferably the gold standard processing should be first. Please research
+        the typical systematic review workflow. I imagine that I researcher starts
+        with a question and they define their criteria and e
+      project: /Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Projects/AI
+        Engineering/ai-structured-data-extractor
+      history_line: 459
+    created_at: '2025-10-28T02:40:19.241281Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241281+00:00Z
+  - id: res-037
+    topic: Please add the two metadata fields and continue with the mig
+    category: discovery
+    findings:
+    - 'Research from: Please add the two metadata fields and continue with the migration.
+      Moreover please document this me'
+    methodology: Extracted from conversation history
+    sources:
+    - 'Please add the two metadata fields and continue with the migration. Moreover
+      please document this methodology in a way that is clear and up to standard for
+      publication in the PRS journal. '
+    conversation_link:
+      session_id: hist-500
+      timestamp: 1760914712496
+      prompt: 'Please add the two metadata fields and continue with the migration.
+        Moreover please document this methodology in a way that is clear and up to
+        standard for publication in the PRS journal. '
+      project: /Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Projects/AI
+        Engineering/ai-structured-data-extractor
+      history_line: 500
+    created_at: '2025-10-28T02:40:19.241290Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241290+00:00Z
+  - id: res-038
+    topic: before you continue why is the following approach to stroing
+    category: discovery
+    findings:
+    - 'Research from: before you continue why is the following approach to stroing
+      the pdfs @data/raw_papers/sebastin_2011'
+    methodology: Extracted from conversation history
+    sources:
+    - before you continue why is the following approach to stroing the pdfs @data/raw_papers/sebastin_2011
+      where we have PMID_title*.pdf not recommended compared to the approach in @reviews/sebastin_2011/pa
+    conversation_link:
+      session_id: hist-598
+      timestamp: 1760942064063
+      prompt: before you continue why is the following approach to stroing the pdfs
+        @data/raw_papers/sebastin_2011 where we have PMID_title*.pdf not recommended
+        compared to the approach in @reviews/sebastin_2011/pa
+      project: /Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Projects/AI
+        Engineering/ai-structured-data-extractor
+      history_line: 598
+    created_at: '2025-10-28T02:40:19.241300Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241300+00:00Z
+  - id: res-039
+    topic: 2. They only dont have full text articles by they have the a
+    category: discovery
+    findings:
+    - 'Research from: 2. They only dont have full text articles by they have the abstract
+      data which means we can run the '
+    methodology: Extracted from conversation history
+    sources:
+    - 2. They only dont have full text articles by they have the abstract data which
+      means we can run the screening analysis. we just need to create the projects
+    conversation_link:
+      session_id: hist-601
+      timestamp: 1760943477367
+      prompt: 2. They only dont have full text articles by they have the abstract
+        data which means we can run the screening analysis. we just need to create
+        the projects
+      project: /Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Projects/AI
+        Engineering/ai-structured-data-extractor
+      history_line: 601
+    created_at: '2025-10-28T02:40:19.241310Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241310+00:00Z
+  - id: res-040
+    topic: ok this is great but I also wonder if the sequential issue c
+    category: discovery
+    findings:
+    - 'Research from: ok this is great but I also wonder if the sequential issue creation  actions
+      could have been execute'
+    methodology: Extracted from conversation history
+    sources:
+    - 'ok this is great but I also wonder if the sequential issue creation  actions
+      could have been executed in parallel by the haiku subagents: Can you investigate
+      and see how we can make that clear because'
+    conversation_link:
+      session_id: hist-628
+      timestamp: 1760997178979
+      prompt: 'ok this is great but I also wonder if the sequential issue creation  actions
+        could have been executed in parallel by the haiku subagents: Can you investigate
+        and see how we can make that clear because'
+      project: /Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Projects/AI
+        Engineering/ai-structured-data-extractor
+      history_line: 628
+    created_at: '2025-10-28T02:40:19.241319Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241319+00:00Z
+  - id: res-041
+    topic: regarding working in parallel please also investigate the fo
+    category: discovery
+    findings:
+    - 'Research from: regarding working in parallel please also investigate the following
+      slash command and see if the cre'
+    methodology: Extracted from conversation history
+    sources:
+    - regarding working in parallel please also investigate the following slash command
+      and see if the creation of git hub issues and gitworktrees could also be done
+      by subagents insteand of them just worki
+    conversation_link:
+      session_id: hist-629
+      timestamp: 1760997727982
+      prompt: regarding working in parallel please also investigate the following
+        slash command and see if the creation of git hub issues and gitworktrees could
+        also be done by subagents insteand of them just worki
+      project: /Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Projects/AI
+        Engineering/ai-structured-data-extractor
+      history_line: 629
+    created_at: '2025-10-28T02:40:19.241328Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241328+00:00Z
+  - id: res-042
+    topic: Please ultrathink and research the new claude code skills fe
+    category: discovery
+    findings:
+    - 'Research from: Please ultrathink and research the new claude code skills feature
+      and how it works with plugins then'
+    methodology: Extracted from conversation history
+    sources:
+    - Please ultrathink and research the new claude code skills feature and how it
+      works with plugins then improve this plugin to make it improve the software
+      experience
+    conversation_link:
+      session_id: hist-631
+      timestamp: 1761071598888
+      prompt: Please ultrathink and research the new claude code skills feature and
+        how it works with plugins then improve this plugin to make it improve the
+        software experience
+      project: /Users/shakes/DevProjects/slashsense
+      history_line: 631
+    created_at: '2025-10-28T02:40:19.241339Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241339+00:00Z
+  - id: res-043
+    topic: Now also research the use of agents and sub agents like this
+    category: discovery
+    findings:
+    - 'Research from: Now also research the use of agents and sub agents like this
+      agent @ /Users/shakes/Library/Mobile Do'
+    methodology: Extracted from conversation history
+    sources:
+    - Now also research the use of agents and sub agents like this agent @ /Users/shakes/Library/Mobile
+      Documents/com~apple~CloudDocs/Projects/AI Engineering/ai-structured-data-extractor/.claude/agents/e2e-
+    conversation_link:
+      session_id: hist-632
+      timestamp: 1761074104122
+      prompt: Now also research the use of agents and sub agents like this agent @
+        /Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Projects/AI Engineering/ai-structured-data-extractor/.claude/agents/e2e-
+      project: /Users/shakes/DevProjects/slashsense
+      history_line: 632
+    created_at: '2025-10-28T02:40:19.241348Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241348+00:00Z
+  - id: res-044
+    topic: Since the /slashsense:parallel:plan uses the more advanced m
+    category: discovery
+    findings:
+    - 'Research from: Since the /slashsense:parallel:plan uses the more advanced model.
+      how can we make sure that it does '
+    methodology: Extracted from conversation history
+    sources:
+    - Since the /slashsense:parallel:plan uses the more advanced model. how can we
+      make sure that it does the research and planning to the extent that the haiku
+      execution agents do not have to plan but just
+    conversation_link:
+      session_id: hist-654
+      timestamp: 1761080156533
+      prompt: Since the /slashsense:parallel:plan uses the more advanced model. how
+        can we make sure that it does the research and planning to the extent that
+        the haiku execution agents do not have to plan but just
+      project: /Users/shakes/DevProjects/slashsense
+      history_line: 654
+    created_at: '2025-10-28T02:40:19.241357Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241357+00:00Z
+  - id: res-045
+    topic: I gues the remaining issue here that is going to be importan
+    category: discovery
+    findings:
+    - 'Research from: I gues the remaining issue here that is going to be important
+      for this process is to make sure that '
+    methodology: Extracted from conversation history
+    sources:
+    - I gues the remaining issue here that is going to be important for this process
+      is to make sure that the research is grounded in to what the current codebase
+      is about, what has been done before exising
+    conversation_link:
+      session_id: hist-655
+      timestamp: 1761080958044
+      prompt: I gues the remaining issue here that is going to be important for this
+        process is to make sure that the research is grounded in to what the current
+        codebase is about, what has been done before exising
+      project: /Users/shakes/DevProjects/slashsense
+      history_line: 655
+    created_at: '2025-10-28T02:40:19.241366Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241366+00:00Z
+  - id: res-046
+    topic: update the hook and implement - Update parallel-plan with pa
+    category: discovery
+    findings:
+    - "Research from: update the hook and implement - Update parallel-plan with parallel\
+      \ research\n  - Update all 5 researc"
+    methodology: Extracted from conversation history
+    sources:
+    - "update the hook and implement - Update parallel-plan with parallel research\n\
+      \  - Update all 5 research agent templates\n  - Simplify Haiku agents to pure\
+      \ execution\n  - Test the complete workflow"
+    conversation_link:
+      session_id: hist-657
+      timestamp: 1761082623885
+      prompt: "update the hook and implement - Update parallel-plan with parallel\
+        \ research\n  - Update all 5 research agent templates\n  - Simplify Haiku\
+        \ agents to pure execution\n  - Test the complete workflow"
+      project: /Users/shakes/DevProjects/slashsense
+      history_line: 657
+    created_at: '2025-10-28T02:40:19.241375Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241375+00:00Z
+  - id: res-047
+    topic: these tasks seem to be generic and not focussing on screenin
+    category: discovery
+    findings:
+    - "Research from: these tasks seem to be generic and not focussing on screening\
+      \ for ssytematic reviews: \u23FA Task(Researc"
+    methodology: Extracted from conversation history
+    sources:
+    - "these tasks seem to be generic and not focussing on screening for ssytematic\
+      \ reviews: \u23FA Task(Research screening best practices)\n  \u23BF  Initializing\u2026\
+      \n  \u23BF  Error: Interrupted by user\n\n\u23FA Task(Research Pyth"
+    conversation_link:
+      session_id: hist-680
+      timestamp: 1761102119995
+      prompt: "these tasks seem to be generic and not focussing on screening for ssytematic\
+        \ reviews: \u23FA Task(Research screening best practices)\n  \u23BF  Initializing\u2026\
+        \n  \u23BF  Error: Interrupted by user\n\n\u23FA Task(Research Pyth"
+      project: /Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Projects/AI
+        Engineering/ai-structured-data-extractor
+      history_line: 680
+    created_at: '2025-10-28T02:40:19.241384Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241384+00:00Z
+  - id: res-048
+    topic: 'you can still spawn the parallel research agents to improve '
+    category: discovery
+    findings:
+    - 'Research from: you can still spawn the parallel research agents to improve
+      on the exisitng implementation if possib'
+    methodology: Extracted from conversation history
+    sources:
+    - 'you can still spawn the parallel research agents to improve on the exisitng
+      implementation if possible '
+    conversation_link:
+      session_id: hist-681
+      timestamp: 1761102207692
+      prompt: 'you can still spawn the parallel research agents to improve on the
+        exisitng implementation if possible '
+      project: /Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Projects/AI
+        Engineering/ai-structured-data-extractor
+      history_line: 681
+    created_at: '2025-10-28T02:40:19.241393Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241393+00:00Z
+  - id: res-049
+    topic: 'please use your plastic surgery researcher- writer skill to '
+    category: discovery
+    findings:
+    - 'Research from: please use your plastic surgery researcher- writer skill to
+      review the first sentence of the abstrac'
+    methodology: Extracted from conversation history
+    sources:
+    - please use your plastic surgery researcher- writer skill to review the first
+      sentence of the abstract. Am I wrong to think that this should be supported
+      my actual numbers or is it enough to just say s
+    conversation_link:
+      session_id: hist-708
+      timestamp: 1761207199263
+      prompt: please use your plastic surgery researcher- writer skill to review the
+        first sentence of the abstract. Am I wrong to think that this should be supported
+        my actual numbers or is it enough to just say s
+      project: /Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Mundy Edits/Breast_Recon_Disparities
+      history_line: 708
+    created_at: '2025-10-28T02:40:19.241402Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241402+00:00Z
+  - id: res-050
+    topic: is there another study other than [Mahmoudi 2017](https://ja
+    category: discovery
+    findings:
+    - 'Research from: is there another study other than [Mahmoudi 2017](https://jamanetwork.com/journals/jamasurgery/fulla'
+    methodology: Extracted from conversation history
+    sources:
+    - is there another study other than [Mahmoudi 2017](https://jamanetwork.com/journals/jamasurgery/fullarticle/2629297)
+      that shows or analyses the statistics?
+    conversation_link:
+      session_id: hist-709
+      timestamp: 1761207934264
+      prompt: is there another study other than [Mahmoudi 2017](https://jamanetwork.com/journals/jamasurgery/fullarticle/2629297)
+        that shows or analyses the statistics?
+      project: /Users/shakes/Library/Mobile Documents/com~apple~CloudDocs/Mundy Edits/Breast_Recon_Disparities
+      history_line: 709
+    created_at: '2025-10-28T02:40:19.241413Z'
+    status: active
+    permanent: false
+    expires_at: 2026-04-26T02:40:19.241413+00:00Z
 decisions:
-  # Example entry structure (multiple tasks will populate)
-  # - id: "dec-001"
-  #   title: "Use extraction-optimized output format"
-  #   date: "2025-10-27T12:00:00Z"
-  #   status: "accepted"  # accepted, rejected, pending, revisiting
-  #   category: "architecture"  # architecture, process, tooling, performance
-  #   context: |
-  #     Need consistent, reliable format for automated context
-  #     extraction across conversation sessions without manual work.
-  #   alternatives_considered:
-  #     - option: "Manual file writing"
-  #       pros:
-  #         - "Immediate control"
-  #         - "Explicit file updates"
-  #       cons:
-  #         - "Violates DRY principle"
-  #         - "Redundant tool calls"
-  #         - "High maintenance burden"
-  #       effort: "medium"
-  #       result: "rejected"
-  #       rationale: "Too much manual overhead, not scalable"
-  #
-  #     - option: "Extraction-optimized output format"
-  #       pros:
-  #         - "Perfect DRY compliance"
-  #         - "99%+ extraction reliability"
-  #         - "Zero manual work after setup"
-  #       cons:
-  #         - "Requires specific format discipline"
-  #         - "Initial setup complexity"
-  #       effort: "small"
-  #       result: "accepted"
-  #       rationale: "Best long-term solution with minimal overhead"
-  #
-  #   decision: |
-  #     Use extraction-optimized output style for all task outputs.
-  #     Ensures consistency, enables automated parsing, eliminates
-  #     manual file writing. Format defined in CLAUDE.md patterns.
-  #   rationale: |
-  #     This approach provides perfect DRY compliance while
-  #     maintaining 99% automated extraction reliability.
-  #     Once defined, requires only discipline to follow format.
-  #     Eliminates need for manual context preservation work.
-  #   consequences:
-  #     positive:
-  #       - "Zero redundant tool calls"
-  #       - "Automatic extraction without manual intervention"
-  #       - "Better context preservation across sessions"
-  #       - "Improved collaboration with future team members"
-  #     negative:
-  #       - "Must maintain format discipline"
-  #       - "Requires training for new contributors"
-  #   implementation_status: "completed"
-  #   conversation_link:
-  #     session_id: "sess-20251027-001"
-  #     timestamp: 1729771200000
-  #     prompt: "How should we preserve context across sessions?"
-  #     history_line: 456
-  #   created_at: "2025-10-27T10:30:00Z"
-  #   permanent: true
-  #   related_features: ["feat-010", "feat-011"]
-  #   related_plans: ["plan-005"]
-  description: |
-    Architectural and process decisions with full ADR structure.
-    Includes alternatives, rationale, and consequences.
-    Permanent decisions remain indefinitely; others reviewed annually.
-    Task-1 will extract decisions from conversation context.
   entries: []
-
+plans:
+  entries: []
 features:
-  # Example entry structure (integrated from features.yaml)
-  # - id: "feat-001"
-  #   title: "Haiku 4.5 Integration"
-  #   status: "planned"  # planned, in_progress, completed, blocked
-  #   category: "cost-optimization"
-  #   priority: "critical"
-  #   phase: 1
-  #   description: |
-  #     Upgrade to explicit Haiku 4.5 model for 87% cost reduction
-  #     in intent analysis while improving performance 2-3x.
-  #   estimated_tokens: 10000
-  #   based_on_decisions: ["dec-010"]  # Link to decisions that drove this
-  #   conversation_link:
-  #     session_id: "feat-design-20251027"
-  #     timestamp: 1729771300000
-  #     prompt: "Design cost optimization strategy"
-  #     history_line: 789
-  #   created_at: "2025-10-27T14:00:00Z"
-  #   completed_at: null
-  #   notes: |
-  #     Cost savings: $200/month (est.)
-  #     Performance: 2-3x faster than current
-  description: |
-    Feature entries automatically integrated from features.yaml.
-    Links decisions that drove feature implementation.
-    Task-1 will sync with features.yaml to add conversation context.
   entries: []
-
-# Query patterns for selective context loading
-# (Used by future CLAUDE.md enhancements for context selection)
-query_patterns:
-  by_category:
-    architecture: "decisions with category=architecture OR plans with category=architecture"
-    process: "decisions with category=process"
-    tooling: "decisions with category=tooling OR research with category=tools"
-    performance: "decisions with category=performance OR research with category=performance"
-
-  by_status:
-    active_decisions: "decisions with status=accepted AND permanent=true"
-    current_plans: "plans with status!=completed AND status!=archived"
-    active_features: "features with status=in_progress OR status=planned"
-
-  by_recency:
-    this_month: "entries with created_at > 30 days ago"
-    this_quarter: "entries with created_at > 90 days ago"
-    this_year: "entries with created_at > 365 days ago"
-
-  by_conversation:
-    linked: "entries with conversation_link populated"
-    recent_sessions: "entries with conversation_link.timestamp > 7 days ago"
-
-# Lifecycle rules
-lifecycle:
-  research:
-    expiration: "6 months"
-    policy: "Auto-expire after 6 months; mark as 'expired' for archival"
-    review: "Can be marked 'permanent' for evergreen findings"
-
-  plans:
-    completion_archive: "90 days after completion_date"
-    policy: "Archived 90 days after marked completed"
-    review: "Can be unarchived if needed for reference"
-
-  decisions:
-    permanent_threshold: "Major decisions marked permanent=true"
-    review_cycle: "Annual review for non-permanent decisions"
-    deprecation: "Mark as 'superseded' when replaced by newer decisions"
-
-  features:
-    deprecation: "When feature is replaced or removed, mark 'deprecated'"
-    archival: "Keep completed features for historical reference"
-    review: "Link to decisions that drove feature implementation"
-
-# Indexing metadata
-# (For efficient querying and filtering)
-indexing:
-  by_id: true
-  by_category: true
-  by_status: true
-  by_date: true
-  by_conversation_session: true
-  full_text_search: false  # Can be enabled in future versions
