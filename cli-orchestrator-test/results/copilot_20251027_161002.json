@@ -1,0 +1,36 @@
+```json
+{
+  "bugs": [
+    {
+      "issue": "ZeroDivisionError",
+      "description": "Function crashes when passed an empty list/iterable",
+      "example": "calculate_average([]) raises ZeroDivisionError"
+    }
+  ],
+  "improvements": [
+    {
+      "category": "Error Handling",
+      "suggestion": "Add validation for empty input",
+      "code": "if not numbers:\n    raise ValueError('Cannot calculate average of empty sequence')\n# or return 0/None/NaN depending on requirements"
+    },
+    {
+      "category": "Type Safety",
+      "suggestion": "Add type hints for better code clarity",
+      "code": "def calculate_average(numbers: list[float]) -> float:"
+    },
+    {
+      "category": "Input Validation",
+      "suggestion": "Validate that all elements are numeric",
+      "code": "Check for non-numeric values that could cause sum() to fail"
+    },
+    {
+      "category": "Documentation",
+      "suggestion": "Add docstring explaining parameters, return value, and exceptions",
+      "code": "Add Google/NumPy style docstring"
+    }
+  ],
+  "risk_level": "MEDIUM",
+  "explanation": "The primary risk is the unhandled ZeroDivisionError when the input is empty, which will cause runtime crashes. This is a common edge case that should always be handled. The function works correctly for valid non-empty numeric sequences, but lacks defensive programming practices. Risk is MEDIUM because while it will fail on empty input (common scenario), it won't cause data corruption or security issues."
+}
+```
+

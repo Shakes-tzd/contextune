@@ -17,7 +17,7 @@ Compares routing decisions with actual token usage to:
 import json
 import sys
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Any
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -46,10 +46,10 @@ class CostTracker:
     def track_tool_usage(
         self,
         tool_name: str,
-        tool_params: Dict[str, Any],
+        tool_params: dict[str, Any],
         result: Any,
-        model_used: str = "sonnet"  # "sonnet" or "haiku"
-    ) -> Dict[str, Any]:
+        model_used: str = "sonnet",  # "sonnet" or "haiku"
+    ) -> dict[str, Any]:
         """
         Track actual tool usage and calculate costs.
 
@@ -91,7 +91,7 @@ class CostTracker:
             "estimated_tokens": estimated_tokens,
             "actual_cost": total_cost,
             "potential_savings": potential_savings,
-            "efficiency": "optimal" if potential_savings <= 0 else "suboptimal"
+            "efficiency": "optimal" if potential_savings <= 0 else "suboptimal",
         }
 
         return cost_analysis
@@ -125,7 +125,7 @@ class CostTracker:
             # Generic: ~4 chars per token
             return len(result_str) // 4
 
-    def log_cost_metrics(self, cost_analysis: Dict[str, Any]):
+    def log_cost_metrics(self, cost_analysis: dict[str, Any]):
         """Log cost metrics to observability database."""
 
         self.db.log_performance_metric(
@@ -138,8 +138,8 @@ class CostTracker:
                 "tokens": cost_analysis["estimated_tokens"],
                 "cost": cost_analysis["actual_cost"],
                 "savings": cost_analysis["potential_savings"],
-                "efficiency": cost_analysis["efficiency"]
-            }
+                "efficiency": cost_analysis["efficiency"],
+            },
         )
 
 
@@ -147,12 +147,12 @@ def main():
     """Main entry point for PostToolUse hook."""
     try:
         # Read hook input from stdin
-        hook_data = json.load(sys.stdin)
+        hook_data: dict[str, Any] = json.load(sys.stdin)
 
-        tool = hook_data.get("tool", {})
-        tool_name = tool.get("name", "")
-        tool_params = tool.get("parameters", {})
-        result = hook_data.get("result", {})
+        tool: dict[str, Any] = hook_data.get("tool", {})
+        tool_name: str = tool.get("name", "")
+        tool_params: dict[str, Any] = tool.get("parameters", {})
+        result: Any = hook_data.get("result", {})
 
         # Detect which model was used
         # Heuristic: If result is very large but fast, likely Haiku
@@ -162,10 +162,7 @@ def main():
         # Track cost
         tracker = CostTracker()
         cost_analysis = tracker.track_tool_usage(
-            tool_name,
-            tool_params,
-            result,
-            model_used
+            tool_name, tool_params, result, model_used
         )
 
         # Log to database
@@ -177,16 +174,13 @@ def main():
 💰 **Cost Optimization Opportunity**
 
 Tool: `{tool_name}`
-Current cost: ${cost_analysis['actual_cost']:.4f}
-Potential savings: ${cost_analysis['potential_savings']:.4f}
+Current cost: ${cost_analysis["actual_cost"]:.4f}
+Potential savings: ${cost_analysis["potential_savings"]:.4f}
 
 This operation could be delegated to Haiku for cost efficiency.
             """.strip()
 
-            output = {
-                "continue": True,
-                "additionalContext": feedback
-            }
+            output = {"continue": True, "additionalContext": feedback}
         else:
             output = {"continue": True}
 
@@ -198,11 +192,10 @@ This operation could be delegated to Haiku for cost efficiency.
             db = ObservabilityDB()
             db.log_error(
                 component="cost_tracker",
+                message=str(e),
                 error_type=type(e).__name__,
-                error_message=str(e),
-                context={"hook": "PostToolUse"}
             )
-        except:
+        except Exception:
             pass
 
         # Always continue

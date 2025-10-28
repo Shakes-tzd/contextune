@@ -1,6 +1,6 @@
 ---
 name: ctx:configure
-description: Learn how to optionally customize your environment for extra Contextune visibility (manual setup guide)
+description: Interactive configuration for Contextune features (output style, status bar, CLAUDE.md)
 keywords:
   - configure
   - setup
@@ -9,12 +9,140 @@ keywords:
   - setup contextune
   - configure environment
   - customization guide
-executable: false
+  - output style
+  - install
+  - uninstall
+executable: commands/ctx-configure.py
 ---
 
-# Contextune Optional Customization Guide
+# Contextune Interactive Configuration
 
-**Note:** Contextune works automatically after installation through Skills and Hooks. This guide provides **optional** customizations for users who want extra visibility.
+**Interactive setup** for Contextune features with guided prompts.
+
+**What this configures:**
+- ✨ Extraction-optimized output style (automatic documentation)
+- 🎨 Status bar integration (optional)
+- 📝 CLAUDE.md integration (optional)
+
+Run `/ctx:configure` and Claude will guide you through interactive prompts.
+
+---
+
+## Quick Start
+
+```bash
+/ctx:configure
+```
+
+Claude will detect your current setup and present interactive options via dialog prompts.
+
+---
+
+## Interactive Flows
+
+### Flow 1: First-Time Setup (Complete Setup in One Command)
+
+When you run `/ctx:configure` and nothing is installed, Claude guides you through:
+
+**Step 1: "Would you like to install the extraction-optimized output style?"**
+- **Install** - Enable automatic documentation extraction
+- **Skip** - Continue without
+
+**Step 2 (if Install): "Where should the output style be installed?"**
+- **This project** - Install to `.claude/output-styles/` (git-trackable, team can share)
+- **All projects** - Install to `~/.claude/output-styles/` (available everywhere)
+
+**Step 3: "Would you like to add Contextune to your status bar?"**
+- **Yes** - Show Contextune commands in status bar (zero token cost)
+- **No** - Skip status bar integration
+
+**Result:** Complete setup with your preferred configuration ✅
+
+---
+
+### Flow 2: Manage Existing Installation
+
+If customizations are already installed, Claude offers:
+
+**"Manage Contextune configuration"**
+
+Current installation displayed (e.g., "Output style: user-level, Status line: ✅")
+
+- **Activate style** - Make extraction-optimized active for this session
+- **Reinstall** - Change installation scope (user ↔ project)
+- **Uninstall** - Remove all customizations
+- **Keep as-is** - No changes
+
+---
+
+### Flow 3: Uninstall (Clean Removal)
+
+If you choose to uninstall, Claude shows:
+
+**⚠️  Important Warning:**
+> Before disabling the Contextune plugin (`/plugin disable contextune`),
+> run this uninstall process FIRST.
+>
+> The plugin's hooks won't be available after disabling,
+> so remove customizations while the plugin is still active.
+
+**"Proceed with uninstallation?"**
+- **Uninstall** - Remove all customizations
+- **Cancel** - Keep everything as-is
+
+**If Uninstall: "Clean up extracted documentation files?"**
+- **Keep files** - Preserve .plans/ directories with your documentation
+- **Clean up** - Remove all .plans/ directories (⚠️  Cannot be undone)
+
+**Result:** Clean removal + guidance for plugin disable ✅
+
+---
+
+## What Gets Configured
+
+### 1. Extraction-Optimized Output Style ⭐ **Recommended**
+
+**What it does:**
+- Formats all design work in structured YAML blocks
+- Enables automatic extraction to .plans/ files when session ends
+- Zero manual documentation work
+- Perfect DRY workflow (no redundant Read operations)
+
+**Installation Options:**
+
+**User-level** (`~/.claude/output-styles/`):
+- ✅ Available in all projects
+- ✅ Single installation
+- ❌ Not git-trackable
+
+**Project-level** (`.claude/output-styles/`):
+- ✅ Git-trackable (team can share)
+- ✅ Project-specific configuration
+- ❌ Must install per project
+
+**Benefits:**
+- SessionEnd hook extracts designs automatically
+- Next session has context restored
+- Never use Write/Read tools for documentation
+
+---
+
+### 2. Status Bar Integration (Optional)
+
+**What it does:**
+- Shows Contextune commands in your status bar
+- Zero token cost (UI-only display)
+- Quick reference for common commands
+
+**Installation:**
+- Interactive prompt asks during `/ctx:configure`
+- Claude modifies `~/.claude/statusline.sh` automatically
+- Status bar updates immediately
+
+**Display:**
+```
+Contextune: /ctx:research | /ctx:plan | /ctx:execute
+```
 
 ---
 
@@ -25,16 +153,19 @@ After installing Contextune, these features work immediately:
 1. **Intent Detection** - Hook detects slash commands from natural language
 2. **Skills** - Claude auto-suggests parallelization and discovers capabilities
 3. **Commands** - All `/ctx:*` commands available in autocomplete
+4. **SessionEnd Hook** - Extracts documentation automatically (works with or without output style)
 
-**You don't need to configure anything!** Contextune is designed to be zero-setup.
+**You don't need to configure anything!** Output style just makes extraction more reliable (99% vs 60%).
 
 ---
 
-## 🎨 Optional Customizations (Manual Setup)
+## 🎨 Optional Customizations
 
-If you want **extra visibility**, you can manually add Contextune to:
+For power users who want extra visibility:
 1. **CLAUDE.md** - Persistent context at session start (~150 tokens)
 2. **Status Bar** - Always-visible command reminders
+
+**These are still manual** (not handled by /ctx:configure yet)
 
 **Trade-offs:**
 - ✅ Pro: Contextune always top-of-mind for Claude

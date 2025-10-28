@@ -6,6 +6,12 @@
         "hooks": [
           {
             "type": "command",
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/context_restorer.js",
+            "timeout": 2000,
+            "description": "Restore working context from scratch_pad.md (DRY context transfer)"
+          },
+          {
+            "type": "command",
             "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/session_start.js",
             "timeout": 1000,
             "description": "Display Contextune commands (zero context overhead)"
@@ -70,9 +76,28 @@
         "hooks": [
           {
             "type": "command",
+            "command": "uv run ${CLAUDE_PLUGIN_ROOT}/hooks/context_preserver.py",
+            "timeout": 2000,
+            "description": "Automatically preserve working context to scratch_pad.md"
+          },
+          {
+            "type": "command",
             "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/compact_start.js",
             "timeout": 1000,
             "description": "Track context compaction for measuring context preservation"
+          }
+        ]
+      }
+    ],
+    "PostSessionEnd": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ${CLAUDE_PLUGIN_ROOT}/hooks/session_end_extractor.py",
+            "timeout": 5000,
+            "description": "Extract completed work to .plans/ (zero conversation overhead)"
           }
         ]
       }

@@ -1,0 +1,52 @@
+{
+  "response": "```json\n{\n  \"bugs\": [\n    {\n      \"type\": \"ZeroDivisionError\",\n      \"description\": \"The function will raise a ZeroDivisionError if the input 'numbers' is an empty list, as len(numbers) will be 0.\"\n    }\n  ],\n  \"improvements\": [\n    {\n      \"type\": \"Input Validation\",\n      \"description\": \"Add a check to handle empty lists. For example, return 0 or None, or raise a ValueError with a descriptive message.\"\n    },\n    {\n      \"type\": \"Code Clarity\",\n      \"description\": \"Add type hints to the function signature (e.g., `def calculate_average(numbers: list[float]) -> float:`) to improve readability and allow for static analysis.\"\n    },\n    {\n      \"type\": \"Documentation\",\n      \"description\": \"Add a docstring to explain the function's purpose, arguments, and return value.\"\n    }\n  ],\n  \"risk_level\": \"Medium\",\n  \"explanation\": \"The function correctly calculates the average for a non-empty list of numbers. However, it is not robust against edge cases, specifically an empty list, which will cause a runtime crash. The lack of type hints and a docstring also reduces its maintainability and ease of use for other developers.\"\n}\n```",
+  "stats": {
+    "models": {
+      "gemini-2.5-pro": {
+        "api": {
+          "totalRequests": 2,
+          "totalErrors": 0,
+          "totalLatencyMs": 14813
+        },
+        "tokens": {
+          "prompt": 11772,
+          "candidates": 596,
+          "total": 13132,
+          "cached": 826,
+          "thoughts": 764,
+          "tool": 0
+        }
+      }
+    },
+    "tools": {
+      "totalCalls": 1,
+      "totalSuccess": 0,
+      "totalFail": 1,
+      "totalDurationMs": 0,
+      "totalDecisions": {
+        "accept": 0,
+        "reject": 0,
+        "modify": 0,
+        "auto_accept": 0
+      },
+      "byName": {
+        "run_code": {
+          "count": 1,
+          "success": 0,
+          "fail": 1,
+          "durationMs": 0,
+          "decisions": {
+            "accept": 0,
+            "reject": 0,
+            "modify": 0,
+            "auto_accept": 0
+          }
+        }
+      }
+    },
+    "files": {
+      "totalLinesAdded": 0,
+      "totalLinesRemoved": 0
+    }
+  }
+}
