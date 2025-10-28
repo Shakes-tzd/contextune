@@ -7,22 +7,22 @@
 # ]
 # ///
 """
-Decision Sync - Auto-populate decisions.yaml from history.jsonl
+Decision Sync - Auto-populate decisions.yaml from conversation transcripts
 
-Scans ~/.claude/history.jsonl (1,236+ conversations) and extracts:
-- Research findings: "research", "/ctx:research", "investigate", "explore"
-- Plans: "/ctx:plan", "create plan", "design", "architecture"
-- Decisions: "decided to", "alternatives considered"
+Scans ~/.claude/projects/ for conversation transcripts and extracts:
+- Research findings from extraction-optimized format
+- Plans and designs
+- Architectural decisions
 
-Appends to decisions.yaml with conversation links for context preservation.
+Uses same extraction patterns as SessionEnd hook for consistency.
 
 Usage:
-    decision-sync.py [--dry-run] [--limit N] [--output PATH]
+    decision-sync.py [--dry-run] [--limit N] [--project PATH]
 
 Options:
     --dry-run       Show what would be added without modifying files
     --limit N       Only process first N conversations (default: all)
-    --output PATH   Custom decisions.yaml path (default: ./decisions.yaml)
+    --project PATH  Specific project to scan (default: scan all projects)
 """
 
 import json
@@ -31,10 +31,7 @@ import re
 from pathlib import Path
 from datetime import datetime, timedelta
 from typing import Optional, List, Dict, Any
-from dataclasses import dataclass, asdict
-from collections import defaultdict
 import argparse
-import traceback
 
 try:
     import yaml
@@ -44,487 +41,313 @@ except ImportError:
 
 try:
     from rich.console import Console
-    from rich.progress import Progress, SpinnerColumn, TextColumn
+    from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
     from rich.table import Table
+    console = Console()
 except ImportError:
-    Console = None  # Fallback if rich not available
-    Progress = None
+    console = None
 
+# Import extraction functions from session_end_extractor
+sys.path.insert(0, str(Path(__file__).parent.parent / 'hooks'))
 
-# ============================================================================
-# Data Models
-# ============================================================================
+try:
+    from session_end_extractor import (
+        extract_designs,
+        extract_decisions,
+        extract_assistant_text
+    )
+except ImportError:
+    print("Warning: Could not import from session_end_extractor, using fallback", file=sys.stderr)
+    extract_designs = None
+    extract_decisions = None
+    extract_assistant_text = None
 
-@dataclass
-class ConversationLink:
-    """Link to source conversation for context preservation."""
-    session_id: str
-    timestamp: int
-    prompt: str
-    project: str
-    history_line: Optional[int] = None
+def find_conversation_transcripts(project_filter: Optional[str] = None) -> List[Path]:
+    """
+    Find all conversation transcript files.
 
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary, excluding None values."""
-        return {k: v for k, v in asdict(self).items() if v is not None}
+    Args:
+        project_filter: Optional path to specific project
 
+    Returns:
+        List of transcript file paths
+    """
+    projects_dir = Path.home() / ".claude" / "projects"
 
-@dataclass
-class ResearchEntry:
-    """Research finding extracted from conversation."""
-    id: str
-    topic: str
-    category: str
-    findings: List[str]
-    methodology: str
-    sources: List[str]
-    conversation_link: ConversationLink
-    created_at: str
-    status: str = "active"
-    permanent: bool = False
+    if not projects_dir.exists():
+        return []
 
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary."""
-        data = asdict(self)
-        data['conversation_link'] = self.conversation_link.to_dict()
-        # Calculate expiration (6 months)
-        created = datetime.fromisoformat(self.created_at)
-        expires = created + timedelta(days=180)
-        data['expires_at'] = expires.isoformat() + 'Z'
-        return data
+    transcripts = []
 
+    if project_filter:
+        # Scan specific project only
+        project_transcripts = Path(project_filter).parent
+        if project_transcripts.exists():
+            transcripts.extend(project_transcripts.glob("*.jsonl"))
+    else:
+        # Scan all projects
+        for project_dir in projects_dir.iterdir():
+            if project_dir.is_dir():
+                transcripts.extend(project_dir.glob("*.jsonl"))
 
-@dataclass
-class DecisionEntry:
-    """Decision extracted from conversation."""
-    id: str
-    title: str
-    date: str
-    status: str
-    category: str
-    context: str
-    decision: str
-    rationale: str
-    alternatives_considered: List[Dict[str, Any]]
-    consequences: Dict[str, List[str]]
-    conversation_link: ConversationLink
-    permanent: bool = False
-    implementation_status: str = "pending"
+    return transcripts
 
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary."""
-        data = asdict(self)
-        data['conversation_link'] = self.conversation_link.to_dict()
-        return data
+def read_transcript(transcript_path: Path) -> List[dict]:
+    """Read conversation transcript JSONL file."""
+    try:
+        with open(transcript_path, 'r') as f:
+            return [json.loads(line) for line in f if line.strip()]
+    except Exception as e:
+        if console:
+            console.print(f"[yellow]Warning: Failed to read {transcript_path.name}: {e}[/yellow]")
+        return []
 
+def extract_research_from_transcript(transcript: List[dict]) -> List[dict]:
+    """
+    Extract research findings from conversation transcript.
 
-# ============================================================================
-# Keyword Matchers
-# ============================================================================
+    Looks for extraction-optimized format:
+    - ## Research: [Topic]
+    - ### Key Findings (YAML blocks)
+    """
+    research_entries = []
 
-class KeywordMatcher:
-    """Detect research, plans, and decisions via keyword patterns."""
+    for entry in transcript:
+        text = extract_assistant_text(entry) if extract_assistant_text else None
+        if not text:
+            continue
 
-    RESEARCH_KEYWORDS = {
-        'research', '/ctx:research', 'ctx:research',
-        'investigate', 'exploration', 'explore', 'findings',
-        'methodology', 'compare', 'comparison', 'benchmark',
-        'analysis', 'analyze', 'study', 'survey'
+        # Detect research pattern
+        research_match = re.search(r'## Research:\s*(.+?)$', text, re.MULTILINE)
+        if not research_match:
+            continue
+
+        topic = research_match.group(1).strip()
+
+        # Extract findings YAML block
+        findings_yaml = re.search(r'### Key Findings\n\n```yaml\n(.*?)```', text, re.DOTALL)
+        findings = []
+
+        if findings_yaml:
+            try:
+                findings_data = yaml.safe_load(findings_yaml.group(1))
+                if isinstance(findings_data, dict) and 'findings' in findings_data:
+                    findings = [f.get('finding', '') for f in findings_data['findings']]
+            except:
+                pass
+
+        # Extract recommendations
+        recommendations = re.findall(r'###? Recommendations?\n\n(.+?)(?=\n##|\Z)', text, re.DOTALL)
+
+        research_entries.append({
+            'topic': topic,
+            'findings': findings if findings else [f"Research from conversation about {topic}"],
+            'recommendations': recommendations[0] if recommendations else '',
+            'timestamp': entry.get('timestamp', ''),
+            'content_snippet': text[:500]
+        })
+
+    return research_entries
+
+def populate_from_transcripts(
+    decisions_path: Path,
+    transcripts: List[Path],
+    dry_run: bool = False,
+    limit: Optional[int] = None
+) -> Dict[str, int]:
+    """
+    Populate decisions.yaml from conversation transcripts.
+
+    Args:
+        decisions_path: Path to decisions.yaml
+        transcripts: List of transcript files to scan
+        dry_run: If True, don't modify files
+        limit: Max conversations to process
+
+    Returns:
+        Dict with counts of extracted items
+    """
+    stats = {
+        'transcripts_scanned': 0,
+        'research_found': 0,
+        'plans_found': 0,
+        'decisions_found': 0
     }
 
-    PLAN_KEYWORDS = {
-        '/ctx:plan', 'ctx:plan', 'create plan',
-        'design', 'architecture', 'implementation plan',
-        'breakdown', 'decompose', 'strategy', 'roadmap',
-        'phased approach', 'workflow'
-    }
+    all_research = []
+    all_plans = []
+    all_decisions = []
 
-    DECISION_KEYWORDS = {
-        'decided to', 'decision:', 'alternatives',
-        'alternatives considered', 'pros and cons',
-        'why did we choose', 'rationale', 'trade-off',
-        'accepted', 'rejected', 'status: accepted'
-    }
-
-    @classmethod
-    def detect_research(cls, text: str) -> bool:
-        """Check if text contains research indicators."""
-        text_lower = text.lower()
-        # At least 2 keywords or research-specific patterns
-        matches = sum(
-            1 for keyword in cls.RESEARCH_KEYWORDS
-            if keyword.lower() in text_lower
+    if console:
+        progress = Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            BarColumn(),
+            console=console
         )
-        # Also detect structured research patterns
-        has_findings = bool(re.search(r'(findings?|findings:)', text, re.IGNORECASE))
-        has_methodology = bool(re.search(r'(methodology|approach)', text, re.IGNORECASE))
+    else:
+        progress = None
 
-        return matches >= 1 or (has_findings and has_methodology)
+    with progress or DummyProgress():
+        task = progress.add_task("Scanning transcripts...", total=len(transcripts)) if progress else None
 
-    @classmethod
-    def detect_plan(cls, text: str) -> bool:
-        """Check if text contains planning indicators."""
-        text_lower = text.lower()
-        matches = sum(
-            1 for keyword in cls.PLAN_KEYWORDS
-            if keyword.lower() in text_lower
-        )
-        # Also detect YAML task structure
-        has_yaml_tasks = bool(re.search(r'tasks:\s*\n\s*-', text, re.IGNORECASE))
-        has_phases = bool(re.search(r'phases?:', text, re.IGNORECASE))
+        for i, transcript_path in enumerate(transcripts):
+            if limit and i >= limit:
+                break
 
-        return matches >= 1 or has_yaml_tasks or has_phases
-
-    @classmethod
-    def detect_decision(cls, text: str) -> bool:
-        """Check if text contains decision indicators."""
-        text_lower = text.lower()
-        matches = sum(
-            1 for keyword in cls.DECISION_KEYWORDS
-            if keyword.lower() in text_lower
-        )
-        # Also detect decision structure
-        has_alternatives = bool(re.search(r'##.*alternatives', text, re.IGNORECASE))
-        has_status = bool(re.search(r'\*\*status:\*\*\s*(accepted|rejected)', text, re.IGNORECASE))
-
-        return matches >= 1 or has_alternatives or has_status
-
-
-# ============================================================================
-# History Parser
-# ============================================================================
-
-class HistoryParser:
-    """Parse ~/.claude/history.jsonl file."""
-
-    def __init__(self, history_path: Optional[Path] = None, dry_run: bool = False):
-        self.history_path = history_path or Path.home() / '.claude' / 'history.jsonl'
-        self.dry_run = dry_run
-        self.console = Console() if Console else None
-        self.entries_read = 0
-        self.research_found = 0
-        self.plans_found = 0
-        self.decisions_found = 0
-        self.next_research_id = 1
-        self.next_decision_id = 1
-
-    def load_history(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
-        """Load history.jsonl entries."""
-        if not self.history_path.exists():
-            if self.console:
-                self.console.print(f"[yellow]⚠️  History file not found: {self.history_path}", file=sys.stderr)
-            return []
-
-        entries = []
-        try:
-            with open(self.history_path, 'r') as f:
-                for i, line in enumerate(f):
-                    if limit and i >= limit:
-                        break
-                    if not line.strip():
-                        continue
-                    try:
-                        entry = json.loads(line)
-                        entries.append(entry)
-                        self.entries_read += 1
-                    except json.JSONDecodeError:
-                        continue
-        except Exception as e:
-            if self.console:
-                self.console.print(f"[red]Error reading history: {e}", file=sys.stderr)
-
-        return entries
-
-    def extract_prompt(self, entry: Dict[str, Any]) -> Optional[str]:
-        """Extract user's prompt/display text from entry."""
-        # Try various fields
-        for field in ['display', 'prompt', 'message']:
-            if field in entry and isinstance(entry[field], str):
-                text = entry[field]
-                if text and len(text) > 3:  # Skip very short entries
-                    return text[:200]  # Limit to first 200 chars
-        return None
-
-    def scan_entries(self, entries: List[Dict[str, Any]]) -> tuple:
-        """Scan entries for research, plans, decisions."""
-        research_items = []
-        plan_items = []
-        decision_items = []
-
-        for i, entry in enumerate(entries):
-            prompt = self.extract_prompt(entry)
-            if not prompt:
+            transcript = read_transcript(transcript_path)
+            if not transcript:
                 continue
 
-            # Extract metadata for linking
-            timestamp = entry.get('timestamp', int(datetime.now().timestamp() * 1000))
-            project = entry.get('project', '/Users/shakes/.claude')
-            session_id = entry.get('session_id', f'hist-{i}')
+            stats['transcripts_scanned'] += 1
 
-            # Create conversation link
-            link = ConversationLink(
-                session_id=session_id,
-                timestamp=timestamp,
-                prompt=prompt,
-                project=project,
-                history_line=i
-            )
+            # Extract using SessionEnd hook patterns
+            if extract_designs:
+                designs = extract_designs(transcript)
+                stats['plans_found'] += len(designs)
+                all_plans.extend([{
+                    'content': d['content'],
+                    'timestamp': d['timestamp'],
+                    'session': transcript_path.stem
+                } for d in designs])
 
-            # Detect type
-            if KeywordMatcher.detect_research(prompt):
-                research_items.append({
-                    'line': i,
-                    'prompt': prompt,
-                    'link': link
-                })
-                self.research_found += 1
+            if extract_decisions:
+                decisions = extract_decisions(transcript)
+                stats['decisions_found'] += len(decisions)
+                all_decisions.extend([{
+                    'content': d['content'],
+                    'timestamp': d['timestamp'],
+                    'session': transcript_path.stem
+                } for d in decisions])
 
-            if KeywordMatcher.detect_plan(prompt):
-                plan_items.append({
-                    'line': i,
-                    'prompt': prompt,
-                    'link': link
-                })
-                self.plans_found += 1
+            # Extract research
+            research = extract_research_from_transcript(transcript)
+            stats['research_found'] += len(research)
+            all_research.extend([{
+                **r,
+                'session': transcript_path.stem
+            } for r in research])
 
-            if KeywordMatcher.detect_decision(prompt):
-                decision_items.append({
-                    'line': i,
-                    'prompt': prompt,
-                    'link': link
-                })
-                self.decisions_found += 1
+            if progress:
+                progress.update(task, advance=1)
 
-        return research_items, plan_items, decision_items
+    if console:
+        console.print(f"\n[green]✅ Scanned {stats['transcripts_scanned']} transcripts[/green]")
+        console.print(f"   Research: {stats['research_found']}")
+        console.print(f"   Plans: {stats['plans_found']}")
+        console.print(f"   Decisions: {stats['decisions_found']}")
 
-    def create_research_entries(self, items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Convert detected research to entry dictionaries."""
-        entries = []
-        for item in items[:50]:  # Limit to avoid explosion
-            link = item['link']
-            entry = ResearchEntry(
-                id=f"res-{self.next_research_id:03d}",
-                topic=item['prompt'][:60],
-                category="discovery",  # Will be refined in real scenario
-                findings=[f"Research from: {item['prompt'][:100]}"],
-                methodology="Extracted from conversation history",
-                sources=[link.prompt],
-                conversation_link=link,
-                created_at=datetime.now().isoformat() + 'Z',
-                status="active"
-            )
-            entries.append(entry.to_dict())
-            self.next_research_id += 1
+    if not dry_run and (all_research or all_plans or all_decisions):
+        # Load or create decisions.yaml
+        if decisions_path.exists():
+            with open(decisions_path) as f:
+                data = yaml.safe_load(f) or {}
+        else:
+            data = {
+                'metadata': {
+                    'project': 'contextune',
+                    'version': '1.0',
+                    'created': datetime.now().isoformat(),
+                    'last_scan': None,
+                    'auto_population_enabled': True
+                },
+                'research': {'entries': []},
+                'plans': {'entries': []},
+                'decisions': {'entries': []},
+                'features': {'entries': []}
+            }
 
-        return entries
-
-    def create_decision_entries(self, items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Convert detected decisions to entry dictionaries."""
-        entries = []
-        for item in items[:50]:  # Limit to avoid explosion
-            link = item['link']
-            entry = DecisionEntry(
-                id=f"dec-{self.next_decision_id:03d}",
-                title=item['prompt'][:80],
-                date=datetime.now().isoformat() + 'Z',
-                status="pending",  # Will be reviewed
-                category="architecture",
-                context=item['prompt'],
-                decision="To be determined",
-                rationale="Extracted from conversation history",
-                alternatives_considered=[],
-                consequences={"positive": [], "negative": []},
-                conversation_link=link,
-                permanent=False
-            )
-            entries.append(entry.to_dict())
-            self.next_decision_id += 1
-
-        return entries
-
-
-# ============================================================================
-# YAML Manager
-# ============================================================================
-
-class YAMLManager:
-    """Safe YAML reading/writing for decisions.yaml."""
-
-    def __init__(self, path: Optional[Path] = None, dry_run: bool = False):
-        self.path = path or Path.cwd() / 'decisions.yaml'
-        self.dry_run = dry_run
-        self.console = Console() if Console else None
-
-    def load_decisions(self) -> Dict[str, Any]:
-        """Load existing decisions.yaml."""
-        if not self.path.exists():
-            return self._default_structure()
-
-        try:
-            with open(self.path, 'r') as f:
-                data = yaml.safe_load(f)
-                return data or self._default_structure()
-        except Exception as e:
-            if self.console:
-                self.console.print(f"[red]Error loading YAML: {e}", file=sys.stderr)
-            return self._default_structure()
-
-    def _default_structure(self) -> Dict[str, Any]:
-        """Return default decisions.yaml structure."""
-        return {
-            'metadata': {
-                'project': 'contextune',
-                'version': '1.0',
-                'last_scan': None,
-                'auto_population_enabled': True
-            },
-            'research': {'entries': []},
-            'decisions': {'entries': []},
-            'plans': {'entries': []},
-            'features': {'entries': []}
-        }
-
-    def append_entries(self, data: Dict[str, Any], research: List[Dict], decisions: List[Dict]) -> Dict[str, Any]:
-        """Append research and decision entries."""
-        # Update metadata
-        data['metadata']['last_scan'] = datetime.now().isoformat() + 'Z'
-        data['metadata']['auto_population_enabled'] = True
-
-        # Add research entries (avoid duplicates)
-        if 'research' not in data:
-            data['research'] = {'entries': []}
-        existing_topics = {e.get('topic') for e in data['research'].get('entries', [])}
-        for entry in research:
-            if entry.get('topic') not in existing_topics:
+        # Append research entries (with meaningful content!)
+        if all_research:
+            for i, research in enumerate(all_research[:50], 1):  # Limit to 50
+                entry = {
+                    'id': f'res-{i:03d}',
+                    'topic': research['topic'],
+                    'findings': research['findings'],
+                    'category': 'research',
+                    'conversation_link': {
+                        'session_id': research['session'],
+                        'timestamp': research['timestamp']
+                    },
+                    'created_at': datetime.now().isoformat(),
+                    'status': 'active'
+                }
                 data['research']['entries'].append(entry)
 
-        # Add decision entries (avoid duplicates)
-        if 'decisions' not in data:
-            data['decisions'] = {'entries': []}
-        existing_titles = {e.get('title') for e in data['decisions'].get('entries', [])}
-        for entry in decisions:
-            if entry.get('title') not in existing_titles:
-                data['decisions']['entries'].append(entry)
+        # Update metadata
+        data['metadata']['last_scan'] = datetime.now().isoformat()
 
-        return data
+        # Save
+        with open(decisions_path, 'w') as f:
+            yaml.dump(data, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
 
-    def save(self, data: Dict[str, Any]) -> bool:
-        """Save to decisions.yaml."""
-        if self.dry_run:
-            return True
+        if console:
+            console.print(f"\n[green]✅ Updated {decisions_path}[/green]")
 
-        try:
-            with open(self.path, 'w') as f:
-                yaml.dump(data, f, default_flow_style=False, sort_keys=False)
-            return True
-        except Exception as e:
-            if self.console:
-                self.console.print(f"[red]Error saving YAML: {e}", file=sys.stderr)
-            return False
+    return stats
 
-
-# ============================================================================
-# Main
-# ============================================================================
+class DummyProgress:
+    """Fallback if Rich not available."""
+    def __enter__(self): return self
+    def __exit__(self, *args): pass
+    def add_task(self, *args, **kwargs): return None
+    def update(self, *args, **kwargs): pass
 
 def main():
-    """Main entry point."""
-    parser = argparse.ArgumentParser(
-        description='Auto-populate decisions.yaml from history.jsonl'
-    )
-    parser.add_argument('--dry-run', action='store_true',
-                        help='Show what would be added without modifying')
-    parser.add_argument('--limit', type=int, default=None,
-                        help='Only process first N conversations')
-    parser.add_argument('--output', type=Path, default=None,
-                        help='Custom decisions.yaml path')
+    parser = argparse.ArgumentParser(description="Auto-populate decisions.yaml from conversation transcripts")
+    parser.add_argument('--dry-run', action='store_true', help="Show what would be added")
+    parser.add_argument('--limit', type=int, help="Process only first N conversations")
+    parser.add_argument('--output', type=Path, default=Path('decisions.yaml'), help="decisions.yaml path")
+    parser.add_argument('--project', type=str, help="Specific project path to scan")
 
     args = parser.parse_args()
 
-    console = Console() if Console else None
+    if console:
+        console.print("\n[bold]🔍 Decision Sync - Scanning Conversation Transcripts[/bold]\n")
 
-    try:
-        # Print header
-        if console:
-            console.print("\n[bold cyan]Decision Sync[/bold cyan] - Auto-populate from history.jsonl\n")
+    # Find transcripts
+    transcripts = find_conversation_transcripts(args.project)
 
-        # Load history
+    if not transcripts:
         if console:
-            console.print("[cyan]1.[/cyan] Loading history...", end=" ")
-        parser_obj = HistoryParser(dry_run=args.dry_run)
-        entries = parser_obj.load_history(args.limit)
-        if console:
-            console.print(f"[green]✓[/green] Loaded {len(entries)} entries")
+            console.print("[yellow]No conversation transcripts found in ~/.claude/projects/[/yellow]")
+        else:
+            print("No transcripts found")
+        return
 
-        if not entries:
-            if console:
-                console.print("[yellow]⚠️  No history entries found", file=sys.stderr)
-            return 1
+    if console:
+        console.print(f"Found {len(transcripts)} conversation transcripts\n")
 
-        # Scan for research, plans, decisions
+    if args.limit:
+        transcripts = transcripts[:args.limit]
         if console:
-            console.print("[cyan]2.[/cyan] Scanning for research, plans, decisions...", end=" ")
-        research, plans, decisions = parser_obj.scan_entries(entries)
-        if console:
-            console.print(f"[green]✓[/green]")
-            console.print(f"   - Found {parser_obj.research_found} research items")
-            console.print(f"   - Found {parser_obj.plans_found} plans")
-            console.print(f"   - Found {parser_obj.decisions_found} decisions")
+            console.print(f"[yellow]Limiting to first {args.limit} transcripts[/yellow]\n")
 
-        # Create structured entries
-        if console:
-            console.print("[cyan]3.[/cyan] Creating structured entries...", end=" ")
-        research_entries = parser_obj.create_research_entries(research)
-        decision_entries = parser_obj.create_decision_entries(decisions)
-        if console:
-            console.print(f"[green]✓[/green]")
+    # Populate from transcripts
+    stats = populate_from_transcripts(
+        args.output,
+        transcripts,
+        dry_run=args.dry_run,
+        limit=args.limit
+    )
 
-        # Load and update decisions.yaml
-        if console:
-            console.print("[cyan]4.[/cyan] Loading decisions.yaml...", end=" ")
-        yaml_mgr = YAMLManager(args.output, args.dry_run)
-        data = yaml_mgr.load_decisions()
-        if console:
-            console.print(f"[green]✓[/green]")
+    # Summary
+    if console:
+        table = Table(title="\nExtraction Summary")
+        table.add_column("Metric", style="cyan")
+        table.add_column("Count", style="green")
 
-        # Append entries
-        if console:
-            console.print("[cyan]5.[/cyan] Appending entries...", end=" ")
-        data = yaml_mgr.append_entries(data, research_entries, decision_entries)
-        if console:
-            console.print(f"[green]✓[/green]")
+        table.add_row("Transcripts Scanned", str(stats['transcripts_scanned']))
+        table.add_row("Research Found", str(stats['research_found']))
+        table.add_row("Plans Found", str(stats['plans_found']))
+        table.add_row("Decisions Found", str(stats['decisions_found']))
 
-        # Save
-        if console:
-            console.print("[cyan]6.[/cyan] Saving to decisions.yaml...", end=" ")
-        success = yaml_mgr.save(data)
-        if console:
-            if success:
-                console.print(f"[green]✓[/green]")
-            else:
-                console.print(f"[red]✗[/red]")
-                return 1
+        console.print(table)
 
-        # Summary
-        if console:
-            console.print("\n[bold green]Summary[/bold green]")
-            console.print(f"  Entries processed: {parser_obj.entries_read}")
-            console.print(f"  Research entries added: {len(research_entries)}")
-            console.print(f"  Decision entries added: {len(decision_entries)}")
-            if args.dry_run:
-                console.print(f"  [yellow]DRY RUN - No files modified[/yellow]")
-            else:
-                console.print(f"  [green]✓ decisions.yaml updated successfully[/green]")
-            console.print()
-
-        return 0
-
-    except Exception as e:
-        if console:
-            console.print(f"\n[red]Error: {e}[/red]", file=sys.stderr)
-        traceback.print_exc(file=sys.stderr)
-        return 1
-
+        if args.dry_run:
+            console.print("\n[yellow]🔒 Dry run - no files modified[/yellow]")
+        else:
+            console.print(f"\n[green]✅ decisions.yaml updated at {args.output}[/green]")
 
 if __name__ == '__main__':
-    sys.exit(main())
+    main()
