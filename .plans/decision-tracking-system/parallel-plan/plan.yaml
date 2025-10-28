@@ -1,0 +1,118 @@
+# Plan metadata
+metadata:
+  name: "Unified Decision Tracking System"
+  created: "20251028-011700"
+  status: "ready"
+
+# High-level overview
+overview: |
+  Complete unified decision tracking system that solves changelog bloat via
+  bounded selective context loading. Auto-populates from 1,236 historical
+  conversations, integrates features.yaml, links to observability_db.py.
+  Replaces manual CHANGELOG with queryable decisions.yaml (10K vs 150K tokens).
+
+# Research synthesis
+research:
+  approach: "Extend extraction-optimized system with decisions.yaml layer"
+  libraries:
+    - name: "pyyaml"
+      reason: "Already installed, YAML parsing/writing"
+  patterns:
+    - file: "hooks/session_end_extractor.py:99-127"
+      description: "Pattern extraction from transcripts"
+    - file: "scripts/feature-status.py:1-270"
+      description: "YAML feature tracking with Rich output"
+  specifications:
+    - requirement: "Extraction-optimized format for high fidelity"
+      status: "must_follow"
+    - requirement: "YAML for queryability and tooling"
+      status: "must_follow"
+    - requirement: "Lifecycle management (research 6mo, decisions permanent)"
+      status: "must_follow"
+  dependencies:
+    existing:
+      - "pyyaml>=6.0"
+      - "observability_db.py"
+      - "features.yaml"
+    new: []
+
+# Feature list
+features:
+  - "decisions.yaml unified tracking"
+  - "Auto-population from history.jsonl (1,236 conversations)"
+  - "Features.yaml integration"
+  - "Conversation linking"
+  - "Selective context loading (83-97% reduction)"
+
+# Task index
+tasks:
+  - id: "task-0"
+    name: "Create decisions.yaml schema with features integration"
+    file: "tasks/task-0.md"
+    priority: "blocker"
+    dependencies: []
+
+  - id: "task-1"
+    name: "Implement decision-sync.py for history auto-population"
+    file: "tasks/task-1.md"
+    priority: "blocker"
+    dependencies: ["task-0"]
+
+  - id: "task-2"
+    name: "Implement decision-link.py for observability linking"
+    file: "tasks/task-2.md"
+    priority: "high"
+    dependencies: ["task-1"]
+
+  - id: "task-3"
+    name: "Enhance SessionEnd to populate decisions.yaml"
+    file: "tasks/task-3.md"
+    priority: "high"
+    dependencies: ["task-0"]
+
+  - id: "task-4"
+    name: "Implement selective context loading"
+    file: "tasks/task-4.md"
+    priority: "medium"
+    dependencies: ["task-0", "task-1"]
+
+# Shared resources
+shared_resources:
+  files:
+    - path: "decisions.yaml"
+      reason: "All tasks read/write this file"
+      mitigation: "Atomic operations, append-only where possible"
+
+# Testing strategy
+testing:
+  unit:
+    - "Test YAML schema validation"
+    - "Test history.jsonl parsing"
+    - "Test conversation linking"
+  integration:
+    - "Test auto-population from 1,236 conversations"
+    - "Test selective loading reduces context"
+    - "Test features.yaml integration"
+
+# Success criteria
+success_criteria:
+  - "decisions.yaml auto-populates from history.jsonl"
+  - "Features.yaml integrated"
+  - "Selective loading: 83-97% context reduction"
+  - "Conversation links work"
+  - "All tests passing"
+
+# Notes
+notes: |
+  This is the ORIGINAL vision from scratch_pad.md. The extraction system
+  we built (.plans/) is valuable for DESIGNS, but this system (decisions.yaml)
+  is for CONTEXT/DECISIONS - the actual changelog replacement.
+
+  Complements extraction:
+  - .plans/ = Design docs (what/how)
+  - decisions.yaml = Decision tracking (why/alternatives)
+
+# Changelog
+changelog:
+  - timestamp: "20251028-011700"
+    event: "Plan created to complete scratch_pad.md vision"

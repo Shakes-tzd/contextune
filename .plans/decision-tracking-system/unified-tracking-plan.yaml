@@ -1,0 +1,53 @@
+# Plan metadata
+metadata:
+  name: "Complete Unified Decision Tracking System"
+  created: "20251028-011700"
+  status: "ready"
+
+# High-level overview
+overview: |
+  Complete the unified decision tracking system from scratch_pad.md vision.
+  Integrates extraction system (already built) with decisions.yaml tracking,
+  auto-population from conversation history (1,236 conversations), and
+  features.yaml integration. This is what actually solves the changelog
+  bloat problem via bounded selective context loading.
+
+# Task index
+tasks:
+  - id: "task-0"
+    name: "Create decisions.yaml schema with features integration"
+    file: "tasks/task-0.yaml"
+    priority: "blocker"
+    dependencies: []
+
+  - id: "task-1"
+    name: "Implement decision-sync.py for history.jsonl auto-population"
+    file: "tasks/task-1.yaml"
+    priority: "blocker"
+    dependencies: ["task-0"]
+
+  - id: "task-2"
+    name: "Implement decision-link.py for observability DB linking"
+    file: "tasks/task-2.yaml"
+    priority: "high"
+    dependencies: ["task-1"]
+
+  - id: "task-3"
+    name: "Enhance SessionEnd to populate decisions.yaml"
+    file: "tasks/task-3.yaml"
+    priority: "high"
+    dependencies: ["task-0"]
+
+  - id: "task-4"
+    name: "Implement selective context loading"
+    file: "tasks/task-4.yaml"
+    priority: "medium"
+    dependencies: ["task-0", "task-1"]
+
+# Success criteria
+success_criteria:
+  - "decisions.yaml auto-populates from history.jsonl"
+  - "Features.yaml integrated"
+  - "Conversation links functional"
+  - "Selective loading: 83-97% context reduction"
+  - "Bounded growth: 10K (vs 150K manual changelog)"

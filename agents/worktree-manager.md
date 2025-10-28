@@ -532,7 +532,7 @@ if [ -d "$WORKTREE_PATH" ]; then
   echo "Next steps:"
   echo "  cd $WORKTREE_PATH"
   echo "  # Do your work"
-  echo "  git add . && git commit -m 'feat: $TASK_TITLE'"
+  echo "  ../scripts/commit_and_push.sh '.' 'feat: $TASK_TITLE' 'master'"
   echo "  git push origin $BRANCH_NAME"
 else
   echo "❌ Failed to create worktree"

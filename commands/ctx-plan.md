@@ -23,8 +23,13 @@ You are executing the parallel planning workflow. Your task is to analyze the co
 - ✅ Add/remove tasks without touching existing content
 - ✅ Reorder tasks with simple array edits
 - ✅ Better version control (smaller, focused diffs)
-- ✅ No time estimates (they go stale immediately)
+- ✅ No time/duration estimates (use tokens and priority instead)
 - ✅ Priority + dependencies (what actually matters for execution)
+
+**DRY Strategy Note:**
+- Modular files justified for **active plans** (frequent updates/reordering)
+- For **documentation/designs** (read-only after creation): Use extraction-optimized output format instead
+- Let SessionEnd/PreCompact hooks extract documentation automatically (no Write tool needed)
 
 This command is part of the Contextune plugin and can be triggered via natural language or explicitly with `/contextune:parallel:plan`.
 
@@ -65,7 +70,7 @@ Use the following criteria to classify tasks:
 **IMPORTANT:** Before planning, do comprehensive research using 5 parallel agents!
 
 **Why parallel research?**
-- 5x faster (1-2 min vs 6+ min sequential)
+- 5x faster (parallel vs sequential execution)
 - More comprehensive coverage
 - Grounded in current reality (uses context from hook)
 - Main agent context preserved (research in subagents)
@@ -213,7 +218,7 @@ Report back (<300 words):
 
 ### Wait for Research Results
 
-All 5 agents will complete in ~1-2 minutes (parallel).
+All 5 agents will complete quickly when executed in parallel.
 
 ### Synthesize Research Findings
 
