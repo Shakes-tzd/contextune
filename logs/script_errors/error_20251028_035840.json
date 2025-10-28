@@ -1,0 +1,16 @@
+{
+  "script": "/tmp/test_error.sh",
+  "args": "",
+  "exit_code": 1,
+  "error_output": "Simulated error\n",
+  "timestamp": "2025-10-28T03:58:40Z",
+  "recovery_attempts": [
+    {
+      "handler": "haiku",
+      "diagnosis": "The script /tmp/test_error.sh produced a generic 'Simulated error' message with no git-specific context. This appears to be a test error rather than an actual git problem. Cannot diagnose git issue without specific error details (branch divergence, merge conflicts, authentication failures, etc.).",
+      "error_type": "other",
+      "can_fix": false,
+      "timestamp": "2025-10-28T03:59:15Z"
+    }
+  ]
+}
