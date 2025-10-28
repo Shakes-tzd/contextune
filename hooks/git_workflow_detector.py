@@ -4,22 +4,33 @@
 # dependencies = []
 # ///
 """
-Git Workflow Detector - PreToolUse Hook
+Git Workflow Detector - PreToolUse Hook with Preference Management
 
 Detects when Claude is about to use inefficient multi-tool git workflows
 and suggests using optimized scripts instead.
+
+Features:
+- First detection: Uses AskUserQuestion for user choice
+- User can set preference: "Always use scripts"
+- Subsequent detections: Auto-use based on preference
+- Subagents: Always use scripts (no prompting)
 
 Triggers:
 - Multiple git commands in single Bash call
 - Sequential git operations (add, commit, push)
 - PR/merge workflows
 
-Does NOT block - just provides helpful suggestions.
+Does NOT block - provides suggestions only.
 """
 
 import json
 import sys
 import re
+from pathlib import Path
+from datetime import datetime
+
+# Preference storage
+PREFERENCE_FILE = Path.home() / ".claude" / "plugins" / "contextune" / "data" / "git_workflow_preferences.json"
 
 # Script mappings
 SCRIPT_SUGGESTIONS = {
@@ -51,6 +62,39 @@ SCRIPT_SUGGESTIONS = {
         'savings': '90-95% tokens, $0.030-0.080 cost reduction'
     }
 }
+
+def read_preference() -> dict:
+    """
+    Read user's git workflow preference.
+
+    Returns:
+        dict with 'auto_use_scripts' (bool or None) and 'set_at' timestamp
+    """
+    if not PREFERENCE_FILE.exists():
+        return {'auto_use_scripts': None, 'set_at': None}
+
+    try:
+        with open(PREFERENCE_FILE, 'r') as f:
+            return json.load(f)
+    except (json.JSONDecodeError, IOError):
+        return {'auto_use_scripts': None, 'set_at': None}
+
+def write_preference(auto_use_scripts: bool):
+    """
+    Write user's git workflow preference.
+
+    Args:
+        auto_use_scripts: Whether to automatically use scripts
+    """
+    PREFERENCE_FILE.parent.mkdir(parents=True, exist_ok=True)
+
+    data = {
+        'auto_use_scripts': auto_use_scripts,
+        'set_at': datetime.now().isoformat()
+    }
+
+    with open(PREFERENCE_FILE, 'w') as f:
+        json.dump(data, f, indent=2)
 
 def detect_git_workflow(command: str) -> tuple[bool, dict]:
     """
@@ -88,16 +132,55 @@ def detect_git_workflow(command: str) -> tuple[bool, dict]:
 
     return False, {}
 
-def format_suggestion(suggestion: dict) -> str:
-    """
-    Format suggestion message for Claude.
+def format_auto_use_message(suggestion: dict) -> str:
+    """Format message when auto-using scripts (preference set)."""
+    return f"""
+✨ AUTO-OPTIMIZATION ACTIVE
 
-    Args:
-        suggestion: Suggestion dict from detect_git_workflow
+Using optimized script: {suggestion['script']}
+(Your preference is set to auto-use scripts)
 
-    Returns:
-        Formatted message
-    """
+Benefits:
+  • {suggestion['savings']}
+  • Automatic error recovery (Haiku/Copilot)
+  • Minimal session context impact
+
+Change preference: Delete {PREFERENCE_FILE}
+""".strip()
+
+def format_ask_user_instruction(suggestion: dict) -> str:
+    """Format instruction for Claude to use AskUserQuestion."""
+    return f"""
+🎯 GIT WORKFLOW OPTIMIZATION DETECTED
+
+Use AskUserQuestion tool with these settings:
+
+Question: "Git workflow optimization available - how would you like to proceed?"
+
+Header: "Optimize"
+
+Options:
+1. Use optimized script
+   Description: "Use {suggestion['script']} - {suggestion['savings']}, automatic error recovery"
+
+2. Use standard approach
+   Description: "Proceed with multiple Bash tool calls (current method)"
+
+3. Always use scripts
+   Description: "Set preference to auto-use scripts for all git workflows this session"
+
+Based on user selection:
+- Option 1: Execute {suggestion['script']} (one-time)
+- Option 2: Continue with Bash as planned
+- Option 3: Save preference, then execute {suggestion['script']}
+
+To save preference (Option 3), create file at:
+{PREFERENCE_FILE}
+With content: {{"auto_use_scripts": true, "set_at": "{datetime.now().isoformat()}"}}
+""".strip()
+
+def format_suggestion_only(suggestion: dict) -> str:
+    """Format simple suggestion when no preference system available."""
     return f"""
 💡 Git Workflow Optimization Available
 
@@ -138,24 +221,43 @@ def main():
         # Detect git workflows
         is_workflow, suggestion = detect_git_workflow(command)
 
-        if is_workflow and suggestion:
-            # Inject suggestion as additional context
-            message = format_suggestion(suggestion)
-
-            output = {
-                'continue': True,
-                'hookSpecificOutput': {
-                    'hookEventName': 'PreToolUse',
-                    'additionalContext': message
-                }
-            }
-
-            print(f"DEBUG: Detected git workflow, suggesting {suggestion['script']}", file=sys.stderr)
-            print(json.dumps(output))
-        else:
+        if not is_workflow or not suggestion:
             # Not a git workflow, continue normally
             output = {'continue': True}
             print(json.dumps(output))
+            sys.exit(0)
+
+        # Workflow detected - check preference
+        preference = read_preference()
+        auto_use = preference.get('auto_use_scripts')
+
+        if auto_use is True:
+            # User prefers auto-use - suggest directly
+            message = format_auto_use_message(suggestion)
+            print(f"DEBUG: Auto-using scripts (preference set)", file=sys.stderr)
+
+        elif auto_use is False:
+            # User prefers Bash - don't suggest
+            print(f"DEBUG: User prefers Bash approach (preference set)", file=sys.stderr)
+            output = {'continue': True}
+            print(json.dumps(output))
+            sys.exit(0)
+
+        else:
+            # No preference - ask user with AskUserQuestion
+            message = format_ask_user_instruction(suggestion)
+            print(f"DEBUG: First detection, will prompt user via AskUserQuestion", file=sys.stderr)
+
+        # Inject suggestion/instruction
+        output = {
+            'continue': True,
+            'hookSpecificOutput': {
+                'hookEventName': 'PreToolUse',
+                'additionalContext': message
+            }
+        }
+
+        print(json.dumps(output))
 
     except Exception as e:
         print(f"DEBUG: Git workflow detector error: {e}", file=sys.stderr)
