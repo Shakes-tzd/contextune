@@ -58,7 +58,7 @@ git --version && git worktree list
 
 **Solution:** Pre-approve safe git commands using Claude Code's IAM permission system.
 
-**Quick Setup (2 minutes):**
+**Quick Setup:**
 
 1. **Run in Claude Code:** `/permissions`
 
@@ -316,7 +316,7 @@ Spawn a `parallel-task-executor` Haiku agent. Each agent receives:
 - If ANYTHING is unclear → ASK, don't guess!
 
 **Why this matters:**
-The planning phase (Sonnet) already spent 2 minutes doing comprehensive parallel research. You (Haiku) are optimized for fast, accurate execution of well-defined tasks. Trust the plan!
+The planning phase (Sonnet) already did comprehensive parallel research. You (Haiku) are optimized for fast, accurate execution of well-defined tasks. Trust the plan!
 
 **Cost savings:**
 - Planning (Sonnet + research): $0.20
@@ -1206,8 +1206,8 @@ Spawning 3 autonomous Haiku agents...
 
 [Agents work concurrently in pre-created worktrees]
 
-✅ All tasks completed in 2.5 hours (estimated: 6 hours sequential)
-Time saved: 3.5 hours (58% faster)
+✅ All tasks completed with parallel execution
+Token efficiency: Significant reduction vs sequential approach
 
 Creating PRs...
 ✅ 3 PRs created from task files
