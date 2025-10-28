@@ -50,6 +50,12 @@
         "hooks": [
           {
             "type": "command",
+            "command": "uv run ${CLAUDE_PLUGIN_ROOT}/hooks/git_workflow_detector.py",
+            "timeout": 1000,
+            "description": "Suggest optimized scripts for git workflows (90-97% token reduction)"
+          },
+          {
+            "type": "command",
             "command": "uv run ${CLAUDE_PLUGIN_ROOT}/hooks/tool_router.py",
             "timeout": 2000,
             "description": "Intelligent tool routing for cost optimization"
