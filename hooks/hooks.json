@@ -107,7 +107,7 @@
         ]
       }
     ],
-    "PostSessionEnd": [
+    "SessionEnd": [
       {
         "matcher": "*",
         "hooks": [
