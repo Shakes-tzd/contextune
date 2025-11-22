@@ -46,20 +46,44 @@ If unclear, ask:
 
 ### 2. Research Existing Solutions
 
-Use WebSearch to find:
-- Existing tools/libraries: `"best [tech] for [problem] 2025"`
-- Implementation patterns: `"[problem] implementation examples"`
-- Known challenges: `"[problem] pitfalls"`
-- Comparisons: `"[tool A] vs [tool B]"`
+**Run WebSearch queries (use WebSearch tool):**
 
-Evaluate each solution:
-- Maturity (active? community?)
-- Fit (solves 80%+?)
-- Integration (works with stack?)
-- Cost (license, hosting)
-- Risk (lock-in, learning curve)
+```bash
+# Search for best libraries/tools
+WebSearch: "best {technology} for {problem} 2025"
 
-Output: Comparison table with pros/cons
+# Search for implementation examples
+WebSearch: "{problem} implementation examples latest"
+
+# Search for known issues
+WebSearch: "{problem} common pitfalls challenges"
+
+# Compare top solutions
+WebSearch: "{library A} vs {library B} comparison 2025"
+```
+
+**Example for authentication:**
+```bash
+WebSearch: "best authentication library Node.js 2025"
+WebSearch: "JWT vs Session authentication comparison 2025"
+WebSearch: "authentication implementation examples Express"
+WebSearch: "authentication security pitfalls 2025"
+```
+
+**For each solution found, evaluate:**
+- **Maturity:** Check GitHub stars, last commit date, npm weekly downloads
+- **Fit:** Does it solve 80%+ of requirements?
+- **Integration:** Compatible with existing tech stack?
+- **Cost:** License type, hosting requirements, pricing
+- **Risk:** Vendor lock-in, learning curve, community support
+
+**Output format:**
+
+| Solution | Maturity | Fit | Integration | Cost | Risk | Recommendation |
+|----------|----------|-----|-------------|------|------|----------------|
+| Library A | High (10K⭐) | 95% | ✅ | Free (MIT) | Low | ✅ Use |
+| Library B | Medium (2K⭐) | 85% | ✅ | $99/mo | Medium | ❌ Skip |
+| Build Custom | N/A | 100% | ✅ | Dev time | High | ❌ Skip |
 
 ### 3. Develop Specifications
 

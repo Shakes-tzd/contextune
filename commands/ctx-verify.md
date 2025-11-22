@@ -20,50 +20,112 @@ You are a verification sub-agent. Your job is simple and focused:
 3. **Execute their choice**
 4. **Report results** back concisely
 
-## Detection Information
+## Input from Hook
 
-The Contextune hook has detected:
+The Contextune UserPromptSubmit hook provides detection information in the `additionalContext` field of the modified prompt.
 
-**Detected Command**: `{{DETECTED_COMMAND}}`
-**Confidence**: {{CONFIDENCE}}%
-**Detection Method**: {{METHOD}}
-**Original Prompt**: "{{ORIGINAL_PROMPT}}"
-
-## Your Response Template
-
-Present this to the user:
-
-```
-🎯 **Contextune Detection**
-
-I detected that you might want to run a slash command instead:
-
-**Option 1**: Run `{{DETECTED_COMMAND}}`
-- This is a specialized command for {{COMMAND_PURPOSE}}
-- Confidence: {{CONFIDENCE}}% ({{METHOD}} match)
-
-**Option 2**: Continue with your original request
-- Original: "{{ORIGINAL_PROMPT}}"
-
-Which would you prefer? (Reply with 1 or 2, or tell me what you'd like)
+**Hook output structure:**
+```json
+{
+  "modifiedPrompt": "/ctx:research ...",
+  "additionalContext": "🎯 Detected: /ctx:research (85% via keyword)"
+}
 ```
 
-## After User Responds
+**You receive:**
+- **Detected Command**: Extracted from additionalContext (e.g., `/ctx:research`)
+- **Confidence**: Extracted from additionalContext (e.g., `85%`)
+- **Detection Method**: Extracted from additionalContext (e.g., `keyword`, `model2vec`, `semantic`)
+- **Original Prompt**: The user's original natural language input
 
-### If they choose Option 1 (slash command):
-```
-✅ Executing {{DETECTED_COMMAND}}...
-```
-Then execute the slash command using SlashCommand tool or by running it directly.
+---
 
-### If they choose Option 2 (original prompt):
+## Execution Steps
+
+### Step 1: Parse Detection Information
+
+**Extract values from the additionalContext:**
+
+```python
+# Example additionalContext:
+# "🎯 Detected: /ctx:research (85% via keyword)"
+
+import re
+
+context = "🎯 Detected: /ctx:research (85% via keyword)"
+
+# Parse command
+command_match = re.search(r'/[a-z:-]+', context)
+detected_command = command_match.group() if command_match else None
+
+# Parse confidence
+conf_match = re.search(r'(\d+)%', context)
+confidence = int(conf_match.group(1)) if conf_match else 0
+
+# Parse method
+method_match = re.search(r'via (\w+)', context)
+method = method_match.group(1) if method_match else "unknown"
+```
+
+---
+
+### Step 2: Present Options to User (Using AskUserQuestion Tool)
+
+**Use the AskUserQuestion tool to get user choice:**
+
+```python
+AskUserQuestion(
+    questions=[{
+        "question": f"I detected you might want {detected_command}. Which approach?",
+        "header": "Contextune",
+        "multiSelect": false,
+        "options": [
+            {
+                "label": f"Run {detected_command}",
+                "description": f"Use specialized command ({confidence}% confidence via {method})"
+            },
+            {
+                "label": "Continue with original",
+                "description": "Process your original request instead"
+            }
+        ]
+    }]
+)
+```
+
+---
+
+### Step 3: Execute Based on User Choice
+
+**If user chose Option 1 (slash command):**
+
+```python
+# Execute the detected command
+SlashCommand(command=detected_command)
+```
+
+**Output to user:**
+```
+✅ Executing {detected_command}...
+```
+
+Then the command will run and produce its normal output.
+
+---
+
+**If user chose Option 2 (original prompt):**
+
 ```
 ✅ Proceeding with your original request...
 ```
-Then process their original prompt normally.
 
-### If they provide different instructions:
-Follow their new instructions.
+Process the original prompt as if Contextune didn't detect anything.
+
+---
+
+**If user chose "Other" with custom text:**
+
+Follow their new instructions exactly.
 
 ## Reporting Back
 

@@ -20,24 +20,201 @@ You are performing cleanup of completed parallel development work.
 
 ---
 
-## Execution Instructions
+## Execution Workflow
 
-Follow the same instructions as defined in `.claude/commands/parallel/cleanup.md`:
+### Step 1: Identify Merged Branches
 
-1. **Step 1:** Identify Merged Branches
-2. **Step 2:** Show Cleanup Plan
-3. **Step 3:** Remove Worktrees
-4. **Step 4:** Delete Local Branches
-5. **Step 5:** Delete Remote Branches (Optional)
-6. **Step 6:** Close GitHub Issues (Optional)
-7. **Step 7:** Clean Up Directory Structure
-8. **Step 8:** Verify Cleanup
-9. **Step 9:** Final Recommendations
+**Check which parallel branches have been merged to main:**
 
-Also support:
-- **Selective Cleanup Mode** - Clean specific tasks only
-- **Dry Run Mode** - Show what would be deleted without actually deleting
-- **Recovery Instructions** - Help users recover from accidental deletions
+```bash
+# List all feature branches that are fully merged
+git branch --merged main | grep "feature/task-"
+```
+
+**Expected output:**
+```
+  feature/task-0
+  feature/task-2
+```
+
+**Interpret:**
+- Listed branches: Safe to delete (already in main) ✅
+- Not listed: Still has unmerged commits ⚠️
+
+---
+
+### Step 2: Show Cleanup Plan (Ask User)
+
+**Before deleting anything, show what will be removed:**
+
+```
+🧹 Cleanup Plan
+
+**Will remove:**
+✅ Worktree: worktrees/task-0 (merged to main)
+✅ Local branch: feature/task-0 (merged)
+✅ Remote branch: origin/feature/task-0 (if exists)
+
+✅ Worktree: worktrees/task-2 (merged to main)
+✅ Local branch: feature/task-2 (merged)
+✅ Remote branch: origin/feature/task-2 (if exists)
+
+**Will keep:**
+⏳ Worktree: worktrees/task-1 (not merged - has uncommitted work)
+
+Proceed with cleanup? (yes/no)
+```
+
+**Ask user for confirmation before proceeding.**
+
+---
+
+### Step 3: Remove Merged Worktrees
+
+**For each merged branch, remove its worktree:**
+
+```bash
+# Remove worktree for task-0
+git worktree remove worktrees/task-0
+
+# Remove worktree for task-2
+git worktree remove worktrees/task-2
+```
+
+**Expected output per removal:**
+```
+✅ Removed worktree 'worktrees/task-0'
+```
+
+**If removal fails:**
+```
+Error: worktree has uncommitted changes
+```
+→ Skip this worktree, warn user
+
+---
+
+### Step 4: Delete Local Merged Branches
+
+**Delete the local branches that were merged:**
+
+```bash
+# Delete local branch
+git branch -d feature/task-0
+
+# Delete local branch
+git branch -d feature/task-2
+```
+
+**Expected output:**
+```
+Deleted branch feature/task-0 (was abc1234).
+```
+
+**If deletion fails:**
+```
+error: The branch 'feature/task-0' is not fully merged.
+```
+→ Use `-D` to force (ask user first!) or skip
+
+---
+
+### Step 5: Delete Remote Branches (Optional)
+
+**Ask user:** "Also delete remote branches?"
+
+**If yes:**
+```bash
+# Delete remote branch
+git push origin --delete feature/task-0
+
+# Delete remote branch
+git push origin --delete feature/task-2
+```
+
+**Expected output:**
+```
+To github.com:user/repo.git
+ - [deleted]         feature/task-0
+```
+
+**If no:** Skip this step
+
+---
+
+### Step 6: Archive Completed Tasks (Optional)
+
+**Move completed task files to archive:**
+
+```bash
+# Create archive directory
+mkdir -p .parallel/archive/completed-$(date +%Y%m%d)
+
+# Move completed task files
+mv .parallel/plans/tasks/task-0.md .parallel/archive/completed-$(date +%Y%m%d)/
+mv .parallel/plans/tasks/task-2.md .parallel/archive/completed-$(date +%Y%m%d)/
+```
+
+**Or keep them for reference** (task files are lightweight)
+
+---
+
+### Step 7: Prune Stale References
+
+**Clean up git's internal references:**
+
+```bash
+git worktree prune
+git remote prune origin
+```
+
+**Expected output:**
+```
+✅ Pruned worktree references
+✅ Pruned remote references
+```
+
+---
+
+### Step 8: Verify Cleanup
+
+**Confirm everything was cleaned up:**
+
+```bash
+# Check remaining worktrees
+git worktree list
+
+# Check remaining feature branches
+git branch | grep "feature/task-"
+
+# Check remote branches
+git branch -r | grep "feature/task-"
+```
+
+**Expected:** Only unmerged tasks should remain
+
+---
+
+### Step 9: Report Results
+
+```
+✅ Cleanup complete!
+
+**Removed:**
+• 2 worktrees (task-0, task-2)
+• 2 local branches
+• 2 remote branches
+
+**Kept:**
+• 1 worktree (task-1 - unmerged)
+
+**Remaining parallel work:**
+- task-1: In progress (3 commits ahead)
+
+**Next actions:**
+• Continue work on task-1
+• Or run /ctx:status for detailed progress
+```
 
 ---
 
