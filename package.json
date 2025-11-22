@@ -1,0 +1,17 @@
+{
+  "name": "contextune",
+  "version": "0.9.0",
+  "description": "Precision-Tuned Context Engineering for Claude Code",
+  "private": true,
+  "dependencies": {
+    "yaml": "^2.3.4"
+  },
+  "scripts": {},
+  "keywords": [
+    "claude-code",
+    "plugin",
+    "context-engineering"
+  ],
+  "author": "Shakes-tzd",
+  "license": "MIT"
+}

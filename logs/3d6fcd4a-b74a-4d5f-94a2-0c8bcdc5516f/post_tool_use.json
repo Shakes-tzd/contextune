@@ -1,0 +1,805 @@
+[
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "claude --version",
+      "description": "Check Claude Code CLI version"
+    },
+    "tool_response": {
+      "stdout": "2.0.50 (Claude Code)",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false
+    }
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "npm list -g @anthropic-ai/claude-code",
+      "description": "Check installed Claude Code package version"
+    },
+    "tool_response": {
+      "stdout": "/Users/shakes/.nvm/versions/node/v22.20.0/lib\n\u2514\u2500\u2500 @anthropic-ai/claude-code@2.0.50",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false
+    }
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "npm outdated -g @anthropic-ai/claude-code",
+      "description": "Check for Claude Code updates"
+    },
+    "tool_response": {
+      "stdout": "",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false
+    }
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "ls -la ~/.claude/history/ | tail -5",
+      "description": "Check recent conversation history files"
+    },
+    "tool_response": {
+      "stdout": "lsd: /Users/shakes/.claude/history/: No such file or directory (os error 2).",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false
+    }
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "find ~/.claude -type f -name \"*.json\" 2>/dev/null | grep -E \"(conversation|history|session)\" | head -10",
+      "description": "Search for conversation state files"
+    },
+    "tool_response": {
+      "stdout": "",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false
+    }
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/shakes/DevProjects/contextune/.claude-plugin/plugin.json"
+    },
+    "tool_response": {
+      "type": "text",
+      "file": {
+        "filePath": "/Users/shakes/DevProjects/contextune/.claude-plugin/plugin.json",
+        "content": "{\n  \"name\": \"contextune\",\n  \"version\": \"0.8.9\",\n  \"description\": \"Precision-tuned context engineering for Claude Code. Optimize context flow with modular plans (95% fewer tokens), parallel workflows (81% cost reduction), and zero-transformation architecture. Quick research (/ctx:research: 3 parallel agents, 1-2 min). Contextune your workflows for peak performance!\",\n  \"author\": {\n    \"name\": \"Shakes Dlamini\",\n    \"email\": \"shakestzd@gmail.com\",\n    \"url\": \"https://contextune.com\"\n  },\n  \"repository\": \"https://github.com/Shakes-tzd/contextune\",\n  \"homepage\": \"https://github.com/Shakes-tzd/contextune#readme\",\n  \"license\": \"MIT\",\n  \"keywords\": [\n    \"context-engineering\",\n    \"context-optimization\",\n    \"parallel-development\",\n    \"workflow-automation\",\n    \"git-worktrees\",\n    \"cost-optimization\",\n    \"performance-optimization\",\n    \"haiku-agents\",\n    \"modular-plans\",\n    \"zero-transformation\",\n    \"three-tier-architecture\",\n    \"autonomous-execution\",\n    \"natural-language\",\n    \"intent-detection\",\n    \"command-mapping\",\n    \"productivity\",\n    \"ai-assistant\",\n    \"claude-code\"\n  ]\n}",
+        "numLines": 33,
+        "startLine": 1,
+        "totalLines": 33
+      }
+    },
+    "tool_use_id": "toolu_013hhgJ255A9h5GT1kC93UW5"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/shakes/DevProjects/contextune/hooks/user_prompt_submit.py",
+      "limit": 100
+    },
+    "tool_response": {
+      "type": "text",
+      "file": {
+        "filePath": "/Users/shakes/DevProjects/contextune/hooks/user_prompt_submit.py",
+        "content": "#!/usr/bin/env -S uv run --script\n# /// script\n# requires-python = \">=3.10\"\n# dependencies = [\n#     \"model2vec>=0.3.0\",\n#     \"semantic-router>=0.1.0\",\n#     \"numpy>=1.24.0\",\n#     \"rapidfuzz>=3.0.0\"\n# ]\n# ///\n\"\"\"\nContextune UserPromptSubmit Hook\n\nDetects slash commands from natural language prompts using 3-tier cascade:\n1. Keyword matching (0.02ms, 60% coverage)\n2. Model2Vec embeddings (0.2ms, 30% coverage)\n3. Semantic Router (50ms, 10% coverage)\n\nUses Claude Code headless mode for interactive prompt analysis and suggestions.\n\nHook Protocol:\n- Input: JSON via stdin with {\"prompt\": \"...\", \"session_id\": \"...\"}\n- Output: JSON via stdout with {\"continue\": true, \"feedback\": \"...\"}\n\"\"\"\n\nimport json\nimport subprocess\nimport sys\nimport re\nfrom pathlib import Path\nfrom typing import Any\n\n# Add lib directory to Python path\nPLUGIN_ROOT = Path(__file__).parent.parent\nsys.path.insert(0, str(PLUGIN_ROOT / \"lib\"))\n\n# Import matchers (now using RapidFuzz-based keyword matcher v2!)\nfrom keyword_matcher_v2 import IntentMatch, KeywordMatcherV2 as KeywordMatcher\nfrom model2vec_matcher import Model2VecMatcher\nfrom observability_db import ObservabilityDB\nfrom semantic_router_matcher import SemanticRouterMatcher\n\n\nclass ContextuneDetector:\n    \"\"\"\n    3-tier intent detection cascade.\n\n    Uses your existing matchers in order of speed:\n    1. KeywordMatcher (always fast)\n    2. Model2VecMatcher (if available)\n    3. SemanticRouterMatcher (if API key available)\n    \"\"\"\n\n    def __init__(self):\n        self._keyword = None\n        self._model2vec = None\n        self._semantic = None\n\n    def _get_keyword(self):\n        if self._keyword is None:\n            self._keyword = KeywordMatcher()\n        return self._keyword\n\n    def _get_model2vec(self):\n        if self._model2vec is None:\n            m = Model2VecMatcher()\n            self._model2vec = m if m.is_available() else None\n        return self._model2vec\n\n    def _get_semantic(self):\n        if self._semantic is None:\n            m = SemanticRouterMatcher()\n            self._semantic = m if m.is_available() else None\n        return self._semantic\n\n    def detect(self, text: str) -> IntentMatch | None:\n        \"\"\"Detect intent using 3-tier cascade.\"\"\"\n\n        # Tier 1: Keyword (always available)\n        result = self._get_keyword().match(text)\n        if result:\n            return result\n\n        # Tier 2: Model2Vec\n        m2v = self._get_model2vec()\n        if m2v:\n            result = m2v.match(text)\n            if result:\n                return result\n\n        # Tier 3: Semantic Router\n        sem = self._get_semantic()\n        if sem:\n            result = sem.match(text)\n            if result:\n                return result\n\n        return None\n\n",
+        "numLines": 100,
+        "startLine": 1,
+        "totalLines": 918
+      }
+    },
+    "tool_use_id": "toolu_01ERkRoQsCKGr2t4jmf4E4Yz"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "find ~/.claude/plugins -name \"plugin.json\" 2>/dev/null | head -5",
+      "description": "Find installed plugin locations"
+    },
+    "tool_response": {
+      "stdout": "/Users/shakes/.claude/plugins/contexteye/.claude-plugin/plugin.json",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false
+    },
+    "tool_use_id": "toolu_01WV3XmvK9fvXwy4VHJURPrb"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "ls -la ~/.claude/plugins/",
+      "description": "List all installed plugins"
+    },
+    "tool_response": {
+      "stdout": "drwxr-xr-x shakes staff 288 B  Sat Nov 22 15:14:21 2025 .\ndrwxr-xr-x shakes staff 672 B  Sat Nov 22 15:46:46 2025 ..\n.rw-r--r-- shakes staff  24 B  Sun Sep 28 17:14:36 2025 config.json\ndrwxr-xr-x shakes staff 160 B  Sat Nov 22 15:14:21 2025 contexteye\ndrwxr-xr-x shakes staff 128 B  Wed Nov 19 14:34:58 2025 contextune\n.rw-r--r-- shakes staff 1.2 KB Sat Nov 22 15:45:10 2025 installed_plugins.json\n.rw-r--r-- shakes staff 497 B  Sat Nov 22 15:02:58 2025 known_marketplaces.json\ndrwx------ shakes staff  64 B  Thu Oct 30 18:14:18 2025 marketplaces\ndrwxr-xr-x shakes staff  64 B  Wed Aug 20 17:18:16 2025 repos",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false
+    },
+    "tool_use_id": "toolu_012eAnVf5yZna2fRjVy4ntrc"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/shakes/DevProjects/contextune/hooks/user_prompt_submit.py",
+      "offset": 100
+    },
+    "tool_response": {
+      "type": "text",
+      "file": {
+        "filePath": "/Users/shakes/DevProjects/contextune/hooks/user_prompt_submit.py",
+        "content": "\nclass ClaudeCodeHaikuEngineer:\n    \"\"\"\n    Uses Claude Code headless mode to analyze prompts and provide interactive suggestions.\n\n    Benefits:\n    - No separate API key needed (uses existing Claude Code auth)\n    - Integrated billing with Claude Code\n    - Fast Haiku model for cost optimization\n    - Interactive blocking mode for user feedback\n    \"\"\"\n\n    def __init__(self):\n        self._claude_available = None\n\n    def is_available(self) -> bool:\n        \"\"\"Check if Claude Code CLI is available.\"\"\"\n        if self._claude_available is None:\n            try:\n                result = subprocess.run(\n                    [\"claude\", \"--version\"], capture_output=True, text=True, timeout=2\n                )\n                self._claude_available = result.returncode == 0\n            except (FileNotFoundError, subprocess.TimeoutExpired):\n                self._claude_available = False\n\n        return self._claude_available\n\n    def analyze_and_enhance(\n        self,\n        prompt: str,\n        detected_command: str,\n        confidence: float,\n        available_commands: list[str],\n        timeout: int = 30,\n    ) -> dict[str, Any] | None:\n        \"\"\"\n        Analyze prompt using Claude Code headless mode and suggest enhancements.\n\n        Args:\n            prompt: User's original prompt\n            detected_command: Command detected by cascade\n            confidence: Detection confidence (0-1)\n            available_commands: List of all available commands\n            timeout: Timeout in seconds\n\n        Returns:\n            Dict with analysis results or None if unavailable/failed\n        \"\"\"\n        if not self.is_available():\n            return None\n\n        # Build analysis prompt for Haiku\n        analysis_prompt = f\"\"\"You are a prompt enhancement assistant for Contextune, a Claude Code plugin.\n\nUSER'S PROMPT: \"{prompt}\"\n\nDETECTED COMMAND: {detected_command}\nDETECTION CONFIDENCE: {confidence:.0%}\n\nAVAILABLE ALTERNATIVES:\n{chr(10).join(f\"- {cmd}\" for cmd in available_commands[:10])}\n\nTASK: Analyze the user's prompt and provide:\n1. Whether the detected command is the best match (true/false)\n2. Alternative commands if better matches exist\n3. A brief, helpful suggestion for the user\n\nRESPONSE FORMAT (JSON):\n{{\n  \"is_best_match\": true/false,\n  \"alternatives\": [\"command1\", \"command2\"],\n  \"suggestion\": \"Brief suggestion text\"\n}}\n\nBe concise. Focus on actionability.\"\"\"\n\n        try:\n            # Call Claude Code headless with Haiku model\n            cmd = [\n                \"claude\",\n                \"--model\",\n                \"claude-haiku-4-5\",\n                \"-p\",\n                analysis_prompt,\n                \"--output-format\",\n                \"json\",\n                \"--allowedTools\",\n                \"\",  # No tools needed for this analysis\n            ]\n\n            result = subprocess.run(\n                cmd, capture_output=True, text=True, timeout=timeout\n            )\n\n            if result.returncode != 0:\n                print(f\"DEBUG: Claude Code error: {result.stderr}\", file=sys.stderr)\n                return None\n\n            # Parse Claude's response - it's nested in a wrapper object\n            claude_response = json.loads(result.stdout)\n\n            # Extract the actual result (may be nested in \"result\" field)\n            if \"result\" in claude_response:\n                result_text = claude_response[\"result\"]\n                # Result may contain JSON in markdown code blocks\n                if \"```json\" in result_text:\n                    # Extract JSON from markdown code block\n                    json_start = result_text.find(\"```json\") + 7\n                    json_end = result_text.find(\"```\", json_start)\n                    result_text = result_text[json_start:json_end].strip()\n\n                # Parse the extracted JSON\n                analysis = json.loads(result_text)\n                return analysis\n            else:\n                # If no \"result\" field, assume the whole response is the analysis\n                return claude_response\n\n        except subprocess.TimeoutExpired:\n            print(f\"DEBUG: Claude Code timeout after {timeout}s\", file=sys.stderr)\n            return None\n        except json.JSONDecodeError as e:\n            print(f\"DEBUG: Failed to parse Claude response: {e}\", file=sys.stderr)\n            print(f\"DEBUG: Raw output: {result.stdout[:200]}\", file=sys.stderr)\n            return None\n        except Exception as e:\n            print(f\"DEBUG: Haiku engineer error: {e}\", file=sys.stderr)\n            return None\n\n\ndef should_process(prompt: str) -> bool:\n    \"\"\"Check if prompt needs intent detection.\"\"\"\n    if not prompt or not prompt.strip():\n        return False\n\n    # Skip if already a command\n    if prompt.strip().startswith(\"/\"):\n        return False\n\n    # Skip internal Haiku analysis prompts (prevent feedback loop)\n    if prompt.startswith(\"You are a prompt enhancement assistant\"):\n        return False\n\n    # Skip if too short\n    if len(prompt.strip().split()) < 3:\n        return False\n\n    return True\n\n\ndef write_detection_for_statusline(match: IntentMatch, prompt: str):\n    \"\"\"Write detection data to observability DB for status line to read.\"\"\"\n    try:\n        db = ObservabilityDB(\".contextune/observability.db\")\n        db.set_detection(\n            command=match.command,\n            confidence=match.confidence,\n            method=match.method,\n            prompt_preview=prompt[:60] + (\"...\" if len(prompt) > 60 else \"\"),\n            latency_ms=match.latency_ms,\n        )\n\n        # Also log matcher performance\n        db.log_matcher_performance(match.method, match.latency_ms, success=True)\n\n        print(\n            f\"DEBUG: Wrote detection to observability DB: {match.command} ({match.confidence:.0%} {match.method})\",\n            file=sys.stderr,\n        )\n    except Exception as e:\n        # Don't fail hook if observability write fails\n        print(f\"DEBUG: Failed to write to observability DB: {e}\", file=sys.stderr)\n        # Also log the error\n        try:\n            db = ObservabilityDB(\".contextune/observability.db\")\n            db.log_error(\"user_prompt_submit\", type(e).__name__, str(e))\n        except:\n            pass\n\n\ndef clear_detection_statusline():\n    \"\"\"Clear status line detection (no match found).\"\"\"\n    try:\n        db = ObservabilityDB(\".contextune/observability.db\")\n        db.clear_detection()\n        print(\"DEBUG: Cleared detection from observability DB\", file=sys.stderr)\n    except Exception as e:\n        print(\n            f\"DEBUG: Failed to clear detection from observability DB: {e}\",\n            file=sys.stderr,\n        )\n\n\ndef get_detection_count() -> int:\n    \"\"\"Get total number of detections for progressive tips.\"\"\"\n    try:\n        db = ObservabilityDB(\".contextune/observability.db\")\n        stats = db.get_stats()\n        return stats.get(\"detections\", {}).get(\"total\", 0)\n    except:\n        pass\n    return 0\n\n\ndef increment_detection_count():\n    \"\"\"Increment detection counter for progressive disclosure.\"\"\"\n    try:\n        data_dir = Path.home() / \".claude\" / \"plugins\" / \"contextune\" / \"data\"\n        data_dir.mkdir(parents=True, exist_ok=True)\n        stats_file = data_dir / \"detection_stats.json\"\n\n        stats = {\"total_detections\": 0, \"by_method\": {}, \"by_command\": {}}\n        if stats_file.exists():\n            with open(stats_file) as f:\n                stats = json.load(f)\n\n        stats[\"total_detections\"] = stats.get(\"total_detections\", 0) + 1\n\n        with open(stats_file, \"w\") as f:\n            json.dump(stats, f, indent=2)\n    except:\n        pass  # Don't fail hook if stats tracking fails\n\n\n# Command action descriptions for directive feedback\nCOMMAND_ACTIONS = {\n    # Contextune commands\n    \"/ctx:design\": \"design system architecture with structured workflow\",\n    \"/ctx:research\": \"get fast answers using 3 parallel agents\",\n    \"/ctx:plan\": \"create parallel development plans\",\n    \"/ctx:execute\": \"run tasks in parallel worktrees\",\n    \"/ctx:status\": \"monitor parallel task progress\",\n    \"/ctx:cleanup\": \"clean up completed worktrees\",\n    \"/ctx:help\": \"see example-first command guide\",\n    \"/ctx:configure\": \"enable persistent status bar display\",\n    \"/ctx:stats\": \"see your time & cost savings\",\n    \"/ctx:verify\": \"verify and execute detected command with confirmation\",\n    # Skill-only detections (no commands)\n    \"skill:ctx:performance\": \"analyze and optimize parallel workflow performance\",\n    \"skill:ctx:parallel-expert\": \"get guidance on parallelizing tasks effectively\",\n    \"skill:ctx:help\": \"discover Contextune features and capabilities\",\n    \"skill:ctx:worktree\": \"troubleshoot git worktree issues and conflicts\",\n}\n\n# Skill mapping for reliable Claude execution\n# Maps slash commands AND skill detections to skill names\n# Skills are auto-discovered by Claude Code from: contextune/skills/*/SKILL.md\nSKILL_MAPPING = {\n    # Commands with skills\n    \"/ctx:design\": \"ctx:architect\",  # Plugin skill: skills/software-architect\n    \"/ctx:research\": \"ctx:researcher\",  # Plugin skill: skills/researcher\n    # Skills without commands (direct skill suggestions)\n    \"skill:ctx:performance\": \"ctx:performance\",\n    \"skill:ctx:parallel-expert\": \"ctx:parallel-expert\",\n    \"skill:ctx:help\": \"ctx:help\",\n    \"skill:ctx:worktree\": \"ctx:worktree\",\n    # Note: /ctx:plan and /ctx:execute are commands, not skills\n    # They execute workflows directly rather than providing guidance\n}\n\n\ndef create_skill_augmented_prompt(match: IntentMatch, original_prompt: str) -> str:\n    \"\"\"\n    Augment prompt with skill suggestion for more reliable execution.\n\n    Evidence: Skills are invoked more reliably than slash commands because\n    they use Claude's native Skill tool (structured, type-safe) vs text expansion.\n\n    Args:\n        match: Detected command and confidence\n        original_prompt: User's original prompt text\n\n    Returns:\n        Augmented prompt that guides Claude to use skill or command\n    \"\"\"\n    if match.command in SKILL_MAPPING:\n        skill_name = SKILL_MAPPING[match.command]\n        # Strong directive: \"You can use your X skill\"\n        return f\"{original_prompt}. You can use your {skill_name} skill to help with this task.\"\n    else:\n        # For commands without skills, use directive language\n        action = COMMAND_ACTIONS.get(match.command, \"complete this request\")\n        return f\"{original_prompt}. Please use the {match.command} command to {action}.\"\n\n\ndef get_contextual_tip(match: IntentMatch, detection_count: int) -> str:\n    \"\"\"Generate directive contextual tip based on usage patterns.\"\"\"\n\n    # First-time users (1-3 detections)\n    if detection_count <= 3:\n        return \"New user? Type `/ctx:help` to see all commands with examples\"\n\n    # Early users (4-10 detections) - promote status bar\n    elif detection_count <= 10:\n        return \"Enable persistent detection: Type `/ctx:configure` to set up status bar\"\n\n    # Experienced users (11-20) - promote advanced features\n    elif detection_count <= 20:\n        if match.command.startswith(\"/ctx:\"):\n            return \"Want parallel workflows? Type `/ctx:plan` to work on multiple tasks simultaneously\"\n        return f\"Blazing fast: {match.latency_ms:.2f}ms detection. Type `/ctx:stats` to see all metrics\"\n\n    # Power users (21+) - occasional celebration\n    else:\n        if detection_count % 10 == 0:  # Every 10th detection\n            return f\"\ud83c\udf89 {detection_count} detections! Type `/ctx:stats` to see your time & cost savings\"\n        return None  # No tip for most interactions\n\n\ndef load_available_commands() -> list[str]:\n    \"\"\"Load list of all available commands for Claude Code.\"\"\"\n    # Return all commands from COMMAND_ACTIONS\n    return [cmd for cmd in COMMAND_ACTIONS if cmd.startswith(\"/\")]\n\n\ndef load_available_skills() -> dict[str, str]:\n    \"\"\"\n    Load all available skills from plugin.\n\n    Returns:\n        Dict mapping directory names to skill names\n        e.g., {'software-architect': 'ctx:architect'}\n    \"\"\"\n    skills_dir = PLUGIN_ROOT / 'skills'\n\n    if not skills_dir.exists():\n        return {}\n\n    skill_map = {}\n\n    for skill_dir in skills_dir.iterdir():\n        if not skill_dir.is_dir():\n            continue\n\n        skill_file = skill_dir / 'SKILL.md'\n        if not skill_file.exists():\n            continue\n\n        # Read skill name from frontmatter\n        try:\n            with open(skill_file) as f:\n                content = f.read()\n                match = re.search(r'^name:\\s*(.+)$', content, re.MULTILINE)\n                if match:\n                    skill_name = match.group(1).strip()\n                    skill_map[skill_dir.name] = skill_name\n        except:\n            continue\n\n    return skill_map\n\n\ndef detect_skill_invocation(prompt: str) -> tuple[bool, str]:\n    \"\"\"\n    Detect if user is trying to invoke a skill explicitly.\n\n    Returns:\n        (is_skill_invocation, attempted_skill_name)\n    \"\"\"\n    patterns = [\n        r'use (?:the )?([a-z\\-:]+) skill',\n        r'with (?:the )?([a-z\\-:]+) skill',\n        r'([a-z\\-:]+) skill to',\n        r'activate (?:the )?([a-z\\-:]+)',\n        r'invoke (?:the )?([a-z\\-:]+)',\n    ]\n\n    for pattern in patterns:\n        match = re.search(pattern, prompt.lower())\n        if match:\n            return True, match.group(1)\n\n    return False, ''\n\n\ndef find_correct_skill_name(attempted_name: str, skill_map: dict[str, str]) -> tuple[str | None, int]:\n    \"\"\"\n    Find correct skill name using fuzzy matching.\n\n    Args:\n        attempted_name: What user tried to use\n        skill_map: Directory \u2192 skill name mapping\n\n    Returns:\n        (correct_name, confidence_score)\n    \"\"\"\n    from rapidfuzz import fuzz\n\n    # Exact directory match\n    if attempted_name in skill_map:\n        return skill_map[attempted_name], 100\n\n    # Exact skill name match (already correct)\n    if attempted_name in skill_map.values():\n        return attempted_name, 100\n\n    # Fuzzy match\n    best_match = None\n    best_score = 0\n\n    for directory, skill_name in skill_map.items():\n        # Directory name\n        score = fuzz.ratio(attempted_name, directory)\n        if score > best_score and score > 70:\n            best_score = score\n            best_match = skill_name\n\n        # Skill name\n        score = fuzz.ratio(attempted_name, skill_name)\n        if score > best_score and score > 70:\n            best_score = score\n            best_match = skill_name\n\n        # Skill name without prefix\n        skill_base = skill_name.replace('ctx:', '')\n        score = fuzz.ratio(attempted_name, skill_base)\n        if score > best_score and score > 70:\n            best_score = score\n            best_match = skill_name\n\n    return best_match, best_score if best_match else 0\n\n\ndef format_suggestion(match: IntentMatch, detection_count: int = 0) -> str:\n    \"\"\"Format detection with directive, actionable phrasing.\"\"\"\n\n    # Get action description\n    action = COMMAND_ACTIONS.get(match.command, \"execute this command\")\n\n    # Build directive message\n    confidence_pct = int(match.confidence * 100)\n\n    # Primary directive message\n    base_msg = (\n        f\"\ud83d\udca1 Type `{match.command}` to {action} ({confidence_pct}% {match.method}\"\n    )\n\n    # Add latency if fast (show performance)\n    if match.latency_ms < 1.0:\n        base_msg += f\", {match.latency_ms:.2f}ms\"\n\n    base_msg += \")\"\n\n    # Get contextual tip\n    tip = get_contextual_tip(match, detection_count)\n\n    if tip:\n        return f\"{base_msg}\\n\ud83d\udca1 {tip}\"\n\n    return base_msg\n\n\ndef format_interactive_suggestion(\n    match: IntentMatch, analysis: dict[str, Any] | None, detection_count: int = 0\n) -> str:\n    \"\"\"\n    Format interactive suggestion with Haiku analysis.\n\n    Args:\n        match: Detected command match\n        analysis: Haiku analysis results (optional)\n        detection_count: Total detections for contextual tips\n\n    Returns:\n        Formatted suggestion message\n    \"\"\"\n    # Get action description\n    action = COMMAND_ACTIONS.get(match.command, \"execute this command\")\n    confidence_pct = int(match.confidence * 100)\n\n    # Base detection message\n    base_msg = f\"\ud83c\udfaf Detected: `{match.command}` ({confidence_pct}% via {match.method})\"\n\n    # Add latency if fast\n    if match.latency_ms < 1.0:\n        base_msg += f\"\\n\u26a1 Detection speed: {match.latency_ms:.2f}ms\"\n\n    # Add Haiku analysis if available\n    if analysis:\n        if not analysis.get(\"is_best_match\", True):\n            alternatives = analysis.get(\"alternatives\", [])\n            if alternatives:\n                base_msg += \"\\n\\n\ud83d\udca1 Better alternatives:\"\n                for alt in alternatives[:3]:\n                    alt_action = COMMAND_ACTIONS.get(alt, \"execute this command\")\n                    base_msg += f\"\\n  \u2022 `{alt}` - {alt_action}\"\n\n        suggestion = analysis.get(\"suggestion\")\n        if suggestion:\n            base_msg += f\"\\n\\n\ud83d\udcac Suggestion: {suggestion}\"\n    else:\n        # Fallback without analysis\n        base_msg += f\"\\n\\n\ud83d\udcdd Action: Type `{match.command}` to {action}\"\n\n    # Get contextual tip\n    tip = get_contextual_tip(match, detection_count)\n    if tip:\n        base_msg += f\"\\n\\n\ud83d\udca1 Tip: {tip}\"\n\n    return base_msg\n\n\ndef detect_git_workflow(prompt: str) -> tuple[bool, str | None]:\n    \"\"\"\n    Detect git workflow patterns in natural language.\n\n    Returns: (is_git_workflow, script_command)\n    \"\"\"\n    prompt_lower = prompt.lower()\n\n    # Git workflow patterns\n    patterns = [\n        # Commit and push\n        (r'\\b(commit|save|push|commit.*push|push.*commit)\\b', '/ctx:git-commit'),\n        # Create PR\n        (r'\\b(create.*pr|make.*pr|open.*pr|pull.*request)\\b', None),  # TODO: /ctx:git-pr\n        # Merge\n        (r'\\b(merge|merge.*branch)\\b', None),  # TODO: /ctx:git-merge\n    ]\n\n    for pattern, command in patterns:\n        if re.search(pattern, prompt_lower):\n            print(f\"DEBUG: Git workflow detected: {pattern} \u2192 {command}\", file=sys.stderr)\n            return True, command\n\n    return False, None\n\n\ndef main():\n    \"\"\"Hook entry point.\"\"\"\n\n    try:\n        # Read hook event from stdin\n        event_json = sys.stdin.read()\n        event = json.loads(event_json)\n\n        prompt = event.get(\"prompt\", \"\")\n\n        # DEBUG: Log what we received\n        print(\n            f\"DEBUG: Contextune hook triggered with prompt: '{prompt}'\", file=sys.stderr\n        )\n\n        # Check if we should process\n        if not should_process(prompt):\n            print(\"DEBUG: Skipping prompt (should_process=False)\", file=sys.stderr)\n            # Pass through unchanged\n            response = {\"continue\": True, \"suppressOutput\": True}\n            print(json.dumps(response))\n            return\n\n        print(\"DEBUG: Processing prompt (should_process=True)\", file=sys.stderr)\n\n        # GIT WORKFLOW DETECTION: Check if user wants git workflow\n        is_git_workflow, git_command = detect_git_workflow(prompt)\n\n        if is_git_workflow and git_command:\n            print(f\"DEBUG: Git workflow detected, suggesting: {git_command}\", file=sys.stderr)\n\n            feedback = f\"\"\"\u26a1 Git Workflow Detected\n\nYour request matches a git workflow pattern.\n\n\ud83d\udca1 **Recommended:** Use the deterministic slash command instead:\n   `{git_command}`\n\n**Benefits:**\n- \u2705 93-97% token reduction (~$0.002 vs ~$0.037-0.086)\n- \u2705 Single command execution\n- \u2705 Deterministic, tested workflow\n- \u2705 Auto-detects remote\n- \u2705 Proper error handling\n\n**Example:**\n```\n{git_command}\n```\n\nContinuing with your original prompt, but consider using the slash command for efficiency.\"\"\"\n\n            response = {\n                \"continue\": True,\n                \"additionalContext\": feedback,\n                \"suppressOutput\": False\n            }\n            print(json.dumps(response))\n            return\n\n        # SKILL DETECTION: Check if user is trying to invoke a skill\n        is_skill_invocation, attempted_skill = detect_skill_invocation(prompt)\n\n        if is_skill_invocation:\n            print(f\"DEBUG: Skill invocation detected: '{attempted_skill}'\", file=sys.stderr)\n\n            # Load available skills\n            skill_map = load_available_skills()\n            print(f\"DEBUG: Loaded {len(skill_map)} skills\", file=sys.stderr)\n\n            # Find correct skill name\n            correct_skill, confidence = find_correct_skill_name(attempted_skill, skill_map)\n\n            if correct_skill and confidence > 70:\n                if attempted_skill != correct_skill:\n                    # Suggest correction\n                    suggestion = f\"\"\"\ud83d\udca1 Skill Name Correction\n\nDetected: Trying to use '{attempted_skill}' skill\nCorrect name: '{correct_skill}' (match confidence: {confidence}%)\n\nUse: {correct_skill}\n\nAvailable skills:\n{chr(10).join(f'  \u2022 {name} (directory: {dir})' for dir, name in skill_map.items())}\n\"\"\"\n                    print(f\"DEBUG: Suggesting skill name correction: {attempted_skill} \u2192 {correct_skill}\", file=sys.stderr)\n\n                    response = {\n                        \"continue\": True,\n                        \"additionalContext\": suggestion,\n                        \"suppressOutput\": False\n                    }\n                    print(json.dumps(response))\n                    return\n                else:\n                    print(f\"DEBUG: Skill name already correct: {correct_skill}\", file=sys.stderr)\n            else:\n                print(f\"DEBUG: No matching skill found for '{attempted_skill}'\", file=sys.stderr)\n\n        # Initialize detector\n        detector = ContextuneDetector()\n\n        # Detect intent\n        match = detector.detect(prompt)\n\n        print(f\"DEBUG: Detection result: {match}\", file=sys.stderr)\n\n        if match is None or match.confidence < 0.7:\n            print(\n                \"DEBUG: No match or low confidence, passing through\", file=sys.stderr\n            )\n            # Clear status line detection (no match)\n            clear_detection_statusline()\n            # No match or low confidence - pass through\n            response = {\"continue\": True, \"suppressOutput\": True}\n            print(json.dumps(response))\n            return\n\n        # Write detection for status line\n        write_detection_for_statusline(match, prompt)\n\n        # Get current detection count for progressive tips\n        detection_count = get_detection_count()\n\n        # Increment counter\n        increment_detection_count()\n\n        print(\n            f\"DEBUG: Command detected (detection #{detection_count + 1})\",\n            file=sys.stderr,\n        )\n\n        # Initialize Haiku engineer for interactive analysis\n        engineer = ClaudeCodeHaikuEngineer()\n        haiku_analysis = None\n        haiku_latency_ms = 0.0\n\n        # Selective triggering: Only run Haiku for low-confidence or fuzzy/semantic matches\n        # High-confidence exact matches (0.95+) are reliable and don't need Haiku validation\n        should_run_haiku = match.confidence < 0.95 or match.method in ['fuzzy', 'semantic']\n\n        if should_run_haiku:\n            print(f\"DEBUG: Triggering Haiku analysis (confidence={match.confidence:.2f}, method={match.method})\", file=sys.stderr)\n        else:\n            print(f\"DEBUG: Skipping Haiku analysis (high-confidence {match.method} match: {match.confidence:.2f})\", file=sys.stderr)\n\n        # Try to get Haiku analysis for better suggestions (only if needed)\n        if should_run_haiku and engineer.is_available():\n            print(f\"DEBUG: Running Haiku analysis...\", file=sys.stderr)\n            available_commands = load_available_commands()\n\n            # Track Haiku analysis latency\n            import time\n\n            haiku_start = time.perf_counter()\n\n            haiku_analysis = engineer.analyze_and_enhance(\n                prompt=prompt,\n                detected_command=match.command,\n                confidence=match.confidence,\n                available_commands=available_commands,\n                timeout=30,\n            )\n\n            haiku_latency_ms = (time.perf_counter() - haiku_start) * 1000\n\n            if haiku_analysis:\n                print(\n                    f\"DEBUG: Haiku analysis: {json.dumps(haiku_analysis)}\",\n                    file=sys.stderr,\n                )\n            else:\n                print(f\"DEBUG: Haiku analysis failed or timed out\", file=sys.stderr)\n        elif not should_run_haiku:\n            print(f\"DEBUG: Haiku analysis skipped (selective triggering)\", file=sys.stderr)\n        else:\n            print(\n                \"DEBUG: Claude Code CLI not available, skipping Haiku analysis\",\n                file=sys.stderr,\n            )\n\n        # AUGMENT MODE: Modify prompt with skill/command suggestion for reliability\n        print(\"DEBUG: Augmenting prompt for Claude\", file=sys.stderr)\n\n        # Create augmented prompt with skill suggestion\n        augmented_prompt = create_skill_augmented_prompt(match, prompt)\n\n        # Format interactive suggestion with Haiku analysis (if available)\n        interactive_msg = format_interactive_suggestion(\n            match, haiku_analysis, detection_count\n        )\n\n        # Determine the best command to use\n        # If Haiku suggests alternatives and it's not the best match, use the first alternative\n        best_command = match.command\n        correction_accepted = False\n\n        if haiku_analysis and not haiku_analysis.get(\"is_best_match\", True):\n            alternatives = haiku_analysis.get(\"alternatives\", [])\n            if alternatives:\n                best_command = alternatives[0]\n                correction_accepted = True\n                print(\n                    f\"DEBUG: Haiku suggests using {best_command} instead of {match.command}\",\n                    file=sys.stderr,\n                )\n\n        # Log correction to observability DB\n        if haiku_analysis:\n            try:\n                db = ObservabilityDB(\".contextune/observability.db\")\n\n                # Estimate token counts (rough approximation)\n                # Haiku prompt is ~150 tokens + command list + user prompt\n                prompt_tokens = (\n                    150 + len(prompt.split()) + len(load_available_commands()) * 5\n                )\n                # Response is typically ~50-100 tokens\n                completion_tokens = (\n                    50 + len(str(haiku_analysis.get(\"suggestion\", \"\"))) // 4\n                )\n\n                db.log_correction(\n                    original_command=match.command,\n                    corrected_command=best_command,\n                    original_confidence=match.confidence,\n                    correction_accepted=correction_accepted,\n                    model_name=\"haiku-4-5\",\n                    reasoning=haiku_analysis.get(\"suggestion\", \"\"),\n                    prompt_tokens=prompt_tokens,\n                    completion_tokens=completion_tokens,\n                    latency_ms=haiku_latency_ms,\n                    session_id=event.get(\"session_id\", \"\"),\n                    prompt_preview=prompt[:100],\n                )\n                print(\n                    f\"DEBUG: Logged correction to observability DB (accepted={correction_accepted})\",\n                    file=sys.stderr,\n                )\n            except Exception as e:\n                print(f\"DEBUG: Failed to log correction: {e}\", file=sys.stderr)\n\n        # Create augmented prompt with the best command (potentially corrected by Haiku)\n        if best_command != match.command:\n            # Use Haiku's suggested command\n            action = COMMAND_ACTIONS.get(best_command, \"complete this request\")\n            if best_command in SKILL_MAPPING:\n                skill_name = SKILL_MAPPING[best_command]\n                augmented_prompt = f\"{prompt}. You can use your {skill_name} skill to help with this task.\"\n            else:\n                augmented_prompt = (\n                    f\"{prompt}. Please use the {best_command} command to {action}.\"\n                )\n        else:\n            # Use original detection\n            augmented_prompt = create_skill_augmented_prompt(match, prompt)\n\n        # HYBRID MODE: Show detection + auto-execute with better command\n        # Prepend the interactive message to the prompt so Claude relays it to user\n        print(\n            f\"DEBUG: Using hybrid mode - show analysis and auto-execute {best_command}\",\n            file=sys.stderr,\n        )\n\n        response = {\n            \"continue\": True,\n            \"modifiedPrompt\": f\"[Contextune detected your intent and is using {best_command}]\\n\\n{augmented_prompt}\",\n            \"hookSpecificOutput\": {\n                \"hookEventName\": \"UserPromptSubmit\",\n                \"additionalContext\": f\"\\n\\n{interactive_msg}\\n\\n[Contextune auto-executing: `{best_command}`]\",\n            },\n        }\n\n        print(f\"DEBUG: Response: {json.dumps(response)}\", file=sys.stderr)\n        print(json.dumps(response))\n\n    except Exception as e:\n        # Log error but don't block Claude\n        import traceback\n\n        print(f\"Contextune error: {e}\", file=sys.stderr)\n        print(f\"DEBUG: Traceback: {traceback.format_exc()}\", file=sys.stderr)\n        response = {\"continue\": True, \"suppressOutput\": True}\n        print(json.dumps(response))\n\n\nif __name__ == \"__main__\":\n    main()\n",
+        "numLines": 819,
+        "startLine": 100,
+        "totalLines": 918
+      }
+    },
+    "tool_use_id": "toolu_01CZodWzkbrSeXtJ2PB4bmEN"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/shakes/.claude/plugins/installed_plugins.json"
+    },
+    "tool_response": {
+      "type": "text",
+      "file": {
+        "filePath": "/Users/shakes/.claude/plugins/installed_plugins.json",
+        "content": "{\n  \"version\": 1,\n  \"plugins\": {\n    \"contextune@Contextune\": {\n      \"version\": \"0.5.4\",\n      \"installedAt\": \"2025-10-25T11:35:36.161Z\",\n      \"lastUpdated\": \"2025-10-25T11:35:36.161Z\",\n      \"installPath\": \"/Users/shakes/.claude/plugins/marketplaces/Contextune/\",\n      \"gitCommitSha\": \"88a2421dfc1f84df050e91aebcab1265b6394199\",\n      \"isLocal\": true\n    },\n    \"claude-code-skills-manager@local-marketplace\": {\n      \"version\": \"unknown\",\n      \"installedAt\": \"2025-11-18T04:02:58.613Z\",\n      \"lastUpdated\": \"2025-11-18T04:02:58.613Z\",\n      \"installPath\": \"/Users/shakes/DevProjects/local-marketplace/claude_code_skills_manager\",\n      \"isLocal\": true\n    },\n    \"superclaude-hooks@local-marketplace\": {\n      \"version\": \"unknown\",\n      \"installedAt\": \"2025-11-19T19:49:43.421Z\",\n      \"lastUpdated\": \"2025-11-19T19:49:43.421Z\",\n      \"installPath\": \"/Users/shakes/DevProjects/local-marketplace/superclaude-hooks\",\n      \"isLocal\": true\n    },\n    \"office-documents@local-marketplace\": {\n      \"version\": \"unknown\",\n      \"installedAt\": \"2025-11-19T19:49:43.421Z\",\n      \"lastUpdated\": \"2025-11-19T19:49:43.421Z\",\n      \"installPath\": \"/Users/shakes/DevProjects/local-marketplace/office-documents\",\n      \"isLocal\": true\n    }\n  }\n}",
+        "numLines": 34,
+        "startLine": 1,
+        "totalLines": 34
+      }
+    },
+    "tool_use_id": "toolu_01DsWBr5aT92KjhPjTvJPj3Z"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "tail -50 /Users/shakes/.claude/plugins/marketplaces/Contextune/hooks/user_prompt_submit.py 2>/dev/null | head -30",
+      "description": "Check installed hook behavior"
+    },
+    "tool_response": {
+      "stdout": "",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false
+    },
+    "tool_use_id": "toolu_01PEsL8amkxsP4axtY46y5mP"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "find ~/.claude/plugins -name \"user_prompt_submit.py\" 2>/dev/null",
+      "description": "Find all hook files"
+    },
+    "tool_response": {
+      "stdout": "",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false
+    },
+    "tool_use_id": "toolu_0166jv7HjFjFzRptPMeCsbtU"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "cat ~/.claude/plugins/marketplaces/Contextune/hooks/hooks.json 2>/dev/null || echo \"No hooks.json in marketplace\"",
+      "description": "Check marketplace hooks config"
+    },
+    "tool_response": {
+      "stdout": "No hooks.json in marketplace",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false
+    },
+    "tool_use_id": "toolu_01UWaNkhYLgAp52coEGLt4dh"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/shakes/DevProjects/contextune/hooks/hooks.json"
+    },
+    "tool_response": {
+      "type": "text",
+      "file": {
+        "filePath": "/Users/shakes/DevProjects/contextune/hooks/hooks.json",
+        "content": "{\n  \"hooks\": {\n    \"SessionStart\": [\n      {\n        \"matcher\": \"*\",\n        \"hooks\": [\n          {\n            \"type\": \"command\",\n            \"command\": \"node ${CLAUDE_PLUGIN_ROOT}/hooks/session_start_git_context.js\",\n            \"timeout\": 2000,\n            \"description\": \"Git-powered context injection - differential updates since last session (~1-2K tokens)\"\n          },\n          {\n            \"type\": \"command\",\n            \"command\": \"node ${CLAUDE_PLUGIN_ROOT}/hooks/context_restorer.js\",\n            \"timeout\": 2000,\n            \"description\": \"Restore working context from scratch_pad.md (DRY context transfer)\"\n          },\n          {\n            \"type\": \"command\",\n            \"command\": \"node ${CLAUDE_PLUGIN_ROOT}/hooks/session_start.js\",\n            \"timeout\": 1000,\n            \"description\": \"Display Contextune commands (zero context overhead)\"\n          },\n          {\n            \"type\": \"command\",\n            \"command\": \"node ${CLAUDE_PLUGIN_ROOT}/hooks/version_checker.js\",\n            \"timeout\": 3000,\n            \"description\": \"Check for plugin updates (once per day)\"\n          }\n        ]\n      }\n    ],\n    \"UserPromptSubmit\": [\n      {\n        \"matcher\": \"*\",\n        \"hooks\": [\n          {\n            \"type\": \"command\",\n            \"command\": \"node ${CLAUDE_PLUGIN_ROOT}/hooks/context_injector.js\",\n            \"timeout\": 1000,\n            \"description\": \"Inject current context for grounded research\"\n          },\n          {\n            \"type\": \"command\",\n            \"command\": \"uv run ${CLAUDE_PLUGIN_ROOT}/hooks/user_prompt_submit.py\",\n            \"timeout\": 5000,\n            \"description\": \"SlashSense intent detection\"\n          }\n        ]\n      }\n    ],\n    \"PreToolUse\": [\n      {\n        \"matcher\": \"*\",\n        \"hooks\": [\n          {\n            \"type\": \"command\",\n            \"command\": \"uv run ${CLAUDE_PLUGIN_ROOT}/hooks/pre_tool_use_state_sync.py\",\n            \"timeout\": 1000,\n            \"description\": \"State sync - check if files changed externally before Edit/Write (~300 tokens only when needed)\"\n          },\n          {\n            \"type\": \"command\",\n            \"command\": \"uv run ${CLAUDE_PLUGIN_ROOT}/hooks/pre_tool_use_git_advisor.py\",\n            \"timeout\": 1000,\n            \"description\": \"Git workflow advisor - suggests scripts for multi-tool workflows (93-97% token reduction)\"\n          },\n          {\n            \"type\": \"command\",\n            \"command\": \"uv run ${CLAUDE_PLUGIN_ROOT}/hooks/tool_router.py\",\n            \"timeout\": 2000,\n            \"description\": \"Intelligent tool routing for cost optimization\"\n          }\n        ]\n      }\n    ],\n    \"PostToolUse\": [\n      {\n        \"matcher\": \"*\",\n        \"hooks\": [\n          {\n            \"type\": \"command\",\n            \"command\": \"uv run ${CLAUDE_PLUGIN_ROOT}/hooks/tool_cost_tracker.py\",\n            \"timeout\": 2000,\n            \"description\": \"Track tool costs and optimization opportunities\"\n          }\n        ]\n      }\n    ],\n    \"PreCompact\": [\n      {\n        \"matcher\": \"*\",\n        \"hooks\": [\n          {\n            \"type\": \"command\",\n            \"command\": \"uv run ${CLAUDE_PLUGIN_ROOT}/hooks/context_preserver.py\",\n            \"timeout\": 2000,\n            \"description\": \"Automatically preserve working context to scratch_pad.md\"\n          },\n          {\n            \"type\": \"command\",\n            \"command\": \"node ${CLAUDE_PLUGIN_ROOT}/hooks/compact_start.js\",\n            \"timeout\": 1000,\n            \"description\": \"Track context compaction for measuring context preservation\"\n          }\n        ]\n      }\n    ],\n    \"SessionEnd\": [\n      {\n        \"matcher\": \"*\",\n        \"hooks\": [\n          {\n            \"type\": \"command\",\n            \"command\": \"uv run ${CLAUDE_PLUGIN_ROOT}/hooks/session_end_recorder.py\",\n            \"timeout\": 2000,\n            \"description\": \"Record session metadata for next session's git context (~100 tokens write only)\"\n          },\n          {\n            \"type\": \"command\",\n            \"command\": \"uv run ${CLAUDE_PLUGIN_ROOT}/hooks/session_end_extractor.py\",\n            \"timeout\": 5000,\n            \"description\": \"Extract completed work to .plans/ and decisions.yaml (zero conversation overhead)\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "numLines": 130,
+        "startLine": 1,
+        "totalLines": 130
+      }
+    },
+    "tool_use_id": "toolu_01To468gUhe48QKsm48Nn43i"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "TodoWrite",
+    "tool_input": {
+      "todos": [
+        {
+          "content": "Read current hook behavior to understand auto-execution logic",
+          "status": "completed",
+          "activeForm": "Reading current hook behavior"
+        },
+        {
+          "content": "Change hook from auto-execute to suggest-only mode",
+          "status": "in_progress",
+          "activeForm": "Changing hook to suggest-only mode"
+        },
+        {
+          "content": "Test the updated hook behavior",
+          "status": "pending",
+          "activeForm": "Testing updated hook"
+        },
+        {
+          "content": "Update version to 0.8.10 per versioning rules",
+          "status": "pending",
+          "activeForm": "Updating version numbers"
+        }
+      ]
+    },
+    "tool_response": {
+      "oldTodos": [],
+      "newTodos": [
+        {
+          "content": "Read current hook behavior to understand auto-execution logic",
+          "status": "completed",
+          "activeForm": "Reading current hook behavior"
+        },
+        {
+          "content": "Change hook from auto-execute to suggest-only mode",
+          "status": "in_progress",
+          "activeForm": "Changing hook to suggest-only mode"
+        },
+        {
+          "content": "Test the updated hook behavior",
+          "status": "pending",
+          "activeForm": "Testing updated hook"
+        },
+        {
+          "content": "Update version to 0.8.10 per versioning rules",
+          "status": "pending",
+          "activeForm": "Updating version numbers"
+        }
+      ]
+    },
+    "tool_use_id": "toolu_01QPVLSenLNi9NsKg4rCUdQX"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Edit",
+    "tool_input": {
+      "file_path": "/Users/shakes/DevProjects/contextune/hooks/user_prompt_submit.py",
+      "old_string": "        # HYBRID MODE: Show detection + auto-execute with better command\n        # Prepend the interactive message to the prompt so Claude relays it to user\n        print(\n            f\"DEBUG: Using hybrid mode - show analysis and auto-execute {best_command}\",\n            file=sys.stderr,\n        )\n\n        response = {\n            \"continue\": True,\n            \"modifiedPrompt\": f\"[Contextune detected your intent and is using {best_command}]\\n\\n{augmented_prompt}\",\n            \"hookSpecificOutput\": {\n                \"hookEventName\": \"UserPromptSubmit\",\n                \"additionalContext\": f\"\\n\\n{interactive_msg}\\n\\n[Contextune auto-executing: `{best_command}`]\",\n            },\n        }",
+      "new_string": "        # SUGGEST-ONLY MODE: Show detection but let user decide\n        # Don't auto-execute - just provide helpful suggestion\n        print(\n            f\"DEBUG: Using suggest-only mode - showing suggestion for {best_command}\",\n            file=sys.stderr,\n        )\n\n        response = {\n            \"continue\": True,\n            \"additionalContext\": interactive_msg,\n            \"suppressOutput\": False\n        }"
+    },
+    "tool_response": {
+      "filePath": "/Users/shakes/DevProjects/contextune/hooks/user_prompt_submit.py",
+      "oldString": "        # HYBRID MODE: Show detection + auto-execute with better command\n        # Prepend the interactive message to the prompt so Claude relays it to user\n        print(\n            f\"DEBUG: Using hybrid mode - show analysis and auto-execute {best_command}\",\n            file=sys.stderr,\n        )\n\n        response = {\n            \"continue\": True,\n            \"modifiedPrompt\": f\"[Contextune detected your intent and is using {best_command}]\\n\\n{augmented_prompt}\",\n            \"hookSpecificOutput\": {\n                \"hookEventName\": \"UserPromptSubmit\",\n                \"additionalContext\": f\"\\n\\n{interactive_msg}\\n\\n[Contextune auto-executing: `{best_command}`]\",\n            },\n        }",
+      "newString": "        # SUGGEST-ONLY MODE: Show detection but let user decide\n        # Don't auto-execute - just provide helpful suggestion\n        print(\n            f\"DEBUG: Using suggest-only mode - showing suggestion for {best_command}\",\n            file=sys.stderr,\n        )\n\n        response = {\n            \"continue\": True,\n            \"additionalContext\": interactive_msg,\n            \"suppressOutput\": False\n        }",
+      "originalFile": "#!/usr/bin/env -S uv run --script\n# /// script\n# requires-python = \">=3.10\"\n# dependencies = [\n#     \"model2vec>=0.3.0\",\n#     \"semantic-router>=0.1.0\",\n#     \"numpy>=1.24.0\",\n#     \"rapidfuzz>=3.0.0\"\n# ]\n# ///\n\"\"\"\nContextune UserPromptSubmit Hook\n\nDetects slash commands from natural language prompts using 3-tier cascade:\n1. Keyword matching (0.02ms, 60% coverage)\n2. Model2Vec embeddings (0.2ms, 30% coverage)\n3. Semantic Router (50ms, 10% coverage)\n\nUses Claude Code headless mode for interactive prompt analysis and suggestions.\n\nHook Protocol:\n- Input: JSON via stdin with {\"prompt\": \"...\", \"session_id\": \"...\"}\n- Output: JSON via stdout with {\"continue\": true, \"feedback\": \"...\"}\n\"\"\"\n\nimport json\nimport subprocess\nimport sys\nimport re\nfrom pathlib import Path\nfrom typing import Any\n\n# Add lib directory to Python path\nPLUGIN_ROOT = Path(__file__).parent.parent\nsys.path.insert(0, str(PLUGIN_ROOT / \"lib\"))\n\n# Import matchers (now using RapidFuzz-based keyword matcher v2!)\nfrom keyword_matcher_v2 import IntentMatch, KeywordMatcherV2 as KeywordMatcher\nfrom model2vec_matcher import Model2VecMatcher\nfrom observability_db import ObservabilityDB\nfrom semantic_router_matcher import SemanticRouterMatcher\n\n\nclass ContextuneDetector:\n    \"\"\"\n    3-tier intent detection cascade.\n\n    Uses your existing matchers in order of speed:\n    1. KeywordMatcher (always fast)\n    2. Model2VecMatcher (if available)\n    3. SemanticRouterMatcher (if API key available)\n    \"\"\"\n\n    def __init__(self):\n        self._keyword = None\n        self._model2vec = None\n        self._semantic = None\n\n    def _get_keyword(self):\n        if self._keyword is None:\n            self._keyword = KeywordMatcher()\n        return self._keyword\n\n    def _get_model2vec(self):\n        if self._model2vec is None:\n            m = Model2VecMatcher()\n            self._model2vec = m if m.is_available() else None\n        return self._model2vec\n\n    def _get_semantic(self):\n        if self._semantic is None:\n            m = SemanticRouterMatcher()\n            self._semantic = m if m.is_available() else None\n        return self._semantic\n\n    def detect(self, text: str) -> IntentMatch | None:\n        \"\"\"Detect intent using 3-tier cascade.\"\"\"\n\n        # Tier 1: Keyword (always available)\n        result = self._get_keyword().match(text)\n        if result:\n            return result\n\n        # Tier 2: Model2Vec\n        m2v = self._get_model2vec()\n        if m2v:\n            result = m2v.match(text)\n            if result:\n                return result\n\n        # Tier 3: Semantic Router\n        sem = self._get_semantic()\n        if sem:\n            result = sem.match(text)\n            if result:\n                return result\n\n        return None\n\n\nclass ClaudeCodeHaikuEngineer:\n    \"\"\"\n    Uses Claude Code headless mode to analyze prompts and provide interactive suggestions.\n\n    Benefits:\n    - No separate API key needed (uses existing Claude Code auth)\n    - Integrated billing with Claude Code\n    - Fast Haiku model for cost optimization\n    - Interactive blocking mode for user feedback\n    \"\"\"\n\n    def __init__(self):\n        self._claude_available = None\n\n    def is_available(self) -> bool:\n        \"\"\"Check if Claude Code CLI is available.\"\"\"\n        if self._claude_available is None:\n            try:\n                result = subprocess.run(\n                    [\"claude\", \"--version\"], capture_output=True, text=True, timeout=2\n                )\n                self._claude_available = result.returncode == 0\n            except (FileNotFoundError, subprocess.TimeoutExpired):\n                self._claude_available = False\n\n        return self._claude_available\n\n    def analyze_and_enhance(\n        self,\n        prompt: str,\n        detected_command: str,\n        confidence: float,\n        available_commands: list[str],\n        timeout: int = 30,\n    ) -> dict[str, Any] | None:\n        \"\"\"\n        Analyze prompt using Claude Code headless mode and suggest enhancements.\n\n        Args:\n            prompt: User's original prompt\n            detected_command: Command detected by cascade\n            confidence: Detection confidence (0-1)\n            available_commands: List of all available commands\n            timeout: Timeout in seconds\n\n        Returns:\n            Dict with analysis results or None if unavailable/failed\n        \"\"\"\n        if not self.is_available():\n            return None\n\n        # Build analysis prompt for Haiku\n        analysis_prompt = f\"\"\"You are a prompt enhancement assistant for Contextune, a Claude Code plugin.\n\nUSER'S PROMPT: \"{prompt}\"\n\nDETECTED COMMAND: {detected_command}\nDETECTION CONFIDENCE: {confidence:.0%}\n\nAVAILABLE ALTERNATIVES:\n{chr(10).join(f\"- {cmd}\" for cmd in available_commands[:10])}\n\nTASK: Analyze the user's prompt and provide:\n1. Whether the detected command is the best match (true/false)\n2. Alternative commands if better matches exist\n3. A brief, helpful suggestion for the user\n\nRESPONSE FORMAT (JSON):\n{{\n  \"is_best_match\": true/false,\n  \"alternatives\": [\"command1\", \"command2\"],\n  \"suggestion\": \"Brief suggestion text\"\n}}\n\nBe concise. Focus on actionability.\"\"\"\n\n        try:\n            # Call Claude Code headless with Haiku model\n            cmd = [\n                \"claude\",\n                \"--model\",\n                \"claude-haiku-4-5\",\n                \"-p\",\n                analysis_prompt,\n                \"--output-format\",\n                \"json\",\n                \"--allowedTools\",\n                \"\",  # No tools needed for this analysis\n            ]\n\n            result = subprocess.run(\n                cmd, capture_output=True, text=True, timeout=timeout\n            )\n\n            if result.returncode != 0:\n                print(f\"DEBUG: Claude Code error: {result.stderr}\", file=sys.stderr)\n                return None\n\n            # Parse Claude's response - it's nested in a wrapper object\n            claude_response = json.loads(result.stdout)\n\n            # Extract the actual result (may be nested in \"result\" field)\n            if \"result\" in claude_response:\n                result_text = claude_response[\"result\"]\n                # Result may contain JSON in markdown code blocks\n                if \"```json\" in result_text:\n                    # Extract JSON from markdown code block\n                    json_start = result_text.find(\"```json\") + 7\n                    json_end = result_text.find(\"```\", json_start)\n                    result_text = result_text[json_start:json_end].strip()\n\n                # Parse the extracted JSON\n                analysis = json.loads(result_text)\n                return analysis\n            else:\n                # If no \"result\" field, assume the whole response is the analysis\n                return claude_response\n\n        except subprocess.TimeoutExpired:\n            print(f\"DEBUG: Claude Code timeout after {timeout}s\", file=sys.stderr)\n            return None\n        except json.JSONDecodeError as e:\n            print(f\"DEBUG: Failed to parse Claude response: {e}\", file=sys.stderr)\n            print(f\"DEBUG: Raw output: {result.stdout[:200]}\", file=sys.stderr)\n            return None\n        except Exception as e:\n            print(f\"DEBUG: Haiku engineer error: {e}\", file=sys.stderr)\n            return None\n\n\ndef should_process(prompt: str) -> bool:\n    \"\"\"Check if prompt needs intent detection.\"\"\"\n    if not prompt or not prompt.strip():\n        return False\n\n    # Skip if already a command\n    if prompt.strip().startswith(\"/\"):\n        return False\n\n    # Skip internal Haiku analysis prompts (prevent feedback loop)\n    if prompt.startswith(\"You are a prompt enhancement assistant\"):\n        return False\n\n    # Skip if too short\n    if len(prompt.strip().split()) < 3:\n        return False\n\n    return True\n\n\ndef write_detection_for_statusline(match: IntentMatch, prompt: str):\n    \"\"\"Write detection data to observability DB for status line to read.\"\"\"\n    try:\n        db = ObservabilityDB(\".contextune/observability.db\")\n        db.set_detection(\n            command=match.command,\n            confidence=match.confidence,\n            method=match.method,\n            prompt_preview=prompt[:60] + (\"...\" if len(prompt) > 60 else \"\"),\n            latency_ms=match.latency_ms,\n        )\n\n        # Also log matcher performance\n        db.log_matcher_performance(match.method, match.latency_ms, success=True)\n\n        print(\n            f\"DEBUG: Wrote detection to observability DB: {match.command} ({match.confidence:.0%} {match.method})\",\n            file=sys.stderr,\n        )\n    except Exception as e:\n        # Don't fail hook if observability write fails\n        print(f\"DEBUG: Failed to write to observability DB: {e}\", file=sys.stderr)\n        # Also log the error\n        try:\n            db = ObservabilityDB(\".contextune/observability.db\")\n            db.log_error(\"user_prompt_submit\", type(e).__name__, str(e))\n        except:\n            pass\n\n\ndef clear_detection_statusline():\n    \"\"\"Clear status line detection (no match found).\"\"\"\n    try:\n        db = ObservabilityDB(\".contextune/observability.db\")\n        db.clear_detection()\n        print(\"DEBUG: Cleared detection from observability DB\", file=sys.stderr)\n    except Exception as e:\n        print(\n            f\"DEBUG: Failed to clear detection from observability DB: {e}\",\n            file=sys.stderr,\n        )\n\n\ndef get_detection_count() -> int:\n    \"\"\"Get total number of detections for progressive tips.\"\"\"\n    try:\n        db = ObservabilityDB(\".contextune/observability.db\")\n        stats = db.get_stats()\n        return stats.get(\"detections\", {}).get(\"total\", 0)\n    except:\n        pass\n    return 0\n\n\ndef increment_detection_count():\n    \"\"\"Increment detection counter for progressive disclosure.\"\"\"\n    try:\n        data_dir = Path.home() / \".claude\" / \"plugins\" / \"contextune\" / \"data\"\n        data_dir.mkdir(parents=True, exist_ok=True)\n        stats_file = data_dir / \"detection_stats.json\"\n\n        stats = {\"total_detections\": 0, \"by_method\": {}, \"by_command\": {}}\n        if stats_file.exists():\n            with open(stats_file) as f:\n                stats = json.load(f)\n\n        stats[\"total_detections\"] = stats.get(\"total_detections\", 0) + 1\n\n        with open(stats_file, \"w\") as f:\n            json.dump(stats, f, indent=2)\n    except:\n        pass  # Don't fail hook if stats tracking fails\n\n\n# Command action descriptions for directive feedback\nCOMMAND_ACTIONS = {\n    # Contextune commands\n    \"/ctx:design\": \"design system architecture with structured workflow\",\n    \"/ctx:research\": \"get fast answers using 3 parallel agents\",\n    \"/ctx:plan\": \"create parallel development plans\",\n    \"/ctx:execute\": \"run tasks in parallel worktrees\",\n    \"/ctx:status\": \"monitor parallel task progress\",\n    \"/ctx:cleanup\": \"clean up completed worktrees\",\n    \"/ctx:help\": \"see example-first command guide\",\n    \"/ctx:configure\": \"enable persistent status bar display\",\n    \"/ctx:stats\": \"see your time & cost savings\",\n    \"/ctx:verify\": \"verify and execute detected command with confirmation\",\n    # Skill-only detections (no commands)\n    \"skill:ctx:performance\": \"analyze and optimize parallel workflow performance\",\n    \"skill:ctx:parallel-expert\": \"get guidance on parallelizing tasks effectively\",\n    \"skill:ctx:help\": \"discover Contextune features and capabilities\",\n    \"skill:ctx:worktree\": \"troubleshoot git worktree issues and conflicts\",\n}\n\n# Skill mapping for reliable Claude execution\n# Maps slash commands AND skill detections to skill names\n# Skills are auto-discovered by Claude Code from: contextune/skills/*/SKILL.md\nSKILL_MAPPING = {\n    # Commands with skills\n    \"/ctx:design\": \"ctx:architect\",  # Plugin skill: skills/software-architect\n    \"/ctx:research\": \"ctx:researcher\",  # Plugin skill: skills/researcher\n    # Skills without commands (direct skill suggestions)\n    \"skill:ctx:performance\": \"ctx:performance\",\n    \"skill:ctx:parallel-expert\": \"ctx:parallel-expert\",\n    \"skill:ctx:help\": \"ctx:help\",\n    \"skill:ctx:worktree\": \"ctx:worktree\",\n    # Note: /ctx:plan and /ctx:execute are commands, not skills\n    # They execute workflows directly rather than providing guidance\n}\n\n\ndef create_skill_augmented_prompt(match: IntentMatch, original_prompt: str) -> str:\n    \"\"\"\n    Augment prompt with skill suggestion for more reliable execution.\n\n    Evidence: Skills are invoked more reliably than slash commands because\n    they use Claude's native Skill tool (structured, type-safe) vs text expansion.\n\n    Args:\n        match: Detected command and confidence\n        original_prompt: User's original prompt text\n\n    Returns:\n        Augmented prompt that guides Claude to use skill or command\n    \"\"\"\n    if match.command in SKILL_MAPPING:\n        skill_name = SKILL_MAPPING[match.command]\n        # Strong directive: \"You can use your X skill\"\n        return f\"{original_prompt}. You can use your {skill_name} skill to help with this task.\"\n    else:\n        # For commands without skills, use directive language\n        action = COMMAND_ACTIONS.get(match.command, \"complete this request\")\n        return f\"{original_prompt}. Please use the {match.command} command to {action}.\"\n\n\ndef get_contextual_tip(match: IntentMatch, detection_count: int) -> str:\n    \"\"\"Generate directive contextual tip based on usage patterns.\"\"\"\n\n    # First-time users (1-3 detections)\n    if detection_count <= 3:\n        return \"New user? Type `/ctx:help` to see all commands with examples\"\n\n    # Early users (4-10 detections) - promote status bar\n    elif detection_count <= 10:\n        return \"Enable persistent detection: Type `/ctx:configure` to set up status bar\"\n\n    # Experienced users (11-20) - promote advanced features\n    elif detection_count <= 20:\n        if match.command.startswith(\"/ctx:\"):\n            return \"Want parallel workflows? Type `/ctx:plan` to work on multiple tasks simultaneously\"\n        return f\"Blazing fast: {match.latency_ms:.2f}ms detection. Type `/ctx:stats` to see all metrics\"\n\n    # Power users (21+) - occasional celebration\n    else:\n        if detection_count % 10 == 0:  # Every 10th detection\n            return f\"\ud83c\udf89 {detection_count} detections! Type `/ctx:stats` to see your time & cost savings\"\n        return None  # No tip for most interactions\n\n\ndef load_available_commands() -> list[str]:\n    \"\"\"Load list of all available commands for Claude Code.\"\"\"\n    # Return all commands from COMMAND_ACTIONS\n    return [cmd for cmd in COMMAND_ACTIONS if cmd.startswith(\"/\")]\n\n\ndef load_available_skills() -> dict[str, str]:\n    \"\"\"\n    Load all available skills from plugin.\n\n    Returns:\n        Dict mapping directory names to skill names\n        e.g., {'software-architect': 'ctx:architect'}\n    \"\"\"\n    skills_dir = PLUGIN_ROOT / 'skills'\n\n    if not skills_dir.exists():\n        return {}\n\n    skill_map = {}\n\n    for skill_dir in skills_dir.iterdir():\n        if not skill_dir.is_dir():\n            continue\n\n        skill_file = skill_dir / 'SKILL.md'\n        if not skill_file.exists():\n            continue\n\n        # Read skill name from frontmatter\n        try:\n            with open(skill_file) as f:\n                content = f.read()\n                match = re.search(r'^name:\\s*(.+)$', content, re.MULTILINE)\n                if match:\n                    skill_name = match.group(1).strip()\n                    skill_map[skill_dir.name] = skill_name\n        except:\n            continue\n\n    return skill_map\n\n\ndef detect_skill_invocation(prompt: str) -> tuple[bool, str]:\n    \"\"\"\n    Detect if user is trying to invoke a skill explicitly.\n\n    Returns:\n        (is_skill_invocation, attempted_skill_name)\n    \"\"\"\n    patterns = [\n        r'use (?:the )?([a-z\\-:]+) skill',\n        r'with (?:the )?([a-z\\-:]+) skill',\n        r'([a-z\\-:]+) skill to',\n        r'activate (?:the )?([a-z\\-:]+)',\n        r'invoke (?:the )?([a-z\\-:]+)',\n    ]\n\n    for pattern in patterns:\n        match = re.search(pattern, prompt.lower())\n        if match:\n            return True, match.group(1)\n\n    return False, ''\n\n\ndef find_correct_skill_name(attempted_name: str, skill_map: dict[str, str]) -> tuple[str | None, int]:\n    \"\"\"\n    Find correct skill name using fuzzy matching.\n\n    Args:\n        attempted_name: What user tried to use\n        skill_map: Directory \u2192 skill name mapping\n\n    Returns:\n        (correct_name, confidence_score)\n    \"\"\"\n    from rapidfuzz import fuzz\n\n    # Exact directory match\n    if attempted_name in skill_map:\n        return skill_map[attempted_name], 100\n\n    # Exact skill name match (already correct)\n    if attempted_name in skill_map.values():\n        return attempted_name, 100\n\n    # Fuzzy match\n    best_match = None\n    best_score = 0\n\n    for directory, skill_name in skill_map.items():\n        # Directory name\n        score = fuzz.ratio(attempted_name, directory)\n        if score > best_score and score > 70:\n            best_score = score\n            best_match = skill_name\n\n        # Skill name\n        score = fuzz.ratio(attempted_name, skill_name)\n        if score > best_score and score > 70:\n            best_score = score\n            best_match = skill_name\n\n        # Skill name without prefix\n        skill_base = skill_name.replace('ctx:', '')\n        score = fuzz.ratio(attempted_name, skill_base)\n        if score > best_score and score > 70:\n            best_score = score\n            best_match = skill_name\n\n    return best_match, best_score if best_match else 0\n\n\ndef format_suggestion(match: IntentMatch, detection_count: int = 0) -> str:\n    \"\"\"Format detection with directive, actionable phrasing.\"\"\"\n\n    # Get action description\n    action = COMMAND_ACTIONS.get(match.command, \"execute this command\")\n\n    # Build directive message\n    confidence_pct = int(match.confidence * 100)\n\n    # Primary directive message\n    base_msg = (\n        f\"\ud83d\udca1 Type `{match.command}` to {action} ({confidence_pct}% {match.method}\"\n    )\n\n    # Add latency if fast (show performance)\n    if match.latency_ms < 1.0:\n        base_msg += f\", {match.latency_ms:.2f}ms\"\n\n    base_msg += \")\"\n\n    # Get contextual tip\n    tip = get_contextual_tip(match, detection_count)\n\n    if tip:\n        return f\"{base_msg}\\n\ud83d\udca1 {tip}\"\n\n    return base_msg\n\n\ndef format_interactive_suggestion(\n    match: IntentMatch, analysis: dict[str, Any] | None, detection_count: int = 0\n) -> str:\n    \"\"\"\n    Format interactive suggestion with Haiku analysis.\n\n    Args:\n        match: Detected command match\n        analysis: Haiku analysis results (optional)\n        detection_count: Total detections for contextual tips\n\n    Returns:\n        Formatted suggestion message\n    \"\"\"\n    # Get action description\n    action = COMMAND_ACTIONS.get(match.command, \"execute this command\")\n    confidence_pct = int(match.confidence * 100)\n\n    # Base detection message\n    base_msg = f\"\ud83c\udfaf Detected: `{match.command}` ({confidence_pct}% via {match.method})\"\n\n    # Add latency if fast\n    if match.latency_ms < 1.0:\n        base_msg += f\"\\n\u26a1 Detection speed: {match.latency_ms:.2f}ms\"\n\n    # Add Haiku analysis if available\n    if analysis:\n        if not analysis.get(\"is_best_match\", True):\n            alternatives = analysis.get(\"alternatives\", [])\n            if alternatives:\n                base_msg += \"\\n\\n\ud83d\udca1 Better alternatives:\"\n                for alt in alternatives[:3]:\n                    alt_action = COMMAND_ACTIONS.get(alt, \"execute this command\")\n                    base_msg += f\"\\n  \u2022 `{alt}` - {alt_action}\"\n\n        suggestion = analysis.get(\"suggestion\")\n        if suggestion:\n            base_msg += f\"\\n\\n\ud83d\udcac Suggestion: {suggestion}\"\n    else:\n        # Fallback without analysis\n        base_msg += f\"\\n\\n\ud83d\udcdd Action: Type `{match.command}` to {action}\"\n\n    # Get contextual tip\n    tip = get_contextual_tip(match, detection_count)\n    if tip:\n        base_msg += f\"\\n\\n\ud83d\udca1 Tip: {tip}\"\n\n    return base_msg\n\n\ndef detect_git_workflow(prompt: str) -> tuple[bool, str | None]:\n    \"\"\"\n    Detect git workflow patterns in natural language.\n\n    Returns: (is_git_workflow, script_command)\n    \"\"\"\n    prompt_lower = prompt.lower()\n\n    # Git workflow patterns\n    patterns = [\n        # Commit and push\n        (r'\\b(commit|save|push|commit.*push|push.*commit)\\b', '/ctx:git-commit'),\n        # Create PR\n        (r'\\b(create.*pr|make.*pr|open.*pr|pull.*request)\\b', None),  # TODO: /ctx:git-pr\n        # Merge\n        (r'\\b(merge|merge.*branch)\\b', None),  # TODO: /ctx:git-merge\n    ]\n\n    for pattern, command in patterns:\n        if re.search(pattern, prompt_lower):\n            print(f\"DEBUG: Git workflow detected: {pattern} \u2192 {command}\", file=sys.stderr)\n            return True, command\n\n    return False, None\n\n\ndef main():\n    \"\"\"Hook entry point.\"\"\"\n\n    try:\n        # Read hook event from stdin\n        event_json = sys.stdin.read()\n        event = json.loads(event_json)\n\n        prompt = event.get(\"prompt\", \"\")\n\n        # DEBUG: Log what we received\n        print(\n            f\"DEBUG: Contextune hook triggered with prompt: '{prompt}'\", file=sys.stderr\n        )\n\n        # Check if we should process\n        if not should_process(prompt):\n            print(\"DEBUG: Skipping prompt (should_process=False)\", file=sys.stderr)\n            # Pass through unchanged\n            response = {\"continue\": True, \"suppressOutput\": True}\n            print(json.dumps(response))\n            return\n\n        print(\"DEBUG: Processing prompt (should_process=True)\", file=sys.stderr)\n\n        # GIT WORKFLOW DETECTION: Check if user wants git workflow\n        is_git_workflow, git_command = detect_git_workflow(prompt)\n\n        if is_git_workflow and git_command:\n            print(f\"DEBUG: Git workflow detected, suggesting: {git_command}\", file=sys.stderr)\n\n            feedback = f\"\"\"\u26a1 Git Workflow Detected\n\nYour request matches a git workflow pattern.\n\n\ud83d\udca1 **Recommended:** Use the deterministic slash command instead:\n   `{git_command}`\n\n**Benefits:**\n- \u2705 93-97% token reduction (~$0.002 vs ~$0.037-0.086)\n- \u2705 Single command execution\n- \u2705 Deterministic, tested workflow\n- \u2705 Auto-detects remote\n- \u2705 Proper error handling\n\n**Example:**\n```\n{git_command}\n```\n\nContinuing with your original prompt, but consider using the slash command for efficiency.\"\"\"\n\n            response = {\n                \"continue\": True,\n                \"additionalContext\": feedback,\n                \"suppressOutput\": False\n            }\n            print(json.dumps(response))\n            return\n\n        # SKILL DETECTION: Check if user is trying to invoke a skill\n        is_skill_invocation, attempted_skill = detect_skill_invocation(prompt)\n\n        if is_skill_invocation:\n            print(f\"DEBUG: Skill invocation detected: '{attempted_skill}'\", file=sys.stderr)\n\n            # Load available skills\n            skill_map = load_available_skills()\n            print(f\"DEBUG: Loaded {len(skill_map)} skills\", file=sys.stderr)\n\n            # Find correct skill name\n            correct_skill, confidence = find_correct_skill_name(attempted_skill, skill_map)\n\n            if correct_skill and confidence > 70:\n                if attempted_skill != correct_skill:\n                    # Suggest correction\n                    suggestion = f\"\"\"\ud83d\udca1 Skill Name Correction\n\nDetected: Trying to use '{attempted_skill}' skill\nCorrect name: '{correct_skill}' (match confidence: {confidence}%)\n\nUse: {correct_skill}\n\nAvailable skills:\n{chr(10).join(f'  \u2022 {name} (directory: {dir})' for dir, name in skill_map.items())}\n\"\"\"\n                    print(f\"DEBUG: Suggesting skill name correction: {attempted_skill} \u2192 {correct_skill}\", file=sys.stderr)\n\n                    response = {\n                        \"continue\": True,\n                        \"additionalContext\": suggestion,\n                        \"suppressOutput\": False\n                    }\n                    print(json.dumps(response))\n                    return\n                else:\n                    print(f\"DEBUG: Skill name already correct: {correct_skill}\", file=sys.stderr)\n            else:\n                print(f\"DEBUG: No matching skill found for '{attempted_skill}'\", file=sys.stderr)\n\n        # Initialize detector\n        detector = ContextuneDetector()\n\n        # Detect intent\n        match = detector.detect(prompt)\n\n        print(f\"DEBUG: Detection result: {match}\", file=sys.stderr)\n\n        if match is None or match.confidence < 0.7:\n            print(\n                \"DEBUG: No match or low confidence, passing through\", file=sys.stderr\n            )\n            # Clear status line detection (no match)\n            clear_detection_statusline()\n            # No match or low confidence - pass through\n            response = {\"continue\": True, \"suppressOutput\": True}\n            print(json.dumps(response))\n            return\n\n        # Write detection for status line\n        write_detection_for_statusline(match, prompt)\n\n        # Get current detection count for progressive tips\n        detection_count = get_detection_count()\n\n        # Increment counter\n        increment_detection_count()\n\n        print(\n            f\"DEBUG: Command detected (detection #{detection_count + 1})\",\n            file=sys.stderr,\n        )\n\n        # Initialize Haiku engineer for interactive analysis\n        engineer = ClaudeCodeHaikuEngineer()\n        haiku_analysis = None\n        haiku_latency_ms = 0.0\n\n        # Selective triggering: Only run Haiku for low-confidence or fuzzy/semantic matches\n        # High-confidence exact matches (0.95+) are reliable and don't need Haiku validation\n        should_run_haiku = match.confidence < 0.95 or match.method in ['fuzzy', 'semantic']\n\n        if should_run_haiku:\n            print(f\"DEBUG: Triggering Haiku analysis (confidence={match.confidence:.2f}, method={match.method})\", file=sys.stderr)\n        else:\n            print(f\"DEBUG: Skipping Haiku analysis (high-confidence {match.method} match: {match.confidence:.2f})\", file=sys.stderr)\n\n        # Try to get Haiku analysis for better suggestions (only if needed)\n        if should_run_haiku and engineer.is_available():\n            print(f\"DEBUG: Running Haiku analysis...\", file=sys.stderr)\n            available_commands = load_available_commands()\n\n            # Track Haiku analysis latency\n            import time\n\n            haiku_start = time.perf_counter()\n\n            haiku_analysis = engineer.analyze_and_enhance(\n                prompt=prompt,\n                detected_command=match.command,\n                confidence=match.confidence,\n                available_commands=available_commands,\n                timeout=30,\n            )\n\n            haiku_latency_ms = (time.perf_counter() - haiku_start) * 1000\n\n            if haiku_analysis:\n                print(\n                    f\"DEBUG: Haiku analysis: {json.dumps(haiku_analysis)}\",\n                    file=sys.stderr,\n                )\n            else:\n                print(f\"DEBUG: Haiku analysis failed or timed out\", file=sys.stderr)\n        elif not should_run_haiku:\n            print(f\"DEBUG: Haiku analysis skipped (selective triggering)\", file=sys.stderr)\n        else:\n            print(\n                \"DEBUG: Claude Code CLI not available, skipping Haiku analysis\",\n                file=sys.stderr,\n            )\n\n        # AUGMENT MODE: Modify prompt with skill/command suggestion for reliability\n        print(\"DEBUG: Augmenting prompt for Claude\", file=sys.stderr)\n\n        # Create augmented prompt with skill suggestion\n        augmented_prompt = create_skill_augmented_prompt(match, prompt)\n\n        # Format interactive suggestion with Haiku analysis (if available)\n        interactive_msg = format_interactive_suggestion(\n            match, haiku_analysis, detection_count\n        )\n\n        # Determine the best command to use\n        # If Haiku suggests alternatives and it's not the best match, use the first alternative\n        best_command = match.command\n        correction_accepted = False\n\n        if haiku_analysis and not haiku_analysis.get(\"is_best_match\", True):\n            alternatives = haiku_analysis.get(\"alternatives\", [])\n            if alternatives:\n                best_command = alternatives[0]\n                correction_accepted = True\n                print(\n                    f\"DEBUG: Haiku suggests using {best_command} instead of {match.command}\",\n                    file=sys.stderr,\n                )\n\n        # Log correction to observability DB\n        if haiku_analysis:\n            try:\n                db = ObservabilityDB(\".contextune/observability.db\")\n\n                # Estimate token counts (rough approximation)\n                # Haiku prompt is ~150 tokens + command list + user prompt\n                prompt_tokens = (\n                    150 + len(prompt.split()) + len(load_available_commands()) * 5\n                )\n                # Response is typically ~50-100 tokens\n                completion_tokens = (\n                    50 + len(str(haiku_analysis.get(\"suggestion\", \"\"))) // 4\n                )\n\n                db.log_correction(\n                    original_command=match.command,\n                    corrected_command=best_command,\n                    original_confidence=match.confidence,\n                    correction_accepted=correction_accepted,\n                    model_name=\"haiku-4-5\",\n                    reasoning=haiku_analysis.get(\"suggestion\", \"\"),\n                    prompt_tokens=prompt_tokens,\n                    completion_tokens=completion_tokens,\n                    latency_ms=haiku_latency_ms,\n                    session_id=event.get(\"session_id\", \"\"),\n                    prompt_preview=prompt[:100],\n                )\n                print(\n                    f\"DEBUG: Logged correction to observability DB (accepted={correction_accepted})\",\n                    file=sys.stderr,\n                )\n            except Exception as e:\n                print(f\"DEBUG: Failed to log correction: {e}\", file=sys.stderr)\n\n        # Create augmented prompt with the best command (potentially corrected by Haiku)\n        if best_command != match.command:\n            # Use Haiku's suggested command\n            action = COMMAND_ACTIONS.get(best_command, \"complete this request\")\n            if best_command in SKILL_MAPPING:\n                skill_name = SKILL_MAPPING[best_command]\n                augmented_prompt = f\"{prompt}. You can use your {skill_name} skill to help with this task.\"\n            else:\n                augmented_prompt = (\n                    f\"{prompt}. Please use the {best_command} command to {action}.\"\n                )\n        else:\n            # Use original detection\n            augmented_prompt = create_skill_augmented_prompt(match, prompt)\n\n        # HYBRID MODE: Show detection + auto-execute with better command\n        # Prepend the interactive message to the prompt so Claude relays it to user\n        print(\n            f\"DEBUG: Using hybrid mode - show analysis and auto-execute {best_command}\",\n            file=sys.stderr,\n        )\n\n        response = {\n            \"continue\": True,\n            \"modifiedPrompt\": f\"[Contextune detected your intent and is using {best_command}]\\n\\n{augmented_prompt}\",\n            \"hookSpecificOutput\": {\n                \"hookEventName\": \"UserPromptSubmit\",\n                \"additionalContext\": f\"\\n\\n{interactive_msg}\\n\\n[Contextune auto-executing: `{best_command}`]\",\n            },\n        }\n\n        print(f\"DEBUG: Response: {json.dumps(response)}\", file=sys.stderr)\n        print(json.dumps(response))\n\n    except Exception as e:\n        # Log error but don't block Claude\n        import traceback\n\n        print(f\"Contextune error: {e}\", file=sys.stderr)\n        print(f\"DEBUG: Traceback: {traceback.format_exc()}\", file=sys.stderr)\n        response = {\"continue\": True, \"suppressOutput\": True}\n        print(json.dumps(response))\n\n\nif __name__ == \"__main__\":\n    main()\n",
+      "structuredPatch": [
+        {
+          "oldStart": 884,
+          "oldLines": 20,
+          "newStart": 884,
+          "newLines": 17,
+          "lines": [
+            "             # Use original detection",
+            "             augmented_prompt = create_skill_augmented_prompt(match, prompt)",
+            " ",
+            "-        # HYBRID MODE: Show detection + auto-execute with better command",
+            "-        # Prepend the interactive message to the prompt so Claude relays it to user",
+            "+        # SUGGEST-ONLY MODE: Show detection but let user decide",
+            "+        # Don't auto-execute - just provide helpful suggestion",
+            "         print(",
+            "-            f\"DEBUG: Using hybrid mode - show analysis and auto-execute {best_command}\",",
+            "+            f\"DEBUG: Using suggest-only mode - showing suggestion for {best_command}\",",
+            "             file=sys.stderr,",
+            "         )",
+            " ",
+            "         response = {",
+            "             \"continue\": True,",
+            "-            \"modifiedPrompt\": f\"[Contextune detected your intent and is using {best_command}]\\n\\n{augmented_prompt}\",",
+            "-            \"hookSpecificOutput\": {",
+            "-                \"hookEventName\": \"UserPromptSubmit\",",
+            "-                \"additionalContext\": f\"\\n\\n{interactive_msg}\\n\\n[Contextune auto-executing: `{best_command}`]\",",
+            "-            },",
+            "+            \"additionalContext\": interactive_msg,",
+            "+            \"suppressOutput\": False",
+            "         }",
+            " ",
+            "         print(f\"DEBUG: Response: {json.dumps(response)}\", file=sys.stderr)"
+          ]
+        }
+      ],
+      "userModified": false,
+      "replaceAll": false
+    },
+    "tool_use_id": "toolu_012mYbzHKVEMwnUSvFcezw52"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Edit",
+    "tool_input": {
+      "file_path": "/Users/shakes/DevProjects/contextune/.claude-plugin/plugin.json",
+      "old_string": "  \"version\": \"0.8.9\",",
+      "new_string": "  \"version\": \"0.9.0\","
+    },
+    "tool_response": {
+      "filePath": "/Users/shakes/DevProjects/contextune/.claude-plugin/plugin.json",
+      "oldString": "  \"version\": \"0.8.9\",",
+      "newString": "  \"version\": \"0.9.0\",",
+      "originalFile": "{\n  \"name\": \"contextune\",\n  \"version\": \"0.8.9\",\n  \"description\": \"Precision-tuned context engineering for Claude Code. Optimize context flow with modular plans (95% fewer tokens), parallel workflows (81% cost reduction), and zero-transformation architecture. Quick research (/ctx:research: 3 parallel agents, 1-2 min). Contextune your workflows for peak performance!\",\n  \"author\": {\n    \"name\": \"Shakes Dlamini\",\n    \"email\": \"shakestzd@gmail.com\",\n    \"url\": \"https://contextune.com\"\n  },\n  \"repository\": \"https://github.com/Shakes-tzd/contextune\",\n  \"homepage\": \"https://github.com/Shakes-tzd/contextune#readme\",\n  \"license\": \"MIT\",\n  \"keywords\": [\n    \"context-engineering\",\n    \"context-optimization\",\n    \"parallel-development\",\n    \"workflow-automation\",\n    \"git-worktrees\",\n    \"cost-optimization\",\n    \"performance-optimization\",\n    \"haiku-agents\",\n    \"modular-plans\",\n    \"zero-transformation\",\n    \"three-tier-architecture\",\n    \"autonomous-execution\",\n    \"natural-language\",\n    \"intent-detection\",\n    \"command-mapping\",\n    \"productivity\",\n    \"ai-assistant\",\n    \"claude-code\"\n  ]\n}",
+      "structuredPatch": [
+        {
+          "oldStart": 1,
+          "oldLines": 6,
+          "newStart": 1,
+          "newLines": 6,
+          "lines": [
+            " {",
+            "   \"name\": \"contextune\",",
+            "-  \"version\": \"0.8.9\",",
+            "+  \"version\": \"0.9.0\",",
+            "   \"description\": \"Precision-tuned context engineering for Claude Code. Optimize context flow with modular plans (95% fewer tokens), parallel workflows (81% cost reduction), and zero-transformation architecture. Quick research (/ctx:research: 3 parallel agents, 1-2 min). Contextune your workflows for peak performance!\",",
+            "   \"author\": {",
+            "     \"name\": \"Shakes Dlamini\","
+          ]
+        }
+      ],
+      "userModified": false,
+      "replaceAll": false
+    },
+    "tool_use_id": "toolu_01Vh2aGLLa8ebMAreHqyer11"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "TodoWrite",
+    "tool_input": {
+      "todos": [
+        {
+          "content": "Read current hook behavior to understand auto-execution logic",
+          "status": "completed",
+          "activeForm": "Reading current hook behavior"
+        },
+        {
+          "content": "Change hook from auto-execute to suggest-only mode",
+          "status": "completed",
+          "activeForm": "Changing hook to suggest-only mode"
+        },
+        {
+          "content": "Test the updated hook behavior",
+          "status": "in_progress",
+          "activeForm": "Testing updated hook"
+        },
+        {
+          "content": "Update version to 0.9.0 per versioning rules",
+          "status": "completed",
+          "activeForm": "Updating version numbers"
+        }
+      ]
+    },
+    "tool_response": {
+      "oldTodos": [
+        {
+          "content": "Read current hook behavior to understand auto-execution logic",
+          "status": "completed",
+          "activeForm": "Reading current hook behavior"
+        },
+        {
+          "content": "Change hook from auto-execute to suggest-only mode",
+          "status": "in_progress",
+          "activeForm": "Changing hook to suggest-only mode"
+        },
+        {
+          "content": "Test the updated hook behavior",
+          "status": "pending",
+          "activeForm": "Testing updated hook"
+        },
+        {
+          "content": "Update version to 0.8.10 per versioning rules",
+          "status": "pending",
+          "activeForm": "Updating version numbers"
+        }
+      ],
+      "newTodos": [
+        {
+          "content": "Read current hook behavior to understand auto-execution logic",
+          "status": "completed",
+          "activeForm": "Reading current hook behavior"
+        },
+        {
+          "content": "Change hook from auto-execute to suggest-only mode",
+          "status": "completed",
+          "activeForm": "Changing hook to suggest-only mode"
+        },
+        {
+          "content": "Test the updated hook behavior",
+          "status": "in_progress",
+          "activeForm": "Testing updated hook"
+        },
+        {
+          "content": "Update version to 0.9.0 per versioning rules",
+          "status": "completed",
+          "activeForm": "Updating version numbers"
+        }
+      ]
+    },
+    "tool_use_id": "toolu_01Gu7di1P5TACgii2kKuZjyt"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "echo '{\"prompt\":\"can you check the plugin version for me\"}' | uv run /Users/shakes/DevProjects/contextune/hooks/user_prompt_submit.py 2>&1",
+      "timeout": 10000,
+      "description": "Test hook with test prompt"
+    },
+    "tool_response": {
+      "stdout": "DEBUG: Contextune hook triggered with prompt: 'can you check the plugin version for me'\nDEBUG: Processing prompt (should_process=True)\n\u2705 Loaded 21 items from JSON\n2025-11-22 15:49:04 - model2vec.hf_utils - INFO - hf_utils.py:153 - load_pretrained() - No cached model found for minishlab/potion-base-2M, loading from local or hub.\n2025-11-22 15:49:04 - model2vec.hf_utils - INFO - hf_utils.py:174 - load_pretrained() - Folder does not exist locally, attempting to use huggingface hub.\nDEBUG: Detection result: None\nDEBUG: No match or low confidence, passing through\nDEBUG: Cleared detection from observability DB\n{\"continue\": true, \"suppressOutput\": true}",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false
+    },
+    "tool_use_id": "toolu_017QGxnnF1jwdayqLfzdGVBy"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "echo '{\"prompt\":\"help me research the best state management libraries\"}' | uv run /Users/shakes/DevProjects/contextune/hooks/user_prompt_submit.py 2>&1",
+      "timeout": 10000,
+      "description": "Test hook with research prompt"
+    },
+    "tool_response": {
+      "stdout": "",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false,
+      "backgroundTaskId": "3cbcd1"
+    },
+    "tool_use_id": "toolu_01GgdfFJyFtTdWRbTepas8hM"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "BashOutput",
+    "tool_input": {
+      "bash_id": "3cbcd1"
+    },
+    "tool_response": {
+      "shellId": "3cbcd1",
+      "command": "echo '{\"prompt\":\"help me research the best state management libraries\"}' | uv run /Users/shakes/DevProjects/contextune/hooks/user_prompt_submit.py 2>&1",
+      "status": "completed",
+      "exitCode": 0,
+      "stdout": "DEBUG: Contextune hook triggered with prompt: 'help me research the best state management libraries'\nDEBUG: Processing prompt (should_process=True)\n\u2705 Loaded 21 items from JSON\nDEBUG: Detection result: IntentMatch(command='ctx:researcher', confidence=1.0, method='fuzzy', latency_ms=0.3295420901849866, matched_keywords=['research'])\nDEBUG: Wrote detection to observability DB: ctx:researcher (100% fuzzy)\nDEBUG: Command detected (detection #339)\nDEBUG: Triggering Haiku analysis (confidence=1.00, method=fuzzy)\nDEBUG: Running Haiku analysis...\nDEBUG: Haiku analysis: {\"is_best_match\": true, \"alternatives\": [\"/ctx:research\"], \"suggestion\": \"\\u2705 /ctx:research is perfect for this - it will spawn 3 parallel agents to investigate state management libraries, compare options, and provide recommendations in ~2 minutes.\"}\nDEBUG: Augmenting prompt for Claude\nDEBUG: Logged correction to observability DB (accepted=False)\nDEBUG: Using suggest-only mode - showing suggestion for ctx:researcher\nDEBUG: Response: {\"continue\": true, \"additionalContext\": \"\\ud83c\\udfaf Detected: `ctx:researcher` (100% via fuzzy)\\n\\u26a1 Detection speed: 0.33ms\\n\\n\\ud83d\\udcac Suggestion: \\u2705 /ctx:research is perfect for this - it will spawn 3 parallel agents to investigate state management libraries, compare options, and provide recommendations in ~2 minutes.\", \"suppressOutput\": false}\n{\"continue\": true, \"additionalContext\": \"\\ud83c\\udfaf Detected: `ctx:researcher` (100% via fuzzy)\\n\\u26a1 Detection speed: 0.33ms\\n\\n\\ud83d\\udcac Suggestion: \\u2705 /ctx:research is perfect for this - it will spawn 3 parallel agents to investigate state management libraries, compare options, and provide recommendations in ~2 minutes.\", \"suppressOutput\": false}",
+      "stderr": "",
+      "stdoutLines": 14,
+      "stderrLines": 1,
+      "timestamp": "2025-11-22T20:49:28.323Z"
+    },
+    "tool_use_id": "toolu_01MjhnzqCkjYFkrowYf7tRzD"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "TodoWrite",
+    "tool_input": {
+      "todos": [
+        {
+          "content": "Read current hook behavior to understand auto-execution logic",
+          "status": "completed",
+          "activeForm": "Reading current hook behavior"
+        },
+        {
+          "content": "Change hook from auto-execute to suggest-only mode",
+          "status": "completed",
+          "activeForm": "Changing hook to suggest-only mode"
+        },
+        {
+          "content": "Test the updated hook behavior",
+          "status": "completed",
+          "activeForm": "Testing updated hook"
+        },
+        {
+          "content": "Update version to 0.9.0 per versioning rules",
+          "status": "completed",
+          "activeForm": "Updating version numbers"
+        }
+      ]
+    },
+    "tool_response": {
+      "oldTodos": [
+        {
+          "content": "Read current hook behavior to understand auto-execution logic",
+          "status": "completed",
+          "activeForm": "Reading current hook behavior"
+        },
+        {
+          "content": "Change hook from auto-execute to suggest-only mode",
+          "status": "completed",
+          "activeForm": "Changing hook to suggest-only mode"
+        },
+        {
+          "content": "Test the updated hook behavior",
+          "status": "in_progress",
+          "activeForm": "Testing updated hook"
+        },
+        {
+          "content": "Update version to 0.9.0 per versioning rules",
+          "status": "completed",
+          "activeForm": "Updating version numbers"
+        }
+      ],
+      "newTodos": [
+        {
+          "content": "Read current hook behavior to understand auto-execution logic",
+          "status": "completed",
+          "activeForm": "Reading current hook behavior"
+        },
+        {
+          "content": "Change hook from auto-execute to suggest-only mode",
+          "status": "completed",
+          "activeForm": "Changing hook to suggest-only mode"
+        },
+        {
+          "content": "Test the updated hook behavior",
+          "status": "completed",
+          "activeForm": "Testing updated hook"
+        },
+        {
+          "content": "Update version to 0.9.0 per versioning rules",
+          "status": "completed",
+          "activeForm": "Updating version numbers"
+        }
+      ]
+    },
+    "tool_use_id": "toolu_019t9XQDnN2XPr2kSA1L5wDt"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git -C /Users/shakes/DevProjects/contextune status",
+      "description": "Check git status"
+    },
+    "tool_response": {
+      "stdout": "On branch master\nYour branch is up to date with 'slashsense/master'.\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   .claude-plugin/plugin.json\n\tmodified:   hooks/user_prompt_submit.py\n\tmodified:   pyproject.toml\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\t.plans/contextune-documentation-workflow-review/\n\tlogs/242aa39d-d2c3-4dcc-bfac-4ee1d1ec0a56/\n\tlogs/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f/\n\tlogs/4606c676-6989-4018-a0b7-223ebae4c1f4/\n\tlogs/976b98f4-25c7-4935-9d4d-9af1714d0b6c/\n\tlogs/afa1c0d5-8028-4591-baf8-83c1e45ee276/\n\tlogs/bc0d32e8-a1f5-46fc-b011-dc38857ed615/\n\tlogs/c17fb17e-d32c-4518-a543-b6f873dfb450/\n\tlogs/d5385a36-d28b-4c4d-b5ef-d22de0e0149c/\n\tmarimo_tutorial_sql.py\n\tpackage.json\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false
+    },
+    "tool_use_id": "toolu_0161PCBkAPNq3nSUVtsufDwb"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git -C /Users/shakes/DevProjects/contextune add hooks/user_prompt_submit.py .claude-plugin/plugin.json",
+      "description": "Stage modified files"
+    },
+    "tool_response": {
+      "stdout": "",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false
+    },
+    "tool_use_id": "toolu_016L1swcjrz2mmhjcRXd8Pf5"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git -C /Users/shakes/DevProjects/contextune commit -m \"$(cat <<'EOF'\nfix: change from auto-execute to suggest-only mode (v0.9.0)\n\n**Problem:**\nHook was auto-executing detected commands instead of just suggesting them.\nUsers reported unexpected behavior where commands ran automatically.\n\n**Root Cause:**\nLines 887-900 used \"HYBRID MODE\" with modifiedPrompt, which injected\ncommands into the conversation flow, causing auto-execution.\n\n**Solution:**\nChanged to \"SUGGEST-ONLY MODE\":\n- Removed modifiedPrompt (no command injection)\n- Use additionalContext only (shows suggestion)\n- User decides whether to use the suggested command\n\n**Changes:**\n- hooks/user_prompt_submit.py: Updated response format (lines 887-898)\n- .claude-plugin/plugin.json: Version 0.8.9 \u2192 0.9.0\n\n**Test Results:**\n\u2705 Hook suggests /ctx:research for \"research\" queries\n\u2705 No auto-execution\n\u2705 User retains full control\n\n**Example Output:**\n\ud83c\udfaf Detected: \\`ctx:researcher\\` (100% via fuzzy)\n\u26a1 Detection speed: 0.33ms\n\ud83d\udcac Suggestion: \u2705 /ctx:research is perfect for this...\n\n\ud83e\udd16 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\"",
+      "description": "Commit changes with detailed message"
+    },
+    "tool_response": {
+      "stdout": "[master 065f0a2] fix: change from auto-execute to suggest-only mode (v0.9.0)\n 2 files changed, 6 insertions(+), 9 deletions(-)",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false
+    },
+    "tool_use_id": "toolu_01VTu7fh3nnZ6MHYtN5AQF7H"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git -C /Users/shakes/DevProjects/contextune remote -v",
+      "description": "Check git remotes"
+    },
+    "tool_response": {
+      "stdout": "slashsense\thttps://github.com/Shakes-tzd/contextune.git (fetch)\nslashsense\thttps://github.com/Shakes-tzd/contextune.git (push)",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false
+    },
+    "tool_use_id": "toolu_017Bj5QvKuDHoGgHkZ1H2UJq"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git -C /Users/shakes/DevProjects/contextune push slashsense master",
+      "description": "Push changes to remote"
+    },
+    "tool_response": {
+      "stdout": "To https://github.com/Shakes-tzd/contextune.git\n   86e3c3e..065f0a2  master -> master",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false
+    },
+    "tool_use_id": "toolu_01DB7iu1w2nxK65AQDQS3vxP"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git -C /Users/shakes/DevProjects/contextune log -1 --oneline",
+      "description": "Verify commit was pushed"
+    },
+    "tool_response": {
+      "stdout": "065f0a2 fix: change from auto-execute to suggest-only mode (v0.9.0)",
+      "stderr": "",
+      "interrupted": false,
+      "isImage": false
+    },
+    "tool_use_id": "toolu_018SWaSu5dYGuQtGfrPnoMR1"
+  },
+  {
+    "session_id": "3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/3d6fcd4a-b74a-4d5f-94a2-0c8bcdc5516f.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PostToolUse",
+    "tool_name": "TodoWrite",
+    "tool_input": {
+      "todos": []
+    },
+    "tool_response": {
+      "oldTodos": [],
+      "newTodos": []
+    },
+    "tool_use_id": "toolu_01K4ck7t3fyZPViCHgpUw2uv"
+  }
+]

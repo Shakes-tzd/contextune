@@ -1,0 +1,66 @@
+[
+  {
+    "session_id": "976b98f4-25c7-4935-9d4d-9af1714d0b6c",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/976b98f4-25c7-4935-9d4d-9af1714d0b6c.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Bash",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "976b98f4-25c7-4935-9d4d-9af1714d0b6c",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/976b98f4-25c7-4935-9d4d-9af1714d0b6c.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Bash",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "976b98f4-25c7-4935-9d4d-9af1714d0b6c",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/976b98f4-25c7-4935-9d4d-9af1714d0b6c.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Bash",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "976b98f4-25c7-4935-9d4d-9af1714d0b6c",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/976b98f4-25c7-4935-9d4d-9af1714d0b6c.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Bash",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "976b98f4-25c7-4935-9d4d-9af1714d0b6c",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/976b98f4-25c7-4935-9d4d-9af1714d0b6c.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Update",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "976b98f4-25c7-4935-9d4d-9af1714d0b6c",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/976b98f4-25c7-4935-9d4d-9af1714d0b6c.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Update",
+    "notification_type": "permission_prompt"
+  },
+  {
+    "session_id": "976b98f4-25c7-4935-9d4d-9af1714d0b6c",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/976b98f4-25c7-4935-9d4d-9af1714d0b6c.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "hook_event_name": "Notification",
+    "message": "Claude is waiting for your input",
+    "notification_type": "idle_prompt"
+  },
+  {
+    "session_id": "976b98f4-25c7-4935-9d4d-9af1714d0b6c",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/976b98f4-25c7-4935-9d4d-9af1714d0b6c.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "hook_event_name": "Notification",
+    "message": "Claude needs your permission to use Bash",
+    "notification_type": "permission_prompt"
+  }
+]

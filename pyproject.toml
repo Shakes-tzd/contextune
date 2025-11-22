@@ -40,6 +40,8 @@ dependencies = [
     "duckdb>=1.4.1",
     "sqlglot>=27.28.1",
     "readchar>=4.2.1",
+    "marimo>=0.17.2",
+    "python-lsp-server>=1.13.2",
 ]
 
 # Development dependencies
