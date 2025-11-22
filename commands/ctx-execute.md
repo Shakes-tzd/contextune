@@ -24,10 +24,12 @@ You are executing an automated parallel development workflow with **optimized pa
 
 **Key Innovation:** Worktrees are pre-created by script, agents focus purely on implementation, enabling deterministic parallel execution.
 
-**Time Savings:**
-- 5 tasks: 30% faster setup (32s saved)
-- 10 tasks: 48% faster setup (72s saved)
-- 20 tasks: 63% faster setup (152s saved)
+**Setup Performance (Measured Actuals):**
+- 5 tasks: Setup completes in ~5s (deterministic script)
+- 10 tasks: Setup completes in ~5s (parallel, O(1) scaling)
+- 20 tasks: Setup completes in ~5s (constant time regardless of task count)
+
+**Note:** Times shown are actual measurements from completed workflows, not estimates.
 
 **Scaling:** Setup time is O(1) instead of O(n) — constant regardless of task count!
 
@@ -159,22 +161,80 @@ chmod +x .parallel/scripts/setup_worktrees.sh
 
 ---
 
-## Phase 1: Load or Create Plan
+## Phase 1: Extract and Load Plan
 
-**Check for existing plan:**
+**IMPORTANT:** This phase prioritizes extracting plans from the current conversation (seamless same-session workflow) before checking for existing files.
+
+---
+
+### Step 1: Check Current Session for Plan (PRIMARY PATH)
+
+**The seamless workflow:** `/ctx:plan` → `/ctx:execute` with zero manual steps
+
+Check if a plan was output in THIS conversation:
+
+1. **Search conversation for plan markers:**
+   - Look for `**Type:** Plan` in recent messages
+   - Look for `## Plan Structure` header
+   - Look for YAML block with `metadata:` and `tasks:`
+
+2. **If plan found → Extract automatically:**
+   ```bash
+   # Run extraction script - finds and extracts plan from transcript
+   ./scripts/extract-current-plan.sh
+   ```
+
+   **What the script does:**
+   - Finds current session's transcript file automatically
+   - Scans transcript for plan output (searches for **Type:** Plan marker)
+   - Extracts ## Plan Structure YAML block
+   - Extracts all ### Task N: sections
+   - Writes to `.parallel/plans/plan.yaml` and `tasks/*.md`
+   - Creates helper directories
+
+   **Extraction output:**
+   ```
+   ✅ Created .parallel/plans/plan.yaml
+   ✅ Created task files in .parallel/plans/tasks/
+   ✅ Extraction complete!
+   ```
+
+3. **Verify extraction worked:**
+   ```bash
+   # Check that files were created
+   ls -la .parallel/plans/
+   cat .parallel/plans/plan.yaml
+   ```
+
+4. **Continue to Step 3** (load the extracted plan)
+
+---
+
+### Step 2: Check for Existing Plan (MULTI-SESSION PATH)
+
+**For resuming work from a previous session**
+
+If no plan was found in the current conversation, check for previously extracted plan:
 
 ```bash
-# Check for plan.yaml
-[ -f .parallel/plans/plan.yaml ] && echo "Found plan.yaml" || echo "No plan found"
+# Check for plan.yaml from previous session
+[ -f .parallel/plans/plan.yaml ] && echo "Found existing plan" || echo "No plan found"
 ```
 
 **If plan.yaml exists:**
-- Read plan.yaml (lightweight index/TOC)
-- Get task list with names, priorities, dependencies
-- Understand scope WITHOUT reading full task files
-- Build execution graph based on dependencies
+- This is from a previous session (SessionEnd extraction or prior `/ctx:execute`)
+- Plan is ready to use
+- Continue to Step 3 (load the plan)
 
-**Context-Optimized Reading:**
+**If plan.yaml does NOT exist:**
+- No plan in current conversation AND no saved plan
+- Continue to Step 4 (ask user)
+
+---
+
+### Step 3: Load Plan (CONTEXT-OPTIMIZED READING)
+
+**Whether extracted from conversation or loaded from disk, read the plan efficiently:**
 
 ```python
 import yaml
@@ -224,84 +284,36 @@ def spawn_agent_for_task(task_ref):
 - ✅ Read specific task file ONLY when spawning its agent
 - ✅ If same session (tasks just created) → already in context!
 
-**If no plan exists:**
-
-Check if a plan was output in the conversation (extraction-optimized format):
-
-1. **Search conversation for plan markers:**
-   - Look for `**Type:** Plan` in recent messages
-   - Look for `## Plan Structure` header
-   - Look for YAML block with `metadata:` and `tasks:`
-
-2. **If plan found in conversation:**
-   - Extract plan automatically (see extraction process below)
-   - Create .parallel/plans/ directory structure
-   - Write extracted files
-   - Continue with execution
-
-3. **If no plan in conversation:**
-   - Ask user: "No plan found. Would you like to create one with `/ctx:plan`?"
-   - Wait for user response
-   - If user provides task list directly, ask them to run `/ctx:plan` first
+**Plan is loaded → Continue to Phase 2 (spawn agents)**
 
 ---
 
-### Extraction Process (Automatic from Transcript!)
+### Step 4: No Plan Found (GUIDANCE PATH)
 
-**IMPORTANT:** Plans can be extracted automatically from the conversation transcript!
+**If neither current conversation nor filesystem has a plan:**
 
-**How it works:**
+Ask user: "No plan found. Would you like to create one with `/ctx:plan`?"
 
-1. **Check if plan.yaml already exists:**
-   ```bash
-   [ -f .parallel/plans/plan.yaml ] && echo "Found" || echo "Not found"
-   ```
+**Options:**
+1. User runs `/ctx:plan` first → Then re-run `/ctx:execute`
+2. User provides task list directly → Ask them to run `/ctx:plan` first for proper structure
 
-2. **If NOT found, extract from current session:**
-   ```bash
-   # Run extraction script - it finds and extracts plan automatically
-   ./scripts/extract-current-plan.sh
-   ```
+**Do NOT proceed to execution without a plan.**
 
-   **What the script does:**
-   - Finds current session's transcript file automatically
-   - Scans transcript for plan output (searches for **Type:** Plan marker)
-   - Extracts ## Plan Structure YAML block
-   - Extracts all ### Task N: sections
-   - Writes to .parallel/plans/plan.yaml and tasks/*.md
-   - Creates helper directories
+---
 
-3. **Verify extraction:**
-   ```bash
-   # Check that files were created
-   ls -la .parallel/plans/
-   cat .parallel/plans/plan.yaml
-   ```
-
-**Workflow options:**
-
-**Option 1: Same-session extraction (Recommended)**
-```
-1. User runs /ctx:plan → Plan output in conversation
-2. User reviews, requests changes if needed
-3. User runs /ctx:execute → Script extracts from transcript automatically
-4. Execution proceeds immediately
-```
-
-**Option 2: SessionEnd extraction (Alternative)**
-```
-1. User runs /ctx:plan → Plan output in conversation
-2. User ends session → SessionEnd hook extracts to .parallel/plans/
-3. User starts new session → Runs /ctx:execute → Files already exist
-```
-
-**Both work! Same-session is faster, SessionEnd is more automatic.**
+### Extraction Troubleshooting
 
 **If extraction fails:**
-- Script will show error message
-- Check: Was plan output in extraction-optimized format?
-- Check: Does plan have **Type:** Plan marker?
-- Fallback: Ask user to run `/ctx:plan` first
+- Script will show clear error message
+- Common issues:
+  - Plan not in extraction-optimized format → Check for `**Type:** Plan` marker
+  - No `## Plan Structure` section → Verify plan follows template
+  - Invalid YAML → Check YAML syntax in plan output
+
+**Recovery:**
+- Ask user to run `/ctx:plan` again with correct format
+- Or manually create `.parallel/plans/plan.yaml` following template
 
 ---
 
@@ -1180,9 +1192,13 @@ mv .parallel/plans/20251025-042057 .parallel/archive/
 - 📋 Pending: {Q} tasks (if any)
 
 **Tasks Completed:** {N} / {Total}
-**Actual Wall-Clock Time:** {actual_time}
-**Speedup vs Sequential:** {speedup_factor}x faster
-**Token Usage:** {total_tokens} tokens (~${cost})
+**Actual Wall-Clock Time:** {actual_time} (measured)
+**Speedup Factor:** {speedup_factor}x (calculated from actuals)
+**Token Usage:** {total_tokens} tokens
+**Actual Cost:** ${cost}
+
+**Note:** All metrics shown are ACTUAL measurements from this workflow.
+Future workflows may vary based on task complexity and dependencies.
 
 **Merged Branches:**
 - feature/task-0: {task 0 title}

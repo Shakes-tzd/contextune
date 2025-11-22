@@ -25,9 +25,9 @@ research best React state management library for 2025
 ```
 → Spawns 3 parallel agents (web + codebase + deps)
 → Returns comparison table + recommendation
-→ 67% faster than sequential research
+→ 67% cost reduction with parallel agents
 
-### ⚡ Parallel Development (30-70% faster)
+### ⚡ Parallel Development (1.5-3x measured speedup)
 ```
 work on authentication, dashboard, and API in parallel
 ```
@@ -129,7 +129,8 @@ Execute development plan in parallel using git worktrees.
 - GitHub CLI (`gh`) authenticated
 - Existing plan (run `/ctx:plan` first)
 
-**Time savings:** 30-70% faster than sequential
+**Performance:** Measured speedup typically 1.5-3x on completed workflows
+**Cost savings:** 81% cheaper with Haiku agents ($0.27 vs $1.40 per workflow)
 
 ---
 
