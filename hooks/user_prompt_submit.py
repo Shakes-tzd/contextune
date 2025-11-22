@@ -884,20 +884,17 @@ Available skills:
             # Use original detection
             augmented_prompt = create_skill_augmented_prompt(match, prompt)
 
-        # HYBRID MODE: Show detection + auto-execute with better command
-        # Prepend the interactive message to the prompt so Claude relays it to user
+        # SUGGEST-ONLY MODE: Show detection but let user decide
+        # Don't auto-execute - just provide helpful suggestion
         print(
-            f"DEBUG: Using hybrid mode - show analysis and auto-execute {best_command}",
+            f"DEBUG: Using suggest-only mode - showing suggestion for {best_command}",
             file=sys.stderr,
         )
 
         response = {
             "continue": True,
-            "modifiedPrompt": f"[Contextune detected your intent and is using {best_command}]\n\n{augmented_prompt}",
-            "hookSpecificOutput": {
-                "hookEventName": "UserPromptSubmit",
-                "additionalContext": f"\n\n{interactive_msg}\n\n[Contextune auto-executing: `{best_command}`]",
-            },
+            "additionalContext": interactive_msg,
+            "suppressOutput": False
         }
 
         print(f"DEBUG: Response: {json.dumps(response)}", file=sys.stderr)
