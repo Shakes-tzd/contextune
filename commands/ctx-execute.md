@@ -163,157 +163,120 @@ chmod +x .parallel/scripts/setup_worktrees.sh
 
 ## Phase 1: Extract and Load Plan
 
-**IMPORTANT:** This phase prioritizes extracting plans from the current conversation (seamless same-session workflow) before checking for existing files.
+**IMPORTANT:** This phase runs the extraction script FIRST to check for plans in the current conversation.
 
 ---
 
-### Step 1: Check Current Session for Plan (PRIMARY PATH)
+### Step 1: Run Extraction Script (PRIMARY PATH)
 
-**The seamless workflow:** `/ctx:plan` → `/ctx:execute` with zero manual steps
+**Always run this first - it's safe and fast (~500ms):**
 
-Check if a plan was output in THIS conversation:
+```bash
+./scripts/extract-current-plan.sh
+```
 
-1. **Search conversation for plan markers:**
-   - Look for `**Type:** Plan` in recent messages
-   - Look for `## Plan Structure` header
-   - Look for YAML block with `metadata:` and `tasks:`
+**The script will:**
+- Search current session for plan markers (`**Type:** Plan`)
+- Extract plan and tasks if found
+- Create `.parallel/plans/plan.yaml` and `tasks/*.md`
+- Output "✅ Extraction complete!" on success
+- Output "❌ Error: No plan found" if no plan in conversation
 
-2. **If plan found → Extract automatically:**
-   ```bash
-   # Run extraction script - finds and extracts plan from transcript
-   ./scripts/extract-current-plan.sh
-   ```
+**Possible outcomes:**
 
-   **What the script does:**
-   - Finds current session's transcript file automatically
-   - Scans transcript for plan output (searches for **Type:** Plan marker)
-   - Extracts ## Plan Structure YAML block
-   - Extracts all ### Task N: sections
-   - Writes to `.parallel/plans/plan.yaml` and `tasks/*.md`
-   - Creates helper directories
+**A) Extraction succeeds:**
+```
+✅ Created .parallel/plans/plan.yaml
+✅ Created task files in .parallel/plans/tasks/
+✅ Extraction complete!
+```
+→ Continue to Step 3 (load the plan)
 
-   **Extraction output:**
-   ```
-   ✅ Created .parallel/plans/plan.yaml
-   ✅ Created task files in .parallel/plans/tasks/
-   ✅ Extraction complete!
-   ```
+**B) Plan already exists:**
+```
+Error: .parallel/plans/plan.yaml already exists
+```
+→ Continue to Step 2 (check existing)
 
-3. **Verify extraction worked:**
-   ```bash
-   # Check that files were created
-   ls -la .parallel/plans/
-   cat .parallel/plans/plan.yaml
-   ```
-
-4. **Continue to Step 3** (load the extracted plan)
+**C) No plan in conversation:**
+```
+❌ Error: No plan found in transcript
+```
+→ Continue to Step 2 (check existing)
 
 ---
 
 ### Step 2: Check for Existing Plan (MULTI-SESSION PATH)
 
-**For resuming work from a previous session**
+**Only reached if Step 1 didn't find/extract a plan**
 
-If no plan was found in the current conversation, check for previously extracted plan:
+Check if a plan.yaml already exists from a previous session:
 
 ```bash
-# Check for plan.yaml from previous session
-[ -f .parallel/plans/plan.yaml ] && echo "Found existing plan" || echo "No plan found"
+ls .parallel/plans/plan.yaml 2>/dev/null && echo "✅ Found existing plan" || echo "❌ No plan exists"
 ```
 
-**If plan.yaml exists:**
-- This is from a previous session (SessionEnd extraction or prior `/ctx:execute`)
-- Plan is ready to use
-- Continue to Step 3 (load the plan)
+**Possible outcomes:**
 
-**If plan.yaml does NOT exist:**
-- No plan in current conversation AND no saved plan
-- Continue to Step 4 (ask user)
+**A) Plan exists:**
+```
+✅ Found existing plan
+```
+→ This is from a previous session
+→ Continue to Step 3 (load it)
+
+**B) No plan exists:**
+```
+❌ No plan exists
+```
+→ No plan in conversation AND no saved plan
+→ Continue to Step 4 (ask user)
 
 ---
 
-### Step 3: Load Plan (CONTEXT-OPTIMIZED READING)
+### Step 3: Load and Validate Plan
 
-**Whether extracted from conversation or loaded from disk, read the plan efficiently:**
+**Now read the plan.yaml file (either just extracted or from previous session):**
 
-```python
-import yaml
-
-# Step 1: Read plan.yaml (index/TOC)
-with open('.parallel/plans/plan.yaml') as f:
-    plan = yaml.safe_load(f)
-
-# Step 2: Check context optimization
-# If tasks were created in SAME session → already in context!
-# If NEW session → read specific task files when spawning agents
-
-# Get task index (with names!)
-tasks_index = []
-for task_ref in plan['tasks']:
-    tasks_index.append({
-        'id': task_ref['id'],
-        'name': task_ref['name'],  # Name in index!
-        'file': task_ref['file'],
-        'priority': task_ref['priority'],
-        'dependencies': task_ref.get('dependencies', [])
-    })
-
-# Sort by priority: blocker > high > medium > low
-priority_order = {'blocker': 0, 'high': 1, 'medium': 2, 'low': 3}
-tasks_index.sort(key=lambda t: priority_order.get(t['priority'], 99))
-
-# Step 3: When spawning agent for specific task
-# ONLY THEN read the task file (if not in context)
-def spawn_agent_for_task(task_ref):
-    # Check if task file is in context
-    # (created in this session vs read from disk)
-
-    # If NOT in context → read it
-    task_file = f".parallel/plans/{task_ref['file']}"
-    with open(task_file) as f:
-        task_content = f.read()
-
-    # Spawn agent with task content
-    # ...
+```bash
+# Read the plan
+cat .parallel/plans/plan.yaml
 ```
 
-**Key Optimization:**
-- ✅ Read plan.yaml index (lightweight, ~1K tokens)
-- ✅ See all task names, priorities, dependencies
-- ✅ DON'T read all task files upfront!
-- ✅ Read specific task file ONLY when spawning its agent
-- ✅ If same session (tasks just created) → already in context!
+**Validate the plan has required structure:**
+- ✅ `metadata:` section with name, status
+- ✅ `tasks:` array with at least one task
+- ✅ Each task has: id, name, file, priority, dependencies
 
-**Plan is loaded → Continue to Phase 2 (spawn agents)**
+**For each task in the plan:**
+- Read task metadata from plan.yaml (id, name, priority, dependencies)
+- Sort tasks by priority: blocker → high → medium → low
+- Build execution graph based on dependencies
 
----
+**Context Optimization:**
+- ✅ If tasks were just extracted → Already in context (0 tokens!)
+- ✅ If new session → Will read task files when spawning agents
+- ✅ Only read what's needed, when it's needed
 
-### Step 4: No Plan Found (GUIDANCE PATH)
-
-**If neither current conversation nor filesystem has a plan:**
-
-Ask user: "No plan found. Would you like to create one with `/ctx:plan`?"
-
-**Options:**
-1. User runs `/ctx:plan` first → Then re-run `/ctx:execute`
-2. User provides task list directly → Ask them to run `/ctx:plan` first for proper structure
-
-**Do NOT proceed to execution without a plan.**
+**Plan loaded and validated → Continue to Phase 2 (setup worktrees)**
 
 ---
 
-### Extraction Troubleshooting
+### Step 4: No Plan Found (ASK USER)
 
-**If extraction fails:**
-- Script will show clear error message
-- Common issues:
-  - Plan not in extraction-optimized format → Check for `**Type:** Plan` marker
-  - No `## Plan Structure` section → Verify plan follows template
-  - Invalid YAML → Check YAML syntax in plan output
+**Only reached if both Step 1 and Step 2 failed**
 
-**Recovery:**
-- Ask user to run `/ctx:plan` again with correct format
-- Or manually create `.parallel/plans/plan.yaml` following template
+Tell the user:
+
+```
+❌ No plan found in conversation or filesystem.
+
+To create a plan, run: /ctx:plan
+
+Then re-run /ctx:execute to start parallel execution.
+```
+
+**Do NOT proceed to Phase 2 without a valid plan.**
 
 ---
 
