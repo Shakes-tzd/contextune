@@ -12,7 +12,7 @@ executable: true
 
 # Git Commit - Deterministic Commit and Push Workflow
 
-You are executing a deterministic git commit and push workflow using the `commit_and_push.sh` script.
+You are executing a deterministic git commit and push workflow.
 
 **Cost:** ~$0.002 (545 tokens) vs ~$0.037-0.086 (8K-25K tokens) for multi-tool approach
 **Savings:** 93-97% token reduction
@@ -20,8 +20,6 @@ You are executing a deterministic git commit and push workflow using the `commit
 ---
 
 ## Workflow
-
-**IMPORTANT:** Use the `./scripts/commit_and_push.sh` script. DO NOT use manual git commands.
 
 ### Step 1: Determine What to Commit
 
@@ -37,12 +35,18 @@ git status --short
 - `D` = Deleted files
 - `??` = Untracked files
 
-### Step 2: Stage and Commit Using Script
+### Step 2: Stage and Commit
 
-**Use the deterministic script:**
+**Option A: If `./scripts/commit_and_push.sh` exists (Contextune project):**
 
 ```bash
 ./scripts/commit_and_push.sh "<files>" "<message>" "<branch>" "<remote>"
+```
+
+**Option B: Direct git commands (any project):**
+
+```bash
+git add <files> && git commit -m "<message>" && git push
 ```
 
 **Parameters:**
@@ -180,7 +184,18 @@ The `commit_and_push.sh` script handles:
 
 ---
 
-## Why Use the Script?
+## Decision Logic
+
+**Check if script exists first:**
+```bash
+[ -f ./scripts/commit_and_push.sh ] && echo "Use script" || echo "Use git commands"
+```
+
+**Or simply try the script and fall back:**
+1. Try `./scripts/commit_and_push.sh ...`
+2. If exit code 127 (not found), use `git add && git commit && git push`
+
+## Why Minimize Tool Calls?
 
 ### Token Efficiency
 
@@ -198,9 +213,9 @@ Tool 8: git status
 Cost: ~8K-25K tokens ($0.037-0.086)
 ```
 
-**Script approach (correct):**
+**Efficient approach (correct):**
 ```
-Tool 1: ./scripts/commit_and_push.sh "." "message"
+Tool 1: git add . && git commit -m "message" && git push
 
 Cost: ~545 tokens ($0.002)
 Savings: 93-97% reduction
@@ -278,9 +293,10 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 
 ## Notes
 
-- Always use the script for commit + push workflows
-- Single git commands (like `git status`) are OK without script
-- Script auto-detects remote (no need to specify if only one remote)
+- **In Contextune project:** Use `./scripts/commit_and_push.sh` (script exists)
+- **In other projects:** Use chained git commands: `git add . && git commit -m "..." && git push`
+- If script returns exit code 127 (not found), fall back to direct git commands
+- Single git commands (like `git status`) are always OK
 - Follow conventional commit format for consistency
 - Include co-authorship footer for Claude-assisted commits
 
