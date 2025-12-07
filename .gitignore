@@ -105,4 +105,4 @@ data/discovered_commands.json
 # API keys (never commit!)
 *_api_key*
 *_secret*
-credentials.json
+credentials.jsonlogs/

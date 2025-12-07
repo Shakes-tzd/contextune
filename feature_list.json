@@ -1,0 +1,142 @@
+[
+  {
+    "category": "functional",
+    "description": "Haiku 4.5 Integration - Upgrade ClaudeCodeHaikuEngineer to use explicit Haiku 4.5 model (claude-haiku-4-5-20250929) for 87% cost reduction",
+    "steps": [
+      "Update model string in hooks/user_prompt_submit.py",
+      "Test performance benchmarks (target <200ms P95)",
+      "Verify cost reduction (target 87%)",
+      "Test accuracy (maintain ≥85%)"
+    ],
+    "passes": false
+  },
+  {
+    "category": "ui",
+    "description": "AskUserQuestion Integration - Use native UI for interactive command verification with 3-tier confidence thresholds",
+    "steps": [
+      "Add configuration system with thresholds in config.json",
+      "Implement should_ask_user() logic",
+      "Create create_ask_user_question_instruction()",
+      "Update main() with 3-way decision (auto-execute/ask/suggest)",
+      "Add observability tracking"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "PreToolUse Input Modifications - Auto-add timeouts, limits, and route Task tool to Haiku",
+    "steps": [
+      "Add optimize_tool_call() function to hooks/tool_router.py",
+      "Implement Bash timeout auto-addition",
+      "Implement Read limit auto-addition for large files",
+      "Add Task routing to Explore/Haiku",
+      "Add sandbox mode detection"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Explore Subagent Integration - Detect search intents and suggest Explore subagent (87% cheaper)",
+    "steps": [
+      "Create explore-router agent in agents/",
+      "Add suggest_explore_subagent() function",
+      "Detect search keywords",
+      "Add tip in additionalContext"
+    ],
+    "passes": false
+  },
+  {
+    "category": "ui",
+    "description": "SlashCommand Tool Auto-Execute - Enable auto-execution of high-confidence detections for safe commands",
+    "steps": [
+      "Add should_auto_execute() function",
+      "Define safe commands list",
+      "Create create_auto_execute_response()",
+      "Add SlashCommand tool request to additionalContext"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "SessionEnd Hook Analytics - Generate session summary with detections, commands used, cost saved, and tips",
+    "steps": [
+      "Add SessionEnd hook registration to hooks.json",
+      "Create session_end.js script",
+      "Query observability DB for stats",
+      "Generate summary and actionable tips"
+    ],
+    "passes": false
+  },
+  {
+    "category": "infrastructure",
+    "description": "MCP Server for Analytics - Create MCP server exposing Contextune analytics as tools",
+    "steps": [
+      "Create MCP server scaffold in mcp-server/",
+      "Implement get_contextune_stats tool",
+      "Use structuredContent format",
+      "Add to plugin.json"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "/doctor Integration - Provide diagnostic context for self-serve debugging",
+    "steps": [
+      "Add provide_doctor_context() function",
+      "Check matchers availability",
+      "Check data files existence",
+      "Return structured diagnostic info"
+    ],
+    "passes": false
+  },
+  {
+    "category": "infrastructure",
+    "description": "Plugin Validation CI/CD - Automated plugin validation using GitHub Actions",
+    "steps": [
+      "Create GitHub Actions workflow in .github/workflows/",
+      "Add plugin validation step",
+      "Test hook execution",
+      "Validate JSON files"
+    ],
+    "passes": false
+  },
+  {
+    "category": "security",
+    "description": "Sandbox Mode Support - Detect sandbox mode and warn about incompatible commands",
+    "steps": [
+      "Add is_sandbox_mode() function to hooks/tool_router.py",
+      "Detect problematic commands",
+      "Add warnings in systemMessage"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Dynamic Model Selection - Agents dynamically choose Haiku vs Sonnet based on task complexity",
+    "steps": [
+      "Create complexity scoring function in lib/complexity_scorer.py",
+      "Add model selection logic to agents",
+      "Track model usage in observability",
+      "Measure cost savings"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Plan Subagent Integration - Create skill for delegating to Plan subagent",
+    "steps": [
+      "Create skill documentation in skills/plan-delegation/SKILL.md",
+      "Add trigger phrases",
+      "Document comparison to /ctx:plan"
+    ],
+    "passes": false
+  },
+  {
+    "category": "functional",
+    "description": "Skills Support Integration - Already implemented, plugin uses Claude Code Skills",
+    "steps": [
+      "Verify skills in skills/*/SKILL.md are working"
+    ],
+    "passes": true
+  }
+]

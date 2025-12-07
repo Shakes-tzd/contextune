@@ -38,7 +38,15 @@ sys.path.insert(0, str(PLUGIN_ROOT / "lib"))
 from keyword_matcher_v2 import IntentMatch, KeywordMatcherV2 as KeywordMatcher
 from model2vec_matcher import Model2VecMatcher
 from observability_db import ObservabilityDB
-from semantic_router_matcher import SemanticRouterMatcher
+
+# Gracefully handle semantic_router import errors (logging issues, etc.)
+try:
+    from semantic_router_matcher import SemanticRouterMatcher
+    SEMANTIC_ROUTER_AVAILABLE = True
+except Exception as e:
+    print(f"Warning: semantic_router unavailable: {e}", file=sys.stderr)
+    SemanticRouterMatcher = None
+    SEMANTIC_ROUTER_AVAILABLE = False
 
 
 class ContextuneDetector:
@@ -68,7 +76,7 @@ class ContextuneDetector:
         return self._model2vec
 
     def _get_semantic(self):
-        if self._semantic is None:
+        if self._semantic is None and SEMANTIC_ROUTER_AVAILABLE:
             m = SemanticRouterMatcher()
             self._semantic = m if m.is_available() else None
         return self._semantic
