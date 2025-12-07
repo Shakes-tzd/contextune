@@ -37,17 +37,13 @@ git status --short
 
 ### Step 2: Stage and Commit
 
-**Option A: If `./scripts/commit_and_push.sh` exists (Contextune project):**
+**Use the plugin's commit script (works from any project):**
 
 ```bash
-./scripts/commit_and_push.sh "<files>" "<message>" "<branch>" "<remote>"
+"${CLAUDE_PLUGIN_ROOT}/scripts/commit_and_push.sh" "<files>" "<message>" "<branch>" "<remote>"
 ```
 
-**Option B: Direct git commands (any project):**
-
-```bash
-git add <files> && git commit -m "<message>" && git push
-```
+> **Note:** `${CLAUDE_PLUGIN_ROOT}` is automatically set by Claude Code to the plugin's installation directory (e.g., `~/.claude/plugins/contextune@Contextune/`). This ensures the script is always accessible regardless of which project you're working in.
 
 **Parameters:**
 - `<files>` - Files to commit (use `.` for all changes, or specific files)
@@ -57,7 +53,7 @@ git add <files> && git commit -m "<message>" && git push
 
 **Example 1: Commit all changes**
 ```bash
-./scripts/commit_and_push.sh "." "feat: add new feature
+"${CLAUDE_PLUGIN_ROOT}/scripts/commit_and_push.sh" "." "feat: add new feature
 
 Detailed description of changes.
 
@@ -68,12 +64,12 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 
 **Example 2: Commit specific files**
 ```bash
-./scripts/commit_and_push.sh "src/feature.ts tests/feature.test.ts" "feat: implement feature X"
+"${CLAUDE_PLUGIN_ROOT}/scripts/commit_and_push.sh" "src/feature.ts tests/feature.test.ts" "feat: implement feature X"
 ```
 
 **Example 3: Specify branch and remote**
 ```bash
-./scripts/commit_and_push.sh "." "fix: resolve bug" "develop" "origin"
+"${CLAUDE_PLUGIN_ROOT}/scripts/commit_and_push.sh" "." "fix: resolve bug" "develop" "origin"
 ```
 
 ---
@@ -184,16 +180,22 @@ The `commit_and_push.sh` script handles:
 
 ---
 
-## Decision Logic
+## Script Location
 
-**Check if script exists first:**
+The commit script is part of the Contextune plugin and is automatically accessible via:
+
 ```bash
-[ -f ./scripts/commit_and_push.sh ] && echo "Use script" || echo "Use git commands"
+"${CLAUDE_PLUGIN_ROOT}/scripts/commit_and_push.sh"
 ```
 
-**Or simply try the script and fall back:**
-1. Try `./scripts/commit_and_push.sh ...`
-2. If exit code 127 (not found), use `git add && git commit && git push`
+**Where `CLAUDE_PLUGIN_ROOT` resolves to:**
+- `~/.claude/plugins/contextune@Contextune/` (typical installation)
+- Set automatically by Claude Code when executing plugin commands
+
+**Fallback (if env var not set):**
+```bash
+git add <files> && git commit -m "<message>" && git push
+```
 
 ## Why Minimize Tool Calls?
 
@@ -265,16 +267,16 @@ This command is available via:
 
 ```bash
 # Commit specific directories
-./scripts/commit_and_push.sh "src/ tests/" "feat: implement feature"
+"${CLAUDE_PLUGIN_ROOT}/scripts/commit_and_push.sh" "src/ tests/" "feat: implement feature"
 
 # Commit specific file types
-./scripts/commit_and_push.sh "*.ts *.tsx" "refactor: update types"
+"${CLAUDE_PLUGIN_ROOT}/scripts/commit_and_push.sh" "*.ts *.tsx" "refactor: update types"
 ```
 
 ### Multiline Commit Messages
 
 ```bash
-./scripts/commit_and_push.sh "." "feat: add authentication
+"${CLAUDE_PLUGIN_ROOT}/scripts/commit_and_push.sh" "." "feat: add authentication
 
 Implemented features:
 - JWT token generation
@@ -293,10 +295,10 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 
 ## Notes
 
-- **In Contextune project:** Use `./scripts/commit_and_push.sh` (script exists)
-- **In other projects:** Use chained git commands: `git add . && git commit -m "..." && git push`
-- If script returns exit code 127 (not found), fall back to direct git commands
-- Single git commands (like `git status`) are always OK
+- **Always use `${CLAUDE_PLUGIN_ROOT}`** - This resolves to the plugin's installation directory
+- Script works from ANY project directory (not just Contextune)
+- Script auto-updates when plugin is updated
+- Single git commands (like `git status`) are always OK without script
 - Follow conventional commit format for consistency
 - Include co-authorship footer for Claude-assisted commits
 
@@ -305,7 +307,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
 ## See Also
 
 - `UNIFIED_DRY_STRATEGY.md` - DRY strategy for git operations
-- `scripts/commit_and_push.sh` - Script source code
-- `scripts/smart_execute.sh` - Error recovery wrapper
-- `scripts/create_pr.sh` - Create pull request script
-- `scripts/merge_and_cleanup.sh` - Merge and cleanup script
+- `${CLAUDE_PLUGIN_ROOT}/scripts/commit_and_push.sh` - Script source code
+- `${CLAUDE_PLUGIN_ROOT}/scripts/smart_execute.sh` - Error recovery wrapper
+- `${CLAUDE_PLUGIN_ROOT}/scripts/create_pr.sh` - Create pull request script
+- `${CLAUDE_PLUGIN_ROOT}/scripts/merge_and_cleanup.sh` - Merge and cleanup script
