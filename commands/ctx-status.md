@@ -175,7 +175,7 @@ Task 2: Fix ctx-cleanup.md
 ✅ Tasks ready for review: task-0
 
 Suggested action:
-./scripts/create_prs.sh
+"${CLAUDE_PLUGIN_ROOT}/scripts/create_prs.sh"
 ```
 
 **If any tasks are blocked:**
@@ -191,7 +191,7 @@ cd worktrees/task-N && git log -1
 🎉 All tasks completed!
 
 Next steps:
-1. Create PRs: ./scripts/create_prs.sh
+1. Create PRs: "${CLAUDE_PLUGIN_ROOT}/scripts/create_prs.sh"
 2. Or merge directly: /ctx:cleanup
 ```
 

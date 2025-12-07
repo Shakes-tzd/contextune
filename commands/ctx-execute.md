@@ -172,7 +172,7 @@ chmod +x .parallel/scripts/setup_worktrees.sh
 **Always run this first - it's safe and fast (~500ms):**
 
 ```bash
-./scripts/extract-current-plan.sh
+"${CLAUDE_PLUGIN_ROOT}/scripts/extract-current-plan.sh"
 ```
 
 **The script will:**
@@ -572,7 +572,7 @@ Use git push (single command is OK per DRY strategy):
 git push origin "feature/{task.id}"
 ```
 
-**Note:** If you need commit + push workflow, use `../../scripts/commit_and_push.sh` instead.
+**Note:** If you need commit + push workflow, use `"${CLAUDE_PLUGIN_ROOT}/scripts/commit_and_push.sh"` instead.
 
 **Log completion:**
 
@@ -990,7 +990,7 @@ If you don't need PR reviews, use the merge script:
 
 ```bash
 # For each completed task:
-./scripts/merge_and_cleanup.sh task-0 "Fix missing utils module"
+"${CLAUDE_PLUGIN_ROOT}/scripts/merge_and_cleanup.sh" task-0 "Fix missing utils module"
 ```
 
 **Script handles:**
@@ -1014,16 +1014,16 @@ If you don't need PR reviews, use the merge script:
 
 ```bash
 # Merge task-0 with AI error recovery
-./scripts/smart_execute.sh ./scripts/merge_and_cleanup.sh task-0 "Review CRUD endpoints"
+"${CLAUDE_PLUGIN_ROOT}/scripts/smart_execute.sh" "${CLAUDE_PLUGIN_ROOT}/scripts/merge_and_cleanup.sh" task-0 "Review CRUD endpoints"
 
 # Merge task-1 with AI error recovery
-./scripts/smart_execute.sh ./scripts/merge_and_cleanup.sh task-1 "Paper CSV import"
+"${CLAUDE_PLUGIN_ROOT}/scripts/smart_execute.sh" "${CLAUDE_PLUGIN_ROOT}/scripts/merge_and_cleanup.sh" task-1 "Paper CSV import"
 
 # Merge task-2 with AI error recovery
-./scripts/smart_execute.sh ./scripts/merge_and_cleanup.sh task-2 "Paper listing endpoint"
+"${CLAUDE_PLUGIN_ROOT}/scripts/smart_execute.sh" "${CLAUDE_PLUGIN_ROOT}/scripts/merge_and_cleanup.sh" task-2 "Paper listing endpoint"
 
 # Merge task-3 with AI error recovery
-./scripts/smart_execute.sh ./scripts/merge_and_cleanup.sh task-3 "Database-first workflow"
+"${CLAUDE_PLUGIN_ROOT}/scripts/smart_execute.sh" "${CLAUDE_PLUGIN_ROOT}/scripts/merge_and_cleanup.sh" task-3 "Database-first workflow"
 ```
 
 **Why use smart_execute.sh wrapper:**
