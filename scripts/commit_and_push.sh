@@ -11,7 +11,17 @@ set -e
 
 FILES=${1:-.}
 MESSAGE=$2
-BRANCH=${3:-master}
+
+# Auto-detect current branch if not specified (supports both main and master)
+if [ -z "$3" ]; then
+    BRANCH=$(git branch --show-current)
+    if [ -z "$BRANCH" ]; then
+        echo "Error: Could not detect current branch" >&2
+        exit 1
+    fi
+else
+    BRANCH=$3
+fi
 
 # Auto-detect remote if not specified
 if [ -z "$4" ]; then

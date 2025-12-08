@@ -48,7 +48,7 @@ git status --short
 **Parameters:**
 - `<files>` - Files to commit (use `.` for all changes, or specific files)
 - `<message>` - Commit message (follows conventional commits format)
-- `<branch>` - Branch name (default: `master`, optional)
+- `<branch>` - Branch name (auto-detected from current branch, optional)
 - `<remote>` - Remote name (auto-detected if not specified, optional)
 
 **Example 1: Commit all changes**
