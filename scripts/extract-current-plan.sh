@@ -8,7 +8,9 @@
 set -e
 
 # Find most recent transcript file
-TRANSCRIPT_DIR="$HOME/.claude/projects/$(basename $(pwd))/conversation"
+# Claude Code stores transcripts at: ~/.claude/projects/-<FULL_PATH_WITH_SLASHES_AS_DASHES>/<session-id>.jsonl
+ESCAPED_PATH=$(pwd | sed 's/\//-/g')
+TRANSCRIPT_DIR="$HOME/.claude/projects/$ESCAPED_PATH"
 
 if [ ! -d "$TRANSCRIPT_DIR" ]; then
     echo "❌ Error: Transcript directory not found: $TRANSCRIPT_DIR" >&2
