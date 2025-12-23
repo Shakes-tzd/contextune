@@ -1,0 +1,22 @@
+[
+  {
+    "session_id": "9202596c-d296-440a-b61f-1fca4bc5b4ea",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/9202596c-d296-440a-b61f-1fca4bc5b4ea.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "SubagentStop",
+    "stop_hook_active": false,
+    "agent_id": "0787a706",
+    "agent_transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/agent-0787a706.jsonl"
+  },
+  {
+    "session_id": "9202596c-d296-440a-b61f-1fca4bc5b4ea",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/9202596c-d296-440a-b61f-1fca4bc5b4ea.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "SubagentStop",
+    "stop_hook_active": false,
+    "agent_id": "a44e5f06",
+    "agent_transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/agent-a44e5f06.jsonl"
+  }
+]

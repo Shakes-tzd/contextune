@@ -106,3 +106,9 @@ data/discovered_commands.json
 *_api_key*
 *_secret*
 credentials.jsonlogs/
+
+# HtmlGraph analytics index (rebuildable cache)
+.htmlgraph/index.sqlite
+.htmlgraph/index.sqlite-wal
+.htmlgraph/index.sqlite-shm
+.htmlgraph/git-hook-errors.log

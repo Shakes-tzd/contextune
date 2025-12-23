@@ -1,0 +1,15 @@
+[
+  {
+    "session_id": "cb49dd14-0259-4321-8860-bd671b0081f6",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/cb49dd14-0259-4321-8860-bd671b0081f6.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "git log --oneline -1",
+      "description": "Check current state of repository"
+    },
+    "tool_use_id": "toolu_01Pq28PEbVJxxqNSG3JjKw3h"
+  }
+]

@@ -1,0 +1,227 @@
+[
+  {
+    "session_id": "9202596c-d296-440a-b61f-1fca4bc5b4ea",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/9202596c-d296-440a-b61f-1fca4bc5b4ea.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/shakes/DevProjects/contextune/lib/semantic_router_matcher.py"
+    },
+    "tool_use_id": "toolu_016mf36vEtvb1njhKZTEY7EC"
+  },
+  {
+    "session_id": "9202596c-d296-440a-b61f-1fca4bc5b4ea",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/9202596c-d296-440a-b61f-1fca4bc5b4ea.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Grep",
+    "tool_input": {
+      "pattern": "LOG_LEVEL|log_level|SEMANTIC_ROUTER",
+      "output_mode": "content",
+      "-i": true
+    },
+    "tool_use_id": "toolu_01HKKh6x6Azx7ekcdFZLANLK"
+  },
+  {
+    "session_id": "9202596c-d296-440a-b61f-1fca4bc5b4ea",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/9202596c-d296-440a-b61f-1fca4bc5b4ea.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "env | grep -i \"log\\|semantic\"",
+      "description": "Check for log-related environment variables"
+    },
+    "tool_use_id": "toolu_015LmuJQRYAnDU1Gj1LFL1ug"
+  },
+  {
+    "session_id": "9202596c-d296-440a-b61f-1fca4bc5b4ea",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/9202596c-d296-440a-b61f-1fca4bc5b4ea.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Glob",
+    "tool_input": {
+      "pattern": "**/.env*"
+    },
+    "tool_use_id": "toolu_018z1GCXh2mnxm1j9agErhmx"
+  },
+  {
+    "session_id": "9202596c-d296-440a-b61f-1fca4bc5b4ea",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/9202596c-d296-440a-b61f-1fca4bc5b4ea.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Glob",
+    "tool_input": {
+      "pattern": "**/marimo*.py"
+    },
+    "tool_use_id": "toolu_01ErgfDEeEbheXXYzNogseqJ"
+  },
+  {
+    "session_id": "9202596c-d296-440a-b61f-1fca4bc5b4ea",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/9202596c-d296-440a-b61f-1fca4bc5b4ea.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/shakes/DevProjects/contextune/marimo_tutorial_sql.py"
+    },
+    "tool_use_id": "toolu_01ULrS1ahEjC4bemxUzr156q"
+  },
+  {
+    "session_id": "9202596c-d296-440a-b61f-1fca4bc5b4ea",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/9202596c-d296-440a-b61f-1fca4bc5b4ea.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "echo 'export SEMANTIC_ROUTER_LOG_LEVEL=\"INFO\"' >> ~/.zshrc && export SEMANTIC_ROUTER_LOG_LEVEL=\"INFO\"",
+      "description": "Set semantic router log level"
+    },
+    "tool_use_id": "toolu_0199w3A7cycLvZSa695WyGTx"
+  },
+  {
+    "session_id": "9202596c-d296-440a-b61f-1fca4bc5b4ea",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/9202596c-d296-440a-b61f-1fca4bc5b4ea.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "TodoWrite",
+    "tool_input": {
+      "todos": [
+        {
+          "content": "Fix semantic_router hook crash with graceful error handling",
+          "status": "in_progress",
+          "activeForm": "Adding graceful error handling to hook"
+        },
+        {
+          "content": "Show user how to use mo.hstack() for side-by-side layout",
+          "status": "pending",
+          "activeForm": "Demonstrating mo.hstack() usage"
+        }
+      ]
+    },
+    "tool_use_id": "toolu_01FruKw68aGzpPPKML3EG7Tr"
+  },
+  {
+    "session_id": "9202596c-d296-440a-b61f-1fca4bc5b4ea",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/9202596c-d296-440a-b61f-1fca4bc5b4ea.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/shakes/DevProjects/contextune/hooks/user_prompt_submit.py",
+      "limit": 50
+    },
+    "tool_use_id": "toolu_018aTnigeVDKwJ7ee5bvz9fC"
+  },
+  {
+    "session_id": "9202596c-d296-440a-b61f-1fca4bc5b4ea",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/9202596c-d296-440a-b61f-1fca4bc5b4ea.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Edit",
+    "tool_input": {
+      "file_path": "/Users/shakes/DevProjects/contextune/hooks/user_prompt_submit.py",
+      "old_string": "# Import matchers (now using RapidFuzz-based keyword matcher v2!)\nfrom keyword_matcher_v2 import IntentMatch, KeywordMatcherV2 as KeywordMatcher\nfrom model2vec_matcher import Model2VecMatcher\nfrom observability_db import ObservabilityDB\nfrom semantic_router_matcher import SemanticRouterMatcher",
+      "new_string": "# Import matchers (now using RapidFuzz-based keyword matcher v2!)\nfrom keyword_matcher_v2 import IntentMatch, KeywordMatcherV2 as KeywordMatcher\nfrom model2vec_matcher import Model2VecMatcher\nfrom observability_db import ObservabilityDB\n\n# Gracefully handle semantic_router import errors (logging issues, etc.)\ntry:\n    from semantic_router_matcher import SemanticRouterMatcher\n    SEMANTIC_ROUTER_AVAILABLE = True\nexcept Exception as e:\n    print(f\"Warning: semantic_router unavailable: {e}\", file=sys.stderr)\n    SemanticRouterMatcher = None\n    SEMANTIC_ROUTER_AVAILABLE = False"
+    },
+    "tool_use_id": "toolu_01NgRy4j1FAHpb8jhm3BWDB8"
+  },
+  {
+    "session_id": "9202596c-d296-440a-b61f-1fca4bc5b4ea",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/9202596c-d296-440a-b61f-1fca4bc5b4ea.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Read",
+    "tool_input": {
+      "file_path": "/Users/shakes/DevProjects/contextune/hooks/user_prompt_submit.py",
+      "offset": 50,
+      "limit": 50
+    },
+    "tool_use_id": "toolu_01XnXapBDhFULtWctVXYanuM"
+  },
+  {
+    "session_id": "9202596c-d296-440a-b61f-1fca4bc5b4ea",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/9202596c-d296-440a-b61f-1fca4bc5b4ea.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Edit",
+    "tool_input": {
+      "file_path": "/Users/shakes/DevProjects/contextune/hooks/user_prompt_submit.py",
+      "old_string": "    def _get_semantic(self):\n        if self._semantic is None:\n            m = SemanticRouterMatcher()\n            self._semantic = m if m.is_available() else None\n        return self._semantic",
+      "new_string": "    def _get_semantic(self):\n        if self._semantic is None and SEMANTIC_ROUTER_AVAILABLE:\n            m = SemanticRouterMatcher()\n            self._semantic = m if m.is_available() else None\n        return self._semantic"
+    },
+    "tool_use_id": "toolu_01HiB9Lq42BxHkLVjrkW7w1c"
+  },
+  {
+    "session_id": "9202596c-d296-440a-b61f-1fca4bc5b4ea",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/9202596c-d296-440a-b61f-1fca4bc5b4ea.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "TodoWrite",
+    "tool_input": {
+      "todos": [
+        {
+          "content": "Fix semantic_router hook crash with graceful error handling",
+          "status": "completed",
+          "activeForm": "Adding graceful error handling to hook"
+        },
+        {
+          "content": "Show user how to use mo.hstack() for side-by-side layout",
+          "status": "in_progress",
+          "activeForm": "Demonstrating mo.hstack() usage"
+        }
+      ]
+    },
+    "tool_use_id": "toolu_01N3gKg7KGRHSKqaz6HWgS5Q"
+  },
+  {
+    "session_id": "9202596c-d296-440a-b61f-1fca4bc5b4ea",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/9202596c-d296-440a-b61f-1fca4bc5b4ea.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "echo '{\"prompt\":\"test research query\"}' | uv run /Users/shakes/DevProjects/contextune/hooks/user_prompt_submit.py 2>&1 | head -20",
+      "description": "Test hook after error handling fix"
+    },
+    "tool_use_id": "toolu_01K2iCPsKtZTWdYWujGUh7rC"
+  },
+  {
+    "session_id": "9202596c-d296-440a-b61f-1fca4bc5b4ea",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/9202596c-d296-440a-b61f-1fca4bc5b4ea.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "acceptEdits",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "TodoWrite",
+    "tool_input": {
+      "todos": [
+        {
+          "content": "Fix semantic_router hook crash with graceful error handling",
+          "status": "completed",
+          "activeForm": "Adding graceful error handling to hook"
+        },
+        {
+          "content": "Show user how to use mo.hstack() for side-by-side layout",
+          "status": "completed",
+          "activeForm": "Demonstrating mo.hstack() usage"
+        }
+      ]
+    },
+    "tool_use_id": "toolu_01KUL8Y2CidisHDdXX5Fav83"
+  }
+]

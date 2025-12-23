@@ -1,0 +1,10 @@
+[
+  {
+    "session_id": "07e3d465-e638-4f7d-845c-0ed86d7474fb",
+    "transcript_path": "/Users/shakes/.claude/projects/-Users-shakes-DevProjects-contextune/07e3d465-e638-4f7d-845c-0ed86d7474fb.jsonl",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "permission_mode": "default",
+    "hook_event_name": "Stop",
+    "stop_hook_active": false
+  }
+]

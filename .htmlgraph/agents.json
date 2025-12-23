@@ -1,0 +1,72 @@
+{
+  "version": "1.0",
+  "updated": "2025-12-23T09:01:40.906095",
+  "agents": {
+    "claude": {
+      "id": "claude",
+      "name": "Claude",
+      "capabilities": [
+        "python",
+        "javascript",
+        "typescript",
+        "html",
+        "css",
+        "code-review",
+        "testing",
+        "documentation",
+        "debugging",
+        "refactoring",
+        "architecture",
+        "api-design"
+      ],
+      "max_parallel_tasks": 3,
+      "preferred_complexity": [
+        "low",
+        "medium",
+        "high",
+        "very-high"
+      ],
+      "active": true,
+      "metadata": {}
+    },
+    "gemini": {
+      "id": "gemini",
+      "name": "Gemini",
+      "capabilities": [
+        "python",
+        "data-analysis",
+        "documentation",
+        "testing",
+        "code-review",
+        "javascript"
+      ],
+      "max_parallel_tasks": 2,
+      "preferred_complexity": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "active": true,
+      "metadata": {}
+    },
+    "codex": {
+      "id": "codex",
+      "name": "Codex",
+      "capabilities": [
+        "python",
+        "javascript",
+        "debugging",
+        "testing",
+        "code-generation",
+        "documentation"
+      ],
+      "max_parallel_tasks": 2,
+      "preferred_complexity": [
+        "low",
+        "medium"
+      ],
+      "active": true,
+      "metadata": {}
+    }
+  }
+}

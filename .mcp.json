@@ -4,35 +4,5 @@
       "command": "npx",
       "args": ["-y", "chrome-devtools-mcp"]
     }
-    // ,
-    // "logfire": {
-    //   "command": "uvx",
-    //   "args": ["logfire-mcp@latest"],
-    //   "env": {
-    //     "LOGFIRE_TOKEN": "${LOGFIRE_TOKEN}",
-    //     "LOGFIRE_READ_TOKEN": "${LOGFIRE_READ_TOKEN}"
-    //   }
-    // }
-    // ,
-    // "zen": {
-    //   "type": "stdio",
-    //   "command": "/Users/shakes/DevProjects/zen-mcp-server/.venv/bin/python",
-    //   "args": [
-    //     "/Users/shakes/DevProjects/zen-mcp-server/server.py"
-    //   ],
-    //   "env": {
-    //     "AZURE_OPENAI_ENDPOINT": "https://your-resource.openai.azure.com/",
-    //     "DEFAULT_MODEL": "auto",
-    //     "DEFAULT_THINKING_MODE_THINKDEEP": "high",
-    //     "CONVERSATION_TIMEOUT_HOURS": "24",
-    //     "MAX_CONVERSATION_TURNS": "40",
-    //     "LOG_LEVEL": "DEBUG",
-    //     "DISABLED_TOOLS": "analyze,refactor,testgen,secaudit,docgen,tracer",
-    //     "ZEN_MCP_FORCE_ENV_OVERRIDE": "false",
-    //     "COMPOSE_PROJECT_NAME": "zen-mcp",
-    //     "TZ": "UTC",
-    //     "LOG_MAX_SIZE": "10MB"
-    //   }
-    // }
   }
 }

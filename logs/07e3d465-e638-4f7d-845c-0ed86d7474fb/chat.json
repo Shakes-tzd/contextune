@@ -1,0 +1,69 @@
+[
+  {
+    "type": "queue-operation",
+    "operation": "enqueue",
+    "timestamp": "2025-11-24T15:48:56.161Z",
+    "content": "You are a prompt enhancement assistant for Contextune, a Claude Code plugin.\n\nUSER'S PROMPT: \"test research query\"\n\nDETECTED COMMAND: ctx:researcher\nDETECTION CONFIDENCE: 100%\n\nAVAILABLE ALTERNATIVES:\n- /ctx:design\n- /ctx:research\n- /ctx:plan\n- /ctx:execute\n- /ctx:status\n- /ctx:cleanup\n- /ctx:help\n- /ctx:configure\n- /ctx:stats\n- /ctx:verify\n\nTASK: Analyze the user's prompt and provide:\n1. Whether the detected command is the best match (true/false)\n2. Alternative commands if better matches exist\n3. A brief, helpful suggestion for the user\n\nRESPONSE FORMAT (JSON):\n{\n  \"is_best_match\": true/false,\n  \"alternatives\": [\"command1\", \"command2\"],\n  \"suggestion\": \"Brief suggestion text\"\n}\n\nBe concise. Focus on actionability.",
+    "sessionId": "07e3d465-e638-4f7d-845c-0ed86d7474fb"
+  },
+  {
+    "type": "queue-operation",
+    "operation": "dequeue",
+    "timestamp": "2025-11-24T15:48:56.169Z",
+    "sessionId": "07e3d465-e638-4f7d-845c-0ed86d7474fb"
+  },
+  {
+    "parentUuid": null,
+    "isSidechain": false,
+    "userType": "external",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "sessionId": "07e3d465-e638-4f7d-845c-0ed86d7474fb",
+    "version": "2.0.50",
+    "gitBranch": "master",
+    "type": "user",
+    "message": {
+      "role": "user",
+      "content": "You are a prompt enhancement assistant for Contextune, a Claude Code plugin.\n\nUSER'S PROMPT: \"test research query\"\n\nDETECTED COMMAND: ctx:researcher\nDETECTION CONFIDENCE: 100%\n\nAVAILABLE ALTERNATIVES:\n- /ctx:design\n- /ctx:research\n- /ctx:plan\n- /ctx:execute\n- /ctx:status\n- /ctx:cleanup\n- /ctx:help\n- /ctx:configure\n- /ctx:stats\n- /ctx:verify\n\nTASK: Analyze the user's prompt and provide:\n1. Whether the detected command is the best match (true/false)\n2. Alternative commands if better matches exist\n3. A brief, helpful suggestion for the user\n\nRESPONSE FORMAT (JSON):\n{\n  \"is_best_match\": true/false,\n  \"alternatives\": [\"command1\", \"command2\"],\n  \"suggestion\": \"Brief suggestion text\"\n}\n\nBe concise. Focus on actionability."
+    },
+    "uuid": "147bf4f6-69fe-47e9-8233-4f70c661f06b",
+    "timestamp": "2025-11-24T15:48:56.192Z"
+  },
+  {
+    "parentUuid": "147bf4f6-69fe-47e9-8233-4f70c661f06b",
+    "isSidechain": false,
+    "userType": "external",
+    "cwd": "/Users/shakes/DevProjects/contextune",
+    "sessionId": "07e3d465-e638-4f7d-845c-0ed86d7474fb",
+    "version": "2.0.50",
+    "gitBranch": "master",
+    "message": {
+      "model": "claude-haiku-4-5-20251001",
+      "id": "msg_01UpMP2P4prHrFEUeJUiUKwi",
+      "type": "message",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```json\n{\n  \"is_best_match\": true,\n  \"alternatives\": [],\n  \"suggestion\": \"\u2705 /ctx:research is perfect for this. It will investigate your topic using 3 parallel agents (~2 min, grounded in current context).\"\n}\n```"
+        }
+      ],
+      "stop_reason": null,
+      "stop_sequence": null,
+      "usage": {
+        "input_tokens": 3,
+        "cache_creation_input_tokens": 43241,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 43241,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 1,
+        "service_tier": "standard"
+      }
+    },
+    "requestId": "req_011CVSygYC6rsZFjvdcGwX7p",
+    "type": "assistant",
+    "uuid": "fba3ae9d-fb36-43e8-9031-4f191b1200c7",
+    "timestamp": "2025-11-24T15:49:00.691Z"
+  }
+]

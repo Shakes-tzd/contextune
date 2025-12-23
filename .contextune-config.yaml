@@ -1,0 +1,31 @@
+# Unified Contextune-HtmlGraph Configuration
+# Auto-generated - edit as needed
+
+contextune:
+  intent_detection:
+    keyword_threshold: 1.0
+    model2vec_threshold: 0.85
+    semantic_threshold: 0.7
+    enable_haiku_analysis: true
+  parallel_execution:
+    max_agents: 5
+    default_model: haiku
+    timeout_minutes: 30
+  data_dir: /Users/shakes/.claude/plugins/contextune/data
+htmlgraph:
+  tracking:
+    auto_create_tracks: true
+    auto_link_features: true
+    auto_start_features: true
+    track_all_sessions: true
+  dashboard:
+    port: 8080
+    host: localhost
+    show_contextune_metrics: true
+    auto_reload: true
+  data_dir: .htmlgraph
+integration:
+  enabled: true
+  shared_data_dir: /Users/shakes/.contextune-htmlgraph
+  log_level: INFO
+  sync_interval_seconds: 60
