@@ -161,82 +161,78 @@ chmod +x .parallel/scripts/setup_worktrees.sh
 
 ---
 
-## Phase 1: Extract and Load Plan
+## Phase 1: Load Plan
 
-**IMPORTANT:** This phase runs the extraction script FIRST to check for plans in the current conversation.
+**NEW WORKFLOW:** Direct file loading (plan.yaml created by `/ctx:plan`)
+
+**Extraction is now deprecated** - `/ctx:plan` creates files directly, so we just load them.
 
 ---
 
-### Step 1: Run Extraction Script (PRIMARY PATH)
+### Step 1: Load Plan from Files (PRIMARY PATH)
 
-**Always run this first - it's safe and fast (~500ms):**
+**Check if plan.yaml exists** (created by new `/ctx:plan`):
+
+```bash
+if [ -f .parallel/plans/plan.yaml ]; then
+    echo "✅ Found plan.yaml (created by /ctx:plan)"
+    cat .parallel/plans/plan.yaml
+else
+    echo "⚠️  No plan.yaml found, trying extraction (deprecated)"
+fi
+```
+
+**Possible outcomes:**
+
+**A) Plan exists (EXPECTED):**
+```
+✅ Found plan.yaml (created by /ctx:plan)
+```
+→ Files were created by new `/ctx:plan` workflow
+→ Continue to Step 3 (validate and execute)
+
+**B) Plan doesn't exist (FALLBACK NEEDED):**
+```
+⚠️  No plan.yaml found, trying extraction (deprecated)
+```
+→ May be old plan from before refactor
+→ Continue to Step 2 (try extraction)
+
+---
+
+### Step 2: Extraction Fallback (DEPRECATED - For Old Plans Only)
+
+**⚠️ DEPRECATED:** This path is only for plans created before the refactor.
+
+**New plans created with `/ctx:plan` skip this step entirely.**
+
+Try to extract plan from conversation transcript:
 
 ```bash
 "${CLAUDE_PLUGIN_ROOT}/scripts/extract-current-plan.sh"
 ```
-
-**The script will:**
-- Search current session for plan markers (`**Type:** Plan`)
-- Extract plan and tasks if found
-- Create `.parallel/plans/plan.yaml` and `tasks/*.md`
-- Output "✅ Extraction complete!" on success
-- Output "❌ Error: No plan found" if no plan in conversation
 
 **Possible outcomes:**
 
 **A) Extraction succeeds:**
 ```
 ✅ Created .parallel/plans/plan.yaml
-✅ Created task files in .parallel/plans/tasks/
 ✅ Extraction complete!
 ```
-→ Continue to Step 3 (load the plan)
+→ Continue to Step 3 (load the extracted plan)
 
-**B) Plan already exists:**
-```
-Error: .parallel/plans/plan.yaml already exists
-```
-→ Continue to Step 2 (check existing)
-
-**C) No plan in conversation:**
+**B) Extraction fails:**
 ```
 ❌ Error: No plan found in transcript
 ```
-→ Continue to Step 2 (check existing)
+→ No plan files AND no plan in conversation
+→ Continue to Step 4 (ask user to create plan)
 
 ---
 
-### Step 2: Check for Existing Plan (MULTI-SESSION PATH)
+### Step 3: Validate Plan
 
-**Only reached if Step 1 didn't find/extract a plan**
-
-Check if a plan.yaml already exists from a previous session:
-
-```bash
-ls .parallel/plans/plan.yaml 2>/dev/null && echo "✅ Found existing plan" || echo "❌ No plan exists"
-```
-
-**Possible outcomes:**
-
-**A) Plan exists:**
-```
-✅ Found existing plan
-```
-→ This is from a previous session
-→ Continue to Step 3 (load it)
-
-**B) No plan exists:**
-```
-❌ No plan exists
-```
-→ No plan in conversation AND no saved plan
-→ Continue to Step 4 (ask user)
-
----
-
-### Step 3: Load and Validate Plan
-
-**Now read the plan.yaml file (either just extracted or from previous session):**
+**Read and validate the plan.yaml file:**
 
 ```bash
 # Read the plan
@@ -254,8 +250,8 @@ cat .parallel/plans/plan.yaml
 - Build execution graph based on dependencies
 
 **Context Optimization:**
-- ✅ If tasks were just extracted → Already in context (0 tokens!)
-- ✅ If new session → Will read task files when spawning agents
+- ✅ If tasks were just created by `/ctx:plan` → Already in context (0 tokens!)
+- ✅ If continuing from previous session → Read task files when spawning agents
 - ✅ Only read what's needed, when it's needed
 
 **Plan loaded and validated → Continue to Phase 2 (setup worktrees)**

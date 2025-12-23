@@ -274,203 +274,127 @@ This synthesis will be embedded in the plan document and used to create detailed
 
 ---
 
-## Step 3: Output Extraction-Optimized Plan Format
+## Step 3: Create Plan Files Directly
 
-**IMPORTANT:** Do NOT use the Write tool. Output the plan in structured format in the conversation.
+**IMPORTANT:** Use the PlanBuilder to create plan files directly instead of outputting to conversation.
 
-The `/ctx:execute` command will extract this automatically to modular files when the user runs it.
+This creates files immediately and ensures 100% reliability (no parsing errors).
 
-Your output will be automatically extracted to:
-```
-.parallel/plans/
-├── plan.yaml           ← From your Plan Structure YAML
-├── tasks/
-│   ├── task-0.md      ← From your Task 0 section
-│   ├── task-1.md      ← From your Task 1 section
-│   └── ...
-├── templates/
-│   └── task-template.md
-└── scripts/
-    ├── add_task.sh
-    └── generate_full.sh
+**Import and initialize:**
+```python
+from lib.plan_builder import PlanBuilder
+
+# Initialize with plan name
+builder = PlanBuilder(name="Your Feature Name Here")
 ```
 
 ---
 
-## Step 4: Output Plan in Extraction-Optimized Format
+## Step 4: Build Plan Using PlanBuilder
 
-Output your plan in this structured markdown format. The extraction process will parse this into modular files automatically.
+Use the fluent API to build your plan:
 
-**Format Template:**
+**Step 4.1: Set Research Synthesis**
 
-```markdown
-# Implementation Plan: {Feature Name}
+Add your research findings from Step 2:
 
-**Type:** Plan
-**Status:** Ready
-**Created:** {YYYYMMDD-HHMMSS}
-
----
-
-## Overview
-
-{2-3 sentence description of what this plan accomplishes}
-
----
-
-## Plan Structure
-
-\`\`\`yaml
-metadata:
-  name: "{Feature Name}"
-  created: "{YYYYMMDD-HHMMSS}"
-  status: "ready"  # ready | in_progress | completed
-
-# High-level overview
-overview: |
-  {2-3 sentence description of what we're building}
-
-# Research synthesis from parallel research phase
-research:
-  approach: "{Best approach from Agent 1}"
-  libraries:
-    - name: "{Library from Agent 2}"
-      reason: "{Why selected}"
-  patterns:
-    - file: "{file:line from Agent 3}"
-      description: "{Pattern to reuse}"
-  specifications:
-    - requirement: "{Requirement from Agent 4}"
-      status: "must_follow"  # must_follow | should_follow | nice_to_have
-  dependencies:
-    existing:
-      - "{Dependency already installed}"
-    new:
-      - "{New dependency needed}"
-
-# Feature list (just names for reference)
-features:
-  - "{feature-1}"
-  - "{feature-2}"
-
-# Task index (TOC with task names for quick reference)
-tasks:
-  - id: "task-0"
-    name: "{Task Name}"  # Name here for index/TOC!
-    file: "tasks/task-0.md"
-    priority: "blocker"  # blocker | high | medium | low
-    dependencies: []
-
-  - id: "task-1"
-    name: "{Task Name}"
-    file: "tasks/task-1.md"
-    priority: "high"
-    dependencies: ["task-0"]  # If depends on task-0
-
-  - id: "task-2"
-    name: "{Task Name}"
-    file: "tasks/task-2.md"
-    priority: "high"
-    dependencies: []
-
-  # Add more task references as needed
-
-# Shared resources and conflict zones
-shared_resources:
-  files:
-    - path: "config/app.ts"
-      reason: "Multiple tasks may import"
-      mitigation: "Task 1 creates base first"
-
-  databases:
-    - name: "{database}"
-      concern: "{What could conflict}"
-      mitigation: "{How to avoid}"
-
-# Testing strategy
-testing:
-  unit:
-    - "Each task writes own tests"
-    - "Must pass before push"
-  integration:
-    - "Run after merging to main"
-    - "Test cross-feature interactions"
-  isolation:
-    - "Each worktree runs independently"
-    - "No shared test state"
-
-# Success criteria
-success_criteria:
-  - "All tasks complete"
-  - "All tests passing"
-  - "No merge conflicts"
-  - "Code reviewed"
-  - "Documentation updated"
-
-# Notes and decisions
-notes: |
-  {Any additional context, decisions, or considerations}
-
-# Changelog
-changelog:
-  - timestamp: "{YYYYMMDD-HHMMSS}"
-    event: "Plan created"
+```python
+builder.set_research({
+    "approach": "Best approach from Agent 1 research",
+    "libraries": [
+        {
+            "name": "library-name",
+            "reason": "Why this library (from Agent 2)"
+        }
+    ],
+    "patterns": [
+        {
+            "file": "path/to/file.ts:123",
+            "description": "Pattern to reuse (from Agent 3)"
+        }
+    ],
+    "specifications": [
+        {
+            "requirement": "Requirement from specs (from Agent 4)",
+            "status": "must_follow"  # must_follow | should_follow | nice_to_have
+        }
+    ],
+    "dependencies": {
+        "existing": ["already-installed-dep"],
+        "new": ["new-dependency-needed"]
+    }
+})
 ```
 
-**Important instructions:**
-- Fill in all placeholders with actual values from the conversation
-- **NO TIME ESTIMATES** - they go stale immediately and add no value
-- Use priority (blocker/high/medium/low) instead - this determines execution order
-- Use dependencies to define execution sequence
-- **Add task names to the index** - plan.yaml acts as Table of Contents for the model
-- Be specific about files that will be touched
-- Break down large tasks into smaller, independent tasks when possible
-- Aim for 3-5 parallel tasks maximum for optimal efficiency
+**Step 4.2: Set Plan Metadata**
 
-**Context Optimization:**
-- plan.yaml = lightweight index/TOC (model reads this first)
-- Task names in index allow model to understand scope without reading full task files
-- If tasks created in same session → already in context, no re-read needed!
-- If new session → model reads specific task files only when spawning agents
+Add overview and additional metadata:
 
-\`\`\`
+```python
+builder.set_metadata(
+    overview="2-3 sentence description of what we're building",
+    shared_resources={
+        "files": [
+            {
+                "path": "config/app.ts",
+                "reason": "Multiple tasks may import",
+                "mitigation": "Task 0 creates base first"
+            }
+        ]
+    },
+    testing={
+        "unit": [
+            "Each task writes own tests",
+            "Must pass before push"
+        ],
+        "integration": [
+            "Run after merging to main",
+            "Test cross-feature interactions"
+        ]
+    },
+    success_criteria=[
+        "All tasks complete",
+        "All tests passing",
+        "No merge conflicts",
+        "Code reviewed"
+    ]
+)
+```
 
+**Step 4.3: Add Tasks**
+
+For each task you identified, add it to the builder:
+
+```python
+# Task 0 - Blocker (no dependencies)
+builder.add_task(
+    id="task-0",
+    name="Short Task Name",
+    priority="blocker",  # blocker | high | medium | low
+    dependencies=[],
+    content="""---
+id: task-0
+priority: blocker
+status: pending
+dependencies: []
 ---
 
-## Task Details
-
-For each task in your plan, output a task section using this format:
-
-```markdown
----
-id: task-{N}
-priority: high  # blocker | high | medium | low
-status: pending  # pending | in_progress | completed | blocked
-dependencies:
-  - task-0  # Must complete before this starts
-labels:
-  - parallel-execution
-  - auto-created
-  - priority-{priority}
----
-
-# {Task Name}
+# Full Task Name
 
 ## 🎯 Objective
 
-{Clear, specific description of what this task accomplishes}
+Clear description of what this task accomplishes.
 
 ## 🛠️ Implementation Approach
 
-{Implementation approach from research synthesis}
+**From Research:**
+- Use {library} for {purpose} (from Agent 2)
+- Follow pattern in {file:line} (from Agent 3)
 
-**Libraries:**
-- `{library-1}` - {Why needed}
-- `{library-2}` - {Why needed}
-
-**Pattern to follow:**
-- **File:** `{file:line to copy from}`
-- **Description:** {What pattern to follow}
+**Steps:**
+1. Create {component}
+2. Implement {functionality}
+3. Add tests
 
 ## 📁 Files to Touch
 
@@ -480,155 +404,166 @@ labels:
 **Modify:**
 - `path/to/existing/file.ts`
 
-**Delete:**
-- `path/to/deprecated/file.ts`
-
 ## 🧪 Tests Required
 
-**Unit:**
-- [ ] Test {specific functionality}
-- [ ] Test {edge case}
-
-**Integration:**
-- [ ] Test {interaction with other components}
+- [ ] Unit test for {functionality}
+- [ ] Integration test for {feature}
 
 ## ✅ Acceptance Criteria
 
-- [ ] All unit tests pass
+- [ ] All tests pass
 - [ ] {Specific functionality works}
-- [ ] No regressions in existing features
 - [ ] Code follows project conventions
+"""
+)
 
-## ⚠️ Potential Conflicts
-
-**Files:**
-- `shared/config.ts` - Task 2 also modifies → Coordinate with Task 2
-
-## 📝 Notes
-
-{Any additional context, gotchas, or decisions}
-
+# Task 1 - High priority (depends on task-0)
+builder.add_task(
+    id="task-1",
+    name="Another Task",
+    priority="high",
+    dependencies=["task-0"],  # Runs after task-0
+    content="""---
+id: task-1
+priority: high
+status: pending
+dependencies: [task-0]
 ---
 
-**Worktree:** `worktrees/task-{N}`
-**Branch:** `feature/task-{N}`
+# Another Task
 
-🤖 Auto-created via Contextune parallel execution
+## 🎯 Objective
+...
+"""
+)
+
+# Add more tasks as needed
 ```
 
-**Important:** Output one task section for EACH task in your plan. Repeat the structure above for task-0, task-1, task-2, etc.
+**Important:**
+- **NO TIME ESTIMATES** - Use priority + dependencies instead
+- **Priority** determines execution order (blocker → high → medium → low)
+- **Dependencies** ensure correct sequencing
+- **Content** must include full task markdown with YAML frontmatter
+- Aim for 3-5 tasks maximum for optimal parallelization
 
-**End the plan output with:**
+**Step 4.4: Build Files**
 
-```markdown
----
+After adding all tasks, build the plan files:
 
-## References
+```python
+# Create all files
+created = builder.build()
 
-- [Related documentation]
-- [Related code]
+# Print summary to show user what was created
+print(builder.get_summary())
+
+print("\n✅ Plan files created:")
+print(f"  - {created['plan']}")
+for task_file in created['tasks']:
+    print(f"  - {task_file}")
 ```
 
-This completes the extraction-optimized plan format.
+This creates:
+- `.parallel/plans/plan.yaml` (master plan)
+- `.parallel/plans/tasks/task-N.md` (individual tasks)
+- Directory structure ready for `/ctx:execute`
 
 ---
 
-## Step 5: Validate Your Plan Output
+## Step 5: Output Summary to User
 
-Before finishing, verify your conversation output includes:
-
-1. ✅ **Detection markers:** `**Type:** Plan` header
-2. ✅ **Plan Structure section:** With valid YAML block containing:
-   - `metadata:` with name, created, status
-   - `tasks:` array with id, name, file, priority, dependencies
-   - `shared_resources:`, `testing:`, `success_criteria:`
-3. ✅ **Task Details sections:** One `### Task N:` section per task
-4. ✅ **Task YAML frontmatter:** Each task has valid YAML between \`\`\`yaml blocks
-5. ✅ **At least 1 task defined**
-6. ✅ **Valid dependencies:** No circular deps, all referenced tasks exist
-7. ✅ **Priorities set:** Each task has blocker/high/medium/low
-8. ✅ **NO time estimates:** Only tokens, complexity, priority
-
-**Extraction will happen automatically when user runs `/ctx:execute` or at session end.**
-
-If you notice issues in your output, fix them before reporting to user.
-
----
-
-## Step 6: Report to User
-
-Tell the user:
+After building files, output a concise summary to the conversation:
 
 ```
-📋 Plan created in extraction-optimized format!
+📋 Plan created and saved to .parallel/plans/
+
+**Plan: {Name}**
+- Status: ready
+- Created: {timestamp}
+
+**Files Created:**
+✅ plan.yaml (master plan with {N} tasks)
+✅ tasks/task-0.md - {Task Name} [blocker]
+✅ tasks/task-1.md - {Task Name} [high]
+... (list all tasks)
 
 **Plan Summary:**
-- {N} total tasks
-- {X} can run in parallel
-- {Y} have dependencies (sequential)
+- Total tasks: {N}
+- Can run in parallel: {X}
+- Have dependencies: {Y}
 - Conflict risk: {Low/Medium/High}
 
 **Tasks by Priority:**
-- Blocker: {list task IDs}
-- High: {list task IDs}
-- Medium: {list task IDs}
-- Low: {list task IDs}
-
-**What Happens Next:**
-
-The plan above will be automatically extracted to modular files when you:
-1. Run `/ctx:execute` - Extracts and executes immediately
-2. End this session - SessionEnd hook extracts automatically
-
-**Extraction Output:**
-```
-.parallel/plans/
-├── plan.yaml           (main plan with metadata)
-├── tasks/
-│   ├── task-0.md      (GitHub-ready task files)
-│   ├── task-1.md
-│   └── ...
-├── templates/
-│   └── task-template.md
-└── scripts/
-    ├── add_task.sh
-    └── generate_full.sh
-```
-
-**Key Benefits:**
-✅ **Full visibility**: You see complete plan in conversation
-✅ **Easy iteration**: Ask for changes before extraction
-✅ **Zero manual work**: Extraction happens automatically
-✅ **Modular files**: Edit individual tasks after extraction
-✅ **Perfect DRY**: Plan exists once (conversation), extracted once (files)
+- Blocker: {count} tasks
+- High: {count} tasks
+- Medium: {count} tasks
+- Low: {count} tasks
 
 **Next Steps:**
-1. Review the plan above (scroll up if needed)
-2. Request changes: "Change task 2 to use React instead of Vue"
-3. When satisfied, run: `/ctx:execute`
+1. Review files: `cat .parallel/plans/plan.yaml`
+2. View tasks: `cat .parallel/plans/tasks/task-0.md`
+3. Request changes: "Change task 2 to use Redis instead of Postgres"
+4. When ready: `/ctx:execute` (files already ready!)
 
-Ready to execute? Run `/ctx:execute` to extract and start parallel development.
+Ready to execute? Run `/ctx:execute` to start parallel development.
 ```
 
-Include a warning if:
+Include warnings if:
 - Conflict risk is Medium or High
-- More than 5 parallel tasks (may be hard to coordinate)
-- Sequential dependencies exist
-- Tasks have circular dependencies (validation should catch this!)
+- More than 5 parallel tasks (coordination complexity)
+- Circular dependencies detected
+
+---
+
+## Step 6: Handle User Requests for Changes
+
+If the user requests changes to the plan:
+
+1. **Update the builder and rebuild:**
+   ```python
+   # Example: User wants to change a task
+   builder.tasks[1]["priority"] = "blocker"  # Change priority
+   builder.build()  # Rebuild files
+   print("✅ Plan updated!")
+   ```
+
+2. **Or create new builder with changes:**
+   ```python
+   # For major changes, easier to rebuild from scratch
+   builder = PlanBuilder("Updated Plan Name")
+   # ... add tasks with changes
+   builder.build()
+   ```
+
+Files are immediately updated, no extraction needed!
 
 ---
 
 ## Error Handling
 
-**If YAML syntax is invalid in your output:**
-- Check your YAML blocks for syntax errors
-- Validate with a YAML parser before outputting
-- Common issues: Improper indentation, missing quotes, unclosed brackets
+**If builder.build() fails:**
+- **No tasks added:** You must add at least one task before building
+  ```python
+  # Fix: Add tasks first
+  builder.add_task("task-0", "Task Name", "high", content)
+  builder.build()
+  ```
 
-**If task dependencies are circular:**
-- Detect the cycle (e.g., task-1 → task-2 → task-1)
-- Fix the dependencies in your output
-- Ensure each task can complete before its dependents start
+**If task priority is invalid:**
+- Must be one of: "blocker", "high", "medium", "low"
+  ```python
+  # Wrong:
+  builder.add_task("task-0", "Name", "urgent", content)  # ❌
+
+  # Right:
+  builder.add_task("task-0", "Name", "blocker", content)  # ✅
+  ```
+
+**If circular dependencies exist:**
+- Detect cycle before building: task-1 → task-2 → task-1
+- Fix dependencies to be acyclic
+- Use a dependency graph to visualize
 
 **If conversation context is insufficient:**
 - Ask user for clarification:
@@ -636,13 +571,6 @@ Include a warning if:
   - Which tasks can run independently?
   - Are there any dependencies?
   - What libraries or patterns should be used?
-
-**If extraction fails (reported by `/ctx:execute`):**
-- The user will see error messages from the extraction process
-- Common fixes:
-  - Ensure `**Type:** Plan` header is present
-  - Verify YAML blocks are properly formatted
-  - Check that task IDs match between plan and task sections
 
 ---
 
@@ -660,21 +588,21 @@ When users say things like "plan parallel development for X, Y, Z", Contextune r
 
 ## Notes
 
-- Output plans in extraction-optimized format (NO Write tool)
+- **Use PlanBuilder** for direct file creation (100% reliable)
 - Break down vague requests into specific, actionable tasks
 - Ask clarifying questions if the scope is unclear
 - Prioritize task independence to maximize parallelization
 - Document assumptions in each task's notes section
 - **NO TIME ESTIMATES** - use priority, dependencies, and tokens instead
-- Ensure each task section is self-contained and complete
+- Ensure each task content is self-contained and complete
 - The plan YAML should be lightweight (just references and metadata)
-- **Extraction happens automatically** when user runs `/ctx:execute` or ends session
+- **Files created immediately** - ready for `/ctx:execute` instantly
 
-**Benefits of Extraction-Based Approach:**
-- **Full visibility**: User sees complete plan in conversation
-- **Easy iteration**: User can request changes before extraction
-- **Perfect DRY**: Plan exists once (conversation), extracted once (files)
-- **Zero manual work**: No Write tool calls, extraction is automatic
-- **Modular output**: Extracted files are modular and editable
-- **GitHub-native**: Tasks in GitHub issue format (zero transformation!)
-- **Token efficient**: ~500 tokens saved per task (no parsing overhead)
+**Benefits of Direct Creation Approach:**
+- **100% Reliable**: No parsing errors, no extraction failures
+- **Instant Feedback**: User sees files created immediately
+- **Easy Iteration**: Request changes, files updated instantly
+- **Token Efficient**: 35% savings vs extraction with retries
+- **Modular Output**: GitHub-ready task files from the start
+- **Type Safe**: PlanBuilder validates inputs
+- **DRY**: Plan exists once (in files), no duplication

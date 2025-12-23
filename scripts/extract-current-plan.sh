@@ -1,11 +1,24 @@
 #!/bin/bash
 # Extract Plan from Current Session
 #
+# ⚠️  DEPRECATED: /ctx:plan now creates files directly via PlanBuilder
+#
+# This script remains for backward compatibility with old plans
+# created before the direct file creation refactor.
+#
+# New workflow: /ctx:plan uses PlanBuilder → Files created immediately
+# Old workflow: /ctx:plan output → This script → Files extracted (error-prone)
+#
 # Finds the current session's transcript and extracts plan to .parallel/plans/
 #
 # Usage: ./scripts/extract-current-plan.sh
 
 set -e
+
+echo "⚠️  DEPRECATED: This extraction script is no longer needed for new plans." >&2
+echo "   /ctx:plan now creates files directly using PlanBuilder." >&2
+echo "   This script is running for backward compatibility with old plans." >&2
+echo "" >&2
 
 # Find most recent transcript file
 # Claude Code stores transcripts at: ~/.claude/projects/-<FULL_PATH_WITH_SLASHES_AS_DASHES>/<session-id>.jsonl
