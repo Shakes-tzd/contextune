@@ -2,12 +2,13 @@
 
 ## Active Bugs
 
-### BUG-001: Missing Node.js Dependencies in Cached Plugin
+### ~~BUG-001: Missing Node.js Dependencies in Cached Plugin~~ ✅ RESOLVED
 
 **Severity:** High
-**Status:** Open
+**Status:** ✅ Resolved in 0.9.2
 **Discovered:** 2025-12-23
 **Affected Version:** 0.9.1
+**Fixed Version:** 0.9.2
 
 #### Description
 
@@ -279,4 +280,26 @@ After fix, verify:
 
 ## Resolved Bugs
 
-(None yet)
+### BUG-001: Missing Node.js Dependencies ✅
+
+**Resolved in:** 0.9.2
+**Resolution:** Rewrote `session_start_git_context.js` as Python script with UV
+
+**Changes:**
+- Created `session_start_git_context.py` with PEP 723 inline dependencies
+- Uses UV for automatic dependency management (pyyaml)
+- Updated `hooks.json` to use Python version
+- Removed JavaScript version entirely
+
+**Benefits:**
+- ✅ No manual `npm install` needed
+- ✅ UV handles dependencies automatically
+- ✅ Consistent with other Contextune hooks (all Python + UV)
+- ✅ No bundling or installation issues
+- ✅ Aligned with project's Python focus
+
+**Files:**
+- Added: `hooks/session_start_git_context.py`
+- Modified: `hooks/hooks.json`
+- Removed: `hooks/session_start_git_context.js`
+- Removed: Dependency on `package.json` for this hook

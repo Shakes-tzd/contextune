@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/session_start_git_context.js",
+            "command": "uv run ${CLAUDE_PLUGIN_ROOT}/hooks/session_start_git_context.py",
             "timeout": 2000,
             "description": "Git-powered context injection - differential updates since last session (~1-2K tokens)"
           },
