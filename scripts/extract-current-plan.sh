@@ -18,8 +18,9 @@ if [ ! -d "$TRANSCRIPT_DIR" ]; then
     exit 1
 fi
 
-# Get most recent transcript file
-TRANSCRIPT_FILE=$(ls -t "$TRANSCRIPT_DIR"/*.jsonl 2>/dev/null | head -1)
+# Get most recent transcript file (exclude subagent transcripts with "agent-" prefix)
+# Subagents never contain plans, only main sessions do
+TRANSCRIPT_FILE=$(ls -t "$TRANSCRIPT_DIR"/*.jsonl 2>/dev/null | grep -v "/agent-" | head -1)
 
 if [ -z "$TRANSCRIPT_FILE" ]; then
     echo "❌ Error: No transcript files found in $TRANSCRIPT_DIR" >&2
